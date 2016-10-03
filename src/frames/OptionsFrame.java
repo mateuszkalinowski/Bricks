@@ -25,7 +25,7 @@ class OptionsFrame extends JDialog {
         gameTypeComboBox.addItem("Dwuosobowa");
         gameTypeComboBox.setSelectedIndex(1);
 
-        gameTypeComboBox.addActionListener(new ActionListener() {
+      /*  gameTypeComboBox.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if(gameTypeComboBox.getSelectedIndex()==0) {
@@ -33,7 +33,7 @@ class OptionsFrame extends JDialog {
                     gameTypeComboBox.setSelectedIndex(1);
                 }
             }
-        });
+        });*/
 
         JButton execute = new JButton("Graj");
         execute.addActionListener(e -> dispose());

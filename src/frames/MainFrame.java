@@ -2,9 +2,12 @@ package frames;
 
 import gfx.BoardPanel;
 import logic.Board;
+import logic.ComputerPlayer;
 
 import javax.swing.*;
+import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
+import javax.swing.border.StrokeBorder;
 import java.awt.*;
 import java.awt.event.WindowAdapter;
 
@@ -26,15 +29,19 @@ public class MainFrame extends JFrame implements Runnable {
         JLabel gameName = new JLabel("Bricks", SwingConstants.CENTER);
         JPanel buttonsGridLayout = new JPanel(new GridLayout(2, 1));
         //boardPanel = new BoardPanel();
-        restTiles = new JLabel("Gracz: Czarny");
-        gameBorderLayout.add(restTiles,BorderLayout.SOUTH);
-        buttonsGridLayout.setBorder(new EmptyBorder(100, 100, 100, 100));
+        restTiles = new JLabel("Gracz: Zielony");
+        buttonsGridLayout.setBorder(new EmptyBorder(120, 100, 100, 120));
         JButton run = new JButton("Graj");
         run.addActionListener(e -> {
             int conditions[] = optionsDialog.showDialog();
             if(conditions[2] == 1) {
                 board = new Board(5 + 2 * conditions[1]);
-                boardPanel = new BoardPanel(board);
+                if(conditions[0]==1)
+                    gameBorderLayout.add(restTiles,BorderLayout.SOUTH);
+                else {
+                    comp = new ComputerPlayer();
+                }
+                boardPanel = new BoardPanel(board,conditions[0]);
                 gameBorderLayout.add(boardPanel, BorderLayout.CENTER);
                 this.getContentPane().removeAll();
                 this.getContentPane().add(gameBorderLayout);
@@ -47,11 +54,13 @@ public class MainFrame extends JFrame implements Runnable {
         });
         JButton exit = new JButton("Wyjdź");
         exit.addActionListener(e -> System.exit(0));
+
         buttonsGridLayout.add(run);
         buttonsGridLayout.add(exit);
 
         mainBorderLayout.add(buttonsGridLayout, BorderLayout.CENTER);
-        gameName.setFont(new Font("Comic Sans MS", Font.PLAIN, 80));
+        gameName.setFont(new Font("Comic Sans MS", Font.BOLD, 100));
+        gameName.setForeground(Color.BLACK);
         mainBorderLayout.add(gameName, BorderLayout.NORTH);
         add(mainBorderLayout);
 
@@ -102,6 +111,7 @@ public class MainFrame extends JFrame implements Runnable {
     private BoardPanel boardPanel;
     private JPanel gameBorderLayout;
     private boolean running = false;
+    public ComputerPlayer comp;
 
     public JLabel restTiles;
 }

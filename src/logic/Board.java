@@ -79,7 +79,7 @@ public class Board {
     public int width;
     public int height;
     public int size;
-    private static int staticSize;
+    public int staticSize;
     public boolean diagonallyMoves;
     public String boardType;
     public int[][] board;
