@@ -23,26 +23,13 @@ class OptionsFrame extends JDialog {
         gameTypeComboBox = new JComboBox<>();
         gameTypeComboBox.addItem("Jednoosobowa");
         gameTypeComboBox.addItem("Dwuosobowa");
-        gameTypeComboBox.setSelectedIndex(1);
-
-      /*  gameTypeComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(gameTypeComboBox.getSelectedIndex()==0) {
-                    JOptionPane.showMessageDialog(null,"Tryb gry jednoosobowej zostanie zaimplementowany w przyszłości","Błąd trybu gry",JOptionPane.OK_OPTION);
-                    gameTypeComboBox.setSelectedIndex(1);
-                }
-            }
-        });*/
+        gameTypeComboBox.setSelectedIndex(0);
 
         JButton execute = new JButton("Graj");
         execute.addActionListener(e -> dispose());
-        execute.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                isPlayPressed = true;
-                dispose();
-            }
+        execute.addActionListener(e -> {
+            isPlayPressed = true;
+            dispose();
         });
         optionsGridLayout.add(gameTypeComboBox);
         boardSizeComboBox = new JComboBox<>();

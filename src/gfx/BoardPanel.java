@@ -173,7 +173,7 @@ public class BoardPanel extends Canvas {
         int height = getHeight();
         try {
             BufferedImage background = ImageIO.read(this.getClass().getResource("resources/background.jpg"));
-            g2.drawImage(background,0,0,null);
+            g2.drawImage(background,0,0,getWidth(),getHeight(),null,null);
         }
         catch (Exception e) {
         }
