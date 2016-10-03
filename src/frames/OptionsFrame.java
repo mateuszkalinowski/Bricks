@@ -15,6 +15,7 @@ class OptionsFrame extends JDialog {
         setLocationRelativeTo(null);
         setModal(true);
         setTitle("Opcje");
+
         JLabel title = new JLabel("Wybierz tryb gry:", SwingConstants.CENTER);
         JPanel optionsGridLayout = new JPanel(new GridLayout(2, 2));
         JLabel boardType = new JLabel("Typ gry: ", SwingConstants.CENTER);

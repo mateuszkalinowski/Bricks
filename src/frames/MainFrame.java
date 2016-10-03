@@ -32,6 +32,8 @@ public class MainFrame extends JFrame implements Runnable {
         restTiles = new JLabel("Gracz: Zielony");
         buttonsGridLayout.setBorder(new EmptyBorder(120, 100, 100, 120));
         JButton run = new JButton("Graj");
+        run.setFont(new Font("Comic Sans MS", Font.BOLD,30));
+        run.setFocusPainted(false);
         run.addActionListener(e -> {
             int conditions[] = optionsDialog.showDialog();
             if(conditions[2] == 1) {
@@ -53,7 +55,13 @@ public class MainFrame extends JFrame implements Runnable {
             }
         });
         JButton exit = new JButton("Wyjdź");
+        exit.setFont(new Font("Comic Sans MS", Font.BOLD,30));
+        exit.setFocusPainted(false);
         exit.addActionListener(e -> System.exit(0));
+
+        JLabel credits = new JLabel("Autor: Mateusz Kalinowski @2016. Dalsze modyfikacje w celach niekomercyjnych dozwolone.");
+        credits.setHorizontalAlignment(0);
+        mainBorderLayout.add(credits,BorderLayout.SOUTH);
 
         buttonsGridLayout.add(run);
         buttonsGridLayout.add(exit);
