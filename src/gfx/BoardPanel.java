@@ -35,14 +35,8 @@ public class BoardPanel extends Canvas {
                     if ((e.getX() > margin && e.getX() < getWidth() - margin) && (e.getY() > margin && e.getY() < getHeight() - margin)) {
                         selectedX = (e.getX() - margin) / oneFieldWidth;
                         selectedY = (e.getY() - margin) / oneFieldHeight;
-                        if (firstMove && (board.boardType.equals("Kwadrat") || board.boardType.equals("Trojkat"))) {
-                            if (board.board[selectedX][selectedY] == 1) {
-                                firstMove = false;
-                                board.board[selectedX][selectedY] = 0;
-                                board.size--;
-                                Bricks.mainFrame.restTiles.setText("Pozostało: " + board.size);
-                            }
-                        } else if (board.board[selectedX][selectedY] == 1) {
+
+                        if (board.board[selectedX][selectedY] == 0) {
                             isSelected = true;
                             directions = board.possibleDirections(selectedX, selectedY);
                         }
@@ -53,74 +47,78 @@ public class BoardPanel extends Canvas {
                         int tempSelectedX = (e.getX() - margin) / oneFieldWidth;
                         int tempSelectedY = (e.getY() - margin) / oneFieldHeight;
 
-                        if ((tempSelectedX == selectedX) && (tempSelectedY == selectedY + 2) && directions[2]) {
-                            board.board[tempSelectedX][tempSelectedY] = 1;
-                            board.board[tempSelectedX][tempSelectedY - 1] = 0;
-                            board.board[selectedX][selectedY] = 0;
-                            isSelected = false;
-                            board.size--;
-                            Bricks.mainFrame.restTiles.setText("Pozostało: " + board.size);
-                            checkNoMoves();
-                        } else if ((tempSelectedX == selectedX) && (tempSelectedY == selectedY - 2) && directions[0]) {
-                            board.board[tempSelectedX][tempSelectedY] = 1;
-                            board.board[tempSelectedX][tempSelectedY + 1] = 0;
-                            board.board[selectedX][selectedY] = 0;
-                            isSelected = false;
-                            board.size -= 1;
-                            Bricks.mainFrame.restTiles.setText("Pozostało: " + board.size);
-                            checkNoMoves();
-                        } else if ((tempSelectedX == selectedX + 2) && (tempSelectedY == selectedY) && directions[1]) {
-                            board.board[tempSelectedX][tempSelectedY] = 1;
-                            board.board[tempSelectedX - 1][tempSelectedY] = 0;
-                            board.board[selectedX][selectedY] = 0;
-                            isSelected = false;
-                            board.size -= 1;
-                            Bricks.mainFrame.restTiles.setText("Pozostało: " + board.size);
-                            checkNoMoves();
-                        } else if ((tempSelectedX == selectedX - 2) && (tempSelectedY == selectedY) && directions[3]) {
-                            board.board[tempSelectedX][tempSelectedY] = 1;
-                            board.board[tempSelectedX + 1][tempSelectedY] = 0;
-                            board.board[selectedX][selectedY] = 0;
-                            isSelected = false;
-                            board.size -= 1;
-                            Bricks.mainFrame.restTiles.setText("Pozostało: " + board.size);
-                            checkNoMoves();
+                        if((tempSelectedX==selectedX+1) && tempSelectedY == selectedY) {
+                            if(directions[1]) {
+                                board.board[selectedX][selectedY] = actualPlayer;
+                                board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                isSelected = false;
+                                if(actualPlayer==1) {
+                                    Bricks.mainFrame.restTiles.setText("Gracz: Czerwony");
+                                    actualPlayer = 2;
+                                }
+                                else {
+                                    Bricks.mainFrame.restTiles.setText("Gracz: Czarny");
+                                    actualPlayer = 1;
+                                }
+                                checkNoMoves();
+
+                            }
                         }
-                        //TYLKO JESLI SA RUCHY PO SKOSIE
-                        else if (board.diagonallyMoves && (tempSelectedX == selectedX + 2) && (tempSelectedY == selectedY - 2) && directions[4]) {
-                            board.board[tempSelectedX][tempSelectedY] = 1;
-                            board.board[tempSelectedX - 1][tempSelectedY + 1] = 0;
-                            board.board[selectedX][selectedY] = 0;
+                        else if((tempSelectedX==selectedX-1) && tempSelectedY == selectedY) {
+                            if(directions[3]) {
+                                board.board[selectedX][selectedY] = actualPlayer;
+                                board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                isSelected = false;
+                                if(actualPlayer==1) {
+                                    Bricks.mainFrame.restTiles.setText("Gracz: Czerwony");
+                                    actualPlayer = 2;
+                                }
+                                else {
+                                    Bricks.mainFrame.restTiles.setText("Gracz: Czarny");
+                                    actualPlayer = 1;
+                                }
+                                checkNoMoves();
+
+                            }
+                        }
+                        else if((tempSelectedX==selectedX) && tempSelectedY == selectedY+1) {
+                            if(directions[2]) {
+                                board.board[selectedX][selectedY] = actualPlayer;
+                                board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                isSelected = false;
+                                if(actualPlayer==1) {
+                                    Bricks.mainFrame.restTiles.setText("Gracz: Czerwony");
+                                    actualPlayer = 2;
+                                }
+                                else {
+                                    Bricks.mainFrame.restTiles.setText("Gracz: Czarny");
+                                    actualPlayer = 1;
+                                }
+                                checkNoMoves();
+
+                            }
+                        }
+                        else if((tempSelectedX==selectedX) && tempSelectedY == selectedY-1) {
+                            if(directions[0]) {
+                                board.board[selectedX][selectedY] = actualPlayer;
+                                board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                isSelected = false;
+                                if(actualPlayer==1) {
+                                    Bricks.mainFrame.restTiles.setText("Gracz: Czerwony");
+                                    actualPlayer = 2;
+                                }
+                                else {
+                                    Bricks.mainFrame.restTiles.setText("Gracz: Czarny");
+                                    actualPlayer = 1;
+                                }
+                                checkNoMoves();
+
+                            }
+                        }
+                        else {
                             isSelected = false;
-                            board.size -= 1;
-                            Bricks.mainFrame.restTiles.setText("Pozostało: " + board.size);
-                            checkNoMoves();
-                        } else if (board.diagonallyMoves && (tempSelectedX == selectedX + 2) && (tempSelectedY == selectedY + 2) && directions[5]) {
-                            board.board[tempSelectedX][tempSelectedY] = 1;
-                            board.board[tempSelectedX - 1][tempSelectedY - 1] = 0;
-                            board.board[selectedX][selectedY] = 0;
-                            isSelected = false;
-                            board.size -= 1;
-                            Bricks.mainFrame.restTiles.setText("Pozostało: " + board.size);
-                            checkNoMoves();
-                        } else if (board.diagonallyMoves && (tempSelectedX == selectedX - 2) && (tempSelectedY == selectedY + 2) && directions[6]) {
-                            board.board[tempSelectedX][tempSelectedY] = 1;
-                            board.board[tempSelectedX + 1][tempSelectedY - 1] = 0;
-                            board.board[selectedX][selectedY] = 0;
-                            isSelected = false;
-                            board.size -= 1;
-                            Bricks.mainFrame.restTiles.setText("Pozostało: " + board.size);
-                            checkNoMoves();
-                        } else if (board.diagonallyMoves && (tempSelectedX == selectedX - 2) && (tempSelectedY == selectedY - 2) && directions[7]) {
-                            board.board[tempSelectedX][tempSelectedY] = 1;
-                            board.board[tempSelectedX + 1][tempSelectedY + 1] = 0;
-                            board.board[selectedX][selectedY] = 0;
-                            isSelected = false;
-                            board.size -= 1;
-                            Bricks.mainFrame.restTiles.setText("Pozostało: " + board.size);
-                            checkNoMoves();
-                        } else
-                            isSelected = false;
+                        }
+
                     } else
                         isSelected = false;
                 }
@@ -144,36 +142,59 @@ public class BoardPanel extends Canvas {
         Graphics2D g2 = (Graphics2D) g;
         int width = getWidth();
         int height = getHeight();
-        g2.setStroke(new BasicStroke(2));
-        g2.drawRect(margin, margin, getWidth() - 2 * margin, getHeight() - 2 * margin);
-
         oneFieldWidth = (width - margin * 2) / board.width;
         oneFieldHeight = (height - margin * 2) / board.height;
-        int inFieldMargin = 12;
+        g2.setStroke(new BasicStroke(2));
+        g2.drawRect(margin, margin, oneFieldWidth*board.width, oneFieldHeight*board.height);
+        g2.setColor(Color.WHITE);
+        g2.fillRect(margin, margin, oneFieldWidth*board.width, oneFieldHeight*board.height);
+        int inFieldMargin = 0;
         for (int i = 0; i < board.height; i++) {
+            if(i>0) {
+                g2.setColor(Color.BLACK);
+                g2.drawLine(margin,margin+i*oneFieldHeight,margin+oneFieldWidth*board.width,margin+i*oneFieldHeight);
+            }
             for (int j = 0; j < board.width; j++) {
-                if (board.board[j][i] == 0 || board.board[j][i] == 1) {
-                    g2.setColor(new Color(142, 142, 56));
-                    int fieldBackgroundMargin = 8;
-                    g2.fillOval(j * oneFieldWidth + margin + fieldBackgroundMargin, i * oneFieldHeight + margin + fieldBackgroundMargin, oneFieldWidth - 2 * fieldBackgroundMargin, oneFieldHeight - 2 * fieldBackgroundMargin);
+                if(j>0) {
+                    g2.setColor(Color.BLACK);
+                    g2.drawLine(margin+j*oneFieldWidth,margin,margin+j*oneFieldWidth,oneFieldHeight*board.height+margin);
                 }
                 if (board.board[j][i] == 1) {
                     g2.setColor(Color.BLACK);
-                    g2.fillOval(j * oneFieldWidth + margin + inFieldMargin, i * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
+                    g2.fillRect(j * oneFieldWidth + margin + inFieldMargin, i * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
+                }
+                if (board.board[j][i] == 2) {
+                    g2.setColor(new Color(238, 44, 44));
+                    g2.fillRect(j * oneFieldWidth + margin + inFieldMargin, i * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
                 }
             }
         }
-        if (isSelected) {
-            g2.setColor(new Color(238, 44, 44));
-            g2.fillOval(selectedX * oneFieldWidth + margin + inFieldMargin, selectedY * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
+        if(actualPlayer==1) {
+            if (isSelected) {
+                g2.setColor(Color.BLACK);
+                g2.fillRect(selectedX * oneFieldWidth + margin + inFieldMargin, selectedY * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
+            }
+        }
+        if(actualPlayer==2) {
+            if (isSelected) {
+                g2.setColor(new Color(238, 44, 44));
+                g2.fillRect(selectedX * oneFieldWidth + margin + inFieldMargin, selectedY * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
+            }
         }
 
     }
 
     private void checkNoMoves() {
         if (!board.anyMoves()) {
-            int selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, chcesz zagrać jeszcze raz?", "Koniec" +
-                    " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int selection;
+            if(actualPlayer == 1) {
+                selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz czerwony, chcesz zagrać jeszcze raz?", "Koniec" +
+                        " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            }
+            else {
+                selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz czarny, chcesz zagrać jeszcze raz?", "Koniec" +
+                        " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            }
             if (selection == JOptionPane.OK_OPTION) {
                 resetBoard();
                 firstMove = true;
@@ -185,11 +206,17 @@ public class BoardPanel extends Canvas {
 
     private void resetBoard() {
         board.reset();
-        Bricks.mainFrame.restTiles.setText("Pozostało: " + board.size);
         isSelected = false;
+        Bricks.mainFrame.restTiles.setText("Gracz: Czarny");
+    }
+
+    public int getActualPlayer(){
+        return actualPlayer;
     }
 
     private Board board;
+
+    private int actualPlayer = 1;
 
     private int margin = 20;
 

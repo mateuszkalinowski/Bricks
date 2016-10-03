@@ -2,6 +2,8 @@ package frames;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 
 /**
  * Created by Mateusz on 21.05.2016.
@@ -13,28 +15,36 @@ class OptionsFrame extends JDialog {
         setLocationRelativeTo(null);
         setModal(true);
         setTitle("Opcje");
-        JLabel title = new JLabel("Wybierz typ Planszy", SwingConstants.CENTER);
+        JLabel title = new JLabel("Wybierz tryb gry:", SwingConstants.CENTER);
         JPanel optionsGridLayout = new JPanel(new GridLayout(2, 2));
-        JLabel boardType = new JLabel("Kształt: ", SwingConstants.CENTER);
+        JLabel boardType = new JLabel("Typ gry: ", SwingConstants.CENTER);
         JLabel boardSize = new JLabel("Rozmiar planszy: ", SwingConstants.CENTER);
         optionsGridLayout.add(boardType);
-        boardTypeComboBox = new JComboBox<>();
-        boardTypeComboBox.addItem("Klasyczna");
-        boardTypeComboBox.addItem("Kwadratowa");
-        boardTypeComboBox.addItem("Trójkątna");
+        gameTypeComboBox = new JComboBox<>();
+        gameTypeComboBox.addItem("Jednoosobowa");
+        gameTypeComboBox.addItem("Dwuosobowa");
+        gameTypeComboBox.setSelectedIndex(1);
+
+        gameTypeComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(gameTypeComboBox.getSelectedIndex()==0) {
+                    JOptionPane.showMessageDialog(null,"Tryb gry jednoosobowej zostanie zaimplementowany w przyszłości","Błąd trybu gry",JOptionPane.OK_OPTION);
+                    gameTypeComboBox.setSelectedIndex(1);
+                }
+            }
+        });
 
         JButton execute = new JButton("Graj");
         execute.addActionListener(e -> dispose());
-
-        boardTypeComboBox.addActionListener(e -> {
-            if (boardTypeComboBox.getSelectedIndex() == 1 || boardTypeComboBox.getSelectedIndex() == 2)
-                boardSizeComboBox.setEnabled(true);
-            else {
-                boardSizeComboBox.setEnabled(false);
-                boardSizeComboBox.setSelectedIndex(1);
+        execute.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                isPlayPressed = true;
+                dispose();
             }
         });
-        optionsGridLayout.add(boardTypeComboBox);
+        optionsGridLayout.add(gameTypeComboBox);
         boardSizeComboBox = new JComboBox<>();
         boardSizeComboBox.addItem("5x5");
         boardSizeComboBox.addItem("7x7");
@@ -42,7 +52,7 @@ class OptionsFrame extends JDialog {
         boardSizeComboBox.addItem("11x11");
         optionsGridLayout.add(boardSize);
         optionsGridLayout.add(boardSizeComboBox);
-        boardSizeComboBox.setEnabled(false);
+        boardSizeComboBox.setEnabled(true);
         JPanel mainBorderLayout = new JPanel(new BorderLayout());
         mainBorderLayout.add(optionsGridLayout, BorderLayout.CENTER);
         mainBorderLayout.add(title, BorderLayout.NORTH);
@@ -51,14 +61,15 @@ class OptionsFrame extends JDialog {
     }
 
     int[] showDialog() {
-        int[] values = new int[2];
+        int[] values = new int[3];
         setVisible(true);
-        values[0] = boardTypeComboBox.getSelectedIndex();
+        values[0] = gameTypeComboBox.getSelectedIndex();
         values[1] = boardSizeComboBox.getSelectedIndex();
-
+        values[2] = isPlayPressed ? 1 : 0;
         return values;
     }
 
-    private JComboBox<String> boardTypeComboBox;
+    private JComboBox<String> gameTypeComboBox;
     private JComboBox<String> boardSizeComboBox;
+    private boolean isPlayPressed = false;
 }

@@ -6,6 +6,7 @@ import logic.Board;
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
 
 /**
  * Created by Mateusz on 20.05.2016.
@@ -15,7 +16,7 @@ public class MainFrame extends JFrame implements Runnable {
     public MainFrame() {
         setTitle("Bricks");
         setSize(600, 600);
-        setResizable(false);
+        setResizable(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -24,32 +25,25 @@ public class MainFrame extends JFrame implements Runnable {
         gameBorderLayout = new JPanel(new BorderLayout());
         JLabel gameName = new JLabel("Bricks", SwingConstants.CENTER);
         JPanel buttonsGridLayout = new JPanel(new GridLayout(2, 1));
-        restTiles = new JLabel("Pozostało: 0");
-        gameBorderLayout.add(restTiles, BorderLayout.SOUTH);
         //boardPanel = new BoardPanel();
+        restTiles = new JLabel("Gracz: Czarny");
+        gameBorderLayout.add(restTiles,BorderLayout.SOUTH);
         buttonsGridLayout.setBorder(new EmptyBorder(100, 100, 100, 100));
         JButton run = new JButton("Graj");
         run.addActionListener(e -> {
             int conditions[] = optionsDialog.showDialog();
-            if (conditions[0] == 0) {
-                board = new Board();
-            } else if (conditions[0] == 1) {
+            if(conditions[2] == 1) {
                 board = new Board(5 + 2 * conditions[1]);
-
-            } else if (conditions[0] == 2) {
-                board = new Board(5 + 2 * conditions[1], 5 + 2 * conditions[1]);
-
+                boardPanel = new BoardPanel(board);
+                gameBorderLayout.add(boardPanel, BorderLayout.CENTER);
+                this.getContentPane().removeAll();
+                this.getContentPane().add(gameBorderLayout);
+                this.revalidate();
+                this.repaint();
+                running = true;
+                game = new Thread(this);
+                game.start();
             }
-            boardPanel = new BoardPanel(board);
-            restTiles.setText("Pozostało: " + board.size);
-            gameBorderLayout.add(boardPanel, BorderLayout.CENTER);
-            this.getContentPane().removeAll();
-            this.getContentPane().add(gameBorderLayout);
-            this.revalidate();
-            this.repaint();
-            running = true;
-            game = new Thread(this);
-            game.start();
         });
         JButton exit = new JButton("Wyjdź");
         exit.addActionListener(e -> System.exit(0));
@@ -104,9 +98,10 @@ public class MainFrame extends JFrame implements Runnable {
     //private void tick(int ticks) {}
     private OptionsFrame optionsDialog;
     private Thread game;
-    public JLabel restTiles;
     private Board board;
     private BoardPanel boardPanel;
     private JPanel gameBorderLayout;
     private boolean running = false;
+
+    public JLabel restTiles;
 }
