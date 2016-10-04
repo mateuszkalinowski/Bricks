@@ -37,7 +37,13 @@ public class MainFrame extends JFrame implements Runnable {
         gameBorderLayout = new JPanel(new BorderLayout());
         JLabel gameName = new JLabel("Bricks", SwingConstants.CENTER);
         JPanel buttonsGridLayout = new JPanel(new GridLayout(9, 1));
-        //boardPanel = new BoardPanel();
+        JButton undoLastMoveButton = new JButton("Cofnij");
+        undoLastMoveButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                boardPanel.undoLastMove();
+            }
+        });
         restTiles = new JLabel("Gracz Pierwszy");
         buttonsGridLayout.setBorder(new EmptyBorder(getHeight()/5, getWidth()/5, getHeight()/5, getWidth()/5));
         JButton runSinglePlayer = new JButton("Gra Jednoosobowa");
@@ -62,7 +68,14 @@ public class MainFrame extends JFrame implements Runnable {
         });
         runMultiPlayer.addActionListener(e -> {
                 board = new Board(BoardSize);
-            gameBorderLayout.add(restTiles,BorderLayout.SOUTH);
+
+                JPanel southBorderLayout = new JPanel(new BorderLayout());
+
+                southBorderLayout.add(restTiles,BorderLayout.WEST);
+                southBorderLayout.add(undoLastMoveButton,BorderLayout.EAST);
+
+                gameBorderLayout.add(southBorderLayout,BorderLayout.SOUTH);
+
                 boardPanel = new BoardPanel(board,1);
                 gameBorderLayout.add(boardPanel, BorderLayout.CENTER);
                 this.getContentPane().removeAll();
@@ -99,7 +112,7 @@ public class MainFrame extends JFrame implements Runnable {
         exitButton.setFocusPainted(false);
         exitButton.addActionListener(e -> System.exit(0));
 
-        JLabel credits = new JLabel("Autor: Mateusz Kalinowski @2016 Wersja: 0.9.2");
+        JLabel credits = new JLabel("Autor: Mateusz Kalinowski @2016 Wersja: 0.9.3");
         credits.setHorizontalAlignment(0);
         mainBorderLayout.add(credits,BorderLayout.SOUTH);
 

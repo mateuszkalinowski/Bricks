@@ -3,6 +3,7 @@ package gfx;
 import core.Bricks;
 import frames.MainFrame;
 import logic.Board;
+import logic.MovesStorage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -32,7 +33,7 @@ public class BoardPanel extends Canvas {
                 super.keyReleased(e);
             }
         });
-
+        movesStorage = new MovesStorage();
         addMouseListener(new MouseAdapter() {
             @Override
             public void mouseClicked(MouseEvent e) {
@@ -56,6 +57,7 @@ public class BoardPanel extends Canvas {
                             if(directions[1]) {
                                 board.board[selectedX][selectedY] = actualPlayer;
                                 board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                movesStorage.addMove(selectedX,selectedY,tempSelectedX,tempSelectedY);
                                 isSelected = false;
                                 if(actualPlayer==1) {
                                     Bricks.mainFrame.restTiles.setText("Gracz Drugi");
@@ -79,6 +81,7 @@ public class BoardPanel extends Canvas {
                             if(directions[3]) {
                                 board.board[selectedX][selectedY] = actualPlayer;
                                 board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                movesStorage.addMove(selectedX,selectedY,tempSelectedX,tempSelectedY);
                                 isSelected = false;
                                 if(actualPlayer==1) {
                                     Bricks.mainFrame.restTiles.setText("Gracz Drugi");
@@ -102,6 +105,7 @@ public class BoardPanel extends Canvas {
                             if(directions[2]) {
                                 board.board[selectedX][selectedY] = actualPlayer;
                                 board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                movesStorage.addMove(selectedX,selectedY,tempSelectedX,tempSelectedY);
                                 isSelected = false;
                                 if(actualPlayer==1) {
                                     Bricks.mainFrame.restTiles.setText("Gracz Drugi");
@@ -125,6 +129,7 @@ public class BoardPanel extends Canvas {
                             if(directions[0]) {
                                 board.board[selectedX][selectedY] = actualPlayer;
                                 board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                movesStorage.addMove(selectedX,selectedY,tempSelectedX,tempSelectedY);
                                 isSelected = false;
                                 if(actualPlayer==1) {
                                     Bricks.mainFrame.restTiles.setText("Gracz Drugi");
@@ -246,6 +251,24 @@ public class BoardPanel extends Canvas {
         actualPlayer = 1;
     }
 
+    public void undoLastMove() {
+        int[] lastMove = movesStorage.returnMoveLikeArray();
+        if(lastMove[0]!=-1) {
+            board.board[lastMove[0]][lastMove[1]] = 0;
+            board.board[lastMove[2]][lastMove[3]] = 0;
+            drawBoardFrame();
+            if (actualPlayer == 1) {
+                actualPlayer = 2;
+                Bricks.mainFrame.restTiles.setText("Gracz Drugi");
+            }
+            else {
+                actualPlayer = 1;
+                Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
+            }
+        }
+
+    }
+
     public int getActualPlayer(){
         return actualPlayer;
     }
@@ -266,6 +289,8 @@ public class BoardPanel extends Canvas {
     private int selectedY;
 
     private boolean firstMove = true;
+
+    private MovesStorage movesStorage;
 
     private Graphics g;
 }
