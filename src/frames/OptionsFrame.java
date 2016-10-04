@@ -76,7 +76,10 @@ class OptionsFrame extends JDialog {
 
         JButton saveChanges = new JButton("Zapisz zmiany");
 
-        saveChanges.addActionListener(e -> dispose());
+        saveChanges.addActionListener(e -> {
+            wasSaveClicked = true;
+            dispose();
+        });
 
         mainBorderLayout.add(saveChanges,BorderLayout.SOUTH);
 
@@ -84,6 +87,7 @@ class OptionsFrame extends JDialog {
     }
 
     public Settings showDialog(Settings firstSettings) {
+        wasSaveClicked = false;
         playerFirstColor = firstSettings.getPlayerFirstColor();
         playerSecondColor = firstSettings.getPlayerSecondColor();
         BoardSize = firstSettings.getBoardSize();
@@ -106,4 +110,6 @@ class OptionsFrame extends JDialog {
 
     private JComboBox<String> boardSizeComboBox;
     private boolean isPlayPressed = false;
+
+    public boolean wasSaveClicked = false;
 }

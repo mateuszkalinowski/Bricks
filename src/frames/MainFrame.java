@@ -7,11 +7,10 @@ import logic.Board;
 import logic.ComputerPlayer;
 
 import javax.swing.*;
-import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
-import javax.swing.border.StrokeBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.net.URL;
 
 /**
  * Created by Mateusz on 20.05.2016.
@@ -24,6 +23,11 @@ public class MainFrame extends JFrame implements Runnable {
         setSize(600, 600);
         setMinimumSize(new Dimension(550,500));
         setResizable(true);
+
+        URL imgURL = this.getClass().getResource("brick-wall.png");
+        ImageIcon icon =  new ImageIcon(imgURL);
+        setIconImage(icon.getImage());
+
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
@@ -92,9 +96,11 @@ public class MainFrame extends JFrame implements Runnable {
         JButton optionsButton = new JButton("Opcje");
         optionsButton.addActionListener(e -> {
             Settings newSettings = optionsDialog.showDialog(new Settings(BoardSize,playerFirstColor,playerSecondColor));
-            BoardSize = newSettings.getBoardSize();
-            playerFirstColor = newSettings.getPlayerFirstColor();
-            playerSecondColor = newSettings.getPlayerSecondColor();
+            if(optionsDialog.wasSaveClicked) {
+                BoardSize = newSettings.getBoardSize();
+                playerFirstColor = newSettings.getPlayerFirstColor();
+                playerSecondColor = newSettings.getPlayerSecondColor();
+            }
         });
         optionsButton.setFont(new Font("Comic Sans MS", Font.BOLD,25));
         optionsButton.setFocusPainted(false);
@@ -111,7 +117,7 @@ public class MainFrame extends JFrame implements Runnable {
         exitButton.setFocusPainted(false);
         exitButton.addActionListener(e -> System.exit(0));
 
-        credits = new JLabel("Autor: Mateusz Kalinowski @2016 Wersja: 0.9.5");
+        credits = new JLabel("Autor: Mateusz Kalinowski @2016 Wersja: 0.9.5, Icon made by Madebyoliver from www.flaticon.com ");
         credits.setHorizontalAlignment(0);
 
 
