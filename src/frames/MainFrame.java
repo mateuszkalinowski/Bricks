@@ -34,10 +34,9 @@ public class MainFrame extends JFrame implements Runnable {
         }
 
         optionsDialog = new OptionsFrame();
-        mainBorderLayout = new JPanel(new BorderLayout());
 
-        JLabel gameName = new JLabel("Bricks", SwingConstants.CENTER);
-        JPanel buttonsGridLayout = new JPanel(new GridLayout(9, 1));
+        gameName = new JLabel("Bricks", SwingConstants.CENTER);
+        buttonsGridLayout = new JPanel(new GridLayout(9, 1));
         JButton undoLastMoveButton = new JButton("Cofnij");
 
         restTiles = new JLabel("Gracz Pierwszy");
@@ -111,9 +110,9 @@ public class MainFrame extends JFrame implements Runnable {
         exitButton.setFocusPainted(false);
         exitButton.addActionListener(e -> System.exit(0));
 
-        JLabel credits = new JLabel("Autor: Mateusz Kalinowski @2016 Wersja: 0.9.5");
+        credits = new JLabel("Autor: Mateusz Kalinowski @2016 Wersja: 0.9.5");
         credits.setHorizontalAlignment(0);
-        mainBorderLayout.add(credits,BorderLayout.SOUTH);
+
 
         buttonsGridLayout.add(new JLabel());
         buttonsGridLayout.add(runSinglePlayer);
@@ -125,19 +124,28 @@ public class MainFrame extends JFrame implements Runnable {
         buttonsGridLayout.add(exitButton);
         buttonsGridLayout.add(new JLabel());
 
-        mainBorderLayout.add(buttonsGridLayout, BorderLayout.CENTER);
+
         gameName.setFont(new Font("Comic Sans MS", Font.BOLD, 100));
         gameName.setForeground(Color.BLACK);
-        mainBorderLayout.add(gameName, BorderLayout.NORTH);
+
+        prepareMainBorderLayout();
         add(mainBorderLayout);
     }
-
+    private void prepareMainBorderLayout() {
+        mainBorderLayout = new JPanel(new BorderLayout());
+        mainBorderLayout.add(credits,BorderLayout.SOUTH);
+        mainBorderLayout.add(buttonsGridLayout, BorderLayout.CENTER);
+        mainBorderLayout.add(gameName, BorderLayout.NORTH);
+    }
     public void stopGame(){
         game.interrupt();
         running = false;
         this.getContentPane().removeAll();
-        this.getContentPane().repaint();
+        prepareMainBorderLayout();
         this.getContentPane().add(mainBorderLayout);
+        this.getContentPane().repaint();
+        validate();
+        repaint();
     }
     @Override
     public void run() {
@@ -191,6 +199,11 @@ public class MainFrame extends JFrame implements Runnable {
     public int BoardSize = 5;
 
     private JPanel mainBorderLayout;
+    private JPanel buttonsGridLayout;
+
+    private JLabel gameName;
+    private JLabel credits;
+
 
     public JLabel restTiles;
 }
