@@ -281,8 +281,6 @@ public class BoardPanel extends Canvas {
                 Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
             }
         }
-        if (movesStorage.isEmpty())
-            Bricks.mainFrame.undoLastMoveButton.setEnabled(false);
     }
         if(gamemode == 0) {
             int []lastMove = movesStorage.returnMoveLikeArray();
@@ -298,6 +296,8 @@ public class BoardPanel extends Canvas {
             drawBoardFrame();
             actualPlayer=1;
         }
+        if (movesStorage.isEmpty())
+            Bricks.mainFrame.undoLastMoveButton.setEnabled(false);
     }
 
     public int getActualPlayer(){

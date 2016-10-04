@@ -46,8 +46,8 @@ public class MainFrame extends JFrame implements Runnable {
 
         restTiles = new JLabel("Gracz Pierwszy");
         buttonsGridLayout.setBorder(new EmptyBorder(0, getWidth()/4, 0, getWidth()/4));
-        JButton runSinglePlayer = new JButton("Gra Jednoosobowa");
-        JButton runMultiPlayer = new JButton("Gra Dwuosobowa");
+        JButton runSinglePlayer = new JButton("Gra jednoosobowa");
+        JButton runMultiPlayer = new JButton("Gra dwuosobowa");
 
         runSinglePlayer.setFont(new Font("Comic Sans MS", Font.BOLD,25));
         runSinglePlayer.setFocusPainted(false);
