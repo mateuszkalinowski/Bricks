@@ -58,7 +58,7 @@ public class BoardPanel extends Canvas {
                                 board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                 isSelected = false;
                                 if(actualPlayer==1) {
-                                    Bricks.mainFrame.restTiles.setText("Gracz: Czerwony");
+                                    Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     actualPlayer = 2;
                                     if(!checkNoMoves()) {
                                         if (gametype == 0) {
@@ -68,7 +68,7 @@ public class BoardPanel extends Canvas {
                                     }
                                 }
                                 else {
-                                    Bricks.mainFrame.restTiles.setText("Gracz: Zielony");
+                                    Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
                                     actualPlayer = 1;
                                 }
                                 checkNoMoves();
@@ -81,7 +81,7 @@ public class BoardPanel extends Canvas {
                                 board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                 isSelected = false;
                                 if(actualPlayer==1) {
-                                    Bricks.mainFrame.restTiles.setText("Gracz: Czerwony");
+                                    Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     actualPlayer = 2;
                                     if(!checkNoMoves()) {
                                         if (gametype == 0) {
@@ -91,7 +91,7 @@ public class BoardPanel extends Canvas {
                                     }
                                 }
                                 else {
-                                    Bricks.mainFrame.restTiles.setText("Gracz: Zielony");
+                                    Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
                                     actualPlayer = 1;
                                 }
                                 checkNoMoves();
@@ -104,7 +104,7 @@ public class BoardPanel extends Canvas {
                                 board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                 isSelected = false;
                                 if(actualPlayer==1) {
-                                    Bricks.mainFrame.restTiles.setText("Gracz: Czerwony");
+                                    Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     actualPlayer = 2;
                                     if(!checkNoMoves()) {
                                         if (gametype == 0) {
@@ -114,7 +114,7 @@ public class BoardPanel extends Canvas {
                                     }
                                 }
                                 else {
-                                    Bricks.mainFrame.restTiles.setText("Gracz: Zielony");
+                                    Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
                                     actualPlayer = 1;
                                 }
                                 checkNoMoves();
@@ -127,7 +127,7 @@ public class BoardPanel extends Canvas {
                                 board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                 isSelected = false;
                                 if(actualPlayer==1) {
-                                    Bricks.mainFrame.restTiles.setText("Gracz: Czerwony");
+                                    Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     actualPlayer = 2;
                                     if(!checkNoMoves()) {
                                         if (gametype == 0) {
@@ -137,7 +137,7 @@ public class BoardPanel extends Canvas {
                                     }
                                 }
                                 else {
-                                    Bricks.mainFrame.restTiles.setText("Gracz: Zielony");
+                                    Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
                                     actualPlayer = 1;
                                 }
                                 checkNoMoves();
@@ -195,24 +195,28 @@ public class BoardPanel extends Canvas {
                     g2.drawLine(margin+j*oneFieldWidth,margin,margin+j*oneFieldWidth,oneFieldHeight*board.height+margin);
                 }
                 if (board.board[j][i] == 1) {
-                    g2.setColor(new Color(69, 136, 58));
+                   // g2.setColor(new Color(69, 136, 58));
+                    g2.setColor(Bricks.mainFrame.playerFirstColor);
                     g2.fillRect(j * oneFieldWidth + margin + inFieldMargin, i * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
                 }
                 if (board.board[j][i] == 2) {
-                    g2.setColor(new Color(238, 44, 44));
+                    //g2.setColor(new Color(238, 44, 44));
+                    g2.setColor(Bricks.mainFrame.playerSecondColor);
                     g2.fillRect(j * oneFieldWidth + margin + inFieldMargin, i * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
                 }
             }
         }
         if(actualPlayer==1) {
             if (isSelected) {
-                g2.setColor(new Color(69, 136, 58));
+                //g2.setColor(new Color(69, 136, 58));
+                g2.setColor(Bricks.mainFrame.playerFirstColor);
                 g2.fillRect(selectedX * oneFieldWidth + margin + inFieldMargin, selectedY * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
             }
         }
         if(actualPlayer==2) {
             if (isSelected) {
-                g2.setColor(new Color(238, 44, 44));
+                //g2.setColor(new Color(238, 44, 44));
+                g2.setColor(Bricks.mainFrame.playerSecondColor);
                 g2.fillRect(selectedX * oneFieldWidth + margin + inFieldMargin, selectedY * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
             }
         }
@@ -244,7 +248,7 @@ public class BoardPanel extends Canvas {
     private void resetBoard() {
         board.reset();
         isSelected = false;
-        Bricks.mainFrame.restTiles.setText("Gracz: Zielony");
+        Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
         actualPlayer = 1;
     }
 

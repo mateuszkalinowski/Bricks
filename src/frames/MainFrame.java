@@ -1,5 +1,6 @@
 package frames;
 
+import core.Settings;
 import gfx.BoardPanel;
 import logic.Board;
 import logic.ComputerPlayer;
@@ -9,7 +10,7 @@ import javax.swing.border.Border;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.StrokeBorder;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
+import java.awt.event.*;
 
 /**
  * Created by Mateusz on 20.05.2016.
@@ -19,6 +20,7 @@ public class MainFrame extends JFrame implements Runnable {
     public MainFrame() {
         setTitle("Bricks");
         setSize(600, 600);
+        setMinimumSize(new Dimension(550,500));
         setResizable(true);
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -27,24 +29,21 @@ public class MainFrame extends JFrame implements Runnable {
         JPanel mainBorderLayout = new JPanel(new BorderLayout());
         gameBorderLayout = new JPanel(new BorderLayout());
         JLabel gameName = new JLabel("Bricks", SwingConstants.CENTER);
-        JPanel buttonsGridLayout = new JPanel(new GridLayout(2, 1));
+        JPanel buttonsGridLayout = new JPanel(new GridLayout(9, 1));
         //boardPanel = new BoardPanel();
-        restTiles = new JLabel("Gracz: Zielony");
-        buttonsGridLayout.setBorder(new EmptyBorder(120, 100, 100, 120));
-        JButton run = new JButton("Graj");
-        run.setFont(new Font("Comic Sans MS", Font.BOLD,30));
-        run.setFocusPainted(false);
-        run.addActionListener(e -> {
-            int conditions[] = optionsDialog.showDialog();
-            if(conditions[2] == 1) {
-                //board = new Board(5 + 2 * conditions[1]);
-                board = new Board(conditions[1]);
-                if(conditions[0]==1)
-                    gameBorderLayout.add(restTiles,BorderLayout.SOUTH);
-                else {
-                    comp = new ComputerPlayer();
-                }
-                boardPanel = new BoardPanel(board,conditions[0]);
+        restTiles = new JLabel("Gracz Pierwszy");
+        buttonsGridLayout.setBorder(new EmptyBorder(getHeight()/5, getWidth()/5, getHeight()/5, getWidth()/5));
+        JButton runSinglePlayer = new JButton("Gra Jednoosobowa");
+        JButton runMultiPlayer = new JButton("Gra Dwuosobowa");
+
+        runSinglePlayer.setFont(new Font("Comic Sans MS", Font.BOLD,25));
+        runSinglePlayer.setFocusPainted(false);
+        runMultiPlayer.setFont(new Font("Comic Sans MS", Font.BOLD,25));
+        runMultiPlayer.setFocusPainted(false);
+        runSinglePlayer.addActionListener(e -> {
+                board = new Board(BoardSize);
+                comp = new ComputerPlayer();
+                boardPanel = new BoardPanel(board,0);
                 gameBorderLayout.add(boardPanel, BorderLayout.CENTER);
                 this.getContentPane().removeAll();
                 this.getContentPane().add(gameBorderLayout);
@@ -53,27 +52,65 @@ public class MainFrame extends JFrame implements Runnable {
                 running = true;
                 game = new Thread(this);
                 game.start();
+        });
+        runMultiPlayer.addActionListener(e -> {
+                board = new Board(BoardSize);
+            gameBorderLayout.add(restTiles,BorderLayout.SOUTH);
+                boardPanel = new BoardPanel(board,1);
+                gameBorderLayout.add(boardPanel, BorderLayout.CENTER);
+                this.getContentPane().removeAll();
+                this.getContentPane().add(gameBorderLayout);
+                this.revalidate();
+                this.repaint();
+                running = true;
+                game = new Thread(this);
+                game.start();
+        });
+
+        JButton optionsButton = new JButton("Opcje");
+        optionsButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                Settings newSettings = optionsDialog.showDialog();
+                BoardSize = newSettings.getBoardSize();
+                playerFirstColor = newSettings.getPlayerFirstColor();
+                playerSecondColor = newSettings.getPlayerSecondColor();
             }
         });
-        JButton exit = new JButton("Wyjdź");
-        exit.setFont(new Font("Comic Sans MS", Font.BOLD,30));
-        exit.setFocusPainted(false);
-        exit.addActionListener(e -> System.exit(0));
+        optionsButton.setFont(new Font("Comic Sans MS", Font.BOLD,25));
+        optionsButton.setFocusPainted(false);
 
-        JLabel credits = new JLabel("Autor: Mateusz Kalinowski @2016. Dalsze modyfikacje w celach niekomercyjnych dozwolone.");
+        this.addComponentListener(new ComponentAdapter() {
+            @Override
+            public void componentResized(ComponentEvent e) {
+                buttonsGridLayout.setBorder(new EmptyBorder(0, getWidth()/4, 0, getWidth()/4));
+                repaint();
+            }
+        });
+        JButton exitButton = new JButton("Wyjdź");
+        exitButton.setFont(new Font("Comic Sans MS", Font.BOLD,25));
+        exitButton.setFocusPainted(false);
+        exitButton.addActionListener(e -> System.exit(0));
+
+        JLabel credits = new JLabel("Autor: Mateusz Kalinowski @2016 Wersja: 0.9.1");
         credits.setHorizontalAlignment(0);
         mainBorderLayout.add(credits,BorderLayout.SOUTH);
 
-        buttonsGridLayout.add(run);
-        buttonsGridLayout.add(exit);
+        buttonsGridLayout.add(new JLabel());
+        buttonsGridLayout.add(runSinglePlayer);
+        buttonsGridLayout.add(new JLabel());
+        buttonsGridLayout.add(runMultiPlayer);
+        buttonsGridLayout.add(new JLabel());
+        buttonsGridLayout.add(optionsButton);
+        buttonsGridLayout.add(new JLabel());
+        buttonsGridLayout.add(exitButton);
+        buttonsGridLayout.add(new JLabel());
 
         mainBorderLayout.add(buttonsGridLayout, BorderLayout.CENTER);
         gameName.setFont(new Font("Comic Sans MS", Font.BOLD, 100));
         gameName.setForeground(Color.BLACK);
         mainBorderLayout.add(gameName, BorderLayout.NORTH);
         add(mainBorderLayout);
-
-
     }
 
 
@@ -121,6 +158,12 @@ public class MainFrame extends JFrame implements Runnable {
     private JPanel gameBorderLayout;
     private boolean running = false;
     public ComputerPlayer comp;
+
+    public Color playerFirstColor = new Color(69, 136, 58);
+
+    public Color playerSecondColor = new Color(238, 44, 44);
+
+    public int BoardSize = 5;
 
     public JLabel restTiles;
 }
