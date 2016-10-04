@@ -45,7 +45,7 @@ public class MainFrame extends JFrame implements Runnable {
         JButton undoLastMoveButton = new JButton("Cofnij");
 
         restTiles = new JLabel("Gracz Pierwszy");
-        buttonsGridLayout.setBorder(new EmptyBorder(getHeight()/5, getWidth()/5, getHeight()/5, getWidth()/5));
+        buttonsGridLayout.setBorder(new EmptyBorder(0, getWidth()/4, 0, getWidth()/4));
         JButton runSinglePlayer = new JButton("Gra Jednoosobowa");
         JButton runMultiPlayer = new JButton("Gra Dwuosobowa");
 
@@ -108,7 +108,10 @@ public class MainFrame extends JFrame implements Runnable {
         this.addComponentListener(new ComponentAdapter() {
             @Override
             public void componentResized(ComponentEvent e) {
-                buttonsGridLayout.setBorder(new EmptyBorder(0, getWidth()/4, 0, getWidth()/4));
+                if(getWidth()<800)
+                    buttonsGridLayout.setBorder(new EmptyBorder(0, getWidth()/4, 0, getWidth()/4));
+                else
+                    buttonsGridLayout.setBorder(new EmptyBorder(0, getWidth()/3, 0, getWidth()/3));
                 repaint();
             }
         });
