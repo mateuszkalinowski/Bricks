@@ -37,7 +37,8 @@ public class MainFrame extends JFrame implements Runnable {
         run.addActionListener(e -> {
             int conditions[] = optionsDialog.showDialog();
             if(conditions[2] == 1) {
-                board = new Board(5 + 2 * conditions[1]);
+                //board = new Board(5 + 2 * conditions[1]);
+                board = new Board(conditions[1]);
                 if(conditions[0]==1)
                     gameBorderLayout.add(restTiles,BorderLayout.SOUTH);
                 else {

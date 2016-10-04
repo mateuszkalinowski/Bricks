@@ -34,10 +34,12 @@ class OptionsFrame extends JDialog {
         });
         optionsGridLayout.add(gameTypeComboBox);
         boardSizeComboBox = new JComboBox<>();
+        boardSizeComboBox.addItem("3x3");
         boardSizeComboBox.addItem("5x5");
         boardSizeComboBox.addItem("7x7");
         boardSizeComboBox.addItem("9x9");
         boardSizeComboBox.addItem("11x11");
+        boardSizeComboBox.addItem("13x13");
         optionsGridLayout.add(boardSize);
         optionsGridLayout.add(boardSizeComboBox);
         boardSizeComboBox.setEnabled(true);
@@ -53,6 +55,7 @@ class OptionsFrame extends JDialog {
         setVisible(true);
         values[0] = gameTypeComboBox.getSelectedIndex();
         values[1] = boardSizeComboBox.getSelectedIndex();
+        values[1] = Integer.parseInt(boardSizeComboBox.getSelectedItem().toString().split("x")[0]);
         values[2] = isPlayPressed ? 1 : 0;
         return values;
     }
