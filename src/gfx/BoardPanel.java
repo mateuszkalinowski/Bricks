@@ -40,9 +40,11 @@ public class BoardPanel extends Canvas {
             }
         });
         movesStorage = new MovesStorage();
+
+
         addMouseListener(new MouseAdapter() {
             @Override
-            public void mouseClicked(MouseEvent e) {
+            public void mousePressed(MouseEvent e) {
                 if (!isSelected) {
                     if ((e.getX() > margin && e.getX() < getWidth() - margin) && (e.getY() > margin && e.getY() < getHeight() - margin)) {
                         selectedX = (e.getX() - margin) / oneFieldWidth;
