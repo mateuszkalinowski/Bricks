@@ -23,14 +23,20 @@ import javax.imageio.ImageIO;
 public class BoardPanel extends Canvas {
     public BoardPanel(Board board,int gametype) {
         this.board = board;
+
+        UIManager.put("OptionPane.yesButtonText","Tak");
+        UIManager.put("OptionPane.noButtonText","Nie");
+
         addKeyListener(new KeyAdapter() {
             @Override
-            public void keyPressed(KeyEvent e) {
-            }
-
-            @Override
             public void keyReleased(KeyEvent e) {
-                super.keyReleased(e);
+                    if(e.getKeyCode() == KeyEvent.VK_ESCAPE && Bricks.mainFrame.running) {
+                        int selection = JOptionPane.showConfirmDialog(null, "Chcesz opuścić grę i wrócić do menu?", "Koniec" +
+                                " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (selection == JOptionPane.OK_OPTION) {
+                    Bricks.mainFrame.stopGame();
+                }
+                }
             }
         });
         movesStorage = new MovesStorage();
@@ -235,7 +241,6 @@ public class BoardPanel extends Canvas {
             }
             if (selection == JOptionPane.OK_OPTION) {
                 resetBoard();
-                firstMove = true;
             } else {
                 System.exit(0);
             }
@@ -288,7 +293,6 @@ public class BoardPanel extends Canvas {
     private int selectedX;
     private int selectedY;
 
-    private boolean firstMove = true;
 
     private MovesStorage movesStorage;
 

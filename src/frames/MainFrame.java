@@ -17,6 +17,7 @@ import java.awt.event.*;
  * Project InferenceEngine
  */
 public class MainFrame extends JFrame implements Runnable {
+
     public MainFrame() {
         setTitle("Bricks");
         setSize(600, 600);
@@ -28,22 +29,17 @@ public class MainFrame extends JFrame implements Runnable {
 
         try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (Exception unsupportedLookAndFeel) {
+        } catch (Exception ignored) {
 
         }
 
         optionsDialog = new OptionsFrame();
-        JPanel mainBorderLayout = new JPanel(new BorderLayout());
-        gameBorderLayout = new JPanel(new BorderLayout());
+        mainBorderLayout = new JPanel(new BorderLayout());
+
         JLabel gameName = new JLabel("Bricks", SwingConstants.CENTER);
         JPanel buttonsGridLayout = new JPanel(new GridLayout(9, 1));
         JButton undoLastMoveButton = new JButton("Cofnij");
-        undoLastMoveButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                boardPanel.undoLastMove();
-            }
-        });
+
         restTiles = new JLabel("Gracz Pierwszy");
         buttonsGridLayout.setBorder(new EmptyBorder(getHeight()/5, getWidth()/5, getHeight()/5, getWidth()/5));
         JButton runSinglePlayer = new JButton("Gra Jednoosobowa");
@@ -54,6 +50,7 @@ public class MainFrame extends JFrame implements Runnable {
         runMultiPlayer.setFont(new Font("Comic Sans MS", Font.BOLD,25));
         runMultiPlayer.setFocusPainted(false);
         runSinglePlayer.addActionListener(e -> {
+            gameBorderLayout = new JPanel(new BorderLayout());
                 board = new Board(BoardSize);
                 comp = new ComputerPlayer();
                 boardPanel = new BoardPanel(board,0);
@@ -66,7 +63,12 @@ public class MainFrame extends JFrame implements Runnable {
                 game = new Thread(this);
                 game.start();
         });
+        undoLastMoveButton.addActionListener(e -> {
+            boardPanel.undoLastMove();
+        });
+
         runMultiPlayer.addActionListener(e -> {
+                gameBorderLayout = new JPanel(new BorderLayout());
                 board = new Board(BoardSize);
 
                 JPanel southBorderLayout = new JPanel(new BorderLayout());
@@ -88,14 +90,11 @@ public class MainFrame extends JFrame implements Runnable {
         });
 
         JButton optionsButton = new JButton("Opcje");
-        optionsButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Settings newSettings = optionsDialog.showDialog();
-                BoardSize = newSettings.getBoardSize();
-                playerFirstColor = newSettings.getPlayerFirstColor();
-                playerSecondColor = newSettings.getPlayerSecondColor();
-            }
+        optionsButton.addActionListener(e -> {
+            Settings newSettings = optionsDialog.showDialog(new Settings(BoardSize,playerFirstColor,playerSecondColor));
+            BoardSize = newSettings.getBoardSize();
+            playerFirstColor = newSettings.getPlayerFirstColor();
+            playerSecondColor = newSettings.getPlayerSecondColor();
         });
         optionsButton.setFont(new Font("Comic Sans MS", Font.BOLD,25));
         optionsButton.setFocusPainted(false);
@@ -112,7 +111,7 @@ public class MainFrame extends JFrame implements Runnable {
         exitButton.setFocusPainted(false);
         exitButton.addActionListener(e -> System.exit(0));
 
-        JLabel credits = new JLabel("Autor: Mateusz Kalinowski @2016 Wersja: 0.9.3");
+        JLabel credits = new JLabel("Autor: Mateusz Kalinowski @2016 Wersja: 0.9.5");
         credits.setHorizontalAlignment(0);
         mainBorderLayout.add(credits,BorderLayout.SOUTH);
 
@@ -133,41 +132,47 @@ public class MainFrame extends JFrame implements Runnable {
         add(mainBorderLayout);
     }
 
-
+    public void stopGame(){
+        game.interrupt();
+        running = false;
+        this.getContentPane().removeAll();
+        this.getContentPane().repaint();
+        this.getContentPane().add(mainBorderLayout);
+    }
     @Override
     public void run() {
-        long lastTime = System.nanoTime();
-        int FRAMERATE = 60;
-        double nsPerTick = 1000000000D / FRAMERATE;
+            long lastTime = System.nanoTime();
+            int FRAMERATE = 60;
+            double nsPerTick = 1000000000D / FRAMERATE;
 
-        // int frames = 0;
-        // int ticks = 0;
+            // int frames = 0;
+            // int ticks = 0;
 
-        long lastTimer = System.currentTimeMillis();
-        double delta = 0;
-        boolean shouldRender = false;
-        while (running) {
-            long now = System.nanoTime();
-            delta += (now - lastTime) / nsPerTick;
-            lastTime = now;
-            while (delta >= 1) {
-                shouldRender = true;
-                //  ticks++;
-                // tick(ticks);
-                delta -= 1;
+            long lastTimer = System.currentTimeMillis();
+            double delta = 0;
+            boolean shouldRender = false;
+            while (running) {
+                long now = System.nanoTime();
+                delta += (now - lastTime) / nsPerTick;
+                lastTime = now;
+                while (delta >= 1) {
+                    shouldRender = true;
+                    //  ticks++;
+                    // tick(ticks);
+                    delta -= 1;
+                }
+                if (shouldRender) {
+                    //frames++;
+                    boardPanel.render();
+                    shouldRender = false;
+                }
+                if (System.currentTimeMillis() - lastTimer >= 1000) {
+                    lastTimer += 1000;
+                    //System.out.println(ticks + " ticks, " + frames + " frames");
+                    //frames = 0;
+                    //  ticks = 0;
+                }
             }
-            if (shouldRender) {
-                //frames++;
-                boardPanel.render();
-                shouldRender = false;
-            }
-            if (System.currentTimeMillis() - lastTimer >= 1000) {
-                lastTimer += 1000;
-                //System.out.println(ticks + " ticks, " + frames + " frames");
-                //frames = 0;
-                //  ticks = 0;
-            }
-        }
     }
 
     //private void tick(int ticks) {}
@@ -176,7 +181,7 @@ public class MainFrame extends JFrame implements Runnable {
     private Board board;
     private BoardPanel boardPanel;
     private JPanel gameBorderLayout;
-    private boolean running = false;
+    public boolean running = false;
     public ComputerPlayer comp;
 
     public Color playerFirstColor = new Color(69, 136, 58);
@@ -184,6 +189,8 @@ public class MainFrame extends JFrame implements Runnable {
     public Color playerSecondColor = new Color(238, 44, 44);
 
     public int BoardSize = 5;
+
+    private JPanel mainBorderLayout;
 
     public JLabel restTiles;
 }

@@ -83,8 +83,17 @@ class OptionsFrame extends JDialog {
         add(mainBorderLayout);
     }
 
-    public Settings showDialog() {
-        int[] values = new int[3];
+    public Settings showDialog(Settings firstSettings) {
+        playerFirstColor = firstSettings.getPlayerFirstColor();
+        playerSecondColor = firstSettings.getPlayerSecondColor();
+        BoardSize = firstSettings.getBoardSize();
+
+        for(int i = 0; i < boardSizeComboBox.getItemCount();i++) {
+            if(Integer.parseInt(boardSizeComboBox.getItemAt(i).split("x")[0])==BoardSize ) {
+                boardSizeComboBox.setSelectedIndex(i);
+            }
+        }
+
         setVisible(true);
         return new Settings(BoardSize,playerFirstColor,playerSecondColor);
     }
