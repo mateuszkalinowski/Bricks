@@ -4,8 +4,8 @@ package logic;
  * Created by Mateusz on 20.05.2016.
  * Project Bricks
  */
-public class Board {
-    public Board(int size) {
+public class BoardLogic {
+    public BoardLogic(int size) {
         this.width = size;
         this.height = size;
         this.size = size * size;

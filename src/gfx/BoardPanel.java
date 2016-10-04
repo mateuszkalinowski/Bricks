@@ -1,8 +1,7 @@
 package gfx;
 
 import core.Bricks;
-import frames.MainFrame;
-import logic.Board;
+import logic.BoardLogic;
 import logic.MovesStorage;
 
 import javax.swing.*;
@@ -12,16 +11,13 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
-import java.awt.image.BufferedImage;
-import java.io.File;
-import javax.imageio.ImageIO;
 
 /**
  * Created by Mateusz on 20.05.2016.
  * Project Bricks
  */
 public class BoardPanel extends Canvas {
-    public BoardPanel(Board board,int gametype) {
+    public BoardPanel(BoardLogic board, int gametype) {
         this.board = board;
 
         UIManager.put("OptionPane.yesButtonText","Tak");
@@ -282,7 +278,7 @@ public class BoardPanel extends Canvas {
         return actualPlayer;
     }
 
-    private Board board;
+    private BoardLogic board;
 
     private int actualPlayer = 1;
 

@@ -3,7 +3,7 @@ package frames;
 import core.Bricks;
 import core.Settings;
 import gfx.BoardPanel;
-import logic.Board;
+import logic.BoardLogic;
 import logic.ComputerPlayer;
 
 import javax.swing.*;
@@ -55,7 +55,7 @@ public class MainFrame extends JFrame implements Runnable {
         runMultiPlayer.setFocusPainted(false);
         runSinglePlayer.addActionListener(e -> {
             gameBorderLayout = new JPanel(new BorderLayout());
-                board = new Board(BoardSize);
+                board = new BoardLogic(BoardSize);
                 comp = new ComputerPlayer();
                 boardPanel = new BoardPanel(board,0);
                 gameBorderLayout.add(boardPanel, BorderLayout.CENTER);
@@ -73,7 +73,7 @@ public class MainFrame extends JFrame implements Runnable {
 
         runMultiPlayer.addActionListener(e -> {
                 gameBorderLayout = new JPanel(new BorderLayout());
-                board = new Board(BoardSize);
+                board = new BoardLogic(BoardSize);
                 Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
                 JPanel southBorderLayout = new JPanel(new BorderLayout());
 
@@ -193,7 +193,7 @@ public class MainFrame extends JFrame implements Runnable {
     //private void tick(int ticks) {}
     private OptionsFrame optionsDialog;
     private Thread game;
-    private Board board;
+    private BoardLogic board;
     private BoardPanel boardPanel;
     private JPanel gameBorderLayout;
     public boolean running = false;
