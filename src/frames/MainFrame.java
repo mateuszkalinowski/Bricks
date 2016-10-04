@@ -14,7 +14,7 @@ import java.net.URL;
 
 /**
  * Created by Mateusz on 20.05.2016.
- * Project InferenceEngine
+ * Project Bricks
  */
 public class MainFrame extends JFrame implements Runnable {
 

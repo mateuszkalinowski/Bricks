@@ -8,7 +8,7 @@ import java.awt.*;
 
 /**
  * Created by Mateusz on 20.05.2016.
- * Project InferenceEngine
+ * Project Bricks
  */
 public class Bricks {
     public static void main(String[] args) {

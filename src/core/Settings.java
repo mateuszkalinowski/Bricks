@@ -4,7 +4,7 @@ import java.awt.*;
 
 /**
  * Created by Mateusz on 04.10.2016.
- * Project InferenceEngine
+ * Project Bricks
  */
 public class Settings {
     public Settings(int BoardSize,Color playerFirstColor,Color playerSecondColor) {

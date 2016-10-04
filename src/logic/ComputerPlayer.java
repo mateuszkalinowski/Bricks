@@ -2,7 +2,7 @@ package logic;
 
 /**
  * Created by Mateusz on 03.10.2016.
- * Project InferenceEngine
+ * Project Bricks
  */
 public class ComputerPlayer {
     public ComputerPlayer(){
