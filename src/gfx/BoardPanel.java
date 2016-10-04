@@ -19,7 +19,7 @@ import java.awt.image.BufferStrategy;
 public class BoardPanel extends Canvas {
     public BoardPanel(BoardLogic board, int gametype) {
         this.board = board;
-
+        gamemode = gametype;
         UIManager.put("OptionPane.yesButtonText","Tak");
         UIManager.put("OptionPane.noButtonText","Nie");
 
@@ -36,7 +36,7 @@ public class BoardPanel extends Canvas {
             }
         });
         movesStorage = new MovesStorage();
-
+        movesStorage.reset();
 
         addMouseListener(new MouseAdapter() {
             @Override
@@ -62,13 +62,14 @@ public class BoardPanel extends Canvas {
                                 board.board[selectedX][selectedY] = actualPlayer;
                                 board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                 movesStorage.addMove(selectedX,selectedY,tempSelectedX,tempSelectedY);
+                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                 isSelected = false;
                                 if(actualPlayer==1) {
                                     Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     actualPlayer = 2;
                                     if(!checkNoMoves()) {
                                         if (gametype == 0) {
-                                            Bricks.mainFrame.comp.performMove(board);
+                                            Bricks.mainFrame.comp.performMove(board,movesStorage);
                                             actualPlayer = 1;
                                         }
                                     }
@@ -78,7 +79,6 @@ public class BoardPanel extends Canvas {
                                     actualPlayer = 1;
                                 }
                                 checkNoMoves();
-
                             }
                         }
                         else if((tempSelectedX==selectedX-1) && tempSelectedY == selectedY) {
@@ -86,13 +86,14 @@ public class BoardPanel extends Canvas {
                                 board.board[selectedX][selectedY] = actualPlayer;
                                 board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                 movesStorage.addMove(selectedX,selectedY,tempSelectedX,tempSelectedY);
+                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                 isSelected = false;
                                 if(actualPlayer==1) {
                                     Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     actualPlayer = 2;
                                     if(!checkNoMoves()) {
                                         if (gametype == 0) {
-                                            Bricks.mainFrame.comp.performMove(board);
+                                            Bricks.mainFrame.comp.performMove(board,movesStorage);
                                             actualPlayer = 1;
                                         }
                                     }
@@ -110,13 +111,14 @@ public class BoardPanel extends Canvas {
                                 board.board[selectedX][selectedY] = actualPlayer;
                                 board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                 movesStorage.addMove(selectedX,selectedY,tempSelectedX,tempSelectedY);
+                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                 isSelected = false;
                                 if(actualPlayer==1) {
                                     Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     actualPlayer = 2;
                                     if(!checkNoMoves()) {
                                         if (gametype == 0) {
-                                            Bricks.mainFrame.comp.performMove(board);
+                                            Bricks.mainFrame.comp.performMove(board,movesStorage);
                                             actualPlayer = 1;
                                         }
                                     }
@@ -134,13 +136,14 @@ public class BoardPanel extends Canvas {
                                 board.board[selectedX][selectedY] = actualPlayer;
                                 board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                 movesStorage.addMove(selectedX,selectedY,tempSelectedX,tempSelectedY);
+                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                 isSelected = false;
                                 if(actualPlayer==1) {
                                     Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     actualPlayer = 2;
                                     if(!checkNoMoves()) {
                                         if (gametype == 0) {
-                                            Bricks.mainFrame.comp.performMove(board);
+                                            Bricks.mainFrame.comp.performMove(board,movesStorage);
                                             actualPlayer = 1;
                                         }
                                     }
@@ -228,14 +231,24 @@ public class BoardPanel extends Canvas {
 
     private boolean checkNoMoves() {
         if (!board.anyMoves()) {
-            int selection;
-            if(actualPlayer == 1) {
-                selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz drugi, chcesz zagrać jeszcze raz?", "Koniec" +
-                        " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            int selection = 0;
+            if(gamemode == 1) {
+                if (actualPlayer == 1) {
+                    selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz drugi, chcesz zagrać jeszcze raz?", "Koniec" +
+                            " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                } else {
+                    selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz pierwszy, chcesz zagrać jeszcze raz?", "Koniec" +
+                            " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                }
             }
-            else {
-                selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz pierwszy, chcesz zagrać jeszcze raz?", "Koniec" +
-                        " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if(gamemode == 0) {
+                if (actualPlayer == 1) {
+                    selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał komputer, chcesz zagrać jeszcze raz?", "Koniec" +
+                            " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                } else {
+                    selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrałeś, chcesz zagrać jeszcze raz?", "Koniec" +
+                            " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                }
             }
             if (selection == JOptionPane.OK_OPTION) {
                 resetBoard();
@@ -253,25 +266,42 @@ public class BoardPanel extends Canvas {
         isSelected = false;
         movesStorage.reset();
         Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
+        Bricks.mainFrame.undoLastMoveButton.setEnabled(false);
         actualPlayer = 1;
     }
 
     public void undoLastMove() {
-        int[] lastMove = movesStorage.returnMoveLikeArray();
-        if(lastMove[0]!=-1) {
+        if (gamemode == 1) {
+            int[] lastMove = movesStorage.returnMoveLikeArray();
+        if (lastMove[0] != -1) {
             board.board[lastMove[0]][lastMove[1]] = 0;
             board.board[lastMove[2]][lastMove[3]] = 0;
             drawBoardFrame();
             if (actualPlayer == 1) {
                 actualPlayer = 2;
                 Bricks.mainFrame.restTiles.setText("Gracz Drugi");
-            }
-            else {
+            } else {
                 actualPlayer = 1;
                 Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
             }
         }
-
+        if (movesStorage.isEmpty())
+            Bricks.mainFrame.undoLastMoveButton.setEnabled(false);
+    }
+        if(gamemode == 0) {
+            int []lastMove = movesStorage.returnMoveLikeArray();
+            if(lastMove[0] != -1) {
+                board.board[lastMove[0]][lastMove[1]] = 0;
+                board.board[lastMove[2]][lastMove[3]] = 0;
+            }
+            lastMove = movesStorage.returnMoveLikeArray();
+            if(lastMove[0] != -1) {
+                board.board[lastMove[0]][lastMove[1]] = 0;
+                board.board[lastMove[2]][lastMove[3]] = 0;
+            }
+            drawBoardFrame();
+            actualPlayer=1;
+        }
     }
 
     public int getActualPlayer(){
@@ -295,6 +325,7 @@ public class BoardPanel extends Canvas {
 
 
     private MovesStorage movesStorage;
+    private int gamemode;
 
     private Graphics g;
 }

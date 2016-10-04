@@ -8,8 +8,9 @@ public class ComputerPlayer {
     public ComputerPlayer(){
 
     }
-    public void performMove(BoardLogic board){
+    public void performMove(BoardLogic board,MovesStorage movesStorage){
         this.board = board;
+        this.movesStorage = movesStorage;
         possibleMovesLeft = countPossibleMovesLeft();
     /*    System.out.println(possibleMovesLeft);
         if(possibleMovesLeft%2==1) {
@@ -318,24 +319,28 @@ public class ComputerPlayer {
             if (direction == 0 && directions[0]) {
                 board.board[x][y] = 2;
                 board.board[x][y - 1] = 2;
+                movesStorage.addMove(x,y,x,y-1);
            //     System.out.println("-----------------");
                 return true;
             }
             if (direction == 1 && directions[1]) {
                 board.board[x][y] = 2;
                 board.board[x + 1][y] = 2;
+                movesStorage.addMove(x,y,x+1,y);
           //      System.out.println("-----------------");
                 return true;
             }
             if (direction == 2 && directions[2]) {
                 board.board[x][y] = 2;
                 board.board[x][y + 1] = 2;
+                movesStorage.addMove(x,y,x,y+1);
           //      System.out.println("-----------------");
                 return true;
             }
             if (direction == 3 && directions[3]) {
                 board.board[x][y] = 2;
                 board.board[x - 1][y] = 2;
+                movesStorage.addMove(x,y,x-1,y);
             //    System.out.println("-----------------");
                 return true;
             }
@@ -362,4 +367,5 @@ public class ComputerPlayer {
 
     private int possibleMovesLeft = 0;
     private BoardLogic board;
+    private MovesStorage movesStorage;
 }

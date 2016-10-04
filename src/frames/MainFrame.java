@@ -42,7 +42,7 @@ public class MainFrame extends JFrame implements Runnable {
 
         gameName = new JLabel("Bricks", SwingConstants.CENTER);
         buttonsGridLayout = new JPanel(new GridLayout(9, 1));
-        JButton undoLastMoveButton = new JButton("Cofnij");
+        undoLastMoveButton = new JButton("Cofnij");
 
         restTiles = new JLabel("Gracz Pierwszy");
         buttonsGridLayout.setBorder(new EmptyBorder(0, getWidth()/4, 0, getWidth()/4));
@@ -56,8 +56,14 @@ public class MainFrame extends JFrame implements Runnable {
         runSinglePlayer.addActionListener(e -> {
             gameBorderLayout = new JPanel(new BorderLayout());
                 board = new BoardLogic(BoardSize);
+                undoLastMoveButton.setEnabled(false);
                 comp = new ComputerPlayer();
                 boardPanel = new BoardPanel(board,0);
+                gametype = 0;
+                JPanel southBorderLayout = new JPanel(new BorderLayout());
+
+                southBorderLayout.add(undoLastMoveButton,BorderLayout.EAST);
+                gameBorderLayout.add(southBorderLayout,BorderLayout.SOUTH);
                 gameBorderLayout.add(boardPanel, BorderLayout.CENTER);
                 this.getContentPane().removeAll();
                 this.getContentPane().add(gameBorderLayout);
@@ -74,9 +80,10 @@ public class MainFrame extends JFrame implements Runnable {
         runMultiPlayer.addActionListener(e -> {
                 gameBorderLayout = new JPanel(new BorderLayout());
                 board = new BoardLogic(BoardSize);
+                undoLastMoveButton.setEnabled(false);
                 Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
                 JPanel southBorderLayout = new JPanel(new BorderLayout());
-
+                gametype = 1;
                 southBorderLayout.add(restTiles,BorderLayout.WEST);
                 southBorderLayout.add(undoLastMoveButton,BorderLayout.EAST);
 
@@ -214,6 +221,8 @@ public class MainFrame extends JFrame implements Runnable {
     private JLabel gameName;
     private JLabel credits;
 
+    private int gametype = -1;
 
     public JLabel restTiles;
+    public JButton undoLastMoveButton;
 }

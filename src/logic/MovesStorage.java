@@ -50,5 +50,9 @@ public class MovesStorage {
         }
         return moveValues;
     }
+    public boolean isEmpty() {
+        if(moves.size()!=0) return false;
+        return true;
+    }
     private ArrayList<Move> moves;
 }
