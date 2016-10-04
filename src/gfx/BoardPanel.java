@@ -171,12 +171,6 @@ public class BoardPanel extends Canvas {
         Graphics2D g2 = (Graphics2D) g;
         int width = getWidth();
         int height = getHeight();
-        try {
-            BufferedImage background = ImageIO.read(this.getClass().getResource("resources/background.jpg"));
-            g2.drawImage(background,0,0,getWidth(),getHeight(),null,null);
-        }
-        catch (Exception e) {
-        }
         oneFieldWidth = (width - margin * 2) / board.width;
         oneFieldHeight = (height - margin * 2) / board.height;
         g2.setStroke(new BasicStroke(2));
@@ -227,11 +221,11 @@ public class BoardPanel extends Canvas {
         if (!board.anyMoves()) {
             int selection;
             if(actualPlayer == 1) {
-                selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz czerwony, chcesz zagrać jeszcze raz?", "Koniec" +
+                selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz drugi, chcesz zagrać jeszcze raz?", "Koniec" +
                         " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             }
             else {
-                selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz zielony, chcesz zagrać jeszcze raz?", "Koniec" +
+                selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz pierwszy, chcesz zagrać jeszcze raz?", "Koniec" +
                         " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
             }
             if (selection == JOptionPane.OK_OPTION) {

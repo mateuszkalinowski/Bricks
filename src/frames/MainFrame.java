@@ -25,6 +25,13 @@ public class MainFrame extends JFrame implements Runnable {
         setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         setVisible(true);
+
+        try {
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        } catch (Exception unsupportedLookAndFeel) {
+
+        }
+
         optionsDialog = new OptionsFrame();
         JPanel mainBorderLayout = new JPanel(new BorderLayout());
         gameBorderLayout = new JPanel(new BorderLayout());
@@ -92,7 +99,7 @@ public class MainFrame extends JFrame implements Runnable {
         exitButton.setFocusPainted(false);
         exitButton.addActionListener(e -> System.exit(0));
 
-        JLabel credits = new JLabel("Autor: Mateusz Kalinowski @2016 Wersja: 0.9.1");
+        JLabel credits = new JLabel("Autor: Mateusz Kalinowski @2016 Wersja: 0.9.2");
         credits.setHorizontalAlignment(0);
         mainBorderLayout.add(credits,BorderLayout.SOUTH);
 
