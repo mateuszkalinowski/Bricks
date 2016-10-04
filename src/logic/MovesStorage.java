@@ -27,6 +27,9 @@ public class MovesStorage {
     public void addMove(int x1,int y1,int x2, int y2) {
         moves.add(new Move(x1,y1,x2,y2));
     }
+    public void reset() {
+        moves.clear();
+    }
     public int[] returnMoveLikeArray(){
         int[] moveValues = new int[4];
         int movesSize = moves.size();

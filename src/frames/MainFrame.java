@@ -1,5 +1,6 @@
 package frames;
 
+import core.Bricks;
 import core.Settings;
 import gfx.BoardPanel;
 import logic.Board;
@@ -69,7 +70,7 @@ public class MainFrame extends JFrame implements Runnable {
         runMultiPlayer.addActionListener(e -> {
                 gameBorderLayout = new JPanel(new BorderLayout());
                 board = new Board(BoardSize);
-
+                Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
                 JPanel southBorderLayout = new JPanel(new BorderLayout());
 
                 southBorderLayout.add(restTiles,BorderLayout.WEST);

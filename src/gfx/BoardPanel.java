@@ -244,7 +244,8 @@ public class BoardPanel extends Canvas {
             if (selection == JOptionPane.OK_OPTION) {
                 resetBoard();
             } else {
-                System.exit(0);
+                resetBoard();
+                Bricks.mainFrame.stopGame();
             }
             return true;
         }
@@ -254,6 +255,7 @@ public class BoardPanel extends Canvas {
     private void resetBoard() {
         board.reset();
         isSelected = false;
+        movesStorage.reset();
         Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
         actualPlayer = 1;
     }

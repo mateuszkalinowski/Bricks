@@ -74,7 +74,7 @@ class OptionsFrame extends JDialog {
         mainBorderLayout.add(optionsGridLayout, BorderLayout.CENTER);
         mainBorderLayout.add(title, BorderLayout.NORTH);
 
-        JButton saveChanges = new JButton("Zapisz Zmiany");
+        JButton saveChanges = new JButton("Zapisz zmiany");
 
         saveChanges.addActionListener(e -> dispose());
 
