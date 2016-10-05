@@ -10,6 +10,8 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.PrintWriter;
 import java.net.URL;
 
 /**
@@ -18,11 +20,15 @@ import java.net.URL;
  */
 public class MainFrame extends JFrame implements Runnable {
 
-    public MainFrame() {
+    public MainFrame(int initialBoardSize,Color firstPlayerColor,Color secondPlayerColor) {
         setTitle("Bricks");
         setSize(600, 600);
         setMinimumSize(new Dimension(550, 500));
         setResizable(true);
+
+        BoardSize = initialBoardSize;
+        playerFirstColor = firstPlayerColor;
+        playerSecondColor = secondPlayerColor;
 
         URL imgURL = this.getClass().getResource("../resources/brick-wall.png");
         ImageIcon icon = new ImageIcon(imgURL);
@@ -139,6 +145,7 @@ public class MainFrame extends JFrame implements Runnable {
                 BoardSize = newSettings.getBoardSize();
                 playerFirstColor = newSettings.getPlayerFirstColor();
                 playerSecondColor = newSettings.getPlayerSecondColor();
+                exportSettings();
             }
         });
         optionsButton.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
@@ -235,6 +242,18 @@ public class MainFrame extends JFrame implements Runnable {
         }
     }
 
+    public void exportSettings() {
+        try {
+            PrintWriter createCfg = new PrintWriter(new File(Bricks.path + "/options"));
+            createCfg.println("BoardSize=" + BoardSize);
+            createCfg.println("FirstColor=" + playerFirstColor.toString());
+            createCfg.println("SecondColor=" + playerSecondColor.toString());
+            createCfg.close();
+        } catch (Exception ignored) {
+
+        }
+    }
+
     //private void tick(int ticks) {}
     private OptionsFrame optionsDialog;
     private Thread game;
@@ -244,9 +263,9 @@ public class MainFrame extends JFrame implements Runnable {
     public boolean running = false;
     public ComputerPlayer comp;
 
-    public Color playerFirstColor = new Color(69, 136, 58);
+    public Color playerFirstColor;
 
-    public Color playerSecondColor = new Color(238, 44, 44);
+    public Color playerSecondColor;
 
     public int BoardSize = 5;
 

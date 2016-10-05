@@ -15,7 +15,7 @@ import java.awt.image.BufferStrategy;
  */
 class OptionsFrame extends JDialog {
     OptionsFrame() {
-        setSize(350, 190);
+        setSize(350, 210);
         setLocationRelativeTo(null);
         setResizable(false);
         setModal(true);
@@ -51,6 +51,23 @@ class OptionsFrame extends JDialog {
                 }
             }
         });
+
+        JButton resetOptions = new JButton("Ustawienia Domyślne");
+        resetOptions.addActionListener(e -> {
+            BoardSize = 5;
+            playerFirstColor = new Color(69,136,58);
+            playerSecondColor = new Color(238,44,44);
+            firstPlayerColor.setColor(playerFirstColor);
+            secondPlayerColor.setColor(playerSecondColor);
+            for(int i = 0; i < boardSizeComboBox.getItemCount();i++) {
+                if(Integer.parseInt(boardSizeComboBox.getItemAt(i).split("x")[0])==BoardSize ) {
+                    boardSizeComboBox.setSelectedIndex(i);
+                }
+            }
+
+            repaint();
+        });
+
         JPanel firstPlayerOptionsGridLayout = new JPanel(new GridLayout(1,2));
         JPanel secondPlayerOptionsGridLayout = new JPanel(new GridLayout(1,2));
 
@@ -99,15 +116,18 @@ class OptionsFrame extends JDialog {
             dispose();
         });
 
-        mainBorderLayout.add(saveChanges,BorderLayout.SOUTH);
+        JPanel southGridLayout = new JPanel(new GridLayout(2,1));
+        southGridLayout.add(resetOptions);
+        southGridLayout.add(saveChanges);
+        mainBorderLayout.add(southGridLayout,BorderLayout.SOUTH);
 
         add(mainBorderLayout);
     }
 
     public Settings showDialog(Settings firstSettings) {
         wasSaveClicked = false;
-        firstPlayerColor.setColor(playerFirstColor);
-        secondPlayerColor.setColor(playerSecondColor);
+        firstPlayerColor.setColor(firstSettings.getPlayerFirstColor());
+        secondPlayerColor.setColor(firstSettings.getPlayerSecondColor());
         playerFirstColor = firstSettings.getPlayerFirstColor();
         playerSecondColor = firstSettings.getPlayerSecondColor();
         BoardSize = firstSettings.getBoardSize();
@@ -124,9 +144,9 @@ class OptionsFrame extends JDialog {
 
     private int BoardSize = 5;
 
-    private Color playerFirstColor = new Color(69, 136, 58);
+    private Color playerFirstColor;
 
-    private Color playerSecondColor = new Color(238, 44, 44);
+    private Color playerSecondColor;
 
     private JComboBox<String> boardSizeComboBox;
     private boolean isPlayPressed = false;
