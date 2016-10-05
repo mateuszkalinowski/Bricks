@@ -4,7 +4,7 @@ import java.util.ArrayList;
 
 /**
  * Created by Mateusz on 04.10.2016.
- * Project InferenceEngine
+ * Project Bricks
  */
 public class MovesStorage {
     class Move{
