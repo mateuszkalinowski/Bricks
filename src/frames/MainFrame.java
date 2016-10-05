@@ -24,7 +24,7 @@ public class MainFrame extends JFrame implements Runnable {
         setMinimumSize(new Dimension(550, 500));
         setResizable(true);
 
-        URL imgURL = this.getClass().getResource("brick-wall.png");
+        URL imgURL = this.getClass().getResource("../resources/brick-wall.png");
         ImageIcon icon = new ImageIcon(imgURL);
         setIconImage(icon.getImage());
 
