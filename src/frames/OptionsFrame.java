@@ -1,11 +1,13 @@
 package frames;
 
 import core.Settings;
+import gfx.ColorPreview;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.awt.image.BufferStrategy;
 
 /**
  * Created by Mateusz on 21.05.2016.
@@ -32,6 +34,8 @@ class OptionsFrame extends JDialog {
                 Color newColor = JColorChooser.showDialog(null,"Wybierz kolor pierwszego gracza",playerFirstColor);
                 if(newColor!=null) {
                     playerFirstColor = newColor;
+                    firstPlayerColor.setColor(playerFirstColor);
+                    repaint();
                 }
             }
         });
@@ -42,9 +46,13 @@ class OptionsFrame extends JDialog {
                 Color newColor = JColorChooser.showDialog(null,"Wybierz kolor drugiego gracza",playerSecondColor);
                 if(newColor!=null) {
                     playerSecondColor = newColor;
+                    secondPlayerColor.setColor(playerSecondColor);
+                    repaint();
                 }
             }
         });
+        JPanel firstPlayerOptionsGridLayout = new JPanel(new GridLayout(1,2));
+        JPanel secondPlayerOptionsGridLayout = new JPanel(new GridLayout(1,2));
 
         boardSizeComboBox = new JComboBox<>();
         boardSizeComboBox.addItem("3x3");
@@ -56,9 +64,19 @@ class OptionsFrame extends JDialog {
         optionsGridLayout.add(boardSize);
         optionsGridLayout.add(boardSizeComboBox);
         optionsGridLayout.add(firstPlayerColorLabel);
-        optionsGridLayout.add(chooseFirstPlayerColorButton);
+        firstPlayerOptionsGridLayout.add(chooseFirstPlayerColorButton);
+        optionsGridLayout.add(firstPlayerOptionsGridLayout);
+        secondPlayerOptionsGridLayout.add(chooseSecondPlayerColorButton);
         optionsGridLayout.add(secondPlayerColorLabel);
-        optionsGridLayout.add(chooseSecondPlayerColorButton);
+        optionsGridLayout.add(secondPlayerOptionsGridLayout);
+
+
+        firstPlayerColor = new ColorPreview(playerFirstColor);
+        firstPlayerOptionsGridLayout.add(firstPlayerColor);
+        secondPlayerColor = new ColorPreview(playerSecondColor);
+        secondPlayerOptionsGridLayout.add(secondPlayerColor);
+
+
         boardSizeComboBox.setEnabled(true);
 
         boardSizeComboBox.addActionListener(e -> {
@@ -88,6 +106,8 @@ class OptionsFrame extends JDialog {
 
     public Settings showDialog(Settings firstSettings) {
         wasSaveClicked = false;
+        firstPlayerColor.setColor(playerFirstColor);
+        secondPlayerColor.setColor(playerSecondColor);
         playerFirstColor = firstSettings.getPlayerFirstColor();
         playerSecondColor = firstSettings.getPlayerSecondColor();
         BoardSize = firstSettings.getBoardSize();
@@ -97,7 +117,7 @@ class OptionsFrame extends JDialog {
                 boardSizeComboBox.setSelectedIndex(i);
             }
         }
-
+        repaint();
         setVisible(true);
         return new Settings(BoardSize,playerFirstColor,playerSecondColor);
     }
@@ -111,5 +131,7 @@ class OptionsFrame extends JDialog {
     private JComboBox<String> boardSizeComboBox;
     private boolean isPlayPressed = false;
 
-    public boolean wasSaveClicked = false;
+    boolean wasSaveClicked = false;
+    private ColorPreview firstPlayerColor;
+    private ColorPreview secondPlayerColor;
 }

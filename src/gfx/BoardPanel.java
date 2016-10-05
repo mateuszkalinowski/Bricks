@@ -20,18 +20,108 @@ public class BoardPanel extends Canvas {
     public BoardPanel(BoardLogic board, int gametype) {
         this.board = board;
         gamemode = gametype;
-        UIManager.put("OptionPane.yesButtonText","Tak");
-        UIManager.put("OptionPane.noButtonText","Nie");
+        UIManager.put("OptionPane.yesButtonText", "Tak");
+        UIManager.put("OptionPane.noButtonText", "Nie");
 
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                    if(e.getKeyCode() == KeyEvent.VK_ESCAPE && Bricks.mainFrame.running) {
-                        int selection = JOptionPane.showConfirmDialog(null, "Chcesz opuścić grę i wrócić do menu?", "Koniec" +
-                                " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
-                if (selection == JOptionPane.OK_OPTION) {
-                    Bricks.mainFrame.stopGame();
-                }
+                if(isSelected) {
+                    if (e.getKeyCode() == KeyEvent.VK_UP) {
+                        if (directions[0]) {
+                            board.board[selectedX][selectedY] = actualPlayer;
+                            board.board[selectedX][selectedY-1] = actualPlayer;
+                            movesStorage.addMove(selectedX, selectedY, selectedX, selectedY-1);
+                            Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                            isSelected = false;
+                            if (actualPlayer == 1) {
+                                Bricks.mainFrame.restTiles.setText("Gracz Drugi");
+                                actualPlayer = 2;
+                                if (!checkNoMoves()) {
+                                    if (gametype == 0) {
+                                        Bricks.mainFrame.comp.performMove(board, movesStorage);
+                                        actualPlayer = 1;
+                                    }
+                                }
+                            } else {
+                                Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
+                                actualPlayer = 1;
+                            }
+                            checkNoMoves();
+
+                        }
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                        if (directions[1]) {
+                            board.board[selectedX][selectedY] = actualPlayer;
+                            board.board[selectedX+1][selectedY] = actualPlayer;
+                            movesStorage.addMove(selectedX, selectedY, selectedX+1, selectedY);
+                            Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                            isSelected = false;
+                            if (actualPlayer == 1) {
+                                Bricks.mainFrame.restTiles.setText("Gracz Drugi");
+                                actualPlayer = 2;
+                                if (!checkNoMoves()) {
+                                    if (gametype == 0) {
+                                        Bricks.mainFrame.comp.performMove(board, movesStorage);
+                                        actualPlayer = 1;
+                                    }
+                                }
+                            } else {
+                                Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
+                                actualPlayer = 1;
+                            }
+                            checkNoMoves();
+                        }
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                        if (directions[2]) {
+                            board.board[selectedX][selectedY] = actualPlayer;
+                            board.board[selectedX][selectedY+1] = actualPlayer;
+                            movesStorage.addMove(selectedX, selectedY, selectedX, selectedY+1);
+                            Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                            isSelected = false;
+                            if (actualPlayer == 1) {
+                                Bricks.mainFrame.restTiles.setText("Gracz Drugi");
+                                actualPlayer = 2;
+                                if (!checkNoMoves()) {
+                                    if (gametype == 0) {
+                                        Bricks.mainFrame.comp.performMove(board, movesStorage);
+                                        actualPlayer = 1;
+                                    }
+                                }
+                            } else {
+                                Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
+                                actualPlayer = 1;
+                            }
+                            checkNoMoves();
+
+                        }
+                    }
+                    if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                        if (directions[3]) {
+                            board.board[selectedX][selectedY] = actualPlayer;
+                            board.board[selectedX-1][selectedY] = actualPlayer;
+                            movesStorage.addMove(selectedX, selectedY, selectedX-1, selectedY);
+                            Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                            isSelected = false;
+                            if (actualPlayer == 1) {
+                                Bricks.mainFrame.restTiles.setText("Gracz Drugi");
+                                actualPlayer = 2;
+                                if (!checkNoMoves()) {
+                                    if (gametype == 0) {
+                                        Bricks.mainFrame.comp.performMove(board, movesStorage);
+                                        actualPlayer = 1;
+                                    }
+                                }
+                            } else {
+                                Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
+                                actualPlayer = 1;
+                            }
+                            checkNoMoves();
+
+                        }
+                    }
                 }
             }
         });
@@ -57,106 +147,98 @@ public class BoardPanel extends Canvas {
                         int tempSelectedX = (e.getX() - margin) / oneFieldWidth;
                         int tempSelectedY = (e.getY() - margin) / oneFieldHeight;
 
-                        if((tempSelectedX==selectedX+1) && tempSelectedY == selectedY) {
-                            if(directions[1]) {
+                        if ((tempSelectedX == selectedX + 1) && tempSelectedY == selectedY) {
+                            if (directions[1]) {
                                 board.board[selectedX][selectedY] = actualPlayer;
                                 board.board[tempSelectedX][tempSelectedY] = actualPlayer;
-                                movesStorage.addMove(selectedX,selectedY,tempSelectedX,tempSelectedY);
+                                movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
                                 Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                 isSelected = false;
-                                if(actualPlayer==1) {
+                                if (actualPlayer == 1) {
                                     Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     actualPlayer = 2;
-                                    if(!checkNoMoves()) {
+                                    if (!checkNoMoves()) {
                                         if (gametype == 0) {
-                                            Bricks.mainFrame.comp.performMove(board,movesStorage);
+                                            Bricks.mainFrame.comp.performMove(board, movesStorage);
                                             actualPlayer = 1;
                                         }
                                     }
-                                }
-                                else {
+                                } else {
                                     Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
                                     actualPlayer = 1;
                                 }
                                 checkNoMoves();
                             }
-                        }
-                        else if((tempSelectedX==selectedX-1) && tempSelectedY == selectedY) {
-                            if(directions[3]) {
+                        } else if ((tempSelectedX == selectedX - 1) && tempSelectedY == selectedY) {
+                            if (directions[3]) {
                                 board.board[selectedX][selectedY] = actualPlayer;
                                 board.board[tempSelectedX][tempSelectedY] = actualPlayer;
-                                movesStorage.addMove(selectedX,selectedY,tempSelectedX,tempSelectedY);
+                                movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
                                 Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                 isSelected = false;
-                                if(actualPlayer==1) {
+                                if (actualPlayer == 1) {
                                     Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     actualPlayer = 2;
-                                    if(!checkNoMoves()) {
+                                    if (!checkNoMoves()) {
                                         if (gametype == 0) {
-                                            Bricks.mainFrame.comp.performMove(board,movesStorage);
+                                            Bricks.mainFrame.comp.performMove(board, movesStorage);
                                             actualPlayer = 1;
                                         }
                                     }
-                                }
-                                else {
-                                    Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
-                                    actualPlayer = 1;
-                                }
-                                checkNoMoves();
-
-                            }
-                        }
-                        else if((tempSelectedX==selectedX) && tempSelectedY == selectedY+1) {
-                            if(directions[2]) {
-                                board.board[selectedX][selectedY] = actualPlayer;
-                                board.board[tempSelectedX][tempSelectedY] = actualPlayer;
-                                movesStorage.addMove(selectedX,selectedY,tempSelectedX,tempSelectedY);
-                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
-                                isSelected = false;
-                                if(actualPlayer==1) {
-                                    Bricks.mainFrame.restTiles.setText("Gracz Drugi");
-                                    actualPlayer = 2;
-                                    if(!checkNoMoves()) {
-                                        if (gametype == 0) {
-                                            Bricks.mainFrame.comp.performMove(board,movesStorage);
-                                            actualPlayer = 1;
-                                        }
-                                    }
-                                }
-                                else {
+                                } else {
                                     Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
                                     actualPlayer = 1;
                                 }
                                 checkNoMoves();
 
                             }
-                        }
-                        else if((tempSelectedX==selectedX) && tempSelectedY == selectedY-1) {
-                            if(directions[0]) {
+                        } else if ((tempSelectedX == selectedX) && tempSelectedY == selectedY + 1) {
+                            if (directions[2]) {
                                 board.board[selectedX][selectedY] = actualPlayer;
                                 board.board[tempSelectedX][tempSelectedY] = actualPlayer;
-                                movesStorage.addMove(selectedX,selectedY,tempSelectedX,tempSelectedY);
+                                movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
                                 Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                 isSelected = false;
-                                if(actualPlayer==1) {
+                                if (actualPlayer == 1) {
                                     Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     actualPlayer = 2;
-                                    if(!checkNoMoves()) {
+                                    if (!checkNoMoves()) {
                                         if (gametype == 0) {
-                                            Bricks.mainFrame.comp.performMove(board,movesStorage);
+                                            Bricks.mainFrame.comp.performMove(board, movesStorage);
                                             actualPlayer = 1;
                                         }
                                     }
-                                }
-                                else {
+                                } else {
                                     Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
                                     actualPlayer = 1;
                                 }
                                 checkNoMoves();
 
                             }
-                        }
-                        else {
+                        } else if ((tempSelectedX == selectedX) && tempSelectedY == selectedY - 1) {
+                            if (directions[0]) {
+                                board.board[selectedX][selectedY] = actualPlayer;
+                                board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
+                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                isSelected = false;
+                                if (actualPlayer == 1) {
+                                    Bricks.mainFrame.restTiles.setText("Gracz Drugi");
+                                    actualPlayer = 2;
+                                    if (!checkNoMoves()) {
+                                        if (gametype == 0) {
+                                            Bricks.mainFrame.comp.performMove(board, movesStorage);
+                                            actualPlayer = 1;
+                                        }
+                                    }
+                                } else {
+                                    Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
+                                    actualPlayer = 1;
+                                }
+                                checkNoMoves();
+
+                            }
+                        } else {
                             isSelected = false;
                         }
 
@@ -185,21 +267,26 @@ public class BoardPanel extends Canvas {
         int height = getHeight();
         oneFieldWidth = (width - margin * 2) / board.width;
         oneFieldHeight = (height - margin * 2) / board.height;
-        g2.setStroke(new BasicStroke(2));
-        g2.drawRect(margin, margin, oneFieldWidth*board.width, oneFieldHeight*board.height);
+        g2.setStroke(new BasicStroke(6));
+        g2.drawRect(margin, margin, oneFieldWidth * board.width, oneFieldHeight * board.height);
         g2.setColor(Color.WHITE);
-        g2.fillRect(margin, margin, oneFieldWidth*board.width, oneFieldHeight*board.height);
+        g2.fillRect(margin, margin, oneFieldWidth * board.width, oneFieldHeight * board.height);
         int inFieldMargin = 0;
-        for (int i = 0; i < board.height; i++) {
-            if(i>0) {
-                g2.setColor(Color.BLACK);
-                g2.drawLine(margin,margin+i*oneFieldHeight,margin+oneFieldWidth*board.width,margin+i*oneFieldHeight);
+        if (actualPlayer == 1) {
+            if (isSelected) {
+                g2.setColor(Bricks.mainFrame.playerFirstColor);
+                g2.fillRect(selectedX * oneFieldWidth + margin + inFieldMargin, selectedY * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
             }
-            for (int j = 0; j < board.width; j++) {
-                if(j>0) {
-                    g2.setColor(Color.BLACK);
-                    g2.drawLine(margin+j*oneFieldWidth,margin,margin+j*oneFieldWidth,oneFieldHeight*board.height+margin);
-                }
+        }
+        if (actualPlayer == 2) {
+            if (isSelected) {
+                g2.setColor(Bricks.mainFrame.playerSecondColor);
+                g2.fillRect(selectedX * oneFieldWidth + margin + inFieldMargin, selectedY * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
+            }
+        }
+
+        for(int i = 0; i < board.height;i++) {
+            for(int j = 0; j < board.width;j++) {
                 if (board.board[j][i] == 1) {
                     g2.setColor(Bricks.mainFrame.playerFirstColor);
                     g2.fillRect(j * oneFieldWidth + margin + inFieldMargin, i * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
@@ -210,16 +297,18 @@ public class BoardPanel extends Canvas {
                 }
             }
         }
-        if(actualPlayer==1) {
-            if (isSelected) {
-                g2.setColor(Bricks.mainFrame.playerFirstColor);
-                g2.fillRect(selectedX * oneFieldWidth + margin + inFieldMargin, selectedY * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
+        for (int i = 0; i < board.height; i++) {
+            if (i > 0) {
+                g2.setStroke(new BasicStroke(2));
+                g2.setColor(Color.BLACK);
+                g2.drawLine(margin, margin + i * oneFieldHeight, margin + oneFieldWidth * board.width, margin + i * oneFieldHeight);
             }
-        }
-        if(actualPlayer==2) {
-            if (isSelected) {
-                g2.setColor(Bricks.mainFrame.playerSecondColor);
-                g2.fillRect(selectedX * oneFieldWidth + margin + inFieldMargin, selectedY * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
+            for (int j = 0; j < board.width; j++) {
+                if (j > 0) {
+                    g2.setStroke(new BasicStroke(2));
+                    g2.setColor(Color.BLACK);
+                    g2.drawLine(margin + j * oneFieldWidth, margin, margin + j * oneFieldWidth, oneFieldHeight * board.height + margin);
+                }
             }
         }
 
@@ -228,7 +317,7 @@ public class BoardPanel extends Canvas {
     private boolean checkNoMoves() {
         if (!board.anyMoves()) {
             int selection = 0;
-            if(gamemode == 1) {
+            if (gamemode == 1) {
                 if (actualPlayer == 1) {
                     selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz drugi, chcesz zagrać jeszcze raz?", "Koniec" +
                             " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -237,7 +326,7 @@ public class BoardPanel extends Canvas {
                             " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
                 }
             }
-            if(gamemode == 0) {
+            if (gamemode == 0) {
                 if (actualPlayer == 1) {
                     selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał komputer, chcesz zagrać jeszcze raz?", "Koniec" +
                             " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -269,38 +358,38 @@ public class BoardPanel extends Canvas {
     public void undoLastMove() {
         if (gamemode == 1) {
             int[] lastMove = movesStorage.returnMoveLikeArray();
-        if (lastMove[0] != -1) {
-            board.board[lastMove[0]][lastMove[1]] = 0;
-            board.board[lastMove[2]][lastMove[3]] = 0;
-            drawBoardFrame();
-            if (actualPlayer == 1) {
-                actualPlayer = 2;
-                Bricks.mainFrame.restTiles.setText("Gracz Drugi");
-            } else {
-                actualPlayer = 1;
-                Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
+            if (lastMove[0] != -1) {
+                board.board[lastMove[0]][lastMove[1]] = 0;
+                board.board[lastMove[2]][lastMove[3]] = 0;
+                drawBoardFrame();
+                if (actualPlayer == 1) {
+                    actualPlayer = 2;
+                    Bricks.mainFrame.restTiles.setText("Gracz Drugi");
+                } else {
+                    actualPlayer = 1;
+                    Bricks.mainFrame.restTiles.setText("Gracz Pierwszy");
+                }
             }
         }
-    }
-        if(gamemode == 0) {
-            int []lastMove = movesStorage.returnMoveLikeArray();
-            if(lastMove[0] != -1) {
+        if (gamemode == 0) {
+            int[] lastMove = movesStorage.returnMoveLikeArray();
+            if (lastMove[0] != -1) {
                 board.board[lastMove[0]][lastMove[1]] = 0;
                 board.board[lastMove[2]][lastMove[3]] = 0;
             }
             lastMove = movesStorage.returnMoveLikeArray();
-            if(lastMove[0] != -1) {
+            if (lastMove[0] != -1) {
                 board.board[lastMove[0]][lastMove[1]] = 0;
                 board.board[lastMove[2]][lastMove[3]] = 0;
             }
             drawBoardFrame();
-            actualPlayer=1;
+            actualPlayer = 1;
         }
         if (movesStorage.isEmpty())
             Bricks.mainFrame.undoLastMoveButton.setEnabled(false);
     }
 
-    public int getActualPlayer(){
+    public int getActualPlayer() {
         return actualPlayer;
     }
 
