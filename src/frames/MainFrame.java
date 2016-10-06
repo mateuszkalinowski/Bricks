@@ -87,7 +87,12 @@ public class MainFrame extends JFrame implements Runnable {
             gametype = 0;
             JPanel southBorderLayout = new JPanel(new BorderLayout());
 
+            movesLeftLabel = new JLabel("Pozostało " + board.getPossibleMovesLeft() + " ruchów");
+            movesLeftLabel.setHorizontalTextPosition(JLabel.CENTER);
+            movesLeftLabel.setHorizontalAlignment(JLabel.CENTER);
+
             southBorderLayout.add(undoLastMoveButton, BorderLayout.EAST);
+            southBorderLayout.add(movesLeftLabel,BorderLayout.CENTER);
             gameBorderLayout.add(southBorderLayout, BorderLayout.SOUTH);
             gameBorderLayout.add(boardPanel, BorderLayout.CENTER);
             this.getContentPane().removeAll();
