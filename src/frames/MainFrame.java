@@ -161,7 +161,7 @@ public class MainFrame extends JFrame implements Runnable {
 
         JButton optionsButton = new JButton("Opcje");
         optionsButton.addActionListener(e -> {
-            Settings newSettings = optionsDialog.showDialog(new Settings(BoardSize, playerFirstColor, playerSecondColor,this.isSound,this.volume,this.debugMode));
+            /*Settings newSettings = optionsDialog.showDialog(new Settings(BoardSize, playerFirstColor, playerSecondColor,this.isSound,this.volume,this.debugMode));
             if (optionsDialog.wasSaveClicked) {
                 BoardSize = newSettings.getBoardSize();
                 playerFirstColor = newSettings.getPlayerFirstColor();
@@ -170,7 +170,14 @@ public class MainFrame extends JFrame implements Runnable {
                 this.volume = newSettings.getVolume();
                 this.debugMode = newSettings.getDebugMode();
                 exportSettings();
-            }
+            }*/
+            JPanel optionsPanel = new JPanel(new BorderLayout());
+            OptionsPanel opcje = new OptionsPanel(new Settings(BoardSize, playerFirstColor, playerSecondColor,this.isSound,this.volume,this.debugMode));
+            optionsPanel.add(opcje,BorderLayout.CENTER);
+            this.getContentPane().removeAll();
+            this.getContentPane().add(optionsPanel);
+            revalidate();
+            repaint();
         });
         optionsButton.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
         optionsButton.setFocusPainted(false);
@@ -212,6 +219,7 @@ public class MainFrame extends JFrame implements Runnable {
         add(mainBorderLayout);
     }
 
+
     private void prepareMainBorderLayout() {
         mainBorderLayout = new JPanel(new BorderLayout());
         mainBorderLayout.add(credits, BorderLayout.SOUTH);
@@ -222,6 +230,14 @@ public class MainFrame extends JFrame implements Runnable {
     public void stopGame() {
         game.interrupt();
         running = false;
+        this.getContentPane().removeAll();
+        prepareMainBorderLayout();
+        this.getContentPane().add(mainBorderLayout);
+        this.getContentPane().repaint();
+        validate();
+        repaint();
+    }
+    public void backToMenu() {
         this.getContentPane().removeAll();
         prepareMainBorderLayout();
         this.getContentPane().add(mainBorderLayout);
@@ -282,6 +298,16 @@ public class MainFrame extends JFrame implements Runnable {
     }
     public void repaintThis() {
         repaint();
+    }
+
+    public void setSettings(Settings newSettings) {
+                BoardSize = newSettings.getBoardSize();
+                playerFirstColor = newSettings.getPlayerFirstColor();
+                playerSecondColor = newSettings.getPlayerSecondColor();
+                this.isSound = newSettings.getIsSound();
+                this.volume = newSettings.getVolume();
+                this.debugMode = newSettings.getDebugMode();
+                exportSettings();
     }
 
     public boolean getDebugMode(){
