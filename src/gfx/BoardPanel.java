@@ -28,6 +28,7 @@ public class BoardPanel extends Canvas {
         gamemode = gametype;
         UIManager.put("OptionPane.yesButtonText", "Tak");
         UIManager.put("OptionPane.noButtonText", "Nie");
+        UIManager.put("OptionPane.cancelButtonText", "Cofnij ostatni ruch");
 
         addKeyListener(new KeyAdapter() {
             @Override
@@ -368,24 +369,27 @@ public class BoardPanel extends Canvas {
             if (gamemode == 1) {
                 if (actualPlayer == 1) {
                     selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz drugi, chcesz zagrać jeszcze raz?", "Koniec" +
-                            " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            " gry", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                 } else {
                     selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz pierwszy, chcesz zagrać jeszcze raz?", "Koniec" +
-                            " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            " gry", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                 }
             }
             if (gamemode == 0) {
                 if (actualPlayer == 1) {
                     selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał komputer, chcesz zagrać jeszcze raz?", "Koniec" +
-                            " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            " gry", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                 } else {
                     selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrałeś, chcesz zagrać jeszcze raz?", "Koniec" +
-                            " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                            " gry", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
                 }
             }
             if (selection == JOptionPane.OK_OPTION) {
                 resetBoard();
-            } else {
+            } else if (selection == JOptionPane.CANCEL_OPTION) {
+                undoLastMove();
+            }
+            else {
                 resetBoard();
                 Bricks.mainFrame.stopGame();
             }
