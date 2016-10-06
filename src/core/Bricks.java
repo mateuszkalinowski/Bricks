@@ -30,6 +30,8 @@ public class Bricks {
                     createCfg.println("BoardSize=5");
                     createCfg.println("FirstColor=java.awt.Color[r=69,g=136,b=58]");
                     createCfg.println("SecondColor=java.awt.Color[r=238,g=44,b=44]");
+                    createCfg.println("sound=true");
+                    createCfg.println("volume=0");
                     createCfg.close();
                     loadDefaultSettings();
                 }
@@ -51,6 +53,16 @@ public class Bricks {
                         g = Integer.parseInt(splittedLine[4]);
                         b = Integer.parseInt(splittedLine[6].substring(0,splittedLine[6].length()-1));
                         secondPlayerColor = new Color(r,g,b);
+                        line = in.nextLine();
+                        splittedLine = line.split("=");
+                        if(splittedLine[1].equals("true"))
+                            isSound = true;
+                        else
+                            isSound=false;
+                        line = in.nextLine();
+                        splittedLine = line.split("=");
+                        volume = Integer.parseInt(splittedLine[1]);
+
                     } catch (Exception ignored) {
                         loadDefaultSettings();
                     }
@@ -59,7 +71,7 @@ public class Bricks {
                 loadDefaultSettings();
             }
 
-            mainFrame = new MainFrame(initialBoardSize,firstPlayerColor,secondPlayerColor);
+            mainFrame = new MainFrame(initialBoardSize,firstPlayerColor,secondPlayerColor,isSound,volume);
             mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             mainFrame.setVisible(true);
         });
@@ -67,6 +79,9 @@ public class Bricks {
     private static int initialBoardSize;
     private static Color firstPlayerColor;
     private static Color secondPlayerColor;
+    private static boolean isSound;
+    private static int volume;
+
     public static MainFrame mainFrame;
 
     public static String path;
@@ -75,6 +90,8 @@ public class Bricks {
         initialBoardSize=5;
         firstPlayerColor = new Color(69,136,58);
         secondPlayerColor = new Color(238,44,44);
+        isSound = true;
+        volume = 0;
     }
 
 }

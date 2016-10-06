@@ -4,6 +4,8 @@ import core.Settings;
 import gfx.ColorPreview;
 
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -59,6 +61,10 @@ class OptionsFrame extends JDialog {
             playerSecondColor = new Color(238,44,44);
             firstPlayerColor.setColor(playerFirstColor);
             secondPlayerColor.setColor(playerSecondColor);
+            isSound = true;
+            soundIsCheckBox.setSelected(true);
+            volume = 0;
+            soundVolumeSlider.setValue(volume);
             for(int i = 0; i < boardSizeComboBox.getItemCount();i++) {
                 if(Integer.parseInt(boardSizeComboBox.getItemAt(i).split("x")[0])==BoardSize ) {
                     boardSizeComboBox.setSelectedIndex(i);
@@ -106,7 +112,7 @@ class OptionsFrame extends JDialog {
         });
 
         JPanel mainBorderLayout = new JPanel(new BorderLayout());
-        mainBorderLayout.add(optionsGridLayout, BorderLayout.CENTER);
+        //mainBorderLayout.add(optionsGridLayout, BorderLayout.CENTER);
         mainBorderLayout.add(title, BorderLayout.NORTH);
 
         JButton saveChanges = new JButton("Zapisz zmiany");
@@ -121,7 +127,46 @@ class OptionsFrame extends JDialog {
         southGridLayout.add(saveChanges);
         mainBorderLayout.add(southGridLayout,BorderLayout.SOUTH);
 
+        mainTablePane = new JTabbedPane();
+
+        JPanel soundOptionsGridLayout = new JPanel(new GridLayout(2,2));
+
+        JLabel soundIsLabel = new JLabel("Dźwięki:");
+        soundIsLabel.setHorizontalAlignment(JLabel.CENTER);
+        soundIsCheckBox = new JCheckBox();
+        JLabel soundVolumeLabel = new JLabel("Głośność:");
+        soundVolumeLabel.setHorizontalAlignment(JLabel.CENTER);
+        soundVolumeSlider = new JSlider(JSlider.HORIZONTAL,-80,6,0);
+
+
+        soundIsCheckBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                if(soundIsCheckBox.isSelected())
+                    isSound = true;
+                else
+                    isSound = false;
+            }
+        });
+
+        soundVolumeSlider.addChangeListener(new ChangeListener() {
+            @Override
+            public void stateChanged(ChangeEvent e) {
+                volume = soundVolumeSlider.getValue();
+            }
+        });
+
+        soundOptionsGridLayout.add(soundIsLabel);
+        soundOptionsGridLayout.add(soundIsCheckBox);
+        soundOptionsGridLayout.add(soundVolumeLabel);
+        soundOptionsGridLayout.add(soundVolumeSlider);
+
+        mainTablePane.add("Ogólne",optionsGridLayout);
+        mainTablePane.add("Dźwięk",soundOptionsGridLayout);
+
+        mainBorderLayout.add(mainTablePane,BorderLayout.CENTER);
         add(mainBorderLayout);
+        //add(mainBorderLayout);
     }
 
     public Settings showDialog(Settings firstSettings) {
@@ -130,23 +175,35 @@ class OptionsFrame extends JDialog {
         secondPlayerColor.setColor(firstSettings.getPlayerSecondColor());
         playerFirstColor = firstSettings.getPlayerFirstColor();
         playerSecondColor = firstSettings.getPlayerSecondColor();
+        isSound = firstSettings.getIsSound();
+        volume = firstSettings.getVolume();
         BoardSize = firstSettings.getBoardSize();
+        mainTablePane.setSelectedIndex(0);
 
         for(int i = 0; i < boardSizeComboBox.getItemCount();i++) {
             if(Integer.parseInt(boardSizeComboBox.getItemAt(i).split("x")[0])==BoardSize ) {
                 boardSizeComboBox.setSelectedIndex(i);
             }
         }
+        soundIsCheckBox.setSelected(isSound);
+        soundVolumeSlider.setValue(volume);
+
         repaint();
         setVisible(true);
-        return new Settings(BoardSize,playerFirstColor,playerSecondColor);
+        return new Settings(BoardSize,playerFirstColor,playerSecondColor,isSound,volume);
     }
-
+    private JTabbedPane mainTablePane;
+    private JSlider soundVolumeSlider;
+    private JCheckBox soundIsCheckBox;
     private int BoardSize = 5;
 
     private Color playerFirstColor;
 
     private Color playerSecondColor;
+
+    private boolean isSound = true;
+
+    private int volume = 0;
 
     private JComboBox<String> boardSizeComboBox;
     private boolean isPlayPressed = false;

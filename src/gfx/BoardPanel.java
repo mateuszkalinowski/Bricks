@@ -4,6 +4,10 @@ import core.Bricks;
 import logic.BoardLogic;
 import logic.MovesStorage;
 
+import javax.sound.sampled.AudioInputStream;
+import javax.sound.sampled.AudioSystem;
+import javax.sound.sampled.Clip;
+import javax.sound.sampled.FloatControl;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.KeyAdapter;
@@ -11,6 +15,8 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
+import java.io.File;
+import java.net.URL;
 
 /**
  * Created by Mateusz on 20.05.2016.
@@ -34,6 +40,7 @@ public class BoardPanel extends Canvas {
                             movesStorage.addMove(selectedX, selectedY, selectedX, selectedY-1);
                             Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                             isSelected = false;
+                            playSound();
                             if (actualPlayer == 1) {
                                 Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                 actualPlayer = 2;
@@ -58,6 +65,7 @@ public class BoardPanel extends Canvas {
                             movesStorage.addMove(selectedX, selectedY, selectedX+1, selectedY);
                             Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                             isSelected = false;
+                            playSound();
                             if (actualPlayer == 1) {
                                 Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                 actualPlayer = 2;
@@ -81,6 +89,7 @@ public class BoardPanel extends Canvas {
                             movesStorage.addMove(selectedX, selectedY, selectedX, selectedY+1);
                             Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                             isSelected = false;
+                            playSound();
                             if (actualPlayer == 1) {
                                 Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                 actualPlayer = 2;
@@ -105,6 +114,7 @@ public class BoardPanel extends Canvas {
                             movesStorage.addMove(selectedX, selectedY, selectedX-1, selectedY);
                             Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                             isSelected = false;
+                            playSound();
                             if (actualPlayer == 1) {
                                 Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                 actualPlayer = 2;
@@ -154,6 +164,7 @@ public class BoardPanel extends Canvas {
                                 movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
                                 Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                 isSelected = false;
+                                playSound();
                                 if (actualPlayer == 1) {
                                     Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     actualPlayer = 2;
@@ -176,6 +187,7 @@ public class BoardPanel extends Canvas {
                                 movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
                                 Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                 isSelected = false;
+                                playSound();
                                 if (actualPlayer == 1) {
                                     Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     actualPlayer = 2;
@@ -199,6 +211,7 @@ public class BoardPanel extends Canvas {
                                 movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
                                 Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                 isSelected = false;
+                                playSound();
                                 if (actualPlayer == 1) {
                                     Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     actualPlayer = 2;
@@ -222,6 +235,7 @@ public class BoardPanel extends Canvas {
                                 movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
                                 Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                 isSelected = false;
+                                playSound();
                                 if (actualPlayer == 1) {
                                     Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     actualPlayer = 2;
@@ -259,6 +273,22 @@ public class BoardPanel extends Canvas {
         drawBoardFrame();
         g.dispose();
         bs.show();
+    }
+    private void playSound() {
+        try {
+            URL putBrickURL = this.getClass().getResource("putbrick.wav");
+            AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(putBrickURL);
+            Clip clip = AudioSystem.getClip();
+            clip.open(audioInputStream);
+            FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
+            volumeControl.setValue(Bricks.mainFrame.volume);
+            if(Bricks.mainFrame.isSound) {
+                clip.start();
+            }
+        } catch(Exception ex) {
+            System.out.println("Error with playing sound.");
+            ex.printStackTrace();
+        }
     }
 
     private void drawBoardFrame() {

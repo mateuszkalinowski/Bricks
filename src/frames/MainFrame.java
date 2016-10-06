@@ -20,7 +20,7 @@ import java.net.URL;
  */
 public class MainFrame extends JFrame implements Runnable {
 
-    public MainFrame(int initialBoardSize,Color firstPlayerColor,Color secondPlayerColor) {
+    public MainFrame(int initialBoardSize,Color firstPlayerColor,Color secondPlayerColor,boolean isSound,int volume) {
         setTitle("Bricks");
         setSize(600, 600);
         setMinimumSize(new Dimension(550, 500));
@@ -29,8 +29,10 @@ public class MainFrame extends JFrame implements Runnable {
         BoardSize = initialBoardSize;
         playerFirstColor = firstPlayerColor;
         playerSecondColor = secondPlayerColor;
+        this.isSound = isSound;
+        this.volume = volume;
 
-        URL imgURL = this.getClass().getResource("../resources/brick-wall.png");
+        URL imgURL = this.getClass().getResource("brick-wall.png");
         ImageIcon icon = new ImageIcon(imgURL);
         setIconImage(icon.getImage());
 
@@ -140,11 +142,13 @@ public class MainFrame extends JFrame implements Runnable {
 
         JButton optionsButton = new JButton("Opcje");
         optionsButton.addActionListener(e -> {
-            Settings newSettings = optionsDialog.showDialog(new Settings(BoardSize, playerFirstColor, playerSecondColor));
+            Settings newSettings = optionsDialog.showDialog(new Settings(BoardSize, playerFirstColor, playerSecondColor,this.isSound,this.volume));
             if (optionsDialog.wasSaveClicked) {
                 BoardSize = newSettings.getBoardSize();
                 playerFirstColor = newSettings.getPlayerFirstColor();
                 playerSecondColor = newSettings.getPlayerSecondColor();
+                this.isSound = newSettings.getIsSound();
+                this.volume = newSettings.getVolume();
                 exportSettings();
             }
         });
@@ -248,6 +252,8 @@ public class MainFrame extends JFrame implements Runnable {
             createCfg.println("BoardSize=" + BoardSize);
             createCfg.println("FirstColor=" + playerFirstColor.toString());
             createCfg.println("SecondColor=" + playerSecondColor.toString());
+            createCfg.println("sound=" + isSound);
+            createCfg.println("volume=" + volume);
             createCfg.close();
         } catch (Exception ignored) {
 
@@ -266,6 +272,10 @@ public class MainFrame extends JFrame implements Runnable {
     public Color playerFirstColor;
 
     public Color playerSecondColor;
+
+    public boolean isSound;
+
+    public int volume;
 
     public int BoardSize = 5;
 
