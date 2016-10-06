@@ -32,6 +32,7 @@ public class Bricks {
                     createCfg.println("SecondColor=java.awt.Color[r=238,g=44,b=44]");
                     createCfg.println("sound=true");
                     createCfg.println("volume=0");
+                    createCfg.println("debugMode=false");
                     createCfg.close();
                     loadDefaultSettings();
                 }
@@ -63,6 +64,13 @@ public class Bricks {
                         splittedLine = line.split("=");
                         volume = Integer.parseInt(splittedLine[1]);
 
+                        line = in.nextLine();
+                        splittedLine = line.split("=");
+                        if(splittedLine[1].equals("true"))
+                            debugMode = true;
+                        else
+                            debugMode = false;
+
                     } catch (Exception ignored) {
                         loadDefaultSettings();
                     }
@@ -71,7 +79,7 @@ public class Bricks {
                 loadDefaultSettings();
             }
 
-            mainFrame = new MainFrame(initialBoardSize,firstPlayerColor,secondPlayerColor,isSound,volume);
+            mainFrame = new MainFrame(initialBoardSize,firstPlayerColor,secondPlayerColor,isSound,volume,debugMode);
             mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             mainFrame.setVisible(true);
         });
@@ -81,6 +89,7 @@ public class Bricks {
     private static Color secondPlayerColor;
     private static boolean isSound;
     private static int volume;
+    private static boolean debugMode;
 
     public static MainFrame mainFrame;
 

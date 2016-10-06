@@ -75,6 +75,22 @@ public class BoardLogic {
 
         return false;
     }
+    public  int getPossibleMovesLeft() {
+        int moves = 0;
+        for(int i = 0; i < staticSize-1;i++) {
+            for(int j = 0; j <  staticSize;j++) {
+                if((board[i][j]==0) && (board[i+1][j]==0))
+                    moves++;
+            }
+        }
+        for(int i = 0; i <  staticSize;i++) {
+            for(int j = 0; j <  staticSize-1;j++) {
+                if((board[i][j]==0) && (board[i][j+1]==0))
+                    moves++;
+            }
+        }
+        return moves;
+    }
 
     public int width;
     public int height;

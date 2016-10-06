@@ -70,6 +70,8 @@ class OptionsFrame extends JDialog {
                     boardSizeComboBox.setSelectedIndex(i);
                 }
             }
+            debugMode = false;
+            debugModeCheckBox.setSelected(false);
 
             repaint();
         });
@@ -156,6 +158,21 @@ class OptionsFrame extends JDialog {
             }
         });
 
+        advancedOptionsGridLayout = new JPanel(new GridLayout(2,2));
+        debugModeCheckBox = new JCheckBox();
+        JLabel debugModeLabel = new JLabel("Tryb Debugowania: ");
+        debugModeLabel.setHorizontalAlignment(JLabel.CENTER);
+        advancedOptionsGridLayout.add(debugModeLabel);
+        advancedOptionsGridLayout.add(debugModeCheckBox);
+        advancedOptionsGridLayout.add(new JLabel());
+
+        debugModeCheckBox.addActionListener(e -> {
+            if(debugModeCheckBox.isSelected())
+                debugMode = true;
+            else
+                debugMode = false;
+        });
+
         soundOptionsGridLayout.add(soundIsLabel);
         soundOptionsGridLayout.add(soundIsCheckBox);
         soundOptionsGridLayout.add(soundVolumeLabel);
@@ -163,7 +180,7 @@ class OptionsFrame extends JDialog {
 
         mainTablePane.add("Ogólne",optionsGridLayout);
         mainTablePane.add("Dźwięk",soundOptionsGridLayout);
-
+        mainTablePane.add("Zaawansowane",advancedOptionsGridLayout);
         mainBorderLayout.add(mainTablePane,BorderLayout.CENTER);
         add(mainBorderLayout);
         //add(mainBorderLayout);
@@ -179,7 +196,7 @@ class OptionsFrame extends JDialog {
         volume = firstSettings.getVolume();
         BoardSize = firstSettings.getBoardSize();
         mainTablePane.setSelectedIndex(0);
-
+        debugMode = firstSettings.getDebugMode();
         for(int i = 0; i < boardSizeComboBox.getItemCount();i++) {
             if(Integer.parseInt(boardSizeComboBox.getItemAt(i).split("x")[0])==BoardSize ) {
                 boardSizeComboBox.setSelectedIndex(i);
@@ -188,14 +205,18 @@ class OptionsFrame extends JDialog {
         soundIsCheckBox.setSelected(isSound);
         soundVolumeSlider.setValue(volume);
 
+        debugModeCheckBox.setSelected(debugMode);
+
         repaint();
         setVisible(true);
-        return new Settings(BoardSize,playerFirstColor,playerSecondColor,isSound,volume);
+        return new Settings(BoardSize,playerFirstColor,playerSecondColor,isSound,volume,debugMode);
     }
     private JTabbedPane mainTablePane;
     private JSlider soundVolumeSlider;
     private JCheckBox soundIsCheckBox;
     private int BoardSize = 5;
+
+    private JCheckBox debugModeCheckBox;
 
     private Color playerFirstColor;
 
@@ -205,8 +226,12 @@ class OptionsFrame extends JDialog {
 
     private int volume = 0;
 
+    private boolean debugMode;
+
     private JComboBox<String> boardSizeComboBox;
     private boolean isPlayPressed = false;
+
+    private JPanel advancedOptionsGridLayout;
 
     boolean wasSaveClicked = false;
     private ColorPreview firstPlayerColor;
