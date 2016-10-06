@@ -33,12 +33,12 @@ public class BoardPanel extends Canvas {
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                if(isSelected) {
+                if (isSelected) {
                     if (e.getKeyCode() == KeyEvent.VK_UP) {
                         if (directions[0]) {
                             board.board[selectedX][selectedY] = actualPlayer;
-                            board.board[selectedX][selectedY-1] = actualPlayer;
-                            movesStorage.addMove(selectedX, selectedY, selectedX, selectedY-1);
+                            board.board[selectedX][selectedY - 1] = actualPlayer;
+                            movesStorage.addMove(selectedX, selectedY, selectedX, selectedY - 1);
                             Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                             isSelected = false;
                             playSound();
@@ -53,8 +53,8 @@ public class BoardPanel extends Canvas {
                                     }
                                 }
                             } else {
-                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
-                                    Bricks.mainFrame.repaint();
+                                Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
+                                Bricks.mainFrame.repaint();
                                 actualPlayer = 1;
                             }
                             checkNoMoves();
@@ -64,8 +64,8 @@ public class BoardPanel extends Canvas {
                     if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
                         if (directions[1]) {
                             board.board[selectedX][selectedY] = actualPlayer;
-                            board.board[selectedX+1][selectedY] = actualPlayer;
-                            movesStorage.addMove(selectedX, selectedY, selectedX+1, selectedY);
+                            board.board[selectedX + 1][selectedY] = actualPlayer;
+                            movesStorage.addMove(selectedX, selectedY, selectedX + 1, selectedY);
                             Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                             isSelected = false;
                             playSound();
@@ -90,13 +90,13 @@ public class BoardPanel extends Canvas {
                     if (e.getKeyCode() == KeyEvent.VK_DOWN) {
                         if (directions[2]) {
                             board.board[selectedX][selectedY] = actualPlayer;
-                            board.board[selectedX][selectedY+1] = actualPlayer;
-                            movesStorage.addMove(selectedX, selectedY, selectedX, selectedY+1);
+                            board.board[selectedX][selectedY + 1] = actualPlayer;
+                            movesStorage.addMove(selectedX, selectedY, selectedX, selectedY + 1);
                             Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                             isSelected = false;
                             playSound();
                             if (actualPlayer == 1) {
-                               // Bricks.mainFrame.restTiles.setText("Gracz Drugi");
+                                // Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                 Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
                                 Bricks.mainFrame.repaint();
                                 actualPlayer = 2;
@@ -118,8 +118,8 @@ public class BoardPanel extends Canvas {
                     if (e.getKeyCode() == KeyEvent.VK_LEFT) {
                         if (directions[3]) {
                             board.board[selectedX][selectedY] = actualPlayer;
-                            board.board[selectedX-1][selectedY] = actualPlayer;
-                            movesStorage.addMove(selectedX, selectedY, selectedX-1, selectedY);
+                            board.board[selectedX - 1][selectedY] = actualPlayer;
+                            movesStorage.addMove(selectedX, selectedY, selectedX - 1, selectedY);
                             Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                             isSelected = false;
                             playSound();
@@ -292,6 +292,7 @@ public class BoardPanel extends Canvas {
         g.dispose();
         bs.show();
     }
+
     private void playSound() {
         try {
             URL putBrickURL = this.getClass().getResource("putbrick.wav");
@@ -300,10 +301,10 @@ public class BoardPanel extends Canvas {
             clip.open(audioInputStream);
             FloatControl volumeControl = (FloatControl) clip.getControl(FloatControl.Type.MASTER_GAIN);
             volumeControl.setValue(Bricks.mainFrame.volume);
-            if(Bricks.mainFrame.isSound) {
+            if (Bricks.mainFrame.isSound) {
                 clip.start();
             }
-        } catch(Exception ex) {
+        } catch (Exception ex) {
             System.out.println("Error with playing sound.");
             ex.printStackTrace();
         }
@@ -333,8 +334,8 @@ public class BoardPanel extends Canvas {
             }
         }
 
-        for(int i = 0; i < board.height;i++) {
-            for(int j = 0; j < board.width;j++) {
+        for (int i = 0; i < board.height; i++) {
+            for (int j = 0; j < board.width; j++) {
                 if (board.board[j][i] == 1) {
                     g2.setColor(Bricks.mainFrame.playerFirstColor);
                     g2.fillRect(j * oneFieldWidth + margin + inFieldMargin, i * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
@@ -366,34 +367,62 @@ public class BoardPanel extends Canvas {
         Bricks.mainFrame.movesLeftLabel.setText("Pozostało " + board.getPossibleMovesLeft() + " ruchów");
         if (!board.anyMoves()) {
             int selection = 0;
-            if (gamemode == 1) {
-                if (actualPlayer == 1) {
-                    selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz drugi, chcesz zagrać jeszcze raz?", "Koniec" +
-                            " gry", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-                } else {
-                    selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz pierwszy, chcesz zagrać jeszcze raz?", "Koniec" +
-                            " gry", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (Bricks.mainFrame.getDebugMode()) {
+                if (gamemode == 1) {
+                    if (actualPlayer == 1) {
+                        selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz drugi, chcesz zagrać jeszcze raz?", "Koniec" +
+                                " gry", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    } else {
+                        selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz pierwszy, chcesz zagrać jeszcze raz?", "Koniec" +
+                                " gry", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    }
                 }
-            }
-            if (gamemode == 0) {
-                if (actualPlayer == 1) {
-                    selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał komputer, chcesz zagrać jeszcze raz?", "Koniec" +
-                            " gry", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
-                } else {
-                    selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrałeś, chcesz zagrać jeszcze raz?", "Koniec" +
-                            " gry", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                if (gamemode == 0) {
+                    if (actualPlayer == 1) {
+                        selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał komputer, chcesz zagrać jeszcze raz?", "Koniec" +
+                                " gry", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    } else {
+                        selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrałeś, chcesz zagrać jeszcze raz?", "Koniec" +
+                                " gry", JOptionPane.YES_NO_CANCEL_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    }
                 }
+                if (selection == JOptionPane.OK_OPTION) {
+                    resetBoard();
+                } else if (selection == JOptionPane.CANCEL_OPTION) {
+                    undoLastMove();
+                } else {
+                    resetBoard();
+                    Bricks.mainFrame.stopGame();
+                }
+                return true;
             }
-            if (selection == JOptionPane.OK_OPTION) {
-                resetBoard();
-            } else if (selection == JOptionPane.CANCEL_OPTION) {
-                undoLastMove();
+            else  {
+                if (gamemode == 1) {
+                    if (actualPlayer == 1) {
+                        selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz drugi, chcesz zagrać jeszcze raz?", "Koniec" +
+                                " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    } else {
+                        selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz pierwszy, chcesz zagrać jeszcze raz?", "Koniec" +
+                                " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    }
+                }
+                if (gamemode == 0) {
+                    if (actualPlayer == 1) {
+                        selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał komputer, chcesz zagrać jeszcze raz?", "Koniec" +
+                                " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    } else {
+                        selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrałeś, chcesz zagrać jeszcze raz?", "Koniec" +
+                                " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    }
+                }
+                if (selection == JOptionPane.OK_OPTION) {
+                    resetBoard();
+                }  else {
+                    resetBoard();
+                    Bricks.mainFrame.stopGame();
+                }
+                return true;
             }
-            else {
-                resetBoard();
-                Bricks.mainFrame.stopGame();
-            }
-            return true;
         }
         return false;
     }

@@ -284,6 +284,10 @@ public class MainFrame extends JFrame implements Runnable {
         repaint();
     }
 
+    public boolean getDebugMode(){
+        return debugMode;
+    }
+
     //private void tick(int ticks) {}
     private OptionsFrame optionsDialog;
     private Thread game;
