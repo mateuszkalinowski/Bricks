@@ -43,11 +43,11 @@ public class MainFrame extends JFrame implements Runnable {
         setVisible(true);
         actualPlayerColorPreview = new ColorPreview(playerFirstColor);
 
-        try {
+     /*   try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
-        } catch (Exception ignored) {
+        } catch (Exception ignored) {}*/
 
-        }
+        com.apple.eawt.Application.getApplication().setDockIconImage(icon.getImage());
 
         optionsDialog = new OptionsFrame();
 
@@ -87,7 +87,7 @@ public class MainFrame extends JFrame implements Runnable {
             gametype = 0;
             JPanel southBorderLayout = new JPanel(new BorderLayout());
 
-            movesLeftLabel = new JLabel("Pozostało " + board.getPossibleMovesLeft() + " ruchów");
+            movesLeftLabel = new JLabel("Pozostały " + board.getPossibleMovesLeft() + " ruchy");
             movesLeftLabel.setHorizontalTextPosition(JLabel.CENTER);
             movesLeftLabel.setHorizontalAlignment(JLabel.CENTER);
 
@@ -134,7 +134,7 @@ public class MainFrame extends JFrame implements Runnable {
             JPanel southLeftGridLayout = new JPanel(new GridLayout(1,2));
 
 
-            movesLeftLabel = new JLabel("Pozostało " + board.getPossibleMovesLeft() + " ruchów");
+            movesLeftLabel = new JLabel("Pozostały " + board.getPossibleMovesLeft() + " ruchy");
             movesLeftLabel.setHorizontalTextPosition(JLabel.CENTER);
             movesLeftLabel.setHorizontalAlignment(JLabel.CENTER);
 
@@ -197,7 +197,7 @@ public class MainFrame extends JFrame implements Runnable {
         exitButton.setFocusPainted(false);
         exitButton.addActionListener(e -> System.exit(0));
 
-        credits = new JLabel("<html><center>Autor: Mateusz Kalinowski @2016 Wersja: 0.9.6, Icon made by Madebyoliver from www.flaticon.com, <br> Kod źródłowy na www.github.com/mateuszkalinowski/Bricks</center></html>");
+        credits = new JLabel("<html><center>Autor: Mateusz Kalinowski @2016 Wersja: 0.9.6, Ikona: Madebyoliver, www.flaticon.com, <br> Kod źródłowy na www.github.com/mateuszkalinowski/Bricks</center></html>");
         credits.setHorizontalAlignment(0);
 
 

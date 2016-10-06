@@ -17,7 +17,7 @@ import java.awt.event.ActionListener;
  */
 class OptionsPanel extends JPanel {
     OptionsPanel(Settings firstSettings) {
-        JLabel title = new JLabel("Wybierz opcje:", SwingConstants.CENTER);
+        JLabel title = new JLabel("Dostosuj ustawienia:", SwingConstants.CENTER);
         title.setFont(new Font("Comic Sans MS", Font.BOLD, 50));
         JLabel boardSize = new JLabel("Rozmiar planszy: ", SwingConstants.CENTER);
         JLabel firstPlayerColorLabel = new JLabel("Kolor pierwszego gracza: ", SwingConstants.CENTER);
@@ -153,8 +153,8 @@ class OptionsPanel extends JPanel {
         });
 
 
-        mainGridLayout = new JPanel(new GridLayout(10,2));
-        JLabel generalSectionLabel = new JLabel("Ogólne");
+        mainGridLayout = new JPanel(new GridLayout(15,2));
+        JLabel generalSectionLabel = new JLabel("Ogólne:");
         generalSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD,20));
         mainGridLayout.add(new JLabel());
         mainGridLayout.add(new JLabel());
@@ -170,8 +170,11 @@ class OptionsPanel extends JPanel {
         secondPlayerOptionsGridLayout.add(chooseSecondPlayerColorButton);
         mainGridLayout.add(secondPlayerColorLabel);
         mainGridLayout.add(secondPlayerOptionsGridLayout);
-
-        JLabel soundSectionLabel = new JLabel("Dźwięk");
+        mainGridLayout.add(new JLabel());
+        mainGridLayout.add(new JLabel());
+        mainGridLayout.add(new JSeparator());
+        mainGridLayout.add(new JSeparator());
+        JLabel soundSectionLabel = new JLabel("Dźwięk:");
         soundSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD,20));
         mainGridLayout.add(soundSectionLabel);
         mainGridLayout.add(new JLabel());
@@ -179,13 +182,19 @@ class OptionsPanel extends JPanel {
         mainGridLayout.add(soundIsCheckBox);
         mainGridLayout.add(soundVolumeLabel);
         mainGridLayout.add(soundVolumeSlider);
-
-        JLabel advancedSectionLabel = new JLabel("Zaawansowane");
+        mainGridLayout.add(new JLabel());
+        mainGridLayout.add(new JLabel());
+        mainGridLayout.add(new JSeparator());
+        mainGridLayout.add(new JSeparator());
+        JLabel advancedSectionLabel = new JLabel("Zaawansowane:");
         advancedSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD,20));
         mainGridLayout.add(advancedSectionLabel);
         mainGridLayout.add(new JLabel());
         mainGridLayout.add(debugModeLabel);
         mainGridLayout.add(debugModeCheckBox);
+
+        mainGridLayout.add(new JLabel());
+        mainGridLayout.add(new JLabel());
 
         firstPlayerOptionsGridLayout.add(firstPlayerColor);
         secondPlayerOptionsGridLayout.add(secondPlayerColor);

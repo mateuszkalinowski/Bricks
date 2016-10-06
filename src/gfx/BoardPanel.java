@@ -364,7 +364,7 @@ public class BoardPanel extends Canvas {
     }
 
     private boolean checkNoMoves() {
-        Bricks.mainFrame.movesLeftLabel.setText("Pozostało " + board.getPossibleMovesLeft() + " ruchów");
+        Bricks.mainFrame.movesLeftLabel.setText("Pozostały " + board.getPossibleMovesLeft() + " ruchy");
         if (!board.anyMoves()) {
             int selection = 0;
             if (Bricks.mainFrame.getDebugMode()) {
@@ -434,7 +434,7 @@ public class BoardPanel extends Canvas {
         Bricks.mainFrame.restTiles.setText("Gracz: ");
         Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
         Bricks.mainFrame.undoLastMoveButton.setEnabled(false);
-        Bricks.mainFrame.movesLeftLabel.setText("Pozostało " + board.getPossibleMovesLeft() + " ruchów");
+        Bricks.mainFrame.movesLeftLabel.setText("Pozostały " + board.getPossibleMovesLeft() + " ruchy");
         actualPlayer = 1;
     }
 
@@ -472,7 +472,7 @@ public class BoardPanel extends Canvas {
         }
         if (movesStorage.isEmpty())
             Bricks.mainFrame.undoLastMoveButton.setEnabled(false);
-        Bricks.mainFrame.movesLeftLabel.setText("Pozostało " + board.getPossibleMovesLeft() + " ruchów");
+        Bricks.mainFrame.movesLeftLabel.setText("Pozostały " + board.getPossibleMovesLeft() + " ruchy");
     }
 
     public int getActualPlayer() {
