@@ -11,146 +11,25 @@ public class ComputerPlayer {
     public void performMove(BoardLogic board,MovesStorage movesStorage){
         this.board = board;
         this.movesStorage = movesStorage;
-        possibleMovesLeft = countPossibleMovesLeft();
-    /*    System.out.println(possibleMovesLeft);
-        if(possibleMovesLeft%2==1) {
-            int randomZeroOrOne = (int) (Math.random() * 2);
-            if(randomZeroOrOne==0) {
-                if(findOddLinesHorizontally()) return;
-                if(findOddLinesVertically()) return;
-            }
-            if(randomZeroOrOne==1) {
-                if(findOddLinesVertically()) return;
-                if(findOddLinesHorizontally()) return;
-            }
-        }
+        possibleMovesLeft = board.getPossibleMovesLeft();
         if(possibleMovesLeft%2==0) {
             int randomZeroOrOne = (int) (Math.random() * 2);
             if(randomZeroOrOne==0) {
-                if(findEvenLinesHorizontally()) return;
-                if(findEvenLinesVertically()) return;
+                System.out.println("Próbuję znaleźć linię na cztery");
+                if(findFourRowHorizontallyStrict()) return;
+                if(findFourRowVerticallyStrict()) return;
             }
             if(randomZeroOrOne==1) {
-                if(findEvenLinesVertically()) return;
-                if(findEvenLinesHorizontally()) return;
+                System.out.println("Próbuję znaleźć linię na cztery");
+                if(findFourRowVerticallyStrict()) return;
+                if(findFourRowHorizontallyStrict()) return;
             }
-        }*/
+        }
         while(true) {
-            //NARAZIE, JESlI LICZBA RUCHOW JEST NIEPARZYSTA KOMPUTER ROBI RUCH LOSOWY
             if(FullRandomMove())
                 return;
         }
     }
-
-
-
-
-    /*public boolean findThreeDownOneRight(){
-
-        for(int i = 0; i < board.staticSize-1;i++) {
-            for(int j = 0; j < board.staticSize-2;j++) {
-                try {
-                    if(board.board[i+2][j]==0)
-                        continue;
-                }catch (ArrayIndexOutOfBoundsException ignored){}
-                try {
-                    if(board.board[i][j+3]==0)
-                        continue;
-                }catch (ArrayIndexOutOfBoundsException ignored){}
-
-                try {
-                    if(board.board[i-1][j]==0)
-                        continue;
-                }catch (ArrayIndexOutOfBoundsException ignored){}
-                try {
-                    if(board.board[i-1][j+1]==0)
-                        continue;
-                }catch (ArrayIndexOutOfBoundsException ignored){}
-                try {
-                    if(board.board[i-1][j+2]==0)
-                        continue;
-                }catch (ArrayIndexOutOfBoundsException ignored){}
-
-                try {
-                    if(board.board[i][j-1]==0)
-                        continue;
-                }catch (ArrayIndexOutOfBoundsException ignored){}
-                try {
-                    if(board.board[i+1][j-1]==0)
-                        continue;
-                }catch (ArrayIndexOutOfBoundsException ignored){}
-
-
-                if(board.board[i][j]==0 && board.board[i+1][j]==0 && board.board[i][j+1]==0 && board.board[i][j+2]==0 && board.board[i+1][j+1] != 0 && board.board[i+1][j+2] != 0) {
-                    board.board[i][j]=0;
-                    board.board[i][j+1]=0;
-                    return true;
-                }
-            }
-        }
-        return false;
-    }*/
- //   public boolean findThreeDownOneRight
-
-
-
-    private boolean findEvenLinesVertically() {
-        for(int k = 3;k<board.staticSize;k+=2) {
-
-        }
-        return false;
-    }
-
-    private boolean findEvenLinesHorizontally() {
-        for(int k = 3;k<board.staticSize;k+=2) {
-
-            for(int i = 0; i <= board.staticSize-k;i++) {
-                for(int j = 0; j < board.staticSize;j++) {
-                    try{
-                        if(board.board[i-1][j]==0)
-                            continue;
-                    }catch (ArrayIndexOutOfBoundsException ignored){}
-                    try{
-                        if(board.board[i+k][j]==0)
-                            continue;
-                    }catch (ArrayIndexOutOfBoundsException ignored){}
-                    for(int w = i;w<i+k;w++) {
-                        try{
-                            if(board.board[i+w][j-1]==0)
-                                continue;
-                        }catch (ArrayIndexOutOfBoundsException ignored){}
-                        try{
-                            if(board.board[i+w][j+1]==0)
-                                continue;
-                        }catch (ArrayIndexOutOfBoundsException ignored){}
-                        if(board.board[i][j]!=0) continue;
-                    }
-
-
-                }
-            }
-
-
-        }
-        return false;
-    }
-
-    private boolean findOddLinesVertically() {
-
-        return false;
-    }
-
-    private boolean findOddLinesHorizontally() {
-
-        return false;
-    }
-
-
-
-
-
-
-/*
 
     private boolean findFourRowHorizontallyStrict() {
         for (int i = 0; i < board.staticSize - 3; i++) {
@@ -306,8 +185,6 @@ public class ComputerPlayer {
     }
 
 
-*/
-
 
     private boolean FullRandomMove() {
         int x = (int) (Math.random() * (board.staticSize));
@@ -347,7 +224,7 @@ public class ComputerPlayer {
         }
         return false;
     }
-
+/*
     private int countPossibleMovesLeft() {
         int moves = 0;
         for(int i = 0; i < board.staticSize-1;i++) {
@@ -364,7 +241,7 @@ public class ComputerPlayer {
         }
         return moves;
     }
-
+*/
     private int possibleMovesLeft = 0;
     private BoardLogic board;
     private MovesStorage movesStorage;

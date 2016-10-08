@@ -92,9 +92,11 @@ public class BoardLogic {
         return moves;
     }
     public  int getPossibleMovesLeft() {
-        int moves1 = 0;
-        int moves2 = 0;
+        int maxmoves = 0;
+        int temp = 0;
         int[][] tempBoard = new int[staticSize][staticSize];
+        //LEWY GORNY
+        tempBoard = new int[staticSize][staticSize];
         for(int i = 0; i < staticSize;i++) {
             for(int j = 0; j < staticSize; j++)
                 tempBoard[i][j] = board[i][j];
@@ -104,7 +106,7 @@ public class BoardLogic {
                 if((tempBoard[i][j]==0) && (tempBoard[i+1][j]==0)) {
                     tempBoard[i][j]=1;
                     tempBoard[i+1][j]=1;
-                    moves1++;
+                    temp++;
                     i++;
                 }
             }
@@ -112,11 +114,14 @@ public class BoardLogic {
         for(int i = 0; i <  staticSize;i++) {
             for(int j = 0; j <  staticSize-1;j++) {
                 if((tempBoard[i][j]==0) && (tempBoard[i][j+1]==0)) {
-                    moves1++;
+                    temp++;
                     j++;
                 }
             }
         }
+        if(temp>maxmoves)
+            maxmoves = temp;
+        temp=0;
 
         tempBoard = new int[staticSize][staticSize];
         for(int i = 0; i < staticSize;i++) {
@@ -128,7 +133,7 @@ public class BoardLogic {
                 if((tempBoard[i][j]==0) && (tempBoard[i][j+1]==0)) {
                     tempBoard[i][j]=1;
                     tempBoard[i][j+1]=1;
-                    moves2++;
+                    temp++;
                     j++;
                 }
             }
@@ -136,13 +141,181 @@ public class BoardLogic {
         for(int j = 0; j < staticSize;j++) {
             for(int i = 0; i < staticSize-1;i++) {
                 if((tempBoard[i][j]==0) && (tempBoard[i+1][j]==0)) {
-                    moves2++;
+                    temp++;
                     i++;
                 }
             }
         }
+        if(temp>maxmoves)
+            maxmoves = temp;
+        temp=0;
+        //PRAWY GORNY
+        tempBoard = new int[staticSize][staticSize];
+        for(int i = 0; i < staticSize;i++) {
+            for(int j = 0; j < staticSize; j++)
+                tempBoard[i][j] = board[i][j];
+        }
+        for(int j = 0; j < staticSize;j++) {
+            for(int i = staticSize-1; i >0;i--) {
+                if((tempBoard[i][j]==0) && (tempBoard[i-1][j]==0)) {
+                    tempBoard[i][j]=1;
+                    tempBoard[i-1][j]=1;
+                    temp++;
+                    i--;
+                }
+            }
+        }
+        for(int i = staticSize-1; i >=0;i--) {
+            for(int j = 0; j <  staticSize-1;j++) {
+                if((tempBoard[i][j]==0) && (tempBoard[i][j+1]==0)) {
+                    temp++;
+                    j++;
+                }
+            }
+        }
+        if(temp>maxmoves)
+            maxmoves = temp;
+        temp=0;
 
-        return moves1 < moves2 ? moves2 : moves1;
+        tempBoard = new int[staticSize][staticSize];
+        for(int i = 0; i < staticSize;i++) {
+            for(int j = 0; j < staticSize; j++)
+                tempBoard[i][j] = board[i][j];
+        }
+        for(int i = staticSize-1; i >= 0;i--) {
+            for(int j = 0; j <  staticSize-1;j++) {
+                if((tempBoard[i][j]==0) && (tempBoard[i][j+1]==0)) {
+                    tempBoard[i][j]=1;
+                    tempBoard[i][j+1]=1;
+                    temp++;
+                    j++;
+                }
+            }
+        }
+        for(int j = 0; j < staticSize;j++) {
+            for(int i = staticSize-1; i >0;i--) {
+                if((tempBoard[i][j]==0) && (tempBoard[i-1][j]==0)) {
+                    temp++;
+                    i--;
+                }
+            }
+        }
+        if(temp>maxmoves)
+            maxmoves = temp;
+        temp=0;
+        //LEWY DOLNY
+        tempBoard = new int[staticSize][staticSize];
+        for(int i = 0; i < staticSize;i++) {
+            for(int j = 0; j < staticSize; j++)
+                tempBoard[i][j] = board[i][j];
+        }
+        for(int j = staticSize-1; j >=0;j--) {
+            for(int i = 0; i < staticSize-1;i++) {
+                if((tempBoard[i][j]==0) && (tempBoard[i+1][j]==0)) {
+                    tempBoard[i][j]=1;
+                    tempBoard[i+1][j]=1;
+                    temp++;
+                    i++;
+                }
+            }
+        }
+        for(int i = 0; i <  staticSize;i++) {
+            for(int j = staticSize-1; j >0;j--) {
+                if((tempBoard[i][j]==0) && (tempBoard[i][j-1]==0)) {
+                    temp++;
+                    j--;
+                }
+            }
+        }
+        if(temp>maxmoves)
+            maxmoves = temp;
+        temp=0;
+
+        tempBoard = new int[staticSize][staticSize];
+        for(int i = 0; i < staticSize;i++) {
+            for(int j = 0; j < staticSize; j++)
+                tempBoard[i][j] = board[i][j];
+        }
+        for(int i = 0; i <  staticSize;i++) {
+            for(int j = staticSize-1; j > 0;j--) {
+                if((tempBoard[i][j]==0) && (tempBoard[i][j-1]==0)) {
+                    tempBoard[i][j]=1;
+                    tempBoard[i][j-1]=1;
+                    temp++;
+                    j--;
+                }
+            }
+        }
+        for(int j = staticSize-1; j >0;j--) {
+            for(int i = 0; i < staticSize-1;i++) {
+                if((tempBoard[i][j]==0) && (tempBoard[i+1][j]==0)) {
+                    temp++;
+                    i++;
+                }
+            }
+        }
+        if(temp>maxmoves)
+            maxmoves = temp;
+        temp=0;
+        //PRAWY DOLNY
+        tempBoard = new int[staticSize][staticSize];
+        for(int i = 0; i < staticSize;i++) {
+            for(int j = 0; j < staticSize; j++)
+                tempBoard[i][j] = board[i][j];
+        }
+        for(int j = staticSize-1; j >=0 ;j--) {
+            for(int i = staticSize - 1; i > 0;i--) {
+                if((tempBoard[i][j]==0) && (tempBoard[i-1][j]==0)) {
+                    tempBoard[i][j]=1;
+                    tempBoard[i-1][j]=1;
+                    temp++;
+                    i--;
+                }
+            }
+        }
+        for(int i = staticSize-1; i >=0;i--) {
+            for(int j = staticSize-1; j > 0;j--) {
+                if((tempBoard[i][j]==0) && (tempBoard[i][j-1]==0)) {
+                    temp++;
+                    j--;
+                }
+            }
+        }
+        if(temp>maxmoves)
+            maxmoves = temp;
+        temp=0;
+
+        tempBoard = new int[staticSize][staticSize];
+        for(int i = 0; i < staticSize;i++) {
+            for(int j = 0; j < staticSize; j++)
+                tempBoard[i][j] = board[i][j];
+        }
+        for(int i = staticSize - 1; i >=0;i--) {
+            for(int j = staticSize-1; j >0;j--) {
+                if((tempBoard[i][j]==0) && (tempBoard[i][j-1]==0)) {
+                    tempBoard[i][j]=1;
+                    tempBoard[i][j-1]=1;
+                    temp++;
+                    j--;
+                }
+            }
+        }
+        for(int j = staticSize-1; j >=0;j--) {
+            for(int i = staticSize-1; i >0;i--) {
+                if((tempBoard[i][j]==0) && (tempBoard[i-1][j]==0)) {
+                    temp++;
+                    i--;
+                }
+            }
+        }
+        if(temp>maxmoves)
+            maxmoves = temp;
+        temp=0;
+
+
+
+
+        return maxmoves;
     }
 
     public int width;

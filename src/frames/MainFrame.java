@@ -47,9 +47,7 @@ public class MainFrame extends JFrame implements Runnable {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception ignored) {}*/
 
-        com.apple.eawt.Application.getApplication().setDockIconImage(icon.getImage());
-
-        optionsDialog = new OptionsFrame();
+      //  com.apple.eawt.Application.getApplication().setDockIconImage(icon.getImage());
 
         gameName = new JLabel("Bricks", SwingConstants.CENTER);
         buttonsGridLayout = new JPanel(new GridLayout(9, 1));
@@ -315,7 +313,6 @@ public class MainFrame extends JFrame implements Runnable {
     }
 
     //private void tick(int ticks) {}
-    private OptionsFrame optionsDialog;
     private Thread game;
     private BoardLogic board;
     private BoardPanel boardPanel;
