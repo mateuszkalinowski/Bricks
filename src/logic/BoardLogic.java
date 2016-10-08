@@ -75,7 +75,7 @@ public class BoardLogic {
 
         return false;
     }
-    public  int getPossibleMovesLeft() {
+    public  int getPossibleMovesLeft2() {
         int moves = 0;
         for(int i = 0; i < staticSize-1;i++) {
             for(int j = 0; j <  staticSize;j++) {
@@ -90,6 +90,59 @@ public class BoardLogic {
             }
         }
         return moves;
+    }
+    public  int getPossibleMovesLeft() {
+        int moves1 = 0;
+        int moves2 = 0;
+        int[][] tempBoard = new int[staticSize][staticSize];
+        for(int i = 0; i < staticSize;i++) {
+            for(int j = 0; j < staticSize; j++)
+                tempBoard[i][j] = board[i][j];
+        }
+        for(int j = 0; j < staticSize;j++) {
+            for(int i = 0; i < staticSize-1;i++) {
+                if((tempBoard[i][j]==0) && (tempBoard[i+1][j]==0)) {
+                    tempBoard[i][j]=1;
+                    tempBoard[i+1][j]=1;
+                    moves1++;
+                    i++;
+                }
+            }
+        }
+        for(int i = 0; i <  staticSize;i++) {
+            for(int j = 0; j <  staticSize-1;j++) {
+                if((tempBoard[i][j]==0) && (tempBoard[i][j+1]==0)) {
+                    moves1++;
+                    j++;
+                }
+            }
+        }
+
+        tempBoard = new int[staticSize][staticSize];
+        for(int i = 0; i < staticSize;i++) {
+            for(int j = 0; j < staticSize; j++)
+                tempBoard[i][j] = board[i][j];
+        }
+        for(int i = 0; i <  staticSize;i++) {
+            for(int j = 0; j <  staticSize-1;j++) {
+                if((tempBoard[i][j]==0) && (tempBoard[i][j+1]==0)) {
+                    tempBoard[i][j]=1;
+                    tempBoard[i][j+1]=1;
+                    moves2++;
+                    j++;
+                }
+            }
+        }
+        for(int j = 0; j < staticSize;j++) {
+            for(int i = 0; i < staticSize-1;i++) {
+                if((tempBoard[i][j]==0) && (tempBoard[i+1][j]==0)) {
+                    moves2++;
+                    i++;
+                }
+            }
+        }
+
+        return moves1 < moves2 ? moves2 : moves1;
     }
 
     public int width;
