@@ -1,5 +1,12 @@
 package logic;
 
+import core.Bricks;
+import frames.MainFrame;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+
 /**
  * Created by Mateusz on 20.05.2016.
  * Project Bricks
@@ -24,6 +31,24 @@ public class BoardLogic {
                     for (int j = 0; j < staticSize; j++)
                         board[i][j] = 0;
                 diagonallyMoves = false;
+    }
+
+    public void saveToFile(){
+        try {
+            PrintWriter createBoardFile = new PrintWriter(new File("/Users/Mateusz/Desktop/computerplayer/board.txt"));
+            createBoardFile.println(this.width);
+            for(int i = 0; i < height;i++) {
+                String line = "";
+                for(int j = 0; j < width;j++) {
+                    line+=board[j][i]+" ";
+                }
+                createBoardFile.println(line);
+            }
+            createBoardFile.close();
+        }
+        catch (Exception e) {
+            System.out.println("Nie działa");
+        }
     }
 
     public boolean[] possibleDirections(int x, int y) {

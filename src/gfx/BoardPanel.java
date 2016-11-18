@@ -33,113 +33,115 @@ public class BoardPanel extends Canvas {
         addKeyListener(new KeyAdapter() {
             @Override
             public void keyReleased(KeyEvent e) {
-                if (isSelected) {
-                    if (e.getKeyCode() == KeyEvent.VK_UP) {
-                        if (directions[0]) {
-                            board.board[selectedX][selectedY] = actualPlayer;
-                            board.board[selectedX][selectedY - 1] = actualPlayer;
-                            movesStorage.addMove(selectedX, selectedY, selectedX, selectedY - 1);
-                            Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
-                            isSelected = false;
-                            playSound();
-                            if (actualPlayer == 1) {
-                                Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
-                                Bricks.mainFrame.repaint();
-                                actualPlayer = 2;
-                                if (!checkNoMoves()) {
-                                    if (gametype == 0) {
-                                        Bricks.mainFrame.comp.performMove(board, movesStorage);
-                                        actualPlayer = 1;
+                if(gametype==0 || gametype==1) {
+                    if (isSelected) {
+                        if (e.getKeyCode() == KeyEvent.VK_UP) {
+                            if (directions[0]) {
+                                board.board[selectedX][selectedY] = actualPlayer;
+                                board.board[selectedX][selectedY - 1] = actualPlayer;
+                                movesStorage.addMove(selectedX, selectedY, selectedX, selectedY - 1);
+                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                isSelected = false;
+                                playSound();
+                                if (actualPlayer == 1) {
+                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
+                                    Bricks.mainFrame.repaint();
+                                    actualPlayer = 2;
+                                    if (!checkNoMoves()) {
+                                        if (gametype == 0) {
+                                            Bricks.mainFrame.comp.performMove(board, movesStorage);
+                                            actualPlayer = 1;
+                                        }
                                     }
+                                } else {
+                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
+                                    Bricks.mainFrame.repaint();
+                                    actualPlayer = 1;
                                 }
-                            } else {
-                                Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
-                                Bricks.mainFrame.repaint();
-                                actualPlayer = 1;
-                            }
-                            checkNoMoves();
+                                checkNoMoves();
 
-                        }
-                    }
-                    if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
-                        if (directions[1]) {
-                            board.board[selectedX][selectedY] = actualPlayer;
-                            board.board[selectedX + 1][selectedY] = actualPlayer;
-                            movesStorage.addMove(selectedX, selectedY, selectedX + 1, selectedY);
-                            Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
-                            isSelected = false;
-                            playSound();
-                            if (actualPlayer == 1) {
-                                Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
-                                Bricks.mainFrame.repaint();
-                                actualPlayer = 2;
-                                if (!checkNoMoves()) {
-                                    if (gametype == 0) {
-                                        Bricks.mainFrame.comp.performMove(board, movesStorage);
-                                        actualPlayer = 1;
-                                    }
-                                }
-                            } else {
-                                Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
-                                Bricks.mainFrame.repaint();
-                                actualPlayer = 1;
                             }
-                            checkNoMoves();
                         }
-                    }
-                    if (e.getKeyCode() == KeyEvent.VK_DOWN) {
-                        if (directions[2]) {
-                            board.board[selectedX][selectedY] = actualPlayer;
-                            board.board[selectedX][selectedY + 1] = actualPlayer;
-                            movesStorage.addMove(selectedX, selectedY, selectedX, selectedY + 1);
-                            Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
-                            isSelected = false;
-                            playSound();
-                            if (actualPlayer == 1) {
-                                // Bricks.mainFrame.restTiles.setText("Gracz Drugi");
-                                Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
-                                Bricks.mainFrame.repaint();
-                                actualPlayer = 2;
-                                if (!checkNoMoves()) {
-                                    if (gametype == 0) {
-                                        Bricks.mainFrame.comp.performMove(board, movesStorage);
-                                        actualPlayer = 1;
+                        if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
+                            if (directions[1]) {
+                                board.board[selectedX][selectedY] = actualPlayer;
+                                board.board[selectedX + 1][selectedY] = actualPlayer;
+                                movesStorage.addMove(selectedX, selectedY, selectedX + 1, selectedY);
+                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                isSelected = false;
+                                playSound();
+                                if (actualPlayer == 1) {
+                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
+                                    Bricks.mainFrame.repaint();
+                                    actualPlayer = 2;
+                                    if (!checkNoMoves()) {
+                                        if (gametype == 0) {
+                                            Bricks.mainFrame.comp.performMove(board, movesStorage);
+                                            actualPlayer = 1;
+                                        }
                                     }
+                                } else {
+                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
+                                    Bricks.mainFrame.repaint();
+                                    actualPlayer = 1;
                                 }
-                            } else {
-                                Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
-                                Bricks.mainFrame.repaint();
-                                actualPlayer = 1;
+                                checkNoMoves();
                             }
-                            checkNoMoves();
+                        }
+                        if (e.getKeyCode() == KeyEvent.VK_DOWN) {
+                            if (directions[2]) {
+                                board.board[selectedX][selectedY] = actualPlayer;
+                                board.board[selectedX][selectedY + 1] = actualPlayer;
+                                movesStorage.addMove(selectedX, selectedY, selectedX, selectedY + 1);
+                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                isSelected = false;
+                                playSound();
+                                if (actualPlayer == 1) {
+                                    // Bricks.mainFrame.restTiles.setText("Gracz Drugi");
+                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
+                                    Bricks.mainFrame.repaint();
+                                    actualPlayer = 2;
+                                    if (!checkNoMoves()) {
+                                        if (gametype == 0) {
+                                            Bricks.mainFrame.comp.performMove(board, movesStorage);
+                                            actualPlayer = 1;
+                                        }
+                                    }
+                                } else {
+                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
+                                    Bricks.mainFrame.repaint();
+                                    actualPlayer = 1;
+                                }
+                                checkNoMoves();
 
-                        }
-                    }
-                    if (e.getKeyCode() == KeyEvent.VK_LEFT) {
-                        if (directions[3]) {
-                            board.board[selectedX][selectedY] = actualPlayer;
-                            board.board[selectedX - 1][selectedY] = actualPlayer;
-                            movesStorage.addMove(selectedX, selectedY, selectedX - 1, selectedY);
-                            Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
-                            isSelected = false;
-                            playSound();
-                            if (actualPlayer == 1) {
-                                Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
-                                Bricks.mainFrame.repaint();
-                                actualPlayer = 2;
-                                if (!checkNoMoves()) {
-                                    if (gametype == 0) {
-                                        Bricks.mainFrame.comp.performMove(board, movesStorage);
-                                        actualPlayer = 1;
-                                    }
-                                }
-                            } else {
-                                Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
-                                Bricks.mainFrame.repaint();
-                                actualPlayer = 1;
                             }
-                            checkNoMoves();
+                        }
+                        if (e.getKeyCode() == KeyEvent.VK_LEFT) {
+                            if (directions[3]) {
+                                board.board[selectedX][selectedY] = actualPlayer;
+                                board.board[selectedX - 1][selectedY] = actualPlayer;
+                                movesStorage.addMove(selectedX, selectedY, selectedX - 1, selectedY);
+                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                isSelected = false;
+                                playSound();
+                                if (actualPlayer == 1) {
+                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
+                                    Bricks.mainFrame.repaint();
+                                    actualPlayer = 2;
+                                    if (!checkNoMoves()) {
+                                        if (gametype == 0) {
+                                            Bricks.mainFrame.comp.performMove(board, movesStorage);
+                                            actualPlayer = 1;
+                                        }
+                                    }
+                                } else {
+                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
+                                    Bricks.mainFrame.repaint();
+                                    actualPlayer = 1;
+                                }
+                                checkNoMoves();
 
+                            }
                         }
                     }
                 }
@@ -151,131 +153,133 @@ public class BoardPanel extends Canvas {
         addMouseListener(new MouseAdapter() {
             @Override
             public void mousePressed(MouseEvent e) {
-                if (!isSelected) {
-                    if ((e.getX() > margin && e.getX() < getWidth() - margin) && (e.getY() > margin && e.getY() < getHeight() - margin)) {
-                        selectedX = (e.getX() - margin) / oneFieldWidth;
-                        selectedY = (e.getY() - margin) / oneFieldHeight;
+                if(gametype==0 || gametype==1) {
+                    if (!isSelected) {
+                        if ((e.getX() > margin && e.getX() < getWidth() - margin) && (e.getY() > margin && e.getY() < getHeight() - margin)) {
+                            selectedX = (e.getX() - margin) / oneFieldWidth;
+                            selectedY = (e.getY() - margin) / oneFieldHeight;
 
-                        if (board.board[selectedX][selectedY] == 0) {
-                            isSelected = true;
-                            directions = board.possibleDirections(selectedX, selectedY);
+                            if (board.board[selectedX][selectedY] == 0) {
+                                isSelected = true;
+                                directions = board.possibleDirections(selectedX, selectedY);
+                            }
+
                         }
+                    } else {
+                        if ((e.getX() > margin && e.getX() < getWidth() - margin) && (e.getY() > margin && e.getY() < getHeight() - margin)) {
+                            int tempSelectedX = (e.getX() - margin) / oneFieldWidth;
+                            int tempSelectedY = (e.getY() - margin) / oneFieldHeight;
 
-                    }
-                } else {
-                    if ((e.getX() > margin && e.getX() < getWidth() - margin) && (e.getY() > margin && e.getY() < getHeight() - margin)) {
-                        int tempSelectedX = (e.getX() - margin) / oneFieldWidth;
-                        int tempSelectedY = (e.getY() - margin) / oneFieldHeight;
-
-                        if ((tempSelectedX == selectedX + 1) && tempSelectedY == selectedY) {
-                            if (directions[1]) {
-                                board.board[selectedX][selectedY] = actualPlayer;
-                                board.board[tempSelectedX][tempSelectedY] = actualPlayer;
-                                movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
-                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
-                                isSelected = false;
-                                playSound();
-                                if (actualPlayer == 1) {
-                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
-                                    Bricks.mainFrame.repaint();
-                                    actualPlayer = 2;
-                                    if (!checkNoMoves()) {
-                                        if (gametype == 0) {
-                                            Bricks.mainFrame.comp.performMove(board, movesStorage);
-                                            actualPlayer = 1;
+                            if ((tempSelectedX == selectedX + 1) && tempSelectedY == selectedY) {
+                                if (directions[1]) {
+                                    board.board[selectedX][selectedY] = actualPlayer;
+                                    board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                    movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
+                                    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                    isSelected = false;
+                                    playSound();
+                                    if (actualPlayer == 1) {
+                                        Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
+                                        Bricks.mainFrame.repaint();
+                                        actualPlayer = 2;
+                                        if (!checkNoMoves()) {
+                                            if (gametype == 0) {
+                                                Bricks.mainFrame.comp.performMove(board, movesStorage);
+                                                actualPlayer = 1;
+                                            }
                                         }
+                                    } else {
+                                        Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
+                                        Bricks.mainFrame.repaint();
+                                        actualPlayer = 1;
                                     }
-                                } else {
-                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
-                                    Bricks.mainFrame.repaint();
-                                    actualPlayer = 1;
+                                    checkNoMoves();
                                 }
-                                checkNoMoves();
-                            }
-                        } else if ((tempSelectedX == selectedX - 1) && tempSelectedY == selectedY) {
-                            if (directions[3]) {
-                                board.board[selectedX][selectedY] = actualPlayer;
-                                board.board[tempSelectedX][tempSelectedY] = actualPlayer;
-                                movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
-                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
-                                isSelected = false;
-                                playSound();
-                                if (actualPlayer == 1) {
-                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
-                                    Bricks.mainFrame.repaint();
-                                    actualPlayer = 2;
-                                    if (!checkNoMoves()) {
-                                        if (gametype == 0) {
-                                            Bricks.mainFrame.comp.performMove(board, movesStorage);
-                                            actualPlayer = 1;
+                            } else if ((tempSelectedX == selectedX - 1) && tempSelectedY == selectedY) {
+                                if (directions[3]) {
+                                    board.board[selectedX][selectedY] = actualPlayer;
+                                    board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                    movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
+                                    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                    isSelected = false;
+                                    playSound();
+                                    if (actualPlayer == 1) {
+                                        Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
+                                        Bricks.mainFrame.repaint();
+                                        actualPlayer = 2;
+                                        if (!checkNoMoves()) {
+                                            if (gametype == 0) {
+                                                Bricks.mainFrame.comp.performMove(board, movesStorage);
+                                                actualPlayer = 1;
+                                            }
                                         }
+                                    } else {
+                                        Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
+                                        Bricks.mainFrame.repaint();
+                                        actualPlayer = 1;
                                     }
-                                } else {
-                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
-                                    Bricks.mainFrame.repaint();
-                                    actualPlayer = 1;
-                                }
-                                checkNoMoves();
+                                    checkNoMoves();
 
-                            }
-                        } else if ((tempSelectedX == selectedX) && tempSelectedY == selectedY + 1) {
-                            if (directions[2]) {
-                                board.board[selectedX][selectedY] = actualPlayer;
-                                board.board[tempSelectedX][tempSelectedY] = actualPlayer;
-                                movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
-                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
-                                isSelected = false;
-                                playSound();
-                                if (actualPlayer == 1) {
-                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
-                                    Bricks.mainFrame.repaint();
-                                    actualPlayer = 2;
-                                    if (!checkNoMoves()) {
-                                        if (gametype == 0) {
-                                            Bricks.mainFrame.comp.performMove(board, movesStorage);
-                                            actualPlayer = 1;
+                                }
+                            } else if ((tempSelectedX == selectedX) && tempSelectedY == selectedY + 1) {
+                                if (directions[2]) {
+                                    board.board[selectedX][selectedY] = actualPlayer;
+                                    board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                    movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
+                                    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                    isSelected = false;
+                                    playSound();
+                                    if (actualPlayer == 1) {
+                                        Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
+                                        Bricks.mainFrame.repaint();
+                                        actualPlayer = 2;
+                                        if (!checkNoMoves()) {
+                                            if (gametype == 0) {
+                                                Bricks.mainFrame.comp.performMove(board, movesStorage);
+                                                actualPlayer = 1;
+                                            }
                                         }
+                                    } else {
+                                        Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
+                                        Bricks.mainFrame.repaint();
+                                        actualPlayer = 1;
                                     }
-                                } else {
-                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
-                                    Bricks.mainFrame.repaint();
-                                    actualPlayer = 1;
-                                }
-                                checkNoMoves();
+                                    checkNoMoves();
 
-                            }
-                        } else if ((tempSelectedX == selectedX) && tempSelectedY == selectedY - 1) {
-                            if (directions[0]) {
-                                board.board[selectedX][selectedY] = actualPlayer;
-                                board.board[tempSelectedX][tempSelectedY] = actualPlayer;
-                                movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
-                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
-                                isSelected = false;
-                                playSound();
-                                if (actualPlayer == 1) {
-                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
-                                    Bricks.mainFrame.repaint();
-                                    actualPlayer = 2;
-                                    if (!checkNoMoves()) {
-                                        if (gametype == 0) {
-                                            Bricks.mainFrame.comp.performMove(board, movesStorage);
-                                            actualPlayer = 1;
+                                }
+                            } else if ((tempSelectedX == selectedX) && tempSelectedY == selectedY - 1) {
+                                if (directions[0]) {
+                                    board.board[selectedX][selectedY] = actualPlayer;
+                                    board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                    movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
+                                    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                    isSelected = false;
+                                    playSound();
+                                    if (actualPlayer == 1) {
+                                        Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
+                                        Bricks.mainFrame.repaint();
+                                        actualPlayer = 2;
+                                        if (!checkNoMoves()) {
+                                            if (gametype == 0) {
+                                                Bricks.mainFrame.comp.performMove(board, movesStorage);
+                                                actualPlayer = 1;
+                                            }
                                         }
+                                    } else {
+                                        Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
+                                        Bricks.mainFrame.repaint();
+                                        actualPlayer = 1;
                                     }
-                                } else {
-                                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
-                                    Bricks.mainFrame.repaint();
-                                    actualPlayer = 1;
-                                }
-                                checkNoMoves();
+                                    checkNoMoves();
 
+                                }
+                            } else {
+                                isSelected = false;
                             }
-                        } else {
+
+                        } else
                             isSelected = false;
-                        }
-
-                    } else
-                        isSelected = false;
+                    }
                 }
             }
         });
@@ -293,7 +297,7 @@ public class BoardPanel extends Canvas {
         bs.show();
     }
 
-    private void playSound() {
+    public void playSound() {
         try {
             URL putBrickURL = this.getClass().getResource("putbrick.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(putBrickURL);
@@ -363,11 +367,13 @@ public class BoardPanel extends Canvas {
 
     }
 
-    private boolean checkNoMoves() {
+    public boolean checkNoMoves() {
+
         Bricks.mainFrame.movesLeftLabel.setText("Pozostały " + board.getPossibleMovesLeft() + " ruchy");
         if (!board.anyMoves()) {
             int selection = 0;
-            if (Bricks.mainFrame.getDebugMode()) {
+            System.out.println("No moves");
+            if (Bricks.mainFrame.getDebugMode() && gamemode !=2) {
                 if (gamemode == 1) {
                     if (actualPlayer == 1) {
                         selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz drugi, chcesz zagrać jeszcze raz?", "Koniec" +
@@ -397,6 +403,18 @@ public class BoardPanel extends Canvas {
                 return true;
             }
             else  {
+                if (gamemode ==  2) {
+                    if( Bricks.mainFrame.computerPlayer==1) {
+                        selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał program drugi, chcesz zagrać jeszcze raz?", "Koniec" +
+                                " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    }
+                    else {
+                        selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał program pierwszy, chcesz zagrać jeszcze raz?", "Koniec" +
+                                " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    }
+                    Bricks.mainFrame.computerPlayer=1;
+
+                }
                 if (gamemode == 1) {
                     if (actualPlayer == 1) {
                         selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał gracz drugi, chcesz zagrać jeszcze raz?", "Koniec" +
@@ -427,7 +445,7 @@ public class BoardPanel extends Canvas {
         return false;
     }
 
-    private void resetBoard() {
+    public void resetBoard() {
         board.reset();
         isSelected = false;
         movesStorage.reset();
@@ -439,6 +457,23 @@ public class BoardPanel extends Canvas {
     }
 
     public void undoLastMove() {
+        if (gamemode == 2) {
+            int[] lastMove = movesStorage.returnMoveLikeArray();
+            if(lastMove[0] != -1) {
+                board.board[lastMove[0]][lastMove[1]] = 0;
+                board.board[lastMove[2]][lastMove[3]] = 0;
+                drawBoardFrame();
+                if (Bricks.mainFrame.computerPlayer == 1) {
+                    Bricks.mainFrame.computerPlayer =2;
+                    Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
+                    Bricks.mainFrame.repaint();
+                }
+                else
+                    Bricks.mainFrame.computerPlayer = 1;
+                   Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
+                   Bricks.mainFrame.repaint();
+            }
+        }
         if (gamemode == 1) {
             int[] lastMove = movesStorage.returnMoveLikeArray();
             if (lastMove[0] != -1) {
@@ -495,7 +530,7 @@ public class BoardPanel extends Canvas {
     private int selectedY;
 
 
-    private MovesStorage movesStorage;
+    public MovesStorage movesStorage;
     private int gamemode;
 
     private Graphics g;

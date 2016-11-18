@@ -11,9 +11,9 @@ import javax.swing.*;
 import javax.swing.border.EmptyBorder;
 import java.awt.*;
 import java.awt.event.*;
-import java.io.File;
-import java.io.PrintWriter;
+import java.io.*;
 import java.net.URL;
+import java.util.*;
 
 /**
  * Created by Mateusz on 20.05.2016.
@@ -50,18 +50,21 @@ public class MainFrame extends JFrame implements Runnable {
       //  com.apple.eawt.Application.getApplication().setDockIconImage(icon.getImage());
 
         gameName = new JLabel("Bricks", SwingConstants.CENTER);
-        buttonsGridLayout = new JPanel(new GridLayout(9, 1));
+        buttonsGridLayout = new JPanel(new GridLayout(11, 1));
         undoLastMoveButton = new JButton("Cofnij");
 
         restTiles = new JLabel("Gracz Pierwszy");
         buttonsGridLayout.setBorder(new EmptyBorder(0, getWidth() / 4, 0, getWidth() / 4));
         JButton runSinglePlayer = new JButton("Gra jednoosobowa");
         JButton runMultiPlayer = new JButton("Gra dwuosobowa");
+        JButton runComputerPlayers = new JButton("Wojna Robotów");
 
         runSinglePlayer.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
         runSinglePlayer.setFocusPainted(false);
         runMultiPlayer.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
         runMultiPlayer.setFocusPainted(false);
+        runComputerPlayers.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
+        runComputerPlayers.setFocusPainted(false);
         runSinglePlayer.addActionListener(e -> {
             gameBorderLayout = new JPanel(new BorderLayout());
             Action backToMenuAction = new AbstractAction() {
@@ -156,19 +159,111 @@ public class MainFrame extends JFrame implements Runnable {
             game.start();
             gameBorderLayout.requestFocus();
         });
+        runComputerPlayers.addActionListener(e -> {
+            gameBorderLayout = new JPanel(new BorderLayout());
+            Action backToMenuAction = new AbstractAction() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    int selection = JOptionPane.showConfirmDialog(null, "Chcesz opuścić grę i wrócić do menu?", "Koniec" +
+                            " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
+                    if (selection == JOptionPane.OK_OPTION) {
+                        Bricks.mainFrame.stopGame();
+                    }
+                }
+            };
+            movesLeftLabel = new JLabel();
+            gameBorderLayout.getActionMap().put("backToMenuAction", backToMenuAction);
+            gameBorderLayout.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("ESCAPE"), "backToMenuAction");
+            board = new BoardLogic(BoardSize);
+            undoLastMoveButton.setEnabled(false);
+            comp = new ComputerPlayer();
+            boardPanel = new BoardPanel(board, 2);
+            gametype = 2;
+            computerPlayer = 1;
+            JPanel southBorderLayout = new JPanel(new BorderLayout());
+            computerPlayerLabel = new JLabel("Gracz Numer " + computerPlayer);
+            JButton nextMoveButton = new JButton("Następny Ruch");
+            nextMoveButton.addActionListener(new ActionListener() {
+                @Override
+                public void actionPerformed(ActionEvent e) {
+                    //TODO
+                    try {
+                        computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
+                        board.saveToFile();
+                        java.util.List<String> command = new ArrayList<>();
+                        command.add("java");
+                        command.add("-cp");
+                        if(computerPlayer==1) {
+                            command.add(Bricks.mainFrame.pathToPlayerOne);
+                        }
+                        if(computerPlayer==2) {
+                            command.add(Bricks.mainFrame.pathToPlayerTwo);
+                        }
+                        command.add("MainClass");
+
+                        ProcessBuilder builder = new ProcessBuilder(command);
+                        final Process process = builder.start();
+                        InputStream is = process.getInputStream();
+                        InputStreamReader isr = new InputStreamReader(is);
+                        BufferedReader br = new BufferedReader(isr);
+                        String output = br.readLine();
+                        String[] outputDivided = output.split(" ");
+                        int x1 = Integer.parseInt(outputDivided[0]);
+                        int y1 = Integer.parseInt(outputDivided[1]);
+                        int x2 = Integer.parseInt(outputDivided[2]);
+                        int y2 = Integer.parseInt(outputDivided[3]);
+
+                        if(board.board[x1][y1]==0 && board.board[x2][y2]==0) {
+                            board.board[x1][y1]=computerPlayer;
+                            board.board[x2][y2]=computerPlayer;
+                            boardPanel.playSound();
+                            boardPanel.movesStorage.addMove(x1,y1,x2,y2);
+
+
+                            if(computerPlayer==1) {
+                                computerPlayer = 2;
+                                actualPlayerColorPreview.setColor(playerSecondColor);
+
+                            }
+                            else if(computerPlayer==2) {
+                                computerPlayer = 1;
+                                actualPlayerColorPreview.setColor(playerFirstColor);
+                            }
+                            undoLastMoveButton.setEnabled(true);
+                        }
+                        repaintThis();
+                        repaint();
+                        boardPanel.checkNoMoves();
+
+                    }
+                    catch(Exception ignored) {
+
+                    }
+
+                }
+            });
+            southBorderLayout.add(undoLastMoveButton, BorderLayout.EAST);
+            southBorderLayout.add(nextMoveButton,BorderLayout.CENTER);
+
+            Bricks.mainFrame.restTiles.setText("Gracz: ");
+            JPanel southLeftGridLayout = new JPanel(new GridLayout(1,2));
+            southLeftGridLayout.add(restTiles);
+            southLeftGridLayout.add(actualPlayerColorPreview);
+            southBorderLayout.add(southLeftGridLayout,BorderLayout.WEST);
+            gameBorderLayout.add(southBorderLayout, BorderLayout.SOUTH);
+            gameBorderLayout.add(boardPanel, BorderLayout.CENTER);
+            this.getContentPane().removeAll();
+            this.getContentPane().add(gameBorderLayout);
+            this.revalidate();
+            this.repaint();
+            running = true;
+            game = new Thread(this);
+            game.start();
+            gameBorderLayout.requestFocus();
+        });
         JButton optionsButton = new JButton("Opcje");
         optionsButton.addActionListener(e -> {
-            /*Settings newSettings = optionsDialog.showDialog(new Settings(BoardSize, playerFirstColor, playerSecondColor,this.isSound,this.volume,this.debugMode));
-            if (optionsDialog.wasSaveClicked) {
-                BoardSize = newSettings.getBoardSize();
-                playerFirstColor = newSettings.getPlayerFirstColor();
-                playerSecondColor = newSettings.getPlayerSecondColor();
-                this.isSound = newSettings.getIsSound();
-                this.volume = newSettings.getVolume();
-                this.debugMode = newSettings.getDebugMode();
-                exportSettings();
-            }*/
             JPanel optionsPanel = new JPanel(new BorderLayout());
             OptionsPanel opcje = new OptionsPanel(new Settings(BoardSize, playerFirstColor, playerSecondColor,this.isSound,this.volume,this.debugMode));
             optionsPanel.add(opcje,BorderLayout.CENTER);
@@ -203,6 +298,8 @@ public class MainFrame extends JFrame implements Runnable {
         buttonsGridLayout.add(runSinglePlayer);
         buttonsGridLayout.add(new JLabel());
         buttonsGridLayout.add(runMultiPlayer);
+        buttonsGridLayout.add(new JLabel());
+        buttonsGridLayout.add(runComputerPlayers);
         buttonsGridLayout.add(new JLabel());
         buttonsGridLayout.add(optionsButton);
         buttonsGridLayout.add(new JLabel());
@@ -322,6 +419,7 @@ public class MainFrame extends JFrame implements Runnable {
     public ComputerPlayer comp;
 
     public  JLabel movesLeftLabel;
+    public JLabel computerPlayerLabel;
 
     public ColorPreview actualPlayerColorPreview;
 
@@ -332,6 +430,8 @@ public class MainFrame extends JFrame implements Runnable {
     public boolean isSound;
 
     public int volume;
+
+    public int computerPlayer;
 
     public int BoardSize = 5;
 
@@ -345,4 +445,8 @@ public class MainFrame extends JFrame implements Runnable {
 
     public JLabel restTiles;
     public JButton undoLastMoveButton;
+
+    //GRACZE KOMPUTEROWI
+    public String pathToPlayerOne = "/Users/Mateusz/Desktop/computerplayer";
+    public String pathToPlayerTwo = "/Users/Mateusz/Desktop/computerplayer";
 }
