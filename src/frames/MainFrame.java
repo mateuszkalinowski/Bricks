@@ -160,109 +160,159 @@ public class MainFrame extends JFrame implements Runnable {
             gameBorderLayout.requestFocus();
         });
         runComputerPlayers.addActionListener(e -> {
-            gameBorderLayout = new JPanel(new BorderLayout());
-            Action backToMenuAction = new AbstractAction() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    int selection = JOptionPane.showConfirmDialog(null, "Chcesz opuścić grę i wrócić do menu?", "Koniec" +
-                            " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            boolean checkFirstComputerPlayer = false;
+            boolean checkSecondComputerPlayer = false;
+            java.util.List<String> command = new ArrayList<>();
+            command.add("java");
+            command.add("-cp");
+            command.add(Bricks.mainFrame.pathToPlayerOne);
+            command.add(Bricks.mainFrame.playerFirstProgramName);
+            command.add("Ping");
+            try {
+                ProcessBuilder builder = new ProcessBuilder(command);
+                final Process process = builder.start();
+                InputStream is = process.getInputStream();
+                InputStreamReader isr = new InputStreamReader(is);
+                BufferedReader br = new BufferedReader(isr);
+                String output = br.readLine();
+                if(output.equals("Pong"))
+                    checkFirstComputerPlayer=true;
 
-                    if (selection == JOptionPane.OK_OPTION) {
-                        Bricks.mainFrame.stopGame();
+                command = new ArrayList<>();
+                command.add("java");
+                command.add("-cp");
+                command.add(Bricks.mainFrame.pathToPlayerTwo);
+                command.add(Bricks.mainFrame.playerSecondProgramName);
+                command.add("Ping");
+                    builder = new ProcessBuilder(command);
+                    final Process process2 = builder.start();
+                    is = process2.getInputStream();
+                    isr = new InputStreamReader(is);
+                    br = new BufferedReader(isr);
+                    output = br.readLine();
+                    if(output.equals("Pong"))
+                        checkSecondComputerPlayer=true;
+            }
+            catch (Exception ignored) {
+
+            }
+
+            if(checkFirstComputerPlayer && checkSecondComputerPlayer) {
+                gameBorderLayout = new JPanel(new BorderLayout());
+                Action backToMenuAction = new AbstractAction() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int selection = JOptionPane.showConfirmDialog(null, "Chcesz opuścić grę i wrócić do menu?", "Koniec" +
+                                " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+
+                        if (selection == JOptionPane.OK_OPTION) {
+                            Bricks.mainFrame.stopGame();
+                        }
                     }
-                }
-            };
-            movesLeftLabel = new JLabel();
-            gameBorderLayout.getActionMap().put("backToMenuAction", backToMenuAction);
-            gameBorderLayout.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("ESCAPE"), "backToMenuAction");
-            board = new BoardLogic(BoardSize);
-            undoLastMoveButton.setEnabled(false);
-            comp = new ComputerPlayer();
-            boardPanel = new BoardPanel(board, 2);
-            gametype = 2;
-            computerPlayer = 1;
-            JPanel southBorderLayout = new JPanel(new BorderLayout());
-            computerPlayerLabel = new JLabel("Gracz Numer " + computerPlayer);
-            JButton nextMoveButton = new JButton("Następny Ruch");
-            nextMoveButton.addActionListener(new ActionListener() {
-                @Override
-                public void actionPerformed(ActionEvent e) {
-                    //TODO
-                    try {
-                        computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
-                        board.saveToFile();
-                        java.util.List<String> command = new ArrayList<>();
-                        command.add("java");
-                        command.add("-cp");
-                        if(computerPlayer==1) {
-                            command.add(Bricks.mainFrame.pathToPlayerOne);
-                            command.add(Bricks.mainFrame.playerFirstProgramName);
-                        }
-                        if(computerPlayer==2) {
-                            command.add(Bricks.mainFrame.pathToPlayerTwo);
-                            command.add(Bricks.mainFrame.playerSecondProgramName);
-                        }
-                        command.add(Bricks.mainFrame.pathToPlayerOne + "/board.txt");
-
-                        ProcessBuilder builder = new ProcessBuilder(command);
-                        final Process process = builder.start();
-                        InputStream is = process.getInputStream();
-                        InputStreamReader isr = new InputStreamReader(is);
-                        BufferedReader br = new BufferedReader(isr);
-                        String output = br.readLine();
-                        String[] outputDivided = output.split(" ");
-                        int x1 = Integer.parseInt(outputDivided[0]);
-                        int y1 = Integer.parseInt(outputDivided[1]);
-                        int x2 = Integer.parseInt(outputDivided[2]);
-                        int y2 = Integer.parseInt(outputDivided[3]);
-
-                        if(board.board[x1][y1]==0 && board.board[x2][y2]==0) {
-                            board.board[x1][y1]=computerPlayer;
-                            board.board[x2][y2]=computerPlayer;
-                            boardPanel.playSound();
-                            boardPanel.movesStorage.addMove(x1,y1,x2,y2);
-
-
-                            if(computerPlayer==1) {
-                                computerPlayer = 2;
-                                actualPlayerColorPreview.setColor(playerSecondColor);
-
+                };
+                movesLeftLabel = new JLabel();
+                gameBorderLayout.getActionMap().put("backToMenuAction", backToMenuAction);
+                gameBorderLayout.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("ESCAPE"), "backToMenuAction");
+                board = new BoardLogic(BoardSize);
+                undoLastMoveButton.setEnabled(false);
+                comp = new ComputerPlayer();
+                boardPanel = new BoardPanel(board, 2);
+                gametype = 2;
+                computerPlayer = 1;
+                JPanel southBorderLayout = new JPanel(new BorderLayout());
+                computerPlayerLabel = new JLabel("Gracz Numer " + computerPlayer);
+                JButton nextMoveButton = new JButton("Następny Ruch");
+                nextMoveButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        //TODO
+                        try {
+                            computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
+                            board.saveToFile();
+                            java.util.List<String> command = new ArrayList<>();
+                            command.add("java");
+                            command.add("-cp");
+                            if (computerPlayer == 1) {
+                                command.add(Bricks.mainFrame.pathToPlayerOne);
+                                command.add(Bricks.mainFrame.playerFirstProgramName);
                             }
-                            else if(computerPlayer==2) {
-                                computerPlayer = 1;
-                                actualPlayerColorPreview.setColor(playerFirstColor);
+                            if (computerPlayer == 2) {
+                                command.add(Bricks.mainFrame.pathToPlayerTwo);
+                                command.add(Bricks.mainFrame.playerSecondProgramName);
                             }
-                            undoLastMoveButton.setEnabled(true);
+                            command.add(Bricks.mainFrame.pathToPlayerOne + "/board.txt");
+
+                            ProcessBuilder builder = new ProcessBuilder(command);
+                            final Process process = builder.start();
+                            InputStream is = process.getInputStream();
+                            InputStreamReader isr = new InputStreamReader(is);
+                            BufferedReader br = new BufferedReader(isr);
+                            String output = br.readLine();
+                            String[] outputDivided = output.split(" ");
+                            int x1 = Integer.parseInt(outputDivided[0]);
+                            int y1 = Integer.parseInt(outputDivided[1]);
+                            int x2 = Integer.parseInt(outputDivided[2]);
+                            int y2 = Integer.parseInt(outputDivided[3]);
+
+                            if (board.board[x1][y1] == 0 && board.board[x2][y2] == 0) {
+                                board.board[x1][y1] = computerPlayer;
+                                board.board[x2][y2] = computerPlayer;
+                                boardPanel.playSound();
+                                boardPanel.movesStorage.addMove(x1, y1, x2, y2);
+
+
+                                if (computerPlayer == 1) {
+                                    computerPlayer = 2;
+                                    actualPlayerColorPreview.setColor(playerSecondColor);
+
+                                } else if (computerPlayer == 2) {
+                                    computerPlayer = 1;
+                                    actualPlayerColorPreview.setColor(playerFirstColor);
+                                }
+                                undoLastMoveButton.setEnabled(true);
+                            }
+                            repaintThis();
+                            repaint();
+                            boardPanel.checkNoMoves();
+
+                        } catch (Exception ignored) {
+
                         }
-                        repaintThis();
-                        repaint();
-                        boardPanel.checkNoMoves();
 
                     }
-                    catch(Exception ignored) {
+                });
+                southBorderLayout.add(undoLastMoveButton, BorderLayout.EAST);
+                southBorderLayout.add(nextMoveButton, BorderLayout.CENTER);
 
-                    }
+                Bricks.mainFrame.restTiles.setText("Gracz: ");
+                JPanel southLeftGridLayout = new JPanel(new GridLayout(1, 2));
+                southLeftGridLayout.add(restTiles);
+                southLeftGridLayout.add(actualPlayerColorPreview);
+                southBorderLayout.add(southLeftGridLayout, BorderLayout.WEST);
+                gameBorderLayout.add(southBorderLayout, BorderLayout.SOUTH);
+                gameBorderLayout.add(boardPanel, BorderLayout.CENTER);
+                this.getContentPane().removeAll();
+                this.getContentPane().add(gameBorderLayout);
+                this.revalidate();
+                this.repaint();
+                running = true;
+                game = new Thread(this);
+                game.start();
+                gameBorderLayout.requestFocus();
+            }
+            else if (checkFirstComputerPlayer && !checkSecondComputerPlayer){
+                JOptionPane.showConfirmDialog(null, "Sprawdź poprawność drugiego programu grającego", "Błąd" +
+                        " gry", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+            }
+            else if (!checkFirstComputerPlayer && checkSecondComputerPlayer) {
+                JOptionPane.showConfirmDialog(null, "Sprawdź poprawność pierwszego programu grającego", "Błąd" +
+                        " gry", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+            }
+            else {
+                JOptionPane.showConfirmDialog(null, "Sprawdź poprawność obu programów grających", "Błąd" +
+                        " gry", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+            }
 
-                }
-            });
-            southBorderLayout.add(undoLastMoveButton, BorderLayout.EAST);
-            southBorderLayout.add(nextMoveButton,BorderLayout.CENTER);
-
-            Bricks.mainFrame.restTiles.setText("Gracz: ");
-            JPanel southLeftGridLayout = new JPanel(new GridLayout(1,2));
-            southLeftGridLayout.add(restTiles);
-            southLeftGridLayout.add(actualPlayerColorPreview);
-            southBorderLayout.add(southLeftGridLayout,BorderLayout.WEST);
-            gameBorderLayout.add(southBorderLayout, BorderLayout.SOUTH);
-            gameBorderLayout.add(boardPanel, BorderLayout.CENTER);
-            this.getContentPane().removeAll();
-            this.getContentPane().add(gameBorderLayout);
-            this.revalidate();
-            this.repaint();
-            running = true;
-            game = new Thread(this);
-            game.start();
-            gameBorderLayout.requestFocus();
         });
         JButton optionsButton = new JButton("Opcje");
         optionsButton.addActionListener(e -> {
@@ -406,27 +456,29 @@ public class MainFrame extends JFrame implements Runnable {
                 this.debugMode = newSettings.getDebugMode();
                 playerFirstFullPath = newSettings.getFirstComputerPlayerPath();
                 playerSecondFullPath = newSettings.getSecondComputerPlayerPath();
+                if(playerFirstFullPath.length()>7) {
+                    int index = playerFirstFullPath.length() - 1;
+                    int i = index;
+                    for (; i > 0; i--) {
+                        if (playerFirstFullPath.charAt(i) == '/')
+                            break;
+                    }
+                    pathToPlayerOne = playerFirstFullPath.substring(0, i);
+                    playerFirstProgramName = playerFirstFullPath.substring(i + 1, playerFirstFullPath.length());
+                    playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 6);
 
-                int index = playerFirstFullPath.length()-1;
-                int i = index;
-                for(; i>0;i--) {
-                    if(playerFirstFullPath.charAt(i) == '/')
-                        break;
                 }
-                pathToPlayerOne = playerFirstFullPath.substring(0,i);
-                playerFirstProgramName = playerFirstFullPath.substring(i+1,playerFirstFullPath.length());
-                playerFirstProgramName = playerFirstProgramName.substring(0,playerFirstProgramName.length()-6);
-                System.out.println(playerFirstProgramName);
-
-                index = playerSecondFullPath.length() - 1;
-                i = index;
-                for(;i>0;i--) {
-                    if(playerSecondFullPath.charAt(i) == '/')
-                        break;
+                if(playerSecondFullPath.length()>7) {
+                    int index = playerSecondFullPath.length() - 1;
+                    int i = index;
+                    for (; i > 0; i--) {
+                        if (playerSecondFullPath.charAt(i) == '/')
+                            break;
+                    }
+                    pathToPlayerTwo = playerSecondFullPath.substring(0, i);
+                    playerSecondProgramName = playerSecondFullPath.substring(i + 1, playerSecondFullPath.length());
+                    playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
                 }
-                pathToPlayerTwo = playerSecondFullPath.substring(0,i);
-                playerSecondProgramName = playerSecondFullPath.substring(i+1,playerSecondFullPath.length());
-                playerSecondProgramName = playerSecondProgramName.substring(0,playerSecondProgramName.length()-6);
                 exportSettings();
     }
 
