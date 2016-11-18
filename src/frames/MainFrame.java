@@ -21,7 +21,7 @@ import java.util.*;
  */
 public class MainFrame extends JFrame implements Runnable {
 
-    public MainFrame(int initialBoardSize,Color firstPlayerColor,Color secondPlayerColor,boolean isSound,int volume,boolean debugModeInitialize) {
+    public MainFrame(int initialBoardSize,Color firstPlayerColor,Color secondPlayerColor,boolean isSound,int volume,boolean debugModeInitialize,String firstPlayerPath, String secondPlayerPath) {
         setTitle("Bricks");
         setSize(600, 650);
         setMinimumSize(new Dimension(550, 650));
@@ -33,6 +33,32 @@ public class MainFrame extends JFrame implements Runnable {
         this.isSound = isSound;
         this.volume = volume;
         debugMode = debugModeInitialize;
+
+        playerFirstFullPath = firstPlayerPath;
+        playerSecondFullPath = secondPlayerPath;
+        if(playerFirstFullPath.length()>7) {
+            int index = playerFirstFullPath.length() - 1;
+            int i = index;
+            for (; i > 0; i--) {
+                if (playerFirstFullPath.charAt(i) == '/')
+                    break;
+            }
+            pathToPlayerOne = playerFirstFullPath.substring(0, i);
+            playerFirstProgramName = playerFirstFullPath.substring(i + 1, playerFirstFullPath.length());
+            playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 6);
+
+        }
+        if(playerSecondFullPath.length()>7) {
+            int index = playerSecondFullPath.length() - 1;
+            int i = index;
+            for (; i > 0; i--) {
+                if (playerSecondFullPath.charAt(i) == '/')
+                    break;
+            }
+            pathToPlayerTwo = playerSecondFullPath.substring(0, i);
+            playerSecondProgramName = playerSecondFullPath.substring(i + 1, playerSecondFullPath.length());
+            playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
+        }
 
         URL imgURL = this.getClass().getResource("brick-wall.png");
         ImageIcon icon = new ImageIcon(imgURL);
@@ -438,6 +464,8 @@ public class MainFrame extends JFrame implements Runnable {
             createCfg.println("sound=" + isSound);
             createCfg.println("volume=" + volume);
             createCfg.println("debugMode=" + debugMode);
+            createCfg.println("firstPlayer=" + playerFirstFullPath);
+            createCfg.println("secondPlayer=" + playerSecondFullPath);
             createCfg.close();
         } catch (Exception ignored) {
 

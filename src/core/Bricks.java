@@ -33,6 +33,8 @@ public class Bricks {
                     createCfg.println("sound=true");
                     createCfg.println("volume=0");
                     createCfg.println("debugMode=false");
+                    createCfg.println("firstPlayer=unknown");
+                    createCfg.println("secondPlayer=unknown");
                     createCfg.close();
                     loadDefaultSettings();
                 }
@@ -70,7 +72,12 @@ public class Bricks {
                             debugMode = true;
                         else
                             debugMode = false;
-
+                        line = in.nextLine();
+                        splittedLine = line.split("=");
+                        firstPlayerPath = splittedLine[1];
+                        line = in.nextLine();
+                        splittedLine = line.split("=");
+                        secondPlayerPath = splittedLine[1];
                     } catch (Exception ignored) {
                         loadDefaultSettings();
                     }
@@ -79,7 +86,7 @@ public class Bricks {
                 loadDefaultSettings();
             }
 
-            mainFrame = new MainFrame(initialBoardSize,firstPlayerColor,secondPlayerColor,isSound,volume,debugMode);
+            mainFrame = new MainFrame(initialBoardSize,firstPlayerColor,secondPlayerColor,isSound,volume,debugMode,firstPlayerPath,secondPlayerPath);
             mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             mainFrame.setVisible(true);
         });
@@ -90,6 +97,8 @@ public class Bricks {
     private static boolean isSound;
     private static int volume;
     private static boolean debugMode;
+    private static String firstPlayerPath;
+    private static String secondPlayerPath;
 
     public static MainFrame mainFrame;
 
