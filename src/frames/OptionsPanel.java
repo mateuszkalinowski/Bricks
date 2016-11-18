@@ -23,6 +23,9 @@ class OptionsPanel extends JPanel {
         JLabel firstPlayerColorLabel = new JLabel("Kolor pierwszego gracza: ", SwingConstants.CENTER);
         JLabel secondPlayerColorLabel = new JLabel("Kolor drugiego gracza: ", SwingConstants.CENTER);
 
+        playerFirstFullPath = firstSettings.getFirstComputerPlayerPath();
+        playerSecondFullPath = firstSettings.getSecondComputerPlayerPath();
+
         JButton chooseFirstPlayerColorButton = new JButton("Wybierz");
         chooseFirstPlayerColorButton.addActionListener(new ActionListener() {
             @Override
@@ -104,7 +107,7 @@ class OptionsPanel extends JPanel {
         JButton saveChanges = new JButton("Zapisz zmiany");
 
         saveChanges.addActionListener(e -> {
-            Bricks.mainFrame.setSettings(new Settings(BoardSize,playerFirstColor,playerSecondColor,isSound,volume,debugMode));
+            Bricks.mainFrame.setSettings(new Settings(BoardSize,playerFirstColor,playerSecondColor,isSound,volume,debugMode,playerFirstFullPath,playerSecondFullPath));
             Bricks.mainFrame.backToMenu();
         });
 
@@ -152,8 +155,24 @@ class OptionsPanel extends JPanel {
                 debugMode = false;
         });
 
+        JButton setFirstPath = new JButton("Ustal Komputer Pierwszy");
+        JButton setSecondPath = new JButton("Ustal Komputer Drugi");
+        JLabel setFirstPathLabel = new JLabel();
+        JLabel setSecondPathLabel = new JLabel();
+        if(playerFirstFullPath.length()<=30) {
+            setFirstPathLabel.setText(playerFirstFullPath);
+        }
+        else {
+            setFirstPathLabel.setText("..."+playerFirstFullPath.substring(playerFirstFullPath.length()-30,playerFirstFullPath.length()));
+        }
+        if(playerSecondFullPath.length()<=30) {
+            setSecondPathLabel.setText(playerSecondFullPath);
+        }
+        else {
+            setSecondPathLabel.setText("..." + playerSecondFullPath.substring(playerSecondFullPath.length()-30,playerSecondFullPath.length()));
+        }
 
-        mainGridLayout = new JPanel(new GridLayout(15,2));
+        mainGridLayout = new JPanel(new GridLayout(17,2));
         JLabel generalSectionLabel = new JLabel("Ogólne:");
         generalSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD,20));
         mainGridLayout.add(new JLabel());
@@ -192,6 +211,46 @@ class OptionsPanel extends JPanel {
         mainGridLayout.add(new JLabel());
         mainGridLayout.add(debugModeLabel);
         mainGridLayout.add(debugModeCheckBox);
+        mainGridLayout.add(setFirstPath);
+        mainGridLayout.add(setFirstPathLabel);
+        mainGridLayout.add(setSecondPath);
+        mainGridLayout.add(setSecondPathLabel);
+
+        setFirstPath.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser chooseFile = new JFileChooser();
+                int save = chooseFile.showOpenDialog(null);
+                if (save == JFileChooser.APPROVE_OPTION) {
+                    String filename = chooseFile.getSelectedFile().getPath();
+                    playerFirstFullPath = filename;
+                    if(playerFirstFullPath.length()<=30) {
+                        setFirstPathLabel.setText(playerFirstFullPath);
+                    }
+                    else {
+                        setFirstPathLabel.setText("..."+playerFirstFullPath.substring(playerFirstFullPath.length()-30,playerFirstFullPath.length()));
+                    }
+                }
+            }
+        });
+        setSecondPath.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                JFileChooser chooseFile = new JFileChooser();
+                int save = chooseFile.showOpenDialog(null);
+                if (save == JFileChooser.APPROVE_OPTION) {
+                    String filename = chooseFile.getSelectedFile().getPath();
+                    playerSecondFullPath = filename;
+                    if(playerSecondFullPath.length()<=30) {
+                        setSecondPathLabel.setText(playerSecondFullPath);
+                    }
+                    else {
+                        setSecondPathLabel.setText("..." + playerSecondFullPath.substring(playerSecondFullPath.length()-30,playerSecondFullPath.length()));
+                    }
+                }
+            }
+        });
+
 
         mainGridLayout.add(new JLabel());
         mainGridLayout.add(new JLabel());
@@ -227,6 +286,12 @@ class OptionsPanel extends JPanel {
     private JSlider soundVolumeSlider;
     private JCheckBox soundIsCheckBox;
     private int BoardSize = 5;
+
+    public JLabel playerFirstPathLabel;
+    public JLabel playerSecondPathLabel;
+
+    private String playerFirstFullPath;
+    private String playerSecondFullPath;
 
     private JCheckBox debugModeCheckBox;
 

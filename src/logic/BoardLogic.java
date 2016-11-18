@@ -35,7 +35,7 @@ public class BoardLogic {
 
     public void saveToFile(){
         try {
-            PrintWriter createBoardFile = new PrintWriter(new File("/Users/Mateusz/Desktop/computerplayer/board.txt"));
+            PrintWriter createBoardFile = new PrintWriter(new File( Bricks.mainFrame.pathToPlayerOne+ "/board.txt"));
             createBoardFile.println(this.width);
             for(int i = 0; i < height;i++) {
                 String line = "";

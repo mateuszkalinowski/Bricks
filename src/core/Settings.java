@@ -7,15 +7,18 @@ import java.awt.*;
  * Project Bricks
  */
 public class Settings {
-    public Settings(int BoardSize,Color playerFirstColor,Color playerSecondColor,boolean isSound,int volume,boolean debugMode) {
+    public Settings(int BoardSize,Color playerFirstColor,Color playerSecondColor,boolean isSound,int volume,boolean debugMode,String path1,String path2) {
         this.BoardSize = BoardSize;
         this.playerFirstColor = playerFirstColor;
         this.playerSecondColor = playerSecondColor;
         this.isSound = isSound;
         this.volume = volume;
         this.debugMode = debugMode;
+        firstComputerPlayerPath = path1;
+        secondComputerPlayerPath = path2;
     }
-
+    public String getFirstComputerPlayerPath(){return firstComputerPlayerPath;}
+    public String getSecondComputerPlayerPath(){return secondComputerPlayerPath;}
     public int getBoardSize(){
         return  BoardSize;
     }
@@ -34,4 +37,6 @@ public class Settings {
     private boolean isSound;
     private int volume;
     private boolean debugMode;
+    private String firstComputerPlayerPath;
+    private String secondComputerPlayerPath;
 }

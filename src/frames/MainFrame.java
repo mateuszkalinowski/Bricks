@@ -23,8 +23,8 @@ public class MainFrame extends JFrame implements Runnable {
 
     public MainFrame(int initialBoardSize,Color firstPlayerColor,Color secondPlayerColor,boolean isSound,int volume,boolean debugModeInitialize) {
         setTitle("Bricks");
-        setSize(600, 600);
-        setMinimumSize(new Dimension(550, 500));
+        setSize(600, 650);
+        setMinimumSize(new Dimension(550, 650));
         setResizable(true);
 
         BoardSize = initialBoardSize;
@@ -196,11 +196,13 @@ public class MainFrame extends JFrame implements Runnable {
                         command.add("-cp");
                         if(computerPlayer==1) {
                             command.add(Bricks.mainFrame.pathToPlayerOne);
+                            command.add(Bricks.mainFrame.playerFirstProgramName);
                         }
                         if(computerPlayer==2) {
                             command.add(Bricks.mainFrame.pathToPlayerTwo);
+                            command.add(Bricks.mainFrame.playerSecondProgramName);
                         }
-                        command.add("MainClass");
+                        command.add(Bricks.mainFrame.pathToPlayerOne + "/board.txt");
 
                         ProcessBuilder builder = new ProcessBuilder(command);
                         final Process process = builder.start();
@@ -265,7 +267,7 @@ public class MainFrame extends JFrame implements Runnable {
         JButton optionsButton = new JButton("Opcje");
         optionsButton.addActionListener(e -> {
             JPanel optionsPanel = new JPanel(new BorderLayout());
-            OptionsPanel opcje = new OptionsPanel(new Settings(BoardSize, playerFirstColor, playerSecondColor,this.isSound,this.volume,this.debugMode));
+            OptionsPanel opcje = new OptionsPanel(new Settings(BoardSize, playerFirstColor, playerSecondColor,this.isSound,this.volume,this.debugMode,playerFirstFullPath,playerSecondFullPath));
             optionsPanel.add(opcje,BorderLayout.CENTER);
             this.getContentPane().removeAll();
             this.getContentPane().add(optionsPanel);
@@ -402,6 +404,29 @@ public class MainFrame extends JFrame implements Runnable {
                 this.isSound = newSettings.getIsSound();
                 this.volume = newSettings.getVolume();
                 this.debugMode = newSettings.getDebugMode();
+                playerFirstFullPath = newSettings.getFirstComputerPlayerPath();
+                playerSecondFullPath = newSettings.getSecondComputerPlayerPath();
+
+                int index = playerFirstFullPath.length()-1;
+                int i = index;
+                for(; i>0;i--) {
+                    if(playerFirstFullPath.charAt(i) == '/')
+                        break;
+                }
+                pathToPlayerOne = playerFirstFullPath.substring(0,i);
+                playerFirstProgramName = playerFirstFullPath.substring(i+1,playerFirstFullPath.length());
+                playerFirstProgramName = playerFirstProgramName.substring(0,playerFirstProgramName.length()-6);
+                System.out.println(playerFirstProgramName);
+
+                index = playerSecondFullPath.length() - 1;
+                i = index;
+                for(;i>0;i--) {
+                    if(playerSecondFullPath.charAt(i) == '/')
+                        break;
+                }
+                pathToPlayerTwo = playerSecondFullPath.substring(0,i);
+                playerSecondProgramName = playerSecondFullPath.substring(i+1,playerSecondFullPath.length());
+                playerSecondProgramName = playerSecondProgramName.substring(0,playerSecondProgramName.length()-6);
                 exportSettings();
     }
 
@@ -447,6 +472,10 @@ public class MainFrame extends JFrame implements Runnable {
     public JButton undoLastMoveButton;
 
     //GRACZE KOMPUTEROWI
-    public String pathToPlayerOne = "/Users/Mateusz/Desktop/computerplayer";
-    public String pathToPlayerTwo = "/Users/Mateusz/Desktop/computerplayer";
+    public String playerFirstFullPath = "";
+    public String playerSecondFullPath = "";
+    public String pathToPlayerOne = "";
+    public String pathToPlayerTwo = "";
+    public String playerFirstProgramName = "";
+    public String playerSecondProgramName = "";
 }
