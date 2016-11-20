@@ -445,6 +445,25 @@ public class BoardPanel extends Canvas {
         return false;
     }
 
+    public void walkover(int computerPlayer) {
+        int selection;
+        if( computerPlayer==1) {
+            selection = JOptionPane.showConfirmDialog(null, "Komputer numer 1 wykonał błędny ruch!, wygrał program drugi, chcesz zagrać jeszcze raz?", "Koniec" +
+                    " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        }
+        else {
+            selection = JOptionPane.showConfirmDialog(null, "Komputer numer 2 wykonał błędny ruch!, wygrał program pierwszy, chcesz zagrać jeszcze raz?", "Koniec" +
+                    " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+        }
+        Bricks.mainFrame.computerPlayer=1;
+        if (selection == JOptionPane.OK_OPTION) {
+            resetBoard();
+        }  else {
+            resetBoard();
+            Bricks.mainFrame.stopGame();
+        }
+    }
+
     public void resetBoard() {
         board.reset();
         isSelected = false;

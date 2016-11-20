@@ -23,8 +23,19 @@ class OptionsPanel extends JPanel {
         JLabel firstPlayerColorLabel = new JLabel("Kolor pierwszego gracza: ", SwingConstants.CENTER);
         JLabel secondPlayerColorLabel = new JLabel("Kolor drugiego gracza: ", SwingConstants.CENTER);
 
+        //setMaximumSize(new Dimension(Bricks.mainFrame.getWidth(),Bricks.mainFrame.getHeight()));
+
         playerFirstFullPath = firstSettings.getFirstComputerPlayerPath();
         playerSecondFullPath = firstSettings.getSecondComputerPlayerPath();
+
+        firstPlayerProgramType = firstSettings.getFirstPlayerProgramType();
+        secondPlayerProgramType = firstSettings.getSecondPlayerProgramType();
+
+        firstPlayerRunCommand = firstSettings.getFirstPlayerRunCommand();
+        secondPlayerRunCommand = firstSettings.getSecondPlayerRunCommand();
+
+        JLabel setFirstPathLabel = new JLabel();
+        JLabel setSecondPathLabel = new JLabel();
 
         JButton chooseFirstPlayerColorButton = new JButton("Wybierz");
         chooseFirstPlayerColorButton.addActionListener(new ActionListener() {
@@ -70,6 +81,24 @@ class OptionsPanel extends JPanel {
             debugMode = false;
             debugModeCheckBox.setSelected(false);
 
+            firstPlayerProgramType = 1;
+            secondPlayerProgramType = 1;
+
+            firstPlayerProgramTypeCombo.setSelectedIndex(firstPlayerProgramType);
+            secondPlayerProgramTypeCombo.setSelectedIndex(secondPlayerProgramType);
+
+            inputOwnRunTextPlayerFirstTextField.setText("");
+            inputOwnRunTextPlayerSecondTextField.setText("");
+
+            firstPlayerRunCommand = "";
+            secondPlayerRunCommand = "";
+
+            playerFirstFullPath = "";
+            playerSecondFullPath = "";
+
+            setFirstPathLabel.setText("");
+            setSecondPathLabel.setText("");
+
             repaint();
         });
 
@@ -107,7 +136,10 @@ class OptionsPanel extends JPanel {
         JButton saveChanges = new JButton("Zapisz zmiany");
 
         saveChanges.addActionListener(e -> {
-            Bricks.mainFrame.setSettings(new Settings(BoardSize,playerFirstColor,playerSecondColor,isSound,volume,debugMode,playerFirstFullPath,playerSecondFullPath));
+            System.out.println(inputOwnRunTextPlayerFirstTextField.getText());
+            Bricks.mainFrame.setSettings(new Settings(BoardSize,playerFirstColor,playerSecondColor,isSound,volume,
+                    debugMode,playerFirstFullPath,playerSecondFullPath,firstPlayerProgramType,secondPlayerProgramType,
+                    inputOwnRunTextPlayerFirstTextField.getText(),inputOwnRunTextPlayerSecondTextField.getText()));
             Bricks.mainFrame.backToMenu();
         });
 
@@ -157,8 +189,7 @@ class OptionsPanel extends JPanel {
 
         JButton setFirstPath = new JButton("Ustal Komputer Pierwszy");
         JButton setSecondPath = new JButton("Ustal Komputer Drugi");
-        JLabel setFirstPathLabel = new JLabel();
-        JLabel setSecondPathLabel = new JLabel();
+
         if(playerFirstFullPath.length()<=30) {
             setFirstPathLabel.setText(playerFirstFullPath);
         }
@@ -172,7 +203,7 @@ class OptionsPanel extends JPanel {
             setSecondPathLabel.setText("..." + playerSecondFullPath.substring(playerSecondFullPath.length()-30,playerSecondFullPath.length()));
         }
 
-        mainGridLayout = new JPanel(new GridLayout(17,2));
+        mainGridLayout = new JPanel(new GridLayout(15,2));
         JLabel generalSectionLabel = new JLabel("Ogólne:");
         generalSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD,20));
         mainGridLayout.add(new JLabel());
@@ -211,10 +242,6 @@ class OptionsPanel extends JPanel {
         mainGridLayout.add(new JLabel());
         mainGridLayout.add(debugModeLabel);
         mainGridLayout.add(debugModeCheckBox);
-        mainGridLayout.add(setFirstPath);
-        mainGridLayout.add(setFirstPathLabel);
-        mainGridLayout.add(setSecondPath);
-        mainGridLayout.add(setSecondPathLabel);
 
         setFirstPath.addActionListener(new ActionListener() {
             @Override
@@ -258,7 +285,92 @@ class OptionsPanel extends JPanel {
         firstPlayerOptionsGridLayout.add(firstPlayerColor);
         secondPlayerOptionsGridLayout.add(secondPlayerColor);
 
-        mainBorderLayout.add(mainGridLayout,BorderLayout.CENTER);
+        JTabbedPane mainTabPane = new JTabbedPane();
+        mainTabPane.add("Podstawowe",mainGridLayout);
+        mainBorderLayout.add(mainTabPane,BorderLayout.CENTER);
+
+        advancedGridLayout = new JPanel(new GridLayout(12,2));
+        JLabel robotsWarsSectionLabel = new JLabel("Ogólne:");
+        robotsWarsSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD,20));
+        advancedGridLayout.add(robotsWarsSectionLabel);
+        advancedGridLayout.add(new JLabel());
+        advancedGridLayout.add(new JSeparator());
+        advancedGridLayout.add(new JSeparator());
+        advancedGridLayout.add(setFirstPath);
+        advancedGridLayout.add(setFirstPathLabel);
+        advancedGridLayout.add(new JLabel("Uruchom jako:"));
+
+        firstPlayerProgramTypeCombo = new JComboBox<>();
+        firstPlayerProgramTypeCombo.addItem("C/C++");
+        firstPlayerProgramTypeCombo.addItem("JAVA");
+        firstPlayerProgramTypeCombo.addItem("Własne");
+        firstPlayerProgramTypeCombo.setSelectedIndex(firstPlayerProgramType);
+
+
+        inputOwnRunTextPlayerFirstTextField = new JTextArea();
+        inputOwnRunTextPlayerFirstTextField.setEnabled(false);
+        inputOwnRunTextPlayerFirstTextField.setLineWrap(true);
+        JScrollPane inputOwnTextScrollPane = new JScrollPane(inputOwnRunTextPlayerFirstTextField);
+        inputOwnRunTextPlayerFirstTextField.setToolTipText("Aktywne tylko, jeśli 'Uruchom Jako' jest wybrane na 'Własne'");
+        inputOwnRunTextPlayerSecondTextField = new JTextArea();
+        inputOwnRunTextPlayerSecondTextField.setEnabled(false);
+        inputOwnRunTextPlayerSecondTextField.setLineWrap(true);
+        JScrollPane inputOwnTextSecondScrollPane = new JScrollPane(inputOwnRunTextPlayerSecondTextField);
+        inputOwnRunTextPlayerSecondTextField.setToolTipText("Aktywne tylko, jeśli 'Uruchom Jako' jest wybrane na 'Własne'");
+
+        firstPlayerProgramTypeCombo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                firstPlayerProgramType = firstPlayerProgramTypeCombo.getSelectedIndex();
+                if(firstPlayerProgramTypeCombo.getSelectedIndex()==2) {
+                    inputOwnRunTextPlayerFirstTextField.setEnabled(true);
+                    setFirstPath.setEnabled(false);
+                }
+                else {
+                    inputOwnRunTextPlayerFirstTextField.setEnabled(false);
+                    setFirstPath.setEnabled(true);
+                }
+            }
+        });
+
+        advancedGridLayout.add(firstPlayerProgramTypeCombo);
+        advancedGridLayout.add(new JLabel("Parametry uruchomienia programu:"));
+        advancedGridLayout.add(inputOwnTextScrollPane);
+
+        advancedGridLayout.add(new JSeparator());
+        advancedGridLayout.add(new JSeparator());
+
+        advancedGridLayout.add(setSecondPath);
+        advancedGridLayout.add(setSecondPathLabel);
+
+        advancedGridLayout.add(new JLabel("Uruchom jako:"));
+
+        secondPlayerProgramTypeCombo = new JComboBox<>();
+        secondPlayerProgramTypeCombo.addItem("C/C++");
+        secondPlayerProgramTypeCombo.addItem("JAVA");
+        secondPlayerProgramTypeCombo.addItem("Własne");
+        secondPlayerProgramTypeCombo.setSelectedIndex(secondPlayerProgramType);
+
+        secondPlayerProgramTypeCombo.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                secondPlayerProgramType = secondPlayerProgramTypeCombo.getSelectedIndex();
+                if(secondPlayerProgramTypeCombo.getSelectedIndex()==2) {
+                    inputOwnRunTextPlayerSecondTextField.setEnabled(true);
+                    setSecondPath.setEnabled(false);
+                }
+                else {
+                    inputOwnRunTextPlayerSecondTextField.setEnabled(false);
+                    setSecondPath.setEnabled(true);
+                }
+            }
+        });
+        advancedGridLayout.add(secondPlayerProgramTypeCombo);
+        advancedGridLayout.add(new JLabel("Parametry uruchomienia programu:"));
+        advancedGridLayout.add(inputOwnTextSecondScrollPane);
+
+        mainTabPane.add("Zaawansowane",advancedGridLayout);
+
         add(mainBorderLayout);
 
         wasSaveClicked = false;
@@ -279,16 +391,58 @@ class OptionsPanel extends JPanel {
         soundVolumeSlider.setValue(volume);
 
         debugModeCheckBox.setSelected(debugMode);
+
+
+        setFirstPath.setEnabled(false);
+        setSecondPath.setEnabled(false);
+        inputOwnRunTextPlayerFirstTextField.setEnabled(false);
+        inputOwnRunTextPlayerSecondTextField.setEnabled(false);
+
+        if(firstPlayerProgramType==2) {
+            inputOwnRunTextPlayerFirstTextField.setEnabled(true);
+            setFirstPath.setEnabled(false);
+        }
+        else {
+            inputOwnRunTextPlayerFirstTextField.setEnabled(false);
+            setFirstPath.setEnabled(true);
+            setSecondPath.setEnabled(false);
+        }
+
+        if(secondPlayerProgramType==2) {
+            inputOwnRunTextPlayerSecondTextField.setEnabled(true);
+        }
+        else {
+            inputOwnRunTextPlayerSecondTextField.setEnabled(false);
+            setSecondPath.setEnabled(true);
+        }
+
+        inputOwnRunTextPlayerFirstTextField.setText(firstPlayerRunCommand);
+        inputOwnRunTextPlayerSecondTextField.setText(secondPlayerRunCommand);
+
         repaint();
     }
+    private JComboBox<String>  secondPlayerProgramTypeCombo;
+    private JComboBox<String> firstPlayerProgramTypeCombo;
 
     private JPanel mainGridLayout;
+    private JPanel advancedGridLayout;
     private JSlider soundVolumeSlider;
     private JCheckBox soundIsCheckBox;
     private int BoardSize = 5;
 
+    private int firstPlayerProgramType;
+    private int secondPlayerProgramType;
+
+    private String firstPlayerRunCommand;
+    private String secondPlayerRunCommand;
+
     public JLabel playerFirstPathLabel;
     public JLabel playerSecondPathLabel;
+
+
+    public JTextArea inputOwnRunTextPlayerFirstTextField;
+
+    public JTextArea inputOwnRunTextPlayerSecondTextField;
 
     private String playerFirstFullPath;
     private String playerSecondFullPath;

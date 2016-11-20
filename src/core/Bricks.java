@@ -33,8 +33,12 @@ public class Bricks {
                     createCfg.println("sound=true");
                     createCfg.println("volume=0");
                     createCfg.println("debugMode=false");
-                    createCfg.println("firstPlayer=unknown");
-                    createCfg.println("secondPlayer=unknown");
+                    createCfg.println("firstPlayer=");
+                    createCfg.println("secondPlayer=");
+                    createCfg.println("firstPlayerProgramType=1");
+                    createCfg.println("secondPlayerProgramType=1");
+                    createCfg.println("firstPlayerRunCommand=");
+                    createCfg.println("secondPlayerRunCommand=");
                     createCfg.close();
                     loadDefaultSettings();
                 }
@@ -74,10 +78,42 @@ public class Bricks {
                             debugMode = false;
                         line = in.nextLine();
                         splittedLine = line.split("=");
-                        firstPlayerPath = splittedLine[1];
+                        if(splittedLine.length==2) {
+                            firstPlayerPath = splittedLine[1];
+                        }
+                        else {
+                            firstPlayerPath = "";
+                        }
                         line = in.nextLine();
                         splittedLine = line.split("=");
-                        secondPlayerPath = splittedLine[1];
+                        if(splittedLine.length==2) {
+                            secondPlayerPath = splittedLine[1];
+                        }
+                        else {
+                            secondPlayerPath = "";
+                        }
+                        line = in.nextLine();
+                        splittedLine = line.split("=");
+                        firstPlayerProgramType = Integer.parseInt(splittedLine[1]);
+                        line = in.nextLine();
+                        splittedLine = line.split("=");
+                        secondPlayerProgramType = Integer.parseInt(splittedLine[1]);
+                        line=in.nextLine();
+                        splittedLine = line.split("=");
+                        if(splittedLine.length==2) {
+                            firstPlayerRunCommand=splittedLine[1];
+                        }
+                        else {
+                            firstPlayerRunCommand = "";
+                        }
+                        line=in.nextLine();
+                        splittedLine = line.split("=");
+                        if(splittedLine.length==2) {
+                            secondPlayerRunCommand=splittedLine[1];
+                        }
+                        else {
+                            secondPlayerRunCommand = "";
+                        }
                     } catch (Exception ignored) {
                         loadDefaultSettings();
                     }
@@ -85,8 +121,9 @@ public class Bricks {
             } catch (Exception ignored) {
                 loadDefaultSettings();
             }
-
-            mainFrame = new MainFrame(initialBoardSize,firstPlayerColor,secondPlayerColor,isSound,volume,debugMode,firstPlayerPath,secondPlayerPath);
+            mainFrame = new MainFrame(initialBoardSize,firstPlayerColor,secondPlayerColor,isSound,volume,debugMode,
+                    firstPlayerPath,secondPlayerPath,firstPlayerProgramType,secondPlayerProgramType,
+                    firstPlayerRunCommand,secondPlayerRunCommand);
             mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             mainFrame.setVisible(true);
         });
@@ -100,6 +137,12 @@ public class Bricks {
     private static String firstPlayerPath;
     private static String secondPlayerPath;
 
+    private static int firstPlayerProgramType;
+    private static int secondPlayerProgramType;
+
+    private static String firstPlayerRunCommand;
+    private static String secondPlayerRunCommand;
+
     public static MainFrame mainFrame;
 
     public static String path;
@@ -110,6 +153,14 @@ public class Bricks {
         secondPlayerColor = new Color(238,44,44);
         isSound = true;
         volume = 0;
+        firstPlayerProgramType=1;
+        secondPlayerProgramType=1;
+
+        firstPlayerRunCommand="";
+        secondPlayerRunCommand="";
+
+        firstPlayerPath="";
+        secondPlayerPath="";
     }
 
 }

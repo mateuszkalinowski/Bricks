@@ -21,7 +21,9 @@ import java.util.*;
  */
 public class MainFrame extends JFrame implements Runnable {
 
-    public MainFrame(int initialBoardSize,Color firstPlayerColor,Color secondPlayerColor,boolean isSound,int volume,boolean debugModeInitialize,String firstPlayerPath, String secondPlayerPath) {
+    public MainFrame(int initialBoardSize,Color firstPlayerColor,Color secondPlayerColor,boolean isSound,int volume,boolean debugModeInitialize,String firstPlayerPath, String secondPlayerPath,
+    int firstPlayerProgramTypeArgument,int secondPlayerProgramTypeArgument,
+                     String firstPlayerRunCommandArgument,String secondPlayerRunCommandArgument) {
         setTitle("Bricks");
         setSize(600, 650);
         setMinimumSize(new Dimension(550, 650));
@@ -36,29 +38,36 @@ public class MainFrame extends JFrame implements Runnable {
 
         playerFirstFullPath = firstPlayerPath;
         playerSecondFullPath = secondPlayerPath;
-        if(playerFirstFullPath.length()>7) {
-            int index = playerFirstFullPath.length() - 1;
-            int i = index;
-            for (; i > 0; i--) {
-                if (playerFirstFullPath.charAt(i) == '/')
-                    break;
-            }
-            pathToPlayerOne = playerFirstFullPath.substring(0, i);
-            playerFirstProgramName = playerFirstFullPath.substring(i + 1, playerFirstFullPath.length());
-            playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 6);
 
-        }
-        if(playerSecondFullPath.length()>7) {
-            int index = playerSecondFullPath.length() - 1;
-            int i = index;
-            for (; i > 0; i--) {
-                if (playerSecondFullPath.charAt(i) == '/')
-                    break;
+        this.firstPlayerProgramType = firstPlayerProgramTypeArgument;
+        this.secondPlayerProgramType = secondPlayerProgramTypeArgument;
+
+        this.firstPlayerRunCommand = firstPlayerRunCommandArgument;
+        this.secondPlayerRunCommand = secondPlayerRunCommandArgument;
+
+            if (playerFirstFullPath.length() > 7) {
+                int index = playerFirstFullPath.length() - 1;
+                int i = index;
+                for (; i > 0; i--) {
+                    if (playerFirstFullPath.charAt(i) == '/')
+                        break;
+                }
+                pathToPlayerOne = playerFirstFullPath.substring(0, i);
+                playerFirstProgramName = playerFirstFullPath.substring(i + 1, playerFirstFullPath.length());
+                playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 6);
+
             }
-            pathToPlayerTwo = playerSecondFullPath.substring(0, i);
-            playerSecondProgramName = playerSecondFullPath.substring(i + 1, playerSecondFullPath.length());
-            playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
-        }
+            if (playerSecondFullPath.length() > 7) {
+                int index = playerSecondFullPath.length() - 1;
+                int i = index;
+                for (; i > 0; i--) {
+                    if (playerSecondFullPath.charAt(i) == '/')
+                        break;
+                }
+                pathToPlayerTwo = playerSecondFullPath.substring(0, i);
+                playerSecondProgramName = playerSecondFullPath.substring(i + 1, playerSecondFullPath.length());
+                playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
+            }
 
         URL imgURL = this.getClass().getResource("brick-wall.png");
         ImageIcon icon = new ImageIcon(imgURL);
@@ -69,11 +78,11 @@ public class MainFrame extends JFrame implements Runnable {
         setVisible(true);
         actualPlayerColorPreview = new ColorPreview(playerFirstColor);
 
-     /*   try {
+       /* try {
             UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
         } catch (Exception ignored) {}*/
-
-      //  com.apple.eawt.Application.getApplication().setDockIconImage(icon.getImage());
+        //OS X AND macOS ONLY, ON WINDOWS/LINUX/UNIX must be set as a comment
+        com.apple.eawt.Application.getApplication().setDockIconImage(icon.getImage());
 
         gameName = new JLabel("Bricks", SwingConstants.CENTER);
         buttonsGridLayout = new JPanel(new GridLayout(11, 1));
@@ -188,12 +197,25 @@ public class MainFrame extends JFrame implements Runnable {
         runComputerPlayers.addActionListener(e -> {
             boolean checkFirstComputerPlayer = false;
             boolean checkSecondComputerPlayer = false;
+
             java.util.List<String> command = new ArrayList<>();
-            command.add("java");
-            command.add("-cp");
-            command.add(Bricks.mainFrame.pathToPlayerOne);
-            command.add(Bricks.mainFrame.playerFirstProgramName);
-            command.add("Ping");
+            if(firstPlayerProgramType==0) {
+                command.add(playerFirstFullPath);
+                command.add("Ping");
+            }
+            if(firstPlayerProgramType==1) {
+                command.add("java");
+                command.add("-cp");
+                    command.add(Bricks.mainFrame.pathToPlayerOne);
+                    command.add(Bricks.mainFrame.playerFirstProgramName);
+                command.add("Ping");
+            }
+            if(firstPlayerProgramType==2) {
+                String args[] = firstPlayerRunCommand.split(" ");
+                for(String s : args)
+                    command.add(s);
+                command.add("Ping");
+            }
             try {
                 ProcessBuilder builder = new ProcessBuilder(command);
                 final Process process = builder.start();
@@ -203,13 +225,26 @@ public class MainFrame extends JFrame implements Runnable {
                 String output = br.readLine();
                 if(output.equals("Pong"))
                     checkFirstComputerPlayer=true;
-
-                command = new ArrayList<>();
-                command.add("java");
-                command.add("-cp");
-                command.add(Bricks.mainFrame.pathToPlayerTwo);
-                command.add(Bricks.mainFrame.playerSecondProgramName);
-                command.add("Ping");
+                command = new ArrayList<String>();
+                if(secondPlayerProgramType==0) {
+                    command.add(playerSecondFullPath);
+                    command.add("Ping");
+                }
+                if(secondPlayerProgramType==1) {
+                    command.add("java");
+                    command.add("-cp");
+                    System.out.println(Bricks.mainFrame.pathToPlayerTwo);
+                    System.out.println(Bricks.mainFrame.playerSecondProgramName);
+                    command.add(Bricks.mainFrame.pathToPlayerTwo);
+                    command.add(Bricks.mainFrame.playerSecondProgramName);
+                    command.add("Ping");
+                }
+                if(secondPlayerProgramType==2) {
+                    String args[] = secondPlayerRunCommand.split(" ");
+                    for(String s : args)
+                        command.add(s);
+                    command.add("Ping");
+                }
                     builder = new ProcessBuilder(command);
                     final Process process2 = builder.start();
                     is = process2.getInputStream();
@@ -256,17 +291,43 @@ public class MainFrame extends JFrame implements Runnable {
                             computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
                             board.saveToFile();
                             java.util.List<String> command = new ArrayList<>();
-                            command.add("java");
-                            command.add("-cp");
-                            if (computerPlayer == 1) {
-                                command.add(Bricks.mainFrame.pathToPlayerOne);
-                                command.add(Bricks.mainFrame.playerFirstProgramName);
+                            if(firstPlayerProgramType==0) {
+                                if (computerPlayer == 1) {
+                                    command.add(playerFirstFullPath);
+                                }
+                                if( computerPlayer == 2) {
+                                    command.add(playerSecondFullPath);
+                                }
+                                command.add(System.getProperty("user.home") + "/Documents/Bricks/board.txt");
                             }
-                            if (computerPlayer == 2) {
-                                command.add(Bricks.mainFrame.pathToPlayerTwo);
-                                command.add(Bricks.mainFrame.playerSecondProgramName);
+                            if(firstPlayerProgramType==1) {
+                                command.add("java");
+                                command.add("-cp");
+                                if (computerPlayer == 1) {
+                                    command.add(Bricks.mainFrame.pathToPlayerOne);
+                                    command.add(Bricks.mainFrame.playerFirstProgramName);
+                                }
+                                if (computerPlayer == 2) {
+                                    command.add(Bricks.mainFrame.pathToPlayerTwo);
+                                    command.add(Bricks.mainFrame.playerSecondProgramName);
+                                }
+                                command.add(System.getProperty("user.home") + "/Documents/Bricks/board.txt");
                             }
-                            command.add(Bricks.mainFrame.pathToPlayerOne + "/board.txt");
+                            if(firstPlayerProgramType==2) {
+                                if(computerPlayer==1) {
+                                    String args[] = firstPlayerRunCommand.split(" ");
+                                    for (String s : args)
+                                        command.add(s);
+                                    command.add(System.getProperty("user.home") + "/Documents/Bricks/board.txt");
+                                }
+                                if(computerPlayer==2) {
+                                    String args[] = secondPlayerRunCommand.split(" ");
+                                    for (String s : args)
+                                        command.add(s);
+                                    command.add(System.getProperty("user.home") + "/Documents/Bricks/board.txt");
+                                }
+                            }
+
 
                             ProcessBuilder builder = new ProcessBuilder(command);
                             final Process process = builder.start();
@@ -280,22 +341,26 @@ public class MainFrame extends JFrame implements Runnable {
                             int x2 = Integer.parseInt(outputDivided[2]);
                             int y2 = Integer.parseInt(outputDivided[3]);
 
-                            if (board.board[x1][y1] == 0 && board.board[x2][y2] == 0) {
-                                board.board[x1][y1] = computerPlayer;
-                                board.board[x2][y2] = computerPlayer;
-                                boardPanel.playSound();
-                                boardPanel.movesStorage.addMove(x1, y1, x2, y2);
+                            if(possibleMove(x1,y1,x2,y2,board.board))
+                             {
+                                    board.board[x1][y1] = computerPlayer;
+                                    board.board[x2][y2] = computerPlayer;
+                                    boardPanel.playSound();
+                                    boardPanel.movesStorage.addMove(x1, y1, x2, y2);
 
 
-                                if (computerPlayer == 1) {
-                                    computerPlayer = 2;
-                                    actualPlayerColorPreview.setColor(playerSecondColor);
+                                    if (computerPlayer == 1) {
+                                        computerPlayer = 2;
+                                        actualPlayerColorPreview.setColor(playerSecondColor);
 
-                                } else if (computerPlayer == 2) {
-                                    computerPlayer = 1;
-                                    actualPlayerColorPreview.setColor(playerFirstColor);
-                                }
-                                undoLastMoveButton.setEnabled(true);
+                                    } else if (computerPlayer == 2) {
+                                        computerPlayer = 1;
+                                        actualPlayerColorPreview.setColor(playerFirstColor);
+                                    }
+                                    undoLastMoveButton.setEnabled(true);
+                            }
+                            else {
+                                boardPanel.walkover(computerPlayer);
                             }
                             repaintThis();
                             repaint();
@@ -343,7 +408,9 @@ public class MainFrame extends JFrame implements Runnable {
         JButton optionsButton = new JButton("Opcje");
         optionsButton.addActionListener(e -> {
             JPanel optionsPanel = new JPanel(new BorderLayout());
-            OptionsPanel opcje = new OptionsPanel(new Settings(BoardSize, playerFirstColor, playerSecondColor,this.isSound,this.volume,this.debugMode,playerFirstFullPath,playerSecondFullPath));
+            OptionsPanel opcje = new OptionsPanel(new Settings(BoardSize, playerFirstColor, playerSecondColor,
+                    this.isSound,this.volume,this.debugMode,playerFirstFullPath,playerSecondFullPath,
+                    firstPlayerProgramType,secondPlayerProgramType,firstPlayerRunCommand,secondPlayerRunCommand));
             optionsPanel.add(opcje,BorderLayout.CENTER);
             this.getContentPane().removeAll();
             this.getContentPane().add(optionsPanel);
@@ -466,6 +533,10 @@ public class MainFrame extends JFrame implements Runnable {
             createCfg.println("debugMode=" + debugMode);
             createCfg.println("firstPlayer=" + playerFirstFullPath);
             createCfg.println("secondPlayer=" + playerSecondFullPath);
+            createCfg.println("firstPlayerProgramType=" + firstPlayerProgramType);
+            createCfg.println("secondPlayerProgramType=" + secondPlayerProgramType);
+            createCfg.println("firstPlayerRunCommand=" + firstPlayerRunCommand);
+            createCfg.println("secondPlayerRunCommand=" + secondPlayerRunCommand);
             createCfg.close();
         } catch (Exception ignored) {
 
@@ -507,7 +578,35 @@ public class MainFrame extends JFrame implements Runnable {
                     playerSecondProgramName = playerSecondFullPath.substring(i + 1, playerSecondFullPath.length());
                     playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
                 }
+                firstPlayerProgramType=newSettings.getFirstPlayerProgramType();
+                secondPlayerProgramType=newSettings.getSecondPlayerProgramType();
+
+                firstPlayerRunCommand=newSettings.getFirstPlayerRunCommand();
+                secondPlayerRunCommand=newSettings.getSecondPlayerRunCommand();
                 exportSettings();
+    }
+
+    private boolean possibleMove(int x1,int y1,int x2,int y2,int[][] board) {
+        if(board[x1][y1]!=0 || board[x2][y2]!=0)
+            return false;
+        boolean flag=false;
+
+        if(y1==y2) {
+            if(x1+1==x2)
+                flag=true;
+            if(x1-1==x2)
+                flag=true;
+        }
+        if(x1==x2) {
+            if(y1+1==y2)
+                flag=true;
+            if(y1-1==y2)
+                flag=true;
+        }
+
+        if(flag==false)
+            return false;
+        return true;
     }
 
     public boolean getDebugMode(){
@@ -522,6 +621,13 @@ public class MainFrame extends JFrame implements Runnable {
     private boolean debugMode;
     public boolean running = false;
     public ComputerPlayer comp;
+
+    private int firstPlayerProgramType;
+    private int secondPlayerProgramType;
+
+    private String firstPlayerRunCommand;
+    private String secondPlayerRunCommand;
+
 
     public  JLabel movesLeftLabel;
     public JLabel computerPlayerLabel;

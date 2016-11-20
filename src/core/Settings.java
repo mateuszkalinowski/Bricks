@@ -7,7 +7,7 @@ import java.awt.*;
  * Project Bricks
  */
 public class Settings {
-    public Settings(int BoardSize,Color playerFirstColor,Color playerSecondColor,boolean isSound,int volume,boolean debugMode,String path1,String path2) {
+    public Settings(int BoardSize,Color playerFirstColor,Color playerSecondColor,boolean isSound,int volume,boolean debugMode,String path1,String path2,int programTypeFirst,int programTypeSecond,String runCommandFirst, String runCommandSecond) {
         this.BoardSize = BoardSize;
         this.playerFirstColor = playerFirstColor;
         this.playerSecondColor = playerSecondColor;
@@ -16,6 +16,10 @@ public class Settings {
         this.debugMode = debugMode;
         firstComputerPlayerPath = path1;
         secondComputerPlayerPath = path2;
+        firstPlayerProgramType = programTypeFirst;
+        secondPlayerProgramType = programTypeSecond;
+        firstPlayerRunCommand = runCommandFirst;
+        secondPlayerRunCommand = runCommandSecond;
     }
     public String getFirstComputerPlayerPath(){return firstComputerPlayerPath;}
     public String getSecondComputerPlayerPath(){return secondComputerPlayerPath;}
@@ -39,4 +43,26 @@ public class Settings {
     private boolean debugMode;
     private String firstComputerPlayerPath;
     private String secondComputerPlayerPath;
+
+    private int firstPlayerProgramType;
+    private int secondPlayerProgramType;
+
+    private String firstPlayerRunCommand;
+    private String secondPlayerRunCommand;
+
+    public String getSecondPlayerRunCommand() {
+        return secondPlayerRunCommand;
+    }
+
+    public String getFirstPlayerRunCommand() {
+        return firstPlayerRunCommand;
+    }
+
+    public int getSecondPlayerProgramType() {
+        return secondPlayerProgramType;
+    }
+
+    public int getFirstPlayerProgramType() {
+        return firstPlayerProgramType;
+    }
 }
