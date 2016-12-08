@@ -372,7 +372,6 @@ public class BoardPanel extends Canvas {
         Bricks.mainFrame.movesLeftLabel.setText("Pozostały " + board.getPossibleMovesLeft() + " ruchy");
         if (!board.anyMoves()) {
             int selection = 0;
-            System.out.println("No moves");
             if (Bricks.mainFrame.getDebugMode() && gamemode !=2) {
                 if (gamemode == 1) {
                     if (actualPlayer == 1) {

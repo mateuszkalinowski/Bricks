@@ -286,55 +286,6 @@ public class MainFrame extends JFrame implements Runnable {
                         try {
                             computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
                             board.saveToFile();
-                            /*
-                            java.util.List<String> command = new ArrayList<>();
-                            if(firstPlayerProgramType==0) {
-                                if (computerPlayer == 1) {
-                                    command.add(playerFirstFullPath);
-                                }
-                                if( computerPlayer == 2) {
-                                    command.add(playerSecondFullPath);
-                                }
-                                command.add(System.getProperty("user.home") + "/Documents/Bricks/board.txt");
-                            }
-                            if(firstPlayerProgramType==1) {
-                                command.add("java");
-                                command.add("-cp");
-                                if (computerPlayer == 1) {
-                                    command.add(Bricks.mainFrame.pathToPlayerOne);
-                                    command.add(Bricks.mainFrame.playerFirstProgramName);
-                                }
-                                if (computerPlayer == 2) {
-                                    command.add(Bricks.mainFrame.pathToPlayerTwo);
-                                    command.add(Bricks.mainFrame.playerSecondProgramName);
-                                }
-                                command.add(System.getProperty("user.home") + "/Documents/Bricks/board.txt");
-                            }
-                            if(firstPlayerProgramType==2) {
-                                if(computerPlayer==1) {
-                                    String args[] = firstPlayerRunCommand.split(" ");
-                                    for (String s : args)
-                                        command.add(s);
-                                    command.add(System.getProperty("user.home") + "/Documents/Bricks/board.txt");
-                                }
-                                if(computerPlayer==2) {
-                                    String args[] = secondPlayerRunCommand.split(" ");
-                                    for (String s : args)
-                                        command.add(s);
-                                    command.add(System.getProperty("user.home") + "/Documents/Bricks/board.txt");
-                                }
-                            }
-
-
-                            ProcessBuilder builder = new ProcessBuilder(command);
-                            final Process process = builder.start();
-                            InputStream is = process.getInputStream();
-                            InputStreamReader isr = new InputStreamReader(is);
-                            BufferedReader br = new BufferedReader(isr);
-                            String output = br.readLine();
-                            String[] outputDivided = output.split(" ");*/
-
-
                             int move[] = new int[4];
                             if(computerPlayer==1) {
                                 if(boardPanel.movesStorage.isEmpty()) {
