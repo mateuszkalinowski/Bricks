@@ -6,6 +6,7 @@ import gfx.BoardPanel;
 import gfx.ColorPreview;
 import logic.BoardLogic;
 import logic.ComputerPlayer;
+import logic.RobotPlayer;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -196,70 +197,62 @@ public class MainFrame extends JFrame implements Runnable {
         });
         runComputerPlayers.addActionListener(e -> {
             //TODO CHANGE TO FALSE!
-            boolean checkFirstComputerPlayer = true;
-            boolean checkSecondComputerPlayer = true;
-            /*
-            java.util.List<String> command = new ArrayList<>();
+            boolean checkFirstComputerPlayer = false;
+            boolean checkSecondComputerPlayer = false;
+
             if(firstPlayerProgramType==0) {
-                command.add(playerFirstFullPath);
-                command.add("Ping");
+                try {
+                    Bricks.firstRobotPlayer = new RobotPlayer(playerFirstFullPath,BoardSize);
+                    checkFirstComputerPlayer = true;
+                }
+                catch (Exception playerFirstError){
+                }
             }
             if(firstPlayerProgramType==1) {
-                command.add("java");
-                command.add("-cp");
-                    command.add(Bricks.mainFrame.pathToPlayerOne);
-                    command.add(Bricks.mainFrame.playerFirstProgramName);
-                command.add("Ping");
-            }
-            if(firstPlayerProgramType==2) {
-                String args[] = firstPlayerRunCommand.split(" ");
-                for(String s : args)
-                    command.add(s);
-                command.add("Ping");
-            }*/
-            /*
-            try {
-                ProcessBuilder builder = new ProcessBuilder(command);
-                final Process process = builder.start();
-                InputStream is = process.getInputStream();
-                InputStreamReader isr = new InputStreamReader(is);
-                BufferedReader br = new BufferedReader(isr);
-                String output = br.readLine();
-                if(output.equals("Pong"))
-                    checkFirstComputerPlayer=true;
-                command = new ArrayList<String>();
-                if(secondPlayerProgramType==0) {
-                    command.add(playerSecondFullPath);
-                    command.add("Ping");
+                try {
+                    Bricks.firstRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainFrame.pathToPlayerOne +" "+Bricks.mainFrame.playerFirstProgramName,BoardSize);
+                    checkFirstComputerPlayer = true;
                 }
-                if(secondPlayerProgramType==1) {
-                    command.add("java");
-                    command.add("-cp");
-                    System.out.println(Bricks.mainFrame.pathToPlayerTwo);
-                    System.out.println(Bricks.mainFrame.playerSecondProgramName);
-                    command.add(Bricks.mainFrame.pathToPlayerTwo);
-                    command.add(Bricks.mainFrame.playerSecondProgramName);
-                    command.add("Ping");
+                catch (Exception playerFirstError){
                 }
-                if(secondPlayerProgramType==2) {
-                    String args[] = secondPlayerRunCommand.split(" ");
-                    for(String s : args)
-                        command.add(s);
-                    command.add("Ping");
-                }
-                    builder = new ProcessBuilder(command);
-                    final Process process2 = builder.start();
-                    is = process2.getInputStream();
-                    isr = new InputStreamReader(is);
-                    br = new BufferedReader(isr);
-                    output = br.readLine();
-                    if(output.equals("Pong"))
-                        checkSecondComputerPlayer=true;
-            }
-            catch (Exception ignored) {
 
             }
-            */
+            if(firstPlayerProgramType==2) {
+                try {
+                    Bricks.firstRobotPlayer = new RobotPlayer(firstPlayerRunCommand,BoardSize);
+                    checkFirstComputerPlayer = true;
+                }
+                catch (Exception playerFirstError){
+                }
+
+            }
+
+            if(secondPlayerProgramType==0) {
+                try {
+                    Bricks.secondRobotPlayer = new RobotPlayer(playerSecondFullPath,BoardSize);
+                    checkSecondComputerPlayer = true;
+                }
+                catch (Exception playerSecondError){
+                }
+            }
+            if(secondPlayerProgramType==1) {
+                try {
+                    Bricks.secondRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainFrame.pathToPlayerTwo +" "+Bricks.mainFrame.playerSecondProgramName,BoardSize);
+                    checkSecondComputerPlayer = true;
+                }
+                catch (Exception playerSecondError){
+                }
+
+            }
+            if(secondPlayerProgramType==2) {
+                try {
+                    Bricks.secondRobotPlayer = new RobotPlayer(secondPlayerRunCommand,BoardSize);
+                    checkSecondComputerPlayer = true;
+                }
+                catch (Exception playerSecondError){
+                }
+
+            }
             if(checkFirstComputerPlayer && checkSecondComputerPlayer) {
                 gameBorderLayout = new JPanel(new BorderLayout());
                 Action backToMenuAction = new AbstractAction() {
@@ -289,10 +282,11 @@ public class MainFrame extends JFrame implements Runnable {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         //TODO
-                        /*
+
                         try {
                             computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
                             board.saveToFile();
+                            /*
                             java.util.List<String> command = new ArrayList<>();
                             if(firstPlayerProgramType==0) {
                                 if (computerPlayer == 1) {
@@ -338,11 +332,32 @@ public class MainFrame extends JFrame implements Runnable {
                             InputStreamReader isr = new InputStreamReader(is);
                             BufferedReader br = new BufferedReader(isr);
                             String output = br.readLine();
-                            String[] outputDivided = output.split(" ");
-                            int x1 = Integer.parseInt(outputDivided[0]);
-                            int y1 = Integer.parseInt(outputDivided[1]);
-                            int x2 = Integer.parseInt(outputDivided[2]);
-                            int y2 = Integer.parseInt(outputDivided[3]);
+                            String[] outputDivided = output.split(" ");*/
+
+
+                            int move[] = new int[4];
+                            if(computerPlayer==1) {
+                                if(boardPanel.movesStorage.isEmpty()) {
+                                    move = Bricks.firstRobotPlayer.makeMove();
+                                }
+                                else {
+                                    move = Bricks.firstRobotPlayer.makeMove(boardPanel.movesStorage.getLastMove());
+                                }
+                            }
+                            if(computerPlayer==2) {
+                                if(boardPanel.movesStorage.isEmpty()) {
+                                    move = Bricks.secondRobotPlayer.makeMove();
+                                }
+                                else {
+                                    move = Bricks.secondRobotPlayer.makeMove(boardPanel.movesStorage.getLastMove());
+                                }
+                            }
+
+                            int x1 = move[0];
+                            int y1 = move[1];
+                            int x2 = move[2];
+                            int y2 = move[3];
+
 
                             if(possibleMove(x1,y1,x2,y2,board.board))
                              {
@@ -372,7 +387,7 @@ public class MainFrame extends JFrame implements Runnable {
                         } catch (Exception ignored) {
 
                         }
-                        */
+
                     }
                 });
                 southBorderLayout.add(undoLastMoveButton, BorderLayout.EAST);

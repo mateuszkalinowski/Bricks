@@ -12,12 +12,12 @@ import java.io.PrintWriter;
  * Created by Mateusz on 08.12.2016.
  * Project Bricks
  */
-public class Robot {
+public class RobotPlayer {
     private Process robotProc;
     private BufferedReader reader;
     private PrintWriter writer;
 
-    public Robot(String source) throws IOException, RobotPlayerNotWorkingException{
+    public RobotPlayer(String source, int size) throws IOException, RobotPlayerNotWorkingException{
         robotProc = Runtime.getRuntime().exec(source);
         reader = new BufferedReader(new InputStreamReader(robotProc.getInputStream()));
         writer = new PrintWriter(robotProc.getOutputStream(),true);
@@ -25,10 +25,11 @@ public class Robot {
         if (!reader.readLine().equals("Pong")) {
             throw new RobotPlayerNotWorkingException("Answer to Ping wasn't Pong");
         }
+        writer.println(size);
     }
-    public int[] makeMove(int previousx1,int previousy1,int previousx2,int previousy2) throws InvalidMoveException{
+    public int[] makeMove(int previousMove[]) throws InvalidMoveException{
         int[] move = new int[4];
-        writer.println(move[0]+ " " + move[1]+ " " + move[2]+ " " + move[3]);
+        writer.println(previousMove[0]+ " " + previousMove[1]+ " " + previousMove[2]+ " " + previousMove[3]);
         String nextMove;
         try {
             nextMove = reader.readLine();

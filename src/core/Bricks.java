@@ -2,10 +2,10 @@ package core;
 
 
 import frames.MainFrame;
+import logic.*;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -162,5 +162,8 @@ public class Bricks {
         firstPlayerPath="";
         secondPlayerPath="";
     }
+
+    public static RobotPlayer firstRobotPlayer;
+    public static RobotPlayer secondRobotPlayer;
 
 }
