@@ -195,9 +195,10 @@ public class MainFrame extends JFrame implements Runnable {
             gameBorderLayout.requestFocus();
         });
         runComputerPlayers.addActionListener(e -> {
-            boolean checkFirstComputerPlayer = false;
-            boolean checkSecondComputerPlayer = false;
-
+            //TODO CHANGE TO FALSE!
+            boolean checkFirstComputerPlayer = true;
+            boolean checkSecondComputerPlayer = true;
+            /*
             java.util.List<String> command = new ArrayList<>();
             if(firstPlayerProgramType==0) {
                 command.add(playerFirstFullPath);
@@ -215,7 +216,8 @@ public class MainFrame extends JFrame implements Runnable {
                 for(String s : args)
                     command.add(s);
                 command.add("Ping");
-            }
+            }*/
+            /*
             try {
                 ProcessBuilder builder = new ProcessBuilder(command);
                 final Process process = builder.start();
@@ -257,7 +259,7 @@ public class MainFrame extends JFrame implements Runnable {
             catch (Exception ignored) {
 
             }
-
+            */
             if(checkFirstComputerPlayer && checkSecondComputerPlayer) {
                 gameBorderLayout = new JPanel(new BorderLayout());
                 Action backToMenuAction = new AbstractAction() {
@@ -287,6 +289,7 @@ public class MainFrame extends JFrame implements Runnable {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         //TODO
+                        /*
                         try {
                             computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
                             board.saveToFile();
@@ -369,7 +372,7 @@ public class MainFrame extends JFrame implements Runnable {
                         } catch (Exception ignored) {
 
                         }
-
+                        */
                     }
                 });
                 southBorderLayout.add(undoLastMoveButton, BorderLayout.EAST);
