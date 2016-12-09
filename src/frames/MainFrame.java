@@ -2,6 +2,7 @@ package frames;
 
 import core.Bricks;
 import core.Settings;
+import exceptions.InvalidMoveException;
 import gfx.BoardPanel;
 import gfx.ColorPreview;
 import logic.BoardLogic;
@@ -282,25 +283,51 @@ public class MainFrame extends JFrame implements Runnable {
                     @Override
                     public void actionPerformed(ActionEvent e) {
                         //TODO
-
+                        boolean gameFinished = false;
                         try {
                             computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
                             board.saveToFile();
                             int move[] = new int[4];
                             if(computerPlayer==1) {
                                 if(boardPanel.movesStorage.isEmpty()) {
-                                    move = Bricks.firstRobotPlayer.makeMove("Zaczynaj");
+                                    try {
+                                        move = Bricks.firstRobotPlayer.makeMove("Zaczynaj");
+                                    }
+                                    catch (InvalidMoveException exception) {
+                                        System.out.println("czas");
+                                        boardPanel.walkover(computerPlayer,"Timeout");
+                                        gameFinished=true;
+                                    }
                                 }
                                 else {
-                                    move = Bricks.firstRobotPlayer.makeMove(boardPanel.movesStorage.getLastMoveAsString());
+                                    try {
+                                        move = Bricks.firstRobotPlayer.makeMove(boardPanel.movesStorage.getLastMoveAsString());
+                                    }
+                                    catch (InvalidMoveException exception) {
+                                        System.out.println("czas");
+                                        boardPanel.walkover(computerPlayer,"Timeout");
+                                        gameFinished=true;
+                                    }
                                 }
                             }
                             if(computerPlayer==2) {
                                 if(boardPanel.movesStorage.isEmpty()) {
-                                    move = Bricks.secondRobotPlayer.makeMove("Zaczynaj");
+                                    try {
+                                        move = Bricks.secondRobotPlayer.makeMove("Zaczynaj");
+                                    } catch (InvalidMoveException exception) {
+                                        System.out.println("czas");
+                                        boardPanel.walkover(computerPlayer,"Timeout");
+                                        gameFinished=true;
+                                    }
                                 }
                                 else {
-                                    move = Bricks.secondRobotPlayer.makeMove(boardPanel.movesStorage.getLastMoveAsString());
+                                    try {
+                                        move = Bricks.secondRobotPlayer.makeMove(boardPanel.movesStorage.getLastMoveAsString());
+                                    } catch (InvalidMoveException exception) {
+                                        System.out.println("czas");
+                                        boardPanel.walkover(computerPlayer,"Timeout");
+                                        gameFinished=true;
+                                    }
                                 }
                             }
 
@@ -310,7 +337,7 @@ public class MainFrame extends JFrame implements Runnable {
                             int y2 = move[3];
 
 
-                            if(possibleMove(x1,y1,x2,y2,board.board))
+                            if(possibleMove(x1,y1,x2,y2,board.board) && !gameFinished)
                              {
                                     board.board[x1][y1] = computerPlayer;
                                     board.board[x2][y2] = computerPlayer;
@@ -328,8 +355,8 @@ public class MainFrame extends JFrame implements Runnable {
                                     }
                                     undoLastMoveButton.setEnabled(true);
                             }
-                            else {
-                                boardPanel.walkover(computerPlayer);
+                            else if (!gameFinished) {
+                                boardPanel.walkover(computerPlayer,"InvalidMove");
                             }
                             repaintThis();
                             repaint();
