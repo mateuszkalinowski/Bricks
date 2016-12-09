@@ -132,8 +132,10 @@ public class Bricks {
                 @Override
                 public void windowClosing(WindowEvent e) {
                     super.windowClosing(e);
-                    firstRobotPlayer.killRobot();
-                    secondRobotPlayer.killRobot();
+                    if(firstRobotPlayer!=null)
+                       firstRobotPlayer.killRobot();
+                    if(secondRobotPlayer!=null)
+                        secondRobotPlayer.killRobot();
                 }
             });
         });
