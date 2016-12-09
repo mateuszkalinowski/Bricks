@@ -116,6 +116,14 @@ public class Bricks {
                         else {
                             secondPlayerRunCommand = "";
                         }
+                        line=in.nextLine();
+                        splittedLine = line.split("=");
+                        if(splittedLine.length==2) {
+                            computerPlayerType = Integer.parseInt(splittedLine[1]);
+                        }
+                        else {
+                            computerPlayerType=0;
+                        }
                     } catch (Exception ignored) {
                         loadDefaultSettings();
                     }
@@ -125,7 +133,7 @@ public class Bricks {
             }
             mainFrame = new MainFrame(initialBoardSize,firstPlayerColor,secondPlayerColor,isSound,volume,debugMode,
                     firstPlayerPath,secondPlayerPath,firstPlayerProgramType,secondPlayerProgramType,
-                    firstPlayerRunCommand,secondPlayerRunCommand);
+                    firstPlayerRunCommand,secondPlayerRunCommand,computerPlayerType);
             mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             mainFrame.setVisible(true);
             mainFrame.addWindowListener(new WindowAdapter() {
@@ -155,6 +163,8 @@ public class Bricks {
     private static String firstPlayerRunCommand;
     private static String secondPlayerRunCommand;
 
+    private static int computerPlayerType;
+
     public static MainFrame mainFrame;
 
     public static String path;
@@ -173,6 +183,10 @@ public class Bricks {
 
         firstPlayerPath="";
         secondPlayerPath="";
+
+        computerPlayerType = 0;
+
+
     }
 
     public static RobotPlayer firstRobotPlayer;

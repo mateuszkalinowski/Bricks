@@ -34,6 +34,8 @@ class OptionsPanel extends JPanel {
         firstPlayerRunCommand = firstSettings.getFirstPlayerRunCommand();
         secondPlayerRunCommand = firstSettings.getSecondPlayerRunCommand();
 
+        computerPlayerType = firstSettings.getComputerPlayerType();
+
         JLabel setFirstPathLabel = new JLabel();
         JLabel setSecondPathLabel = new JLabel();
 
@@ -139,7 +141,7 @@ class OptionsPanel extends JPanel {
             System.out.println(inputOwnRunTextPlayerFirstTextField.getText());
             Bricks.mainFrame.setSettings(new Settings(BoardSize,playerFirstColor,playerSecondColor,isSound,volume,
                     debugMode,playerFirstFullPath,playerSecondFullPath,firstPlayerProgramType,secondPlayerProgramType,
-                    inputOwnRunTextPlayerFirstTextField.getText(),inputOwnRunTextPlayerSecondTextField.getText()));
+                    inputOwnRunTextPlayerFirstTextField.getText(),inputOwnRunTextPlayerSecondTextField.getText(),computerPlayerType));
             Bricks.mainFrame.backToMenu();
         });
 
@@ -301,7 +303,7 @@ class OptionsPanel extends JPanel {
         advancedGridLayout.add(new JLabel("Uruchom jako:"));
 
         firstPlayerProgramTypeCombo = new JComboBox<>();
-        firstPlayerProgramTypeCombo.addItem("C/C++");
+        firstPlayerProgramTypeCombo.addItem("C/C++/exe");
         firstPlayerProgramTypeCombo.addItem("JAVA");
         firstPlayerProgramTypeCombo.addItem("Własne");
         firstPlayerProgramTypeCombo.setSelectedIndex(firstPlayerProgramType);
@@ -346,7 +348,7 @@ class OptionsPanel extends JPanel {
         advancedGridLayout.add(new JLabel("Uruchom jako:"));
 
         secondPlayerProgramTypeCombo = new JComboBox<>();
-        secondPlayerProgramTypeCombo.addItem("C/C++");
+        secondPlayerProgramTypeCombo.addItem("C/C++/exe");
         secondPlayerProgramTypeCombo.addItem("JAVA");
         secondPlayerProgramTypeCombo.addItem("Własne");
         secondPlayerProgramTypeCombo.setSelectedIndex(secondPlayerProgramType);
@@ -368,6 +370,24 @@ class OptionsPanel extends JPanel {
         advancedGridLayout.add(secondPlayerProgramTypeCombo);
         advancedGridLayout.add(new JLabel("Parametry uruchomienia programu:"));
         advancedGridLayout.add(inputOwnTextSecondScrollPane);
+
+        JLabel singlePlayerComputerSelectionLabel = new JLabel("Gra jednoosobowa:");
+        JComboBox<String> singlePlayerComputerSelectionComboBox = new JComboBox<>();
+        advancedGridLayout.add(new JSeparator());
+        advancedGridLayout.add(new JSeparator());
+        singlePlayerComputerSelectionComboBox.addItem("Wbudowany");
+        singlePlayerComputerSelectionComboBox.addItem("Komputer Pierwszy");
+        singlePlayerComputerSelectionComboBox.addItem("Komputer Drugi");
+        advancedGridLayout.add(singlePlayerComputerSelectionLabel);
+        advancedGridLayout.add(singlePlayerComputerSelectionComboBox);
+        singlePlayerComputerSelectionComboBox.setSelectedIndex(computerPlayerType);
+
+        singlePlayerComputerSelectionComboBox.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                computerPlayerType = singlePlayerComputerSelectionComboBox.getSelectedIndex();
+            }
+        });
 
         mainTabPane.add("Zaawansowane",advancedGridLayout);
 
@@ -452,6 +472,8 @@ class OptionsPanel extends JPanel {
     private Color playerFirstColor;
 
     private Color playerSecondColor;
+
+    private int computerPlayerType;
 
     private boolean isSound = true;
 

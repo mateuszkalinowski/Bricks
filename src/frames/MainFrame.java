@@ -25,7 +25,7 @@ public class MainFrame extends JFrame implements Runnable {
 
     public MainFrame(int initialBoardSize,Color firstPlayerColor,Color secondPlayerColor,boolean isSound,int volume,boolean debugModeInitialize,String firstPlayerPath, String secondPlayerPath,
     int firstPlayerProgramTypeArgument,int secondPlayerProgramTypeArgument,
-                     String firstPlayerRunCommandArgument,String secondPlayerRunCommandArgument) {
+                     String firstPlayerRunCommandArgument,String secondPlayerRunCommandArgument, int computerPlayerType) {
         setTitle("Bricks");
         setSize(600, 650);
         setMinimumSize(new Dimension(550, 650));
@@ -38,6 +38,7 @@ public class MainFrame extends JFrame implements Runnable {
         this.volume = volume;
         debugMode = debugModeInitialize;
 
+        this.computerPlayerType = computerPlayerType;
         playerFirstFullPath = firstPlayerPath;
         playerSecondFullPath = secondPlayerPath;
 
@@ -404,7 +405,7 @@ public class MainFrame extends JFrame implements Runnable {
             JPanel optionsPanel = new JPanel(new BorderLayout());
             OptionsPanel opcje = new OptionsPanel(new Settings(BoardSize, playerFirstColor, playerSecondColor,
                     this.isSound,this.volume,this.debugMode,playerFirstFullPath,playerSecondFullPath,
-                    firstPlayerProgramType,secondPlayerProgramType,firstPlayerRunCommand,secondPlayerRunCommand));
+                    firstPlayerProgramType,secondPlayerProgramType,firstPlayerRunCommand,secondPlayerRunCommand,computerPlayerType));
             optionsPanel.add(opcje,BorderLayout.CENTER);
             this.getContentPane().removeAll();
             this.getContentPane().add(optionsPanel);
@@ -531,6 +532,7 @@ public class MainFrame extends JFrame implements Runnable {
             createCfg.println("secondPlayerProgramType=" + secondPlayerProgramType);
             createCfg.println("firstPlayerRunCommand=" + firstPlayerRunCommand);
             createCfg.println("secondPlayerRunCommand=" + secondPlayerRunCommand);
+            createCfg.println("computerPlayerType=" + computerPlayerType);
             createCfg.close();
         } catch (Exception ignored) {
 
@@ -549,6 +551,7 @@ public class MainFrame extends JFrame implements Runnable {
                 this.debugMode = newSettings.getDebugMode();
                 playerFirstFullPath = newSettings.getFirstComputerPlayerPath();
                 playerSecondFullPath = newSettings.getSecondComputerPlayerPath();
+                computerPlayerType = newSettings.getComputerPlayerType();
                 if(playerFirstFullPath.length()>7) {
                     int index = playerFirstFullPath.length() - 1;
                     int i = index;
@@ -658,4 +661,6 @@ public class MainFrame extends JFrame implements Runnable {
     public String pathToPlayerTwo = "";
     public String playerFirstProgramName = "";
     public String playerSecondProgramName = "";
+
+    private int computerPlayerType;
 }
