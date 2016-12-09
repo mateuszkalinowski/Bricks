@@ -429,7 +429,7 @@ public class MainFrame extends JFrame implements Runnable {
         exitButton.setFocusPainted(false);
         exitButton.addActionListener(e -> System.exit(0));
 
-        credits = new JLabel("<html><center>Autor: Mateusz Kalinowski @2016 Wersja: 0.9.6, Ikona: Madebyoliver, www.flaticon.com, <br> Kod źródłowy na www.github.com/mateuszkalinowski/Bricks</center></html>");
+        credits = new JLabel("<html><center>Autorzy: Mateusz Kalinowski, Michał Romaszko <br> Wersja: 0.9.6, Ikona: Madebyoliver, www.flaticon.com, <br> Kod źródłowy na www.github.com/mateuszkalinowski/Bricks</center></html>");
         credits.setHorizontalAlignment(0);
 
 

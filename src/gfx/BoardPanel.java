@@ -481,6 +481,8 @@ public class BoardPanel extends Canvas {
         Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
         Bricks.mainFrame.undoLastMoveButton.setEnabled(false);
         Bricks.mainFrame.movesLeftLabel.setText("Pozostały " + board.getPossibleMovesLeft() + " ruchy");
+        Bricks.mainFrame.repaintThis();
+        Bricks.mainFrame.repaint();
         if(gamemode==2) {
             try {
                 Bricks.firstRobotPlayer.reset();
