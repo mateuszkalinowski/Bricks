@@ -6,6 +6,8 @@ import logic.*;
 
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -126,6 +128,14 @@ public class Bricks {
                     firstPlayerRunCommand,secondPlayerRunCommand);
             mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
             mainFrame.setVisible(true);
+            mainFrame.addWindowListener(new WindowAdapter() {
+                @Override
+                public void windowClosing(WindowEvent e) {
+                    super.windowClosing(e);
+                    firstRobotPlayer.killRobot();
+                    secondRobotPlayer.killRobot();
+                }
+            });
         });
     }
     private static int initialBoardSize;
