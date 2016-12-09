@@ -18,6 +18,19 @@ public class RobotPlayer {
     private PrintWriter writer;
 
     public RobotPlayer(String source, int size) throws IOException, RobotPlayerNotWorkingException {
+        this.source = source;
+        this.size = size;
+        robotProc = Runtime.getRuntime().exec(source);
+        reader = new BufferedReader(new InputStreamReader(robotProc.getInputStream()));
+        writer = new PrintWriter(robotProc.getOutputStream(), true);
+        writer.println("Ping");
+        if (!reader.readLine().equals("Pong")) {
+            throw new RobotPlayerNotWorkingException("Answer to Ping wasn't Pong");
+        }
+        writer.println(size);
+    }
+    public void reset() throws IOException, RobotPlayerNotWorkingException{
+        robotProc.destroy();
         robotProc = Runtime.getRuntime().exec(source);
         reader = new BufferedReader(new InputStreamReader(robotProc.getInputStream()));
         writer = new PrintWriter(robotProc.getOutputStream(), true);
@@ -60,6 +73,8 @@ public class RobotPlayer {
         reader = null;
         writer = null;
     }
+    private String source;
+    private int size;
 
     static boolean hasBegun = false;
 }

@@ -200,7 +200,6 @@ public class MainFrame extends JFrame implements Runnable {
             //TODO CHANGE TO FALSE!
             boolean checkFirstComputerPlayer = false;
             boolean checkSecondComputerPlayer = false;
-
             if(firstPlayerProgramType==0) {
                 try {
                     Bricks.firstRobotPlayer = new RobotPlayer(playerFirstFullPath,BoardSize);
@@ -252,7 +251,6 @@ public class MainFrame extends JFrame implements Runnable {
                 }
                 catch (Exception playerSecondError){
                 }
-
             }
             if(checkFirstComputerPlayer && checkSecondComputerPlayer) {
                 gameBorderLayout = new JPanel(new BorderLayout());
@@ -389,15 +387,15 @@ public class MainFrame extends JFrame implements Runnable {
             }
             else if (checkFirstComputerPlayer && !checkSecondComputerPlayer){
                 JOptionPane.showConfirmDialog(null, "Sprawdź poprawność drugiego programu grającego", "Błąd" +
-                        " gry", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+                        " gry", JOptionPane.PLAIN_MESSAGE, JOptionPane.ERROR_MESSAGE);
             }
             else if (!checkFirstComputerPlayer && checkSecondComputerPlayer) {
                 JOptionPane.showConfirmDialog(null, "Sprawdź poprawność pierwszego programu grającego", "Błąd" +
-                        " gry", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+                        " gry", JOptionPane.PLAIN_MESSAGE, JOptionPane.ERROR_MESSAGE);
             }
             else {
                 JOptionPane.showConfirmDialog(null, "Sprawdź poprawność obu programów grających", "Błąd" +
-                        " gry", JOptionPane.OK_OPTION, JOptionPane.ERROR_MESSAGE);
+                        " gry", JOptionPane.PLAIN_MESSAGE, JOptionPane.ERROR_MESSAGE);
             }
 
         });

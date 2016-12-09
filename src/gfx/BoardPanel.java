@@ -481,6 +481,14 @@ public class BoardPanel extends Canvas {
         Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
         Bricks.mainFrame.undoLastMoveButton.setEnabled(false);
         Bricks.mainFrame.movesLeftLabel.setText("Pozostały " + board.getPossibleMovesLeft() + " ruchy");
+        if(gamemode==2) {
+            try {
+                Bricks.firstRobotPlayer.reset();
+                Bricks.secondRobotPlayer.reset();
+            } catch (Exception ignored) {
+                //TODO EWENTUALNIE, OBSŁUGA BŁĘDU GDYBY PROGRAM GRAJACY PRZESTAL NAGLE DZIALAC
+            }
+        }
         actualPlayer = 1;
     }
 
