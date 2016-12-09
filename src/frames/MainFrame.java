@@ -289,18 +289,18 @@ public class MainFrame extends JFrame implements Runnable {
                             int move[] = new int[4];
                             if(computerPlayer==1) {
                                 if(boardPanel.movesStorage.isEmpty()) {
-                                    move = Bricks.firstRobotPlayer.makeMove();
+                                    move = Bricks.firstRobotPlayer.makeMove("Zaczynaj");
                                 }
                                 else {
-                                    move = Bricks.firstRobotPlayer.makeMove(boardPanel.movesStorage.getLastMove());
+                                    move = Bricks.firstRobotPlayer.makeMove(boardPanel.movesStorage.getLastMoveAsString());
                                 }
                             }
                             if(computerPlayer==2) {
                                 if(boardPanel.movesStorage.isEmpty()) {
-                                    move = Bricks.secondRobotPlayer.makeMove();
+                                    move = Bricks.secondRobotPlayer.makeMove("Zaczynaj");
                                 }
                                 else {
-                                    move = Bricks.secondRobotPlayer.makeMove(boardPanel.movesStorage.getLastMove());
+                                    move = Bricks.secondRobotPlayer.makeMove(boardPanel.movesStorage.getLastMoveAsString());
                                 }
                             }
 

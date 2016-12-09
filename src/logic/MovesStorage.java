@@ -7,8 +7,8 @@ import java.util.ArrayList;
  * Project Bricks
  */
 public class MovesStorage {
-    class Move{
-        public Move(int x1,int y1, int x2, int y2) {
+    class Move {
+        public Move(int x1, int y1, int x2, int y2) {
             this.x1 = x1;
             this.y1 = y1;
             this.x2 = x2;
@@ -21,28 +21,30 @@ public class MovesStorage {
         public int y2;
     }
 
-    public MovesStorage(){
+    public MovesStorage() {
         moves = new ArrayList<>();
     }
-    public void addMove(int x1,int y1,int x2, int y2) {
-        moves.add(new Move(x1,y1,x2,y2));
+
+    public void addMove(int x1, int y1, int x2, int y2) {
+        moves.add(new Move(x1, y1, x2, y2));
     }
+
     public void reset() {
         moves.clear();
     }
-    public int[] returnMoveLikeArray(){
+
+    public int[] returnMoveLikeArray() {
         int[] moveValues = new int[4];
         int movesSize = moves.size();
 
-        if(movesSize>0) {
+        if (movesSize > 0) {
 
             moveValues[0] = moves.get(moves.size() - 1).x1;
             moveValues[1] = moves.get(moves.size() - 1).y1;
             moveValues[2] = moves.get(moves.size() - 1).x2;
             moveValues[3] = moves.get(moves.size() - 1).y2;
             moves.remove(movesSize - 1);
-        }
-        else {
+        } else {
             moveValues[0] = -1;
             moveValues[1] = -1;
             moveValues[2] = -1;
@@ -50,7 +52,8 @@ public class MovesStorage {
         }
         return moveValues;
     }
-    public int[] getLastMove(){
+
+    public int[] getLastMove() {
         int[] moveValues = new int[4];
         moveValues[0] = moves.get(moves.size() - 1).x1;
         moveValues[1] = moves.get(moves.size() - 1).y1;
@@ -58,8 +61,17 @@ public class MovesStorage {
         moveValues[3] = moves.get(moves.size() - 1).y2;
         return moveValues;
     }
+
+    public String getLastMoveAsString() {
+        return moves.get(moves.size() - 1).x1 + " " +
+                moves.get(moves.size() - 1).y1 + " " +
+                moves.get(moves.size() - 1).x2 + " " +
+                moves.get(moves.size() - 1).y2;
+    }
+
     public boolean isEmpty() {
         return moves.size() == 0;
     }
+
     private ArrayList<Move> moves;
 }
