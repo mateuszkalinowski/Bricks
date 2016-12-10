@@ -1,6 +1,8 @@
 package gfx;
 
 import core.Bricks;
+import exceptions.InvalidMoveException;
+import exceptions.RobotPlayerNotWorkingException;
 import logic.BoardLogic;
 import logic.MovesStorage;
 
@@ -48,7 +50,7 @@ public class BoardPanel extends Canvas {
                                     Bricks.mainFrame.repaint();
                                     actualPlayer = 2;
                                     if (!checkNoMoves()) {
-                                        if (gametype == 0) {
+                                        if (gametype == 0 && Bricks.mainFrame.getComputerPlayerType()==0) {
                                             Bricks.mainFrame.comp.performMove(board, movesStorage);
                                             actualPlayer = 1;
                                         }
@@ -75,7 +77,7 @@ public class BoardPanel extends Canvas {
                                     Bricks.mainFrame.repaint();
                                     actualPlayer = 2;
                                     if (!checkNoMoves()) {
-                                        if (gametype == 0) {
+                                        if (gametype == 0 && Bricks.mainFrame.getComputerPlayerType()==0) {
                                             Bricks.mainFrame.comp.performMove(board, movesStorage);
                                             actualPlayer = 1;
                                         }
@@ -102,7 +104,7 @@ public class BoardPanel extends Canvas {
                                     Bricks.mainFrame.repaint();
                                     actualPlayer = 2;
                                     if (!checkNoMoves()) {
-                                        if (gametype == 0) {
+                                        if (gametype == 0 && Bricks.mainFrame.getComputerPlayerType()==0) {
                                             Bricks.mainFrame.comp.performMove(board, movesStorage);
                                             actualPlayer = 1;
                                         }
@@ -129,7 +131,7 @@ public class BoardPanel extends Canvas {
                                     Bricks.mainFrame.repaint();
                                     actualPlayer = 2;
                                     if (!checkNoMoves()) {
-                                        if (gametype == 0) {
+                                        if (gametype == 0 && Bricks.mainFrame.getComputerPlayerType()==0) {
                                             Bricks.mainFrame.comp.performMove(board, movesStorage);
                                             actualPlayer = 1;
                                         }
@@ -158,10 +160,14 @@ public class BoardPanel extends Canvas {
                         if ((e.getX() > margin && e.getX() < getWidth() - margin) && (e.getY() > margin && e.getY() < getHeight() - margin)) {
                             selectedX = (e.getX() - margin) / oneFieldWidth;
                             selectedY = (e.getY() - margin) / oneFieldHeight;
+                            try {
+                                if (board.board[selectedX][selectedY] == 0) {
+                                    isSelected = true;
+                                    directions = board.possibleDirections(selectedX, selectedY);
+                                }
+                            }
+                            catch (Exception ignored) {
 
-                            if (board.board[selectedX][selectedY] == 0) {
-                                isSelected = true;
-                                directions = board.possibleDirections(selectedX, selectedY);
                             }
 
                         }
@@ -183,9 +189,13 @@ public class BoardPanel extends Canvas {
                                         Bricks.mainFrame.repaint();
                                         actualPlayer = 2;
                                         if (!checkNoMoves()) {
-                                            if (gametype == 0) {
+                                            if (gametype == 0 && Bricks.mainFrame.getComputerPlayerType()==0) {
                                                 Bricks.mainFrame.comp.performMove(board, movesStorage);
                                                 actualPlayer = 1;
+                                            }
+                                            if(gametype == 0 && Bricks.mainFrame.getComputerPlayerType()!=0) {
+                                                singlePlayerComputerMakeMove();
+                                                actualPlayer=1;
                                             }
                                         }
                                     } else {
@@ -208,9 +218,13 @@ public class BoardPanel extends Canvas {
                                         Bricks.mainFrame.repaint();
                                         actualPlayer = 2;
                                         if (!checkNoMoves()) {
-                                            if (gametype == 0) {
+                                            if (gametype == 0 && Bricks.mainFrame.getComputerPlayerType()==0) {
                                                 Bricks.mainFrame.comp.performMove(board, movesStorage);
                                                 actualPlayer = 1;
+                                            }
+                                            if(gametype == 0 && Bricks.mainFrame.getComputerPlayerType()!=0) {
+                                                singlePlayerComputerMakeMove();
+                                                actualPlayer=1;
                                             }
                                         }
                                     } else {
@@ -234,9 +248,13 @@ public class BoardPanel extends Canvas {
                                         Bricks.mainFrame.repaint();
                                         actualPlayer = 2;
                                         if (!checkNoMoves()) {
-                                            if (gametype == 0) {
+                                            if (gametype == 0 && Bricks.mainFrame.getComputerPlayerType()==0) {
                                                 Bricks.mainFrame.comp.performMove(board, movesStorage);
                                                 actualPlayer = 1;
+                                            }
+                                            if(gametype == 0 && Bricks.mainFrame.getComputerPlayerType()!=0) {
+                                                singlePlayerComputerMakeMove();
+                                                actualPlayer=1;
                                             }
                                         }
                                     } else {
@@ -260,9 +278,13 @@ public class BoardPanel extends Canvas {
                                         Bricks.mainFrame.repaint();
                                         actualPlayer = 2;
                                         if (!checkNoMoves()) {
-                                            if (gametype == 0) {
+                                            if (gametype == 0 && Bricks.mainFrame.getComputerPlayerType()==0) {
                                                 Bricks.mainFrame.comp.performMove(board, movesStorage);
                                                 actualPlayer = 1;
+                                            }
+                                            if(gametype == 0 && Bricks.mainFrame.getComputerPlayerType()!=0) {
+                                                singlePlayerComputerMakeMove();
+                                                actualPlayer=1;
                                             }
                                         }
                                     } else {
@@ -491,6 +513,14 @@ public class BoardPanel extends Canvas {
                 //TODO EWENTUALNIE, OBSŁUGA BŁĘDU GDYBY PROGRAM GRAJACY PRZESTAL NAGLE DZIALAC
             }
         }
+        if(gamemode==0 && Bricks.mainFrame.getComputerPlayerType()!=0 && Bricks.singlePlayerRobotPlayer!=null) {
+            try {
+                Bricks.singlePlayerRobotPlayer.reset();
+            }
+            catch (Exception ignored){
+                //TODO EWENTUALNIE, OBSŁUGA BŁĘDU GDYBY PROGRAM GRAJACY PRZESTAL NAGLE DZIALAC
+            }
+        }
         actualPlayer = 1;
     }
 
@@ -548,6 +578,56 @@ public class BoardPanel extends Canvas {
         Bricks.mainFrame.movesLeftLabel.setText("Pozostały " + board.getPossibleMovesLeft() + " ruchy");
     }
 
+    public void singlePlayerComputerMakeMove(){
+        int[] move = new int[4];
+        try {
+            move = Bricks.singlePlayerRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
+        } catch (InvalidMoveException exception) {
+            //TODO
+            int selection = JOptionPane.showConfirmDialog(null, "Komputer przekroczył czas na wykonanie ruchu, wygrałałeś, chcesz zagrać jeszcze raz?", "Koniec" +
+                    " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            Bricks.mainFrame.computerPlayer=1;
+            if (selection == JOptionPane.OK_OPTION) {
+                resetBoard();
+            }  else {
+                resetBoard();
+                Bricks.mainFrame.stopGame();
+            }
+        }
+
+        int x1 = move[0];
+        int y1 = move[1];
+        int x2 = move[2];
+        int y2 = move[3];
+
+        if(possibleMove(x1,y1,x2,y2)) {
+            board.board[x1][y1] = 2;
+            board.board[x2][y2] = 2;
+            movesStorage.addMove(x1, y1, x2, y2);
+        }
+    }
+    private boolean possibleMove(int x1,int y1,int x2,int y2) {
+        if(board.board[x1][y1]!=0 || board.board[x2][y2]!=0)
+            return false;
+        boolean flag=false;
+
+        if(y1==y2) {
+            if(x1+1==x2)
+                flag=true;
+            if(x1-1==x2)
+                flag=true;
+        }
+        if(x1==x2) {
+            if(y1+1==y2)
+                flag=true;
+            if(y1-1==y2)
+                flag=true;
+        }
+
+        if(!flag)
+            return false;
+        return true;
+    }
     public int getActualPlayer() {
         return actualPlayer;
     }

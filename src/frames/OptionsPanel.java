@@ -138,7 +138,6 @@ class OptionsPanel extends JPanel {
         JButton saveChanges = new JButton("Zapisz zmiany");
 
         saveChanges.addActionListener(e -> {
-            System.out.println(inputOwnRunTextPlayerFirstTextField.getText());
             Bricks.mainFrame.setSettings(new Settings(BoardSize,playerFirstColor,playerSecondColor,isSound,volume,
                     debugMode,playerFirstFullPath,playerSecondFullPath,firstPlayerProgramType,secondPlayerProgramType,
                     inputOwnRunTextPlayerFirstTextField.getText(),inputOwnRunTextPlayerSecondTextField.getText(),computerPlayerType));
@@ -380,7 +379,7 @@ class OptionsPanel extends JPanel {
         singlePlayerComputerSelectionComboBox.addItem("Komputer Drugi");
         advancedGridLayout.add(singlePlayerComputerSelectionLabel);
         advancedGridLayout.add(singlePlayerComputerSelectionComboBox);
-        singlePlayerComputerSelectionComboBox.setSelectedIndex(computerPlayerType);
+        singlePlayerComputerSelectionComboBox.setSelectedIndex(firstSettings.getComputerPlayerType());
 
         singlePlayerComputerSelectionComboBox.addActionListener(new ActionListener() {
             @Override

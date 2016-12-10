@@ -144,6 +144,8 @@ public class Bricks {
                        firstRobotPlayer.killRobot();
                     if(secondRobotPlayer!=null)
                         secondRobotPlayer.killRobot();
+                    if(singlePlayerRobotPlayer!=null)
+                        singlePlayerRobotPlayer.killRobot();
                 }
             });
         });
@@ -191,5 +193,6 @@ public class Bricks {
 
     public static RobotPlayer firstRobotPlayer;
     public static RobotPlayer secondRobotPlayer;
+    public static RobotPlayer singlePlayerRobotPlayer;
 
 }
