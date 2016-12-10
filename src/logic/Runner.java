@@ -23,7 +23,7 @@ public class Runner extends Thread {
                         }
                         catch (InvalidMoveException exception) {
                             Bricks.mainFrame.boardPanel.walkover(computerPlayer,"Timeout");
-                            gameFinished=true;
+                            break;
                         }
                     }
                     else {
@@ -32,7 +32,7 @@ public class Runner extends Thread {
                         }
                         catch (InvalidMoveException exception) {
                             Bricks.mainFrame.boardPanel.walkover(computerPlayer,"Timeout");
-                            gameFinished=true;
+                            break;
                         }
                     }
                 }
@@ -42,7 +42,7 @@ public class Runner extends Thread {
                             move = Bricks.secondRobotPlayer.makeMove("Zaczynaj");
                         } catch (InvalidMoveException exception) {
                             Bricks.mainFrame.boardPanel.walkover(computerPlayer,"Timeout");
-                            gameFinished=true;
+                            break;
                         }
                     }
                     else {
@@ -50,7 +50,7 @@ public class Runner extends Thread {
                             move = Bricks.secondRobotPlayer.makeMove(Bricks.mainFrame.boardPanel.movesStorage.getLastMoveAsString());
                         } catch (InvalidMoveException exception) {
                             Bricks.mainFrame.boardPanel.walkover(computerPlayer,"Timeout");
-                            gameFinished=true;
+                            break;
                         }
                     }
                 }
@@ -61,7 +61,7 @@ public class Runner extends Thread {
                 int y2 = move[3];
 
 
-                if(Bricks.mainFrame.boardPanel.possibleMove(x1,y1,x2,y2) && !gameFinished)
+                if(Bricks.mainFrame.boardPanel.possibleMove(x1,y1,x2,y2))
                 {
                     Bricks.mainFrame.board.board[x1][y1] = computerPlayer;
                     Bricks.mainFrame. board.board[x2][y2] = computerPlayer;
@@ -80,7 +80,7 @@ public class Runner extends Thread {
                     Bricks.mainFrame.computerPlayer = computerPlayer;
                     Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                 }
-                else if (!gameFinished) {
+                else {
                     Bricks.mainFrame.boardPanel.walkover(computerPlayer,"InvalidMove");
                 }
                 Bricks.mainFrame.repaintThis();
