@@ -8,6 +8,7 @@ import gfx.ColorPreview;
 import logic.BoardLogic;
 import logic.ComputerPlayer;
 import logic.RobotPlayer;
+import logic.Runner;
 
 import javax.swing.*;
 import javax.swing.border.EmptyBorder;
@@ -105,6 +106,7 @@ public class MainFrame extends JFrame implements Runnable {
             Action backToMenuAction = new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    stopRunner();
                     int selection = JOptionPane.showConfirmDialog(null, "Chcesz opuścić grę i wrócić do menu?", "Koniec" +
                             " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
@@ -212,6 +214,7 @@ public class MainFrame extends JFrame implements Runnable {
             Action backToMenuAction = new AbstractAction() {
                 @Override
                 public void actionPerformed(ActionEvent e) {
+                    stopRunner();
                     int selection = JOptionPane.showConfirmDialog(null, "Chcesz opuścić grę i wrócić do menu?", "Koniec" +
                             " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
 
@@ -337,7 +340,7 @@ public class MainFrame extends JFrame implements Runnable {
                 computerPlayer = 1;
                 JPanel southBorderLayout = new JPanel(new BorderLayout());
                 computerPlayerLabel = new JLabel("Gracz Numer " + computerPlayer);
-                JButton nextMoveButton = new JButton("Następny Ruch");
+                nextMoveButton = new JButton("Następny Ruch");
                 nextMoveButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -424,7 +427,70 @@ public class MainFrame extends JFrame implements Runnable {
                     }
                 });
                 southBorderLayout.add(undoLastMoveButton, BorderLayout.EAST);
-                southBorderLayout.add(nextMoveButton, BorderLayout.CENTER);
+
+                JPanel robotWarsControlGridPanel = new JPanel(new GridLayout(1,3));
+
+                JPanel speedControlGridLayout = new JPanel(new GridLayout(1,3));
+                JTextField speedTextField = new JTextField("1");
+                speedTextField.setEditable(false);
+                speedTextField.setHorizontalAlignment(SwingConstants.CENTER);
+
+                JButton speedUpButton = new JButton("+");
+                speedUpButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int i = Integer.parseInt(speedTextField.getText());
+                        if(i<=9)
+                            i++;
+                        speedTextField.setText(i+"");
+                    }
+                });
+                JButton speedDownButton = new JButton("-");
+                speedDownButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        int i = Integer.parseInt(speedTextField.getText());
+                        if(i>1)
+                            i--;
+                        speedTextField.setText(i+"");
+                    }
+                });
+
+                speedControlGridLayout.add(speedDownButton);
+                speedControlGridLayout.add(speedTextField);
+                speedControlGridLayout.add(speedUpButton);
+
+                robotWarsControlGridPanel.add(speedControlGridLayout);
+
+                robotWarsControlGridPanel.add(nextMoveButton);
+
+
+
+                runAutoMovesButton = new JButton("Automatyczna Gra");
+                runAutoMovesButton.addActionListener(new ActionListener() {
+                    @Override
+                    public void actionPerformed(ActionEvent e) {
+                        if(runAutoMovesButton.getText().equals("Automatyczna Gra")) {
+                            try {
+                                runner = new Runner(Integer.parseInt(speedTextField.getText()));
+                            }
+                            catch (Exception ignored) {
+                            }
+                            runner.start();
+                            runAutoMovesButton.setText("Przerwij");
+                            nextMoveButton.setEnabled(false);
+                        }
+                        else {
+                            runner.interrupt();
+                            runAutoMovesButton.setText("Automatyczna Gra");
+                            nextMoveButton.setEnabled(true);
+                        }
+                    }
+                });
+                robotWarsControlGridPanel.add(runAutoMovesButton);
+
+                southBorderLayout.add(robotWarsControlGridPanel, BorderLayout.CENTER);
+
 
                 Bricks.mainFrame.restTiles.setText("Gracz: ");
                 JPanel southLeftGridLayout = new JPanel(new GridLayout(1, 2));
@@ -486,7 +552,7 @@ public class MainFrame extends JFrame implements Runnable {
         exitButton.setFocusPainted(false);
         exitButton.addActionListener(e -> System.exit(0));
 
-        credits = new JLabel("<html><center>Autorzy: Mateusz Kalinowski, Michał Romaszko <br> Wersja: 0.9.6, Ikona: Madebyoliver, www.flaticon.com, <br> Kod źródłowy na www.github.com/mateuszkalinowski/Bricks</center></html>");
+        credits = new JLabel("<html><center>Autorzy: Mateusz Kalinowski, Michał Romaszko <br> Wersja: 0.9.6, Ikona: Madebyoliver, www.flaticon.com</center></html>");
         credits.setHorizontalAlignment(0);
 
 
@@ -674,8 +740,8 @@ public class MainFrame extends JFrame implements Runnable {
 
     //private void tick(int ticks) {}
     private Thread game;
-    private BoardLogic board;
-    private BoardPanel boardPanel;
+    public BoardLogic board;
+    public BoardPanel boardPanel;
     private JPanel gameBorderLayout;
     private boolean debugMode;
     public boolean running = false;
@@ -725,6 +791,18 @@ public class MainFrame extends JFrame implements Runnable {
     public String playerSecondProgramName = "";
 
     private int computerPlayerType;
+
+    JButton nextMoveButton;
+
+    public Runner runner;
+
+    public JButton runAutoMovesButton;
+
+    public void stopRunner(){
+        runner.interrupt();
+        runAutoMovesButton.setText("Automatyczna Gra");
+        nextMoveButton.setEnabled(true);
+    }
 
     public int getComputerPlayerType(){
         return computerPlayerType;
