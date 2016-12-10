@@ -191,6 +191,8 @@ public class Bricks {
 
     }
 
+    public static boolean autoPlayRunning=false;
+
     public static RobotPlayer firstRobotPlayer;
     public static RobotPlayer secondRobotPlayer;
     public static RobotPlayer singlePlayerRobotPlayer;

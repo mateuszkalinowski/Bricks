@@ -12,8 +12,7 @@ import exceptions.InvalidMoveException;
 public class Runner extends Thread {
     @Override
     public void run(){
-        while(!this.isInterrupted()) {
-            try {
+        while(Bricks.autoPlayRunning) {
                 computerPlayer = Bricks.mainFrame.computerPlayer;
                 boolean gameFinished = false;
                 Bricks.mainFrame.computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
@@ -89,12 +88,11 @@ public class Runner extends Thread {
                 Bricks.mainFrame.repaintThis();
                 Bricks.mainFrame.repaint();
                 Bricks.mainFrame.boardPanel.checkNoMoves();
-
-                sleep(1000/speed);
-            }
-            catch (InterruptedException e) {
-                Thread.currentThread().interrupt();
-            }
+                try {
+                    Thread.sleep(1000 / speed);
+                }   catch (InterruptedException e) {
+                    break;
+                }
         }
     }
     public Runner(int speed){

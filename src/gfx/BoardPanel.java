@@ -424,8 +424,9 @@ public class BoardPanel extends Canvas {
                 return true;
             }
             else  {
+                Bricks.mainFrame.stopRunner();
                 if (gamemode ==  2) {
-                    Bricks.mainFrame.stopRunner();
+                    Bricks.mainFrame.runner.interrupt();
                     if( Bricks.mainFrame.computerPlayer==1) {
                         selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał program drugi, chcesz zagrać jeszcze raz?", "Koniec" +
                                 " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);

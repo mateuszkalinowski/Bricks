@@ -260,7 +260,6 @@ public class MainFrame extends JFrame implements Runnable {
             gameBorderLayout.requestFocus();
         });
         runComputerPlayers.addActionListener(e -> {
-            //TODO CHANGE TO FALSE!
             boolean checkFirstComputerPlayer = false;
             boolean checkSecondComputerPlayer = false;
             if(firstPlayerProgramType==0) {
@@ -435,7 +434,7 @@ public class MainFrame extends JFrame implements Runnable {
                 speedTextField.setEditable(false);
                 speedTextField.setHorizontalAlignment(SwingConstants.CENTER);
 
-                JButton speedUpButton = new JButton("+");
+                speedUpButton = new JButton("+");
                 speedUpButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -445,7 +444,7 @@ public class MainFrame extends JFrame implements Runnable {
                         speedTextField.setText(i+"");
                     }
                 });
-                JButton speedDownButton = new JButton("-");
+                speedDownButton = new JButton("-");
                 speedDownButton.addActionListener(new ActionListener() {
                     @Override
                     public void actionPerformed(ActionEvent e) {
@@ -476,14 +475,13 @@ public class MainFrame extends JFrame implements Runnable {
                             }
                             catch (Exception ignored) {
                             }
+                            Bricks.autoPlayRunning=true;
                             runner.start();
-                            runAutoMovesButton.setText("Przerwij");
-                            nextMoveButton.setEnabled(false);
+                            controlAutoPlayButtons(false);
                         }
                         else {
-                            runner.interrupt();
-                            runAutoMovesButton.setText("Automatyczna Gra");
-                            nextMoveButton.setEnabled(true);
+                            Bricks.autoPlayRunning=false;
+                            controlAutoPlayButtons(true);
                         }
                     }
                 });
@@ -587,6 +585,7 @@ public class MainFrame extends JFrame implements Runnable {
     public void stopGame() {
         game.interrupt();
         running = false;
+        stopRunner();
         if(Bricks.firstRobotPlayer!=null)
             Bricks.firstRobotPlayer.killRobot();
         if(Bricks.secondRobotPlayer!=null)
@@ -729,9 +728,7 @@ public class MainFrame extends JFrame implements Runnable {
                 flag=true;
         }
 
-        if(flag==false)
-            return false;
-        return true;
+        return flag;
     }
 
     public boolean getDebugMode(){
@@ -799,13 +796,28 @@ public class MainFrame extends JFrame implements Runnable {
     public JButton runAutoMovesButton;
 
     public void stopRunner(){
-        System.out.println("Stop Runner Funkcja");
-        runner.interrupt();
-        runAutoMovesButton.setText("Automatyczna Gra");
-        nextMoveButton.setEnabled(true);
+        Bricks.autoPlayRunning=false;
+        controlAutoPlayButtons(true);
     }
 
     public int getComputerPlayerType(){
         return computerPlayerType;
     }
+    public void controlAutoPlayButtons(boolean turnOn) {
+        if(turnOn) {
+            speedUpButton.setEnabled(true);
+            speedDownButton.setEnabled(true);
+            runAutoMovesButton.setText("Automatyczna Gra");
+            nextMoveButton.setEnabled(true);
+        }
+        else {
+            speedUpButton.setEnabled(false);
+            speedDownButton.setEnabled(false);
+            runAutoMovesButton.setText("Przerwij");
+            nextMoveButton.setEnabled(false);
+        }
+    }
+
+    private JButton speedUpButton;
+    private JButton speedDownButton;
 }
