@@ -5,11 +5,7 @@ import core.Settings;
 import gfx.ColorPreview;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
 /**
  * Created by Mateusz on 21.05.2016.
@@ -22,8 +18,6 @@ class OptionsPanel extends JPanel {
         JLabel boardSize = new JLabel("Rozmiar planszy: ", SwingConstants.CENTER);
         JLabel firstPlayerColorLabel = new JLabel("Kolor pierwszego gracza: ", SwingConstants.CENTER);
         JLabel secondPlayerColorLabel = new JLabel("Kolor drugiego gracza: ", SwingConstants.CENTER);
-
-        //setMaximumSize(new Dimension(Bricks.mainFrame.getWidth(),Bricks.mainFrame.getHeight()));
 
         playerFirstFullPath = firstSettings.getFirstComputerPlayerPath();
         playerSecondFullPath = firstSettings.getSecondComputerPlayerPath();
@@ -40,27 +34,21 @@ class OptionsPanel extends JPanel {
         JLabel setSecondPathLabel = new JLabel();
 
         JButton chooseFirstPlayerColorButton = new JButton("Wybierz");
-        chooseFirstPlayerColorButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Color newColor = JColorChooser.showDialog(null,"Wybierz kolor pierwszego gracza",playerFirstColor);
-                if(newColor!=null) {
-                    playerFirstColor = newColor;
-                    firstPlayerColor.setColor(playerFirstColor);
-                    repaint();
-                }
+        chooseFirstPlayerColorButton.addActionListener(e -> {
+            Color newColor = JColorChooser.showDialog(null,"Wybierz kolor pierwszego gracza",playerFirstColor);
+            if(newColor!=null) {
+                playerFirstColor = newColor;
+                firstPlayerColor.setColor(playerFirstColor);
+                repaint();
             }
         });
         JButton chooseSecondPlayerColorButton = new JButton("Wybierz");
-        chooseSecondPlayerColorButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                Color newColor = JColorChooser.showDialog(null,"Wybierz kolor drugiego gracza",playerSecondColor);
-                if(newColor!=null) {
-                    playerSecondColor = newColor;
-                    secondPlayerColor.setColor(playerSecondColor);
-                    repaint();
-                }
+        chooseSecondPlayerColorButton.addActionListener(e -> {
+            Color newColor = JColorChooser.showDialog(null,"Wybierz kolor drugiego gracza",playerSecondColor);
+            if(newColor!=null) {
+                playerSecondColor = newColor;
+                secondPlayerColor.setColor(playerSecondColor);
+                repaint();
             }
         });
 
@@ -132,7 +120,6 @@ class OptionsPanel extends JPanel {
         });
 
         JPanel mainBorderLayout = new JPanel(new BorderLayout());
-        //mainBorderLayout.add(optionsGridLayout, BorderLayout.CENTER);
         mainBorderLayout.add(title, BorderLayout.NORTH);
 
         JButton saveChanges = new JButton("Zapisz zmiany");
@@ -149,9 +136,6 @@ class OptionsPanel extends JPanel {
         southGridLayout.add(saveChanges);
         mainBorderLayout.add(southGridLayout,BorderLayout.SOUTH);
 
-
-        JPanel soundOptionsGridLayout = new JPanel(new GridLayout(2,2));
-
         JLabel soundIsLabel = new JLabel("Dźwięki:");
         soundIsLabel.setHorizontalAlignment(JLabel.CENTER);
         soundIsCheckBox = new JCheckBox();
@@ -160,33 +144,15 @@ class OptionsPanel extends JPanel {
         soundVolumeSlider = new JSlider(JSlider.HORIZONTAL,-80,6,0);
 
 
-        soundIsCheckBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(soundIsCheckBox.isSelected())
-                    isSound = true;
-                else
-                    isSound = false;
-            }
-        });
+        soundIsCheckBox.addActionListener(e -> isSound = soundIsCheckBox.isSelected());
 
-        soundVolumeSlider.addChangeListener(new ChangeListener() {
-            @Override
-            public void stateChanged(ChangeEvent e) {
-                volume = soundVolumeSlider.getValue();
-            }
-        });
+        soundVolumeSlider.addChangeListener(e -> volume = soundVolumeSlider.getValue());
 
         debugModeCheckBox = new JCheckBox();
         JLabel debugModeLabel = new JLabel("Tryb Debugowania: ");
         debugModeLabel.setHorizontalAlignment(JLabel.CENTER);
 
-        debugModeCheckBox.addActionListener(e -> {
-            if(debugModeCheckBox.isSelected())
-                debugMode = true;
-            else
-                debugMode = false;
-        });
+        debugModeCheckBox.addActionListener(e -> debugMode = debugModeCheckBox.isSelected());
 
         JButton setFirstPath = new JButton("Ustal Komputer Pierwszy");
         JButton setSecondPath = new JButton("Ustal Komputer Drugi");
@@ -204,7 +170,7 @@ class OptionsPanel extends JPanel {
             setSecondPathLabel.setText("..." + playerSecondFullPath.substring(playerSecondFullPath.length()-30,playerSecondFullPath.length()));
         }
 
-        mainGridLayout = new JPanel(new GridLayout(15,2));
+        JPanel mainGridLayout = new JPanel(new GridLayout(15, 2));
         JLabel generalSectionLabel = new JLabel("Ogólne:");
         generalSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD,20));
         mainGridLayout.add(new JLabel());
@@ -244,37 +210,29 @@ class OptionsPanel extends JPanel {
         mainGridLayout.add(debugModeLabel);
         mainGridLayout.add(debugModeCheckBox);
 
-        setFirstPath.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser chooseFile = new JFileChooser();
-                int save = chooseFile.showOpenDialog(null);
-                if (save == JFileChooser.APPROVE_OPTION) {
-                    String filename = chooseFile.getSelectedFile().getPath();
-                    playerFirstFullPath = filename;
-                    if(playerFirstFullPath.length()<=30) {
-                        setFirstPathLabel.setText(playerFirstFullPath);
-                    }
-                    else {
-                        setFirstPathLabel.setText("..."+playerFirstFullPath.substring(playerFirstFullPath.length()-30,playerFirstFullPath.length()));
-                    }
+        setFirstPath.addActionListener(e -> {
+            JFileChooser chooseFile = new JFileChooser();
+            int save = chooseFile.showOpenDialog(null);
+            if (save == JFileChooser.APPROVE_OPTION) {
+                playerFirstFullPath = chooseFile.getSelectedFile().getPath();
+                if(playerFirstFullPath.length()<=30) {
+                    setFirstPathLabel.setText(playerFirstFullPath);
+                }
+                else {
+                    setFirstPathLabel.setText("..."+playerFirstFullPath.substring(playerFirstFullPath.length()-30,playerFirstFullPath.length()));
                 }
             }
         });
-        setSecondPath.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                JFileChooser chooseFile = new JFileChooser();
-                int save = chooseFile.showOpenDialog(null);
-                if (save == JFileChooser.APPROVE_OPTION) {
-                    String filename = chooseFile.getSelectedFile().getPath();
-                    playerSecondFullPath = filename;
-                    if(playerSecondFullPath.length()<=30) {
-                        setSecondPathLabel.setText(playerSecondFullPath);
-                    }
-                    else {
-                        setSecondPathLabel.setText("..." + playerSecondFullPath.substring(playerSecondFullPath.length()-30,playerSecondFullPath.length()));
-                    }
+        setSecondPath.addActionListener(e -> {
+            JFileChooser chooseFile = new JFileChooser();
+            int save = chooseFile.showOpenDialog(null);
+            if (save == JFileChooser.APPROVE_OPTION) {
+                playerSecondFullPath = chooseFile.getSelectedFile().getPath();
+                if(playerSecondFullPath.length()<=30) {
+                    setSecondPathLabel.setText(playerSecondFullPath);
+                }
+                else {
+                    setSecondPathLabel.setText("..." + playerSecondFullPath.substring(playerSecondFullPath.length()-30,playerSecondFullPath.length()));
                 }
             }
         });
@@ -287,10 +245,10 @@ class OptionsPanel extends JPanel {
         secondPlayerOptionsGridLayout.add(secondPlayerColor);
 
         JTabbedPane mainTabPane = new JTabbedPane();
-        mainTabPane.add("Podstawowe",mainGridLayout);
+        mainTabPane.add("Podstawowe", mainGridLayout);
         mainBorderLayout.add(mainTabPane,BorderLayout.CENTER);
 
-        advancedGridLayout = new JPanel(new GridLayout(12,2));
+        JPanel advancedGridLayout = new JPanel(new GridLayout(12, 2));
         JLabel robotsWarsSectionLabel = new JLabel("Ogólne:");
         robotsWarsSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD,20));
         advancedGridLayout.add(robotsWarsSectionLabel);
@@ -319,18 +277,15 @@ class OptionsPanel extends JPanel {
         JScrollPane inputOwnTextSecondScrollPane = new JScrollPane(inputOwnRunTextPlayerSecondTextField);
         inputOwnRunTextPlayerSecondTextField.setToolTipText("Aktywne tylko, jeśli 'Uruchom Jako' jest wybrane na 'Własne'");
 
-        firstPlayerProgramTypeCombo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                firstPlayerProgramType = firstPlayerProgramTypeCombo.getSelectedIndex();
-                if(firstPlayerProgramTypeCombo.getSelectedIndex()==2) {
-                    inputOwnRunTextPlayerFirstTextField.setEnabled(true);
-                    setFirstPath.setEnabled(false);
-                }
-                else {
-                    inputOwnRunTextPlayerFirstTextField.setEnabled(false);
-                    setFirstPath.setEnabled(true);
-                }
+        firstPlayerProgramTypeCombo.addActionListener(e -> {
+            firstPlayerProgramType = firstPlayerProgramTypeCombo.getSelectedIndex();
+            if(firstPlayerProgramTypeCombo.getSelectedIndex()==2) {
+                inputOwnRunTextPlayerFirstTextField.setEnabled(true);
+                setFirstPath.setEnabled(false);
+            }
+            else {
+                inputOwnRunTextPlayerFirstTextField.setEnabled(false);
+                setFirstPath.setEnabled(true);
             }
         });
 
@@ -352,18 +307,15 @@ class OptionsPanel extends JPanel {
         secondPlayerProgramTypeCombo.addItem("Własne");
         secondPlayerProgramTypeCombo.setSelectedIndex(secondPlayerProgramType);
 
-        secondPlayerProgramTypeCombo.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                secondPlayerProgramType = secondPlayerProgramTypeCombo.getSelectedIndex();
-                if(secondPlayerProgramTypeCombo.getSelectedIndex()==2) {
-                    inputOwnRunTextPlayerSecondTextField.setEnabled(true);
-                    setSecondPath.setEnabled(false);
-                }
-                else {
-                    inputOwnRunTextPlayerSecondTextField.setEnabled(false);
-                    setSecondPath.setEnabled(true);
-                }
+        secondPlayerProgramTypeCombo.addActionListener(e -> {
+            secondPlayerProgramType = secondPlayerProgramTypeCombo.getSelectedIndex();
+            if(secondPlayerProgramTypeCombo.getSelectedIndex()==2) {
+                inputOwnRunTextPlayerSecondTextField.setEnabled(true);
+                setSecondPath.setEnabled(false);
+            }
+            else {
+                inputOwnRunTextPlayerSecondTextField.setEnabled(false);
+                setSecondPath.setEnabled(true);
             }
         });
         advancedGridLayout.add(secondPlayerProgramTypeCombo);
@@ -381,18 +333,12 @@ class OptionsPanel extends JPanel {
         advancedGridLayout.add(singlePlayerComputerSelectionComboBox);
         singlePlayerComputerSelectionComboBox.setSelectedIndex(firstSettings.getComputerPlayerType());
 
-        singlePlayerComputerSelectionComboBox.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                computerPlayerType = singlePlayerComputerSelectionComboBox.getSelectedIndex();
-            }
-        });
+        singlePlayerComputerSelectionComboBox.addActionListener(e -> computerPlayerType = singlePlayerComputerSelectionComboBox.getSelectedIndex());
 
-        mainTabPane.add("Zaawansowane",advancedGridLayout);
+        mainTabPane.add("Zaawansowane", advancedGridLayout);
 
         add(mainBorderLayout);
 
-        wasSaveClicked = false;
         firstPlayerColor.setColor(firstSettings.getPlayerFirstColor());
         secondPlayerColor.setColor(firstSettings.getPlayerSecondColor());
         playerFirstColor = firstSettings.getPlayerFirstColor();
@@ -442,49 +388,33 @@ class OptionsPanel extends JPanel {
     }
     private JComboBox<String>  secondPlayerProgramTypeCombo;
     private JComboBox<String> firstPlayerProgramTypeCombo;
+    private JComboBox<String> boardSizeComboBox;
 
-    private JPanel mainGridLayout;
-    private JPanel advancedGridLayout;
     private JSlider soundVolumeSlider;
-    private JCheckBox soundIsCheckBox;
-    private int BoardSize = 5;
 
+    private JCheckBox soundIsCheckBox;
+    private JCheckBox debugModeCheckBox;
+
+    private int BoardSize = 5;
     private int firstPlayerProgramType;
     private int secondPlayerProgramType;
+    private int computerPlayerType;
+    private int volume = 0;
 
     private String firstPlayerRunCommand;
     private String secondPlayerRunCommand;
-
-    public JLabel playerFirstPathLabel;
-    public JLabel playerSecondPathLabel;
-
-
-    public JTextArea inputOwnRunTextPlayerFirstTextField;
-
-    public JTextArea inputOwnRunTextPlayerSecondTextField;
-
     private String playerFirstFullPath;
     private String playerSecondFullPath;
 
-    private JCheckBox debugModeCheckBox;
+    private JTextArea inputOwnRunTextPlayerFirstTextField;
+    private JTextArea inputOwnRunTextPlayerSecondTextField;
 
     private Color playerFirstColor;
-
     private Color playerSecondColor;
 
-    private int computerPlayerType;
-
     private boolean isSound = true;
-
-    private int volume = 0;
-
     private boolean debugMode;
 
-    private JComboBox<String> boardSizeComboBox;
-    private boolean isPlayPressed = false;
-
-
-    boolean wasSaveClicked = false;
     private ColorPreview firstPlayerColor;
     private ColorPreview secondPlayerColor;
 }

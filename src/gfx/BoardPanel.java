@@ -2,7 +2,6 @@ package gfx;
 
 import core.Bricks;
 import exceptions.InvalidMoveException;
-import exceptions.RobotPlayerNotWorkingException;
 import logic.BoardLogic;
 import logic.MovesStorage;
 
@@ -17,7 +16,6 @@ import java.awt.event.KeyEvent;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.image.BufferStrategy;
-import java.io.File;
 import java.net.URL;
 
 /**
@@ -390,8 +388,6 @@ public class BoardPanel extends Canvas {
     }
 
     public boolean checkNoMoves() {
-
-        Bricks.mainFrame.movesLeftLabel.setText("Pozostały " + board.getPossibleMovesLeft() + " ruchy");
         if (!board.anyMoves()) {
             int selection = 0;
             if (Bricks.mainFrame.getDebugMode() && gamemode !=2) {
@@ -497,15 +493,13 @@ public class BoardPanel extends Canvas {
             Bricks.mainFrame.stopGame();
         }
     }
-
-    public void resetBoard() {
+    private void resetBoard() {
         board.reset();
         isSelected = false;
         movesStorage.reset();
         Bricks.mainFrame.restTiles.setText("Gracz: ");
         Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
         Bricks.mainFrame.undoLastMoveButton.setEnabled(false);
-        Bricks.mainFrame.movesLeftLabel.setText("Pozostały " + board.getPossibleMovesLeft() + " ruchy");
         Bricks.mainFrame.repaintThis();
         Bricks.mainFrame.repaint();
         if(gamemode==2) {
@@ -578,10 +572,9 @@ public class BoardPanel extends Canvas {
         }
         if (movesStorage.isEmpty())
             Bricks.mainFrame.undoLastMoveButton.setEnabled(false);
-        Bricks.mainFrame.movesLeftLabel.setText("Pozostały " + board.getPossibleMovesLeft() + " ruchy");
     }
 
-    public void singlePlayerComputerMakeMove(){
+    private void singlePlayerComputerMakeMove(){
         int[] move = new int[4];
         try {
             move = Bricks.singlePlayerRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
@@ -627,12 +620,7 @@ public class BoardPanel extends Canvas {
                 flag=true;
         }
 
-        if(!flag)
-            return false;
-        return true;
-    }
-    public int getActualPlayer() {
-        return actualPlayer;
+        return flag;
     }
 
     private BoardLogic board;

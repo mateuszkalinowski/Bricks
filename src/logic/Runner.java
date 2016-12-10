@@ -7,18 +7,16 @@ import exceptions.InvalidMoveException;
  * Created by Mateusz on 10.12.2016.
  * Project Bricks
  */
-//TODO PRZEBUDOWA, KLASA NIE POWINNA TAK SOBIE EDYTOWAC POL INNYCH KLAS, A PRZYNAJMNIEJ NIE TAK PRZEZ BEZPOSREDNIE ODWOLANIE
-    // TO MOZNA ZROBIC LADNIEJ
 public class Runner extends Thread {
     @Override
     public void run(){
         while(Bricks.autoPlayRunning) {
-                computerPlayer = Bricks.mainFrame.computerPlayer;
+            int computerPlayer = Bricks.mainFrame.computerPlayer;
                 boolean gameFinished = false;
                 Bricks.mainFrame.computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
                 Bricks.mainFrame.board.saveToFile();
                 int move[] = new int[4];
-                if(computerPlayer==1) {
+                if(computerPlayer ==1) {
                     if(Bricks.mainFrame.boardPanel.movesStorage.isEmpty()) {
                         try {
                             move = Bricks.firstRobotPlayer.makeMove("Zaczynaj");
@@ -38,7 +36,7 @@ public class Runner extends Thread {
                         }
                     }
                 }
-                if(computerPlayer==2) {
+                if(computerPlayer ==2) {
                     if(Bricks.mainFrame.boardPanel.movesStorage.isEmpty()) {
                         try {
                             move = Bricks.secondRobotPlayer.makeMove("Zaczynaj");
@@ -99,5 +97,4 @@ public class Runner extends Thread {
         this.speed = speed;
     }
     private int speed;
-    private int computerPlayer;
 }

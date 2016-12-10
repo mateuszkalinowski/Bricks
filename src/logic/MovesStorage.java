@@ -7,18 +7,18 @@ import java.util.ArrayList;
  * Project Bricks
  */
 public class MovesStorage {
-    class Move {
-        public Move(int x1, int y1, int x2, int y2) {
+    private class Move {
+        Move(int x1, int y1, int x2, int y2) {
             this.x1 = x1;
             this.y1 = y1;
             this.x2 = x2;
             this.y2 = y2;
         }
 
-        public int x1;
-        public int y1;
-        public int x2;
-        public int y2;
+        int x1;
+        int y1;
+        int x2;
+        int y2;
     }
 
     public MovesStorage() {
@@ -52,7 +52,7 @@ public class MovesStorage {
         }
         return moveValues;
     }
-
+/*
     public int[] getLastMove() {
         int[] moveValues = new int[4];
         moveValues[0] = moves.get(moves.size() - 1).x1;
@@ -61,7 +61,7 @@ public class MovesStorage {
         moveValues[3] = moves.get(moves.size() - 1).y2;
         return moveValues;
     }
-
+*/
     public String getLastMoveAsString() {
         return moves.get(moves.size() - 1).x1 + " " +
                 moves.get(moves.size() - 1).y1 + " " +

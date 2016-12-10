@@ -22,10 +22,14 @@ public class Settings {
         secondPlayerRunCommand = runCommandSecond;
         this.computerPlayerType = computerPlayerType;
     }
-    public String getFirstComputerPlayerPath(){return firstComputerPlayerPath;}
-    public String getSecondComputerPlayerPath(){return secondComputerPlayerPath;}
+    public String getFirstComputerPlayerPath() {
+        return firstComputerPlayerPath;
+    }
+    public String getSecondComputerPlayerPath() {
+        return secondComputerPlayerPath;
+    }
     public int getBoardSize(){
-        return  BoardSize;
+        return BoardSize;
     }
     public Color getPlayerFirstColor(){
         return playerFirstColor;
@@ -33,41 +37,45 @@ public class Settings {
     public Color getPlayerSecondColor(){
         return playerSecondColor;
     }
-    public boolean getIsSound() {return isSound;}
-    public int getVolume() {return volume;}
-    public boolean getDebugMode() {return debugMode;}
-    private int BoardSize;
-    private Color playerFirstColor;
-    private Color playerSecondColor;
-    private boolean isSound;
-    private int volume;
-    private boolean debugMode;
-    private String firstComputerPlayerPath;
-    private String secondComputerPlayerPath;
-
-    private int firstPlayerProgramType;
-    private int secondPlayerProgramType;
-
-    private String firstPlayerRunCommand;
-    private String secondPlayerRunCommand;
-
-    private int computerPlayerType;
-
-    public int getComputerPlayerType(){return computerPlayerType;}
-
+    public boolean getIsSound() {
+        return isSound;
+    }
+    public int getVolume() {
+        return volume;
+    }
+    public boolean getDebugMode() {
+        return debugMode;
+    }
     public String getSecondPlayerRunCommand() {
         return secondPlayerRunCommand;
     }
-
     public String getFirstPlayerRunCommand() {
         return firstPlayerRunCommand;
     }
-
     public int getSecondPlayerProgramType() {
         return secondPlayerProgramType;
     }
-
     public int getFirstPlayerProgramType() {
         return firstPlayerProgramType;
     }
+    public int getComputerPlayerType(){
+        return computerPlayerType;
+    }
+
+    private boolean isSound;
+    private boolean debugMode;
+
+    private int BoardSize;
+    private int volume;
+    private int firstPlayerProgramType;
+    private int secondPlayerProgramType;
+    private int computerPlayerType;
+
+    private Color playerFirstColor;
+    private Color playerSecondColor;
+
+    private String firstComputerPlayerPath;
+    private String secondComputerPlayerPath;
+    private String firstPlayerRunCommand;
+    private String secondPlayerRunCommand;
 }

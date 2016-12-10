@@ -16,7 +16,6 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.URL;
-import java.util.*;
 
 /**
  * Created by Mateusz on 20.05.2016.
@@ -50,8 +49,7 @@ public class MainFrame extends JFrame implements Runnable {
         this.secondPlayerRunCommand = secondPlayerRunCommandArgument;
 
             if (playerFirstFullPath.length() > 7) {
-                int index = playerFirstFullPath.length() - 1;
-                int i = index;
+                int i = playerFirstFullPath.length() - 1;
                 for (; i > 0; i--) {
                     if (playerFirstFullPath.charAt(i) == '/')
                         break;
@@ -62,8 +60,7 @@ public class MainFrame extends JFrame implements Runnable {
 
             }
             if (playerSecondFullPath.length() > 7) {
-                int index = playerSecondFullPath.length() - 1;
-                int i = index;
+                int i = playerSecondFullPath.length() - 1;
                 for (; i > 0; i--) {
                     if (playerSecondFullPath.charAt(i) == '/')
                         break;
@@ -122,7 +119,7 @@ public class MainFrame extends JFrame implements Runnable {
                         Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerFirstFullPath,BoardSize);
                         computerPlayerFound = true;
                     }
-                    catch (Exception playerFirstError){
+                    catch (Exception ignored){
                     }
                 }
                 if(firstPlayerProgramType==1) {
@@ -130,7 +127,7 @@ public class MainFrame extends JFrame implements Runnable {
                         Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainFrame.pathToPlayerOne +" "+Bricks.mainFrame.playerFirstProgramName,BoardSize);
                         computerPlayerFound = true;
                     }
-                    catch (Exception playerFirstError){
+                    catch (Exception ignored){
                     }
 
                 }
@@ -139,7 +136,7 @@ public class MainFrame extends JFrame implements Runnable {
                         Bricks.singlePlayerRobotPlayer = new RobotPlayer(firstPlayerRunCommand,BoardSize);
                         computerPlayerFound = true;
                     }
-                    catch (Exception playerFirstError){
+                    catch (Exception ignored){
                     }
 
                 }
@@ -150,7 +147,7 @@ public class MainFrame extends JFrame implements Runnable {
                         Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerSecondFullPath,BoardSize);
                         computerPlayerFound = true;
                     }
-                    catch (Exception playerSecondError){
+                    catch (Exception ignored){
                     }
                 }
                 if(secondPlayerProgramType==1) {
@@ -158,7 +155,7 @@ public class MainFrame extends JFrame implements Runnable {
                         Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainFrame.pathToPlayerTwo +" "+Bricks.mainFrame.playerSecondProgramName,BoardSize);
                         computerPlayerFound = true;
                     }
-                    catch (Exception playerSecondError){
+                    catch (Exception ignored){
                     }
 
                 }
@@ -167,7 +164,7 @@ public class MainFrame extends JFrame implements Runnable {
                         Bricks.singlePlayerRobotPlayer = new RobotPlayer(secondPlayerRunCommand,BoardSize);
                         computerPlayerFound = true;
                     }
-                    catch (Exception playerSecondError){
+                    catch (Exception ignored){
                     }
                 }
             }
@@ -178,16 +175,8 @@ public class MainFrame extends JFrame implements Runnable {
                 undoLastMoveButton.setEnabled(false);
                 comp = new ComputerPlayer();
                 boardPanel = new BoardPanel(board, 0);
-                gametype = 0;
                 JPanel southBorderLayout = new JPanel(new BorderLayout());
-
-                movesLeftLabel = new JLabel("Pozostały " + board.getPossibleMovesLeft() + " ruchy");
-                movesLeftLabel.setHorizontalTextPosition(JLabel.CENTER);
-                movesLeftLabel.setHorizontalAlignment(JLabel.CENTER);
-
                 southBorderLayout.add(undoLastMoveButton, BorderLayout.EAST);
-                if (debugMode)
-                    southBorderLayout.add(movesLeftLabel, BorderLayout.CENTER);
                 gameBorderLayout.add(southBorderLayout, BorderLayout.SOUTH);
                 gameBorderLayout.add(boardPanel, BorderLayout.CENTER);
                 this.getContentPane().removeAll();
@@ -231,21 +220,12 @@ public class MainFrame extends JFrame implements Runnable {
             undoLastMoveButton.setEnabled(false);
             Bricks.mainFrame.restTiles.setText("Gracz: ");
             JPanel southBorderLayout = new JPanel(new BorderLayout());
-            gametype = 1;
             JPanel southLeftGridLayout = new JPanel(new GridLayout(1,2));
-
-
-            movesLeftLabel = new JLabel("Pozostały " + board.getPossibleMovesLeft() + " ruchy");
-            movesLeftLabel.setHorizontalTextPosition(JLabel.CENTER);
-            movesLeftLabel.setHorizontalAlignment(JLabel.CENTER);
 
             southLeftGridLayout.add(restTiles);
             southLeftGridLayout.add(actualPlayerColorPreview);
             southBorderLayout.add(southLeftGridLayout, BorderLayout.WEST);
             southBorderLayout.add(undoLastMoveButton, BorderLayout.EAST);
-            if(debugMode) {
-                southBorderLayout.add(movesLeftLabel);
-            }
             gameBorderLayout.add(southBorderLayout, BorderLayout.SOUTH);
 
             boardPanel = new BoardPanel(board, 1);
@@ -267,7 +247,7 @@ public class MainFrame extends JFrame implements Runnable {
                     Bricks.firstRobotPlayer = new RobotPlayer(playerFirstFullPath,BoardSize);
                     checkFirstComputerPlayer = true;
                 }
-                catch (Exception playerFirstError){
+                catch (Exception ignored){
                 }
             }
             if(firstPlayerProgramType==1) {
@@ -275,7 +255,7 @@ public class MainFrame extends JFrame implements Runnable {
                     Bricks.firstRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainFrame.pathToPlayerOne +" "+Bricks.mainFrame.playerFirstProgramName,BoardSize);
                     checkFirstComputerPlayer = true;
                 }
-                catch (Exception playerFirstError){
+                catch (Exception ignored){
                 }
 
             }
@@ -284,7 +264,7 @@ public class MainFrame extends JFrame implements Runnable {
                     Bricks.firstRobotPlayer = new RobotPlayer(firstPlayerRunCommand,BoardSize);
                     checkFirstComputerPlayer = true;
                 }
-                catch (Exception playerFirstError){
+                catch (Exception ignored){
                 }
 
             }
@@ -294,7 +274,7 @@ public class MainFrame extends JFrame implements Runnable {
                     Bricks.secondRobotPlayer = new RobotPlayer(playerSecondFullPath,BoardSize);
                     checkSecondComputerPlayer = true;
                 }
-                catch (Exception playerSecondError){
+                catch (Exception ignored){
                 }
             }
             if(secondPlayerProgramType==1) {
@@ -302,7 +282,7 @@ public class MainFrame extends JFrame implements Runnable {
                     Bricks.secondRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainFrame.pathToPlayerTwo +" "+Bricks.mainFrame.playerSecondProgramName,BoardSize);
                     checkSecondComputerPlayer = true;
                 }
-                catch (Exception playerSecondError){
+                catch (Exception ignored){
                 }
 
             }
@@ -311,7 +291,7 @@ public class MainFrame extends JFrame implements Runnable {
                     Bricks.secondRobotPlayer = new RobotPlayer(secondPlayerRunCommand,BoardSize);
                     checkSecondComputerPlayer = true;
                 }
-                catch (Exception playerSecondError){
+                catch (Exception ignored){
                 }
             }
             if(checkFirstComputerPlayer && checkSecondComputerPlayer) {
@@ -327,7 +307,6 @@ public class MainFrame extends JFrame implements Runnable {
                         }
                     }
                 };
-                movesLeftLabel = new JLabel();
                 actualPlayerColorPreview = new ColorPreview(playerFirstColor);
                 gameBorderLayout.getActionMap().put("backToMenuAction", backToMenuAction);
                 gameBorderLayout.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("ESCAPE"), "backToMenuAction");
@@ -335,97 +314,92 @@ public class MainFrame extends JFrame implements Runnable {
                 undoLastMoveButton.setEnabled(false);
                 comp = new ComputerPlayer();
                 boardPanel = new BoardPanel(board, 2);
-                gametype = 2;
                 computerPlayer = 1;
                 JPanel southBorderLayout = new JPanel(new BorderLayout());
                 computerPlayerLabel = new JLabel("Gracz Numer " + computerPlayer);
                 nextMoveButton = new JButton("Następny Ruch");
-                nextMoveButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        //TODO
-                        boolean gameFinished = false;
-                        try {
-                            computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
-                            board.saveToFile();
-                            int move[] = new int[4];
-                            if(computerPlayer==1) {
-                                if(boardPanel.movesStorage.isEmpty()) {
-                                    try {
-                                        move = Bricks.firstRobotPlayer.makeMove("Zaczynaj");
-                                    }
-                                    catch (InvalidMoveException exception) {
-                                        boardPanel.walkover(computerPlayer,"Timeout");
-                                        gameFinished=true;
-                                    }
+                nextMoveButton.addActionListener(e1 -> {
+                    //TODO
+                    boolean gameFinished = false;
+                    try {
+                        computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
+                        board.saveToFile();
+                        int move[] = new int[4];
+                        if(computerPlayer==1) {
+                            if(boardPanel.movesStorage.isEmpty()) {
+                                try {
+                                    move = Bricks.firstRobotPlayer.makeMove("Zaczynaj");
                                 }
-                                else {
-                                    try {
-                                        move = Bricks.firstRobotPlayer.makeMove(boardPanel.movesStorage.getLastMoveAsString());
-                                    }
-                                    catch (InvalidMoveException exception) {
-                                        boardPanel.walkover(computerPlayer,"Timeout");
-                                        gameFinished=true;
-                                    }
+                                catch (InvalidMoveException exception) {
+                                    boardPanel.walkover(computerPlayer,"Timeout");
+                                    gameFinished=true;
                                 }
                             }
-                            if(computerPlayer==2) {
-                                if(boardPanel.movesStorage.isEmpty()) {
-                                    try {
-                                        move = Bricks.secondRobotPlayer.makeMove("Zaczynaj");
-                                    } catch (InvalidMoveException exception) {
-                                        boardPanel.walkover(computerPlayer,"Timeout");
-                                        gameFinished=true;
-                                    }
+                            else {
+                                try {
+                                    move = Bricks.firstRobotPlayer.makeMove(boardPanel.movesStorage.getLastMoveAsString());
                                 }
-                                else {
-                                    try {
-                                        move = Bricks.secondRobotPlayer.makeMove(boardPanel.movesStorage.getLastMoveAsString());
-                                    } catch (InvalidMoveException exception) {
-                                        boardPanel.walkover(computerPlayer,"Timeout");
-                                        gameFinished=true;
-                                    }
+                                catch (InvalidMoveException exception) {
+                                    boardPanel.walkover(computerPlayer,"Timeout");
+                                    gameFinished=true;
                                 }
                             }
-
-                            int x1 = move[0];
-                            int y1 = move[1];
-                            int x2 = move[2];
-                            int y2 = move[3];
-
-
-                            if(possibleMove(x1,y1,x2,y2,board.board) && !gameFinished)
-                             {
-                                    board.board[x1][y1] = computerPlayer;
-                                    board.board[x2][y2] = computerPlayer;
-                                    boardPanel.playSound();
-                                    boardPanel.movesStorage.addMove(x1, y1, x2, y2);
-
-
-                                    if (computerPlayer == 1) {
-                                        computerPlayer = 2;
-                                        actualPlayerColorPreview.setColor(playerSecondColor);
-
-                                    } else if (computerPlayer == 2) {
-                                        computerPlayer = 1;
-                                        actualPlayerColorPreview.setColor(playerFirstColor);
-                                    }
-                                    undoLastMoveButton.setEnabled(true);
+                        }
+                        if(computerPlayer==2) {
+                            if(boardPanel.movesStorage.isEmpty()) {
+                                try {
+                                    move = Bricks.secondRobotPlayer.makeMove("Zaczynaj");
+                                } catch (InvalidMoveException exception) {
+                                    boardPanel.walkover(computerPlayer,"Timeout");
+                                    gameFinished=true;
+                                }
                             }
-                            else if (!gameFinished) {
-                                boardPanel.walkover(computerPlayer,"InvalidMove");
+                            else {
+                                try {
+                                    move = Bricks.secondRobotPlayer.makeMove(boardPanel.movesStorage.getLastMoveAsString());
+                                } catch (InvalidMoveException exception) {
+                                    boardPanel.walkover(computerPlayer,"Timeout");
+                                    gameFinished=true;
+                                }
                             }
-                            repaintThis();
-                            repaint();
-                            boardPanel.checkNoMoves();
-
-                        } catch (Exception ignored) {
-
                         }
 
+                        int x1 = move[0];
+                        int y1 = move[1];
+                        int x2 = move[2];
+                        int y2 = move[3];
+
+
+                        if(possibleMove(x1,y1,x2,y2,board.board) && !gameFinished)
+                         {
+                                board.board[x1][y1] = computerPlayer;
+                                board.board[x2][y2] = computerPlayer;
+                                boardPanel.playSound();
+                                boardPanel.movesStorage.addMove(x1, y1, x2, y2);
+
+
+                                if (computerPlayer == 1) {
+                                    computerPlayer = 2;
+                                    actualPlayerColorPreview.setColor(playerSecondColor);
+
+                                } else if (computerPlayer == 2) {
+                                    computerPlayer = 1;
+                                    actualPlayerColorPreview.setColor(playerFirstColor);
+                                }
+                                undoLastMoveButton.setEnabled(true);
+                        }
+                        else if (!gameFinished) {
+                            boardPanel.walkover(computerPlayer,"InvalidMove");
+                        }
+                        repaintThis();
+                        repaint();
+                        boardPanel.checkNoMoves();
+
+                    } catch (Exception ignored) {
+
                     }
+
                 });
-                //southBorderLayout.add(undoLastMoveButton, BorderLayout.EAST);
 
                 JPanel robotWarsControlGridPanel = new JPanel(new GridLayout(1,3));
 
@@ -435,24 +409,18 @@ public class MainFrame extends JFrame implements Runnable {
                 speedTextField.setHorizontalAlignment(SwingConstants.CENTER);
 
                 speedUpButton = new JButton("+");
-                speedUpButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        int i = Integer.parseInt(speedTextField.getText());
-                        if(i<=9)
-                            i++;
-                        speedTextField.setText(i+"");
-                    }
+                speedUpButton.addActionListener(e13 -> {
+                    int i = Integer.parseInt(speedTextField.getText());
+                    if(i<=9)
+                        i++;
+                    speedTextField.setText(i+"");
                 });
                 speedDownButton = new JButton("-");
-                speedDownButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        int i = Integer.parseInt(speedTextField.getText());
-                        if(i>1)
-                            i--;
-                        speedTextField.setText(i+"");
-                    }
+                speedDownButton.addActionListener(e12 -> {
+                    int i = Integer.parseInt(speedTextField.getText());
+                    if(i>1)
+                        i--;
+                    speedTextField.setText(i+"");
                 });
 
                 speedControlGridLayout.add(speedDownButton);
@@ -466,23 +434,20 @@ public class MainFrame extends JFrame implements Runnable {
 
 
                 runAutoMovesButton = new JButton("Automatyczna Gra");
-                runAutoMovesButton.addActionListener(new ActionListener() {
-                    @Override
-                    public void actionPerformed(ActionEvent e) {
-                        if(runAutoMovesButton.getText().equals("Automatyczna Gra")) {
-                            try {
-                                runner = new Runner(Integer.parseInt(speedTextField.getText()));
-                            }
-                            catch (Exception ignored) {
-                            }
-                            Bricks.autoPlayRunning=true;
-                            runner.start();
-                            controlAutoPlayButtons(false);
+                runAutoMovesButton.addActionListener(e14 -> {
+                    if(runAutoMovesButton.getText().equals("Automatyczna Gra")) {
+                        try {
+                            runner = new Runner(Integer.parseInt(speedTextField.getText()));
                         }
-                        else {
-                            Bricks.autoPlayRunning=false;
-                            controlAutoPlayButtons(true);
+                        catch (Exception ignored) {
                         }
+                        Bricks.autoPlayRunning=true;
+                        runner.start();
+                        controlAutoPlayButtons(false);
+                    }
+                    else {
+                        Bricks.autoPlayRunning=false;
+                        controlAutoPlayButtons(true);
                     }
                 });
                 robotWarsControlGridPanel.add(runAutoMovesButton);
@@ -599,7 +564,7 @@ public class MainFrame extends JFrame implements Runnable {
         validate();
         repaint();
     }
-    public void backToMenu() {
+    void backToMenu() {
         this.getContentPane().removeAll();
         prepareMainBorderLayout();
         this.getContentPane().add(mainBorderLayout);
@@ -613,10 +578,6 @@ public class MainFrame extends JFrame implements Runnable {
         long lastTime = System.nanoTime();
         int FRAMERATE = 60;
         double nsPerTick = 1000000000D / FRAMERATE;
-
-        // int frames = 0;
-        // int ticks = 0;
-
         long lastTimer = System.currentTimeMillis();
         double delta = 0;
         boolean shouldRender = false;
@@ -626,25 +587,19 @@ public class MainFrame extends JFrame implements Runnable {
             lastTime = now;
             while (delta >= 1) {
                 shouldRender = true;
-                //  ticks++;
-                // tick(ticks);
                 delta -= 1;
             }
             if (shouldRender) {
-                //frames++;
                 boardPanel.render();
                 shouldRender = false;
             }
             if (System.currentTimeMillis() - lastTimer >= 1000) {
                 lastTimer += 1000;
-                //System.out.println(ticks + " ticks, " + frames + " frames");
-                //frames = 0;
-                //  ticks = 0;
             }
         }
     }
 
-    public void exportSettings() {
+    private void exportSettings() {
         try {
             PrintWriter createCfg = new PrintWriter(new File(Bricks.path + "/options"));
             createCfg.println("BoardSize=" + BoardSize);
@@ -669,7 +624,7 @@ public class MainFrame extends JFrame implements Runnable {
         repaint();
     }
 
-    public void setSettings(Settings newSettings) {
+    void setSettings(Settings newSettings) {
                 BoardSize = newSettings.getBoardSize();
                 playerFirstColor = newSettings.getPlayerFirstColor();
                 playerSecondColor = newSettings.getPlayerSecondColor();
@@ -680,8 +635,7 @@ public class MainFrame extends JFrame implements Runnable {
                 playerSecondFullPath = newSettings.getSecondComputerPlayerPath();
                 computerPlayerType = newSettings.getComputerPlayerType();
                 if(playerFirstFullPath.length()>7) {
-                    int index = playerFirstFullPath.length() - 1;
-                    int i = index;
+                    int i = playerFirstFullPath.length() - 1;
                     for (; i > 0; i--) {
                         if (playerFirstFullPath.charAt(i) == '/')
                             break;
@@ -692,8 +646,7 @@ public class MainFrame extends JFrame implements Runnable {
 
                 }
                 if(playerSecondFullPath.length()>7) {
-                    int index = playerSecondFullPath.length() - 1;
-                    int i = index;
+                    int i = playerSecondFullPath.length() - 1;
                     for (; i > 0; i--) {
                         if (playerSecondFullPath.charAt(i) == '/')
                             break;
@@ -730,71 +683,6 @@ public class MainFrame extends JFrame implements Runnable {
 
         return flag;
     }
-
-    public boolean getDebugMode(){
-        return debugMode;
-    }
-
-    //private void tick(int ticks) {}
-    private Thread game;
-    public BoardLogic board;
-    public BoardPanel boardPanel;
-    private JPanel gameBorderLayout;
-    private boolean debugMode;
-    public boolean running = false;
-    public ComputerPlayer comp;
-
-    private int firstPlayerProgramType;
-    private int secondPlayerProgramType;
-
-    private String firstPlayerRunCommand;
-    private String secondPlayerRunCommand;
-
-
-    public  JLabel movesLeftLabel;
-    public JLabel computerPlayerLabel;
-
-    public ColorPreview actualPlayerColorPreview;
-
-    public Color playerFirstColor;
-
-    public Color playerSecondColor;
-
-    public boolean isSound;
-
-    public int volume;
-
-    public int computerPlayer;
-
-    public int BoardSize = 5;
-
-    private JPanel mainBorderLayout;
-    private JPanel buttonsGridLayout;
-
-    private JLabel gameName;
-    private JLabel credits;
-
-    private int gametype = -1;
-
-    public JLabel restTiles;
-    public JButton undoLastMoveButton;
-
-    //GRACZE KOMPUTEROWI
-    public String playerFirstFullPath = "";
-    public String playerSecondFullPath = "";
-    public String pathToPlayerOne = "";
-    public String pathToPlayerTwo = "";
-    public String playerFirstProgramName = "";
-    public String playerSecondProgramName = "";
-
-    private int computerPlayerType;
-
-    JButton nextMoveButton;
-
-    public Runner runner;
-
-    public JButton runAutoMovesButton;
-
     public void stopRunner(){
         Bricks.autoPlayRunning=false;
         controlAutoPlayButtons(true);
@@ -803,21 +691,77 @@ public class MainFrame extends JFrame implements Runnable {
     public int getComputerPlayerType(){
         return computerPlayerType;
     }
-    public void controlAutoPlayButtons(boolean turnOn) {
+    private void controlAutoPlayButtons(boolean turnOn) {
         if(turnOn) {
-            speedUpButton.setEnabled(true);
-            speedDownButton.setEnabled(true);
-            runAutoMovesButton.setText("Automatyczna Gra");
-            nextMoveButton.setEnabled(true);
+            if(speedUpButton!=null) {
+                speedUpButton.setEnabled(true);
+                speedDownButton.setEnabled(true);
+                runAutoMovesButton.setText("Automatyczna Gra");
+                nextMoveButton.setEnabled(true);
+            }
         }
         else {
-            speedUpButton.setEnabled(false);
-            speedDownButton.setEnabled(false);
-            runAutoMovesButton.setText("Przerwij");
-            nextMoveButton.setEnabled(false);
+            if(speedUpButton!=null) {
+                speedUpButton.setEnabled(false);
+                speedDownButton.setEnabled(false);
+                runAutoMovesButton.setText("Przerwij");
+                nextMoveButton.setEnabled(false);
+            }
         }
     }
 
+    public boolean getDebugMode(){
+        return debugMode;
+    }
+
+    private Thread game;
+
+    public BoardLogic board;
+
+    public BoardPanel boardPanel;
+
+    private boolean debugMode;
+    private boolean running = false;
+    public boolean isSound;
+
+    public ComputerPlayer comp;
+
+    private int firstPlayerProgramType;
+    private int secondPlayerProgramType;
+    public int volume;
+    public int computerPlayer;
+    private int BoardSize;
+    private int computerPlayerType;
+
+    public ColorPreview actualPlayerColorPreview;
+
+    public Color playerFirstColor;
+    public Color playerSecondColor;
+
+    private String playerFirstFullPath = "";
+    private String playerSecondFullPath = "";
+    private String pathToPlayerOne = "";
+    private String pathToPlayerTwo = "";
+    private String playerFirstProgramName = "";
+    private String playerSecondProgramName = "";
+    private String firstPlayerRunCommand;
+    private String secondPlayerRunCommand;
+
+    public Runner runner;
+
+    private JButton runAutoMovesButton;
     private JButton speedUpButton;
     private JButton speedDownButton;
+    private JButton nextMoveButton;
+    public JButton undoLastMoveButton;
+
+    private JPanel gameBorderLayout;
+    private JPanel mainBorderLayout;
+    private JPanel buttonsGridLayout;
+
+    public JLabel computerPlayerLabel;
+    private JLabel gameName;
+    private JLabel credits;
+    public JLabel restTiles;
+
 }
