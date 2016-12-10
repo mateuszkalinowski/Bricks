@@ -17,6 +17,7 @@ import java.util.Scanner;
  * Project Bricks
  */
 public class Bricks {
+    @SuppressWarnings ("ResultOfMethodCallIgnored")
     public static void main(String[] args) {
         EventQueue.invokeLater(() -> {
 
@@ -64,20 +65,14 @@ public class Bricks {
                         secondPlayerColor = new Color(r,g,b);
                         line = in.nextLine();
                         splittedLine = line.split("=");
-                        if(splittedLine[1].equals("true"))
-                            isSound = true;
-                        else
-                            isSound=false;
+                        isSound = splittedLine[1].equals("true");
                         line = in.nextLine();
                         splittedLine = line.split("=");
                         volume = Integer.parseInt(splittedLine[1]);
 
                         line = in.nextLine();
                         splittedLine = line.split("=");
-                        if(splittedLine[1].equals("true"))
-                            debugMode = true;
-                        else
-                            debugMode = false;
+                        debugMode = splittedLine[1].equals("true");
                         line = in.nextLine();
                         splittedLine = line.split("=");
                         if(splittedLine.length==2) {
@@ -150,26 +145,30 @@ public class Bricks {
             });
         });
     }
-    private static int initialBoardSize;
-    private static Color firstPlayerColor;
-    private static Color secondPlayerColor;
     private static boolean isSound;
-    private static int volume;
     private static boolean debugMode;
-    private static String firstPlayerPath;
-    private static String secondPlayerPath;
+    public static boolean autoPlayRunning=false;
 
+    private static int initialBoardSize;
+    private static int volume;
     private static int firstPlayerProgramType;
     private static int secondPlayerProgramType;
+    private static int computerPlayerType;
 
+    private static Color firstPlayerColor;
+    private static Color secondPlayerColor;
+
+    private static String firstPlayerPath;
+    private static String secondPlayerPath;
     private static String firstPlayerRunCommand;
     private static String secondPlayerRunCommand;
-
-    private static int computerPlayerType;
+    public static String path;
 
     public static MainFrame mainFrame;
 
-    public static String path;
+    public static RobotPlayer firstRobotPlayer;
+    public static RobotPlayer secondRobotPlayer;
+    public static RobotPlayer singlePlayerRobotPlayer;
 
     private static void loadDefaultSettings(){
         initialBoardSize=5;
@@ -190,9 +189,4 @@ public class Bricks {
 
 
     }
-
-    public static RobotPlayer firstRobotPlayer;
-    public static RobotPlayer secondRobotPlayer;
-    public static RobotPlayer singlePlayerRobotPlayer;
-
 }

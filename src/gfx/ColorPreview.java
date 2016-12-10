@@ -2,7 +2,6 @@ package gfx;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.image.BufferStrategy;
 
 /**
  * Created by Mateusz on 05.10.2016.
@@ -19,6 +18,6 @@ public class ColorPreview extends JPanel {
     public void setColor(Color color) {
         this.color = color;
     }
-    Color color;
+    private Color color;
 
 }

@@ -74,7 +74,6 @@ public class RobotPlayer {
         writer = null;
     }
     private String source;
-    private int size;
 
-    static boolean hasBegun = false;
+    private int size;
 }
