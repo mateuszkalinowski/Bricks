@@ -12,9 +12,9 @@ import exceptions.InvalidMoveException;
 public class Runner extends Thread {
     @Override
     public void run(){
-        computerPlayer = Bricks.mainFrame.computerPlayer;
-        while(true && Bricks.autoPlay) {
+        while(!this.isInterrupted()) {
             try {
+                computerPlayer = Bricks.mainFrame.computerPlayer;
                 boolean gameFinished = false;
                 Bricks.mainFrame.computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
                 Bricks.mainFrame.board.saveToFile();
@@ -70,7 +70,6 @@ public class Runner extends Thread {
                     Bricks.mainFrame. board.board[x2][y2] = computerPlayer;
                     Bricks.mainFrame.boardPanel.playSound();
                     Bricks.mainFrame.boardPanel.movesStorage.addMove(x1, y1, x2, y2);
-                    Bricks.mainFrame.computerPlayer = this.computerPlayer;
 
 
                     if (computerPlayer == 1) {
@@ -81,6 +80,7 @@ public class Runner extends Thread {
                         computerPlayer = 1;
                         Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
                     }
+                    Bricks.mainFrame.computerPlayer = computerPlayer;
                     Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                 }
                 else if (!gameFinished) {
@@ -93,7 +93,7 @@ public class Runner extends Thread {
                 sleep(1000/speed);
             }
             catch (InterruptedException e) {
-                break;
+                Thread.currentThread().interrupt();
             }
         }
     }

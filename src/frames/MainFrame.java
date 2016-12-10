@@ -426,7 +426,7 @@ public class MainFrame extends JFrame implements Runnable {
 
                     }
                 });
-                southBorderLayout.add(undoLastMoveButton, BorderLayout.EAST);
+                //southBorderLayout.add(undoLastMoveButton, BorderLayout.EAST);
 
                 JPanel robotWarsControlGridPanel = new JPanel(new GridLayout(1,3));
 
@@ -799,6 +799,7 @@ public class MainFrame extends JFrame implements Runnable {
     public JButton runAutoMovesButton;
 
     public void stopRunner(){
+        System.out.println("Stop Runner Funkcja");
         runner.interrupt();
         runAutoMovesButton.setText("Automatyczna Gra");
         nextMoveButton.setEnabled(true);
