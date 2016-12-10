@@ -60,7 +60,6 @@ public class BoardPanel extends Canvas {
                                     actualPlayer = 1;
                                 }
                                 checkNoMoves();
-
                             }
                         }
                         if (e.getKeyCode() == KeyEvent.VK_RIGHT) {
@@ -100,7 +99,6 @@ public class BoardPanel extends Canvas {
                                 isSelected = false;
                                 playSound();
                                 if (actualPlayer == 1) {
-                                    // Bricks.mainFrame.restTiles.setText("Gracz Drugi");
                                     Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
                                     Bricks.mainFrame.repaint();
                                     actualPlayer = 2;
@@ -184,12 +182,6 @@ public class BoardPanel extends Canvas {
                                 }
                             }
 
-
-                          //  selectedY = (e.getY() - margin) /(int) Math.round(oneFieldHeight);
-
-
-
-
                             try {
                                 if (board.board[selectedX][selectedY] == 0) {
                                     isSelected = true;
@@ -229,9 +221,6 @@ public class BoardPanel extends Canvas {
                                     tempSelectedY=board.height-1;
                                 }
                             }
-
-
-
                             if ((tempSelectedX == selectedX + 1) && tempSelectedY == selectedY) {
                                 if (directions[1]) {
                                     board.board[selectedX][selectedY] = actualPlayer;
