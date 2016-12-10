@@ -96,12 +96,17 @@ class OptionsPanel extends JPanel {
         JPanel secondPlayerOptionsGridLayout = new JPanel(new GridLayout(1,2));
 
         boardSizeComboBox = new JComboBox<>();
-        boardSizeComboBox.addItem("3x3");
         boardSizeComboBox.addItem("5x5");
-        boardSizeComboBox.addItem("7x7");
         boardSizeComboBox.addItem("9x9");
-        boardSizeComboBox.addItem("11x11");
         boardSizeComboBox.addItem("13x13");
+        boardSizeComboBox.addItem("17x17");
+        boardSizeComboBox.addItem("21x21");
+        boardSizeComboBox.addItem("25x25");
+        boardSizeComboBox.addItem("29x29");
+        boardSizeComboBox.addItem("33x33");
+        boardSizeComboBox.addItem("37x37");
+        boardSizeComboBox.addItem("41x41");
+        boardSizeComboBox.addItem("45x45");
 
 
         firstPlayerColor = new ColorPreview(playerFirstColor);

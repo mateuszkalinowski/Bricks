@@ -160,8 +160,36 @@ public class BoardPanel extends Canvas {
                 if(gametype==0 || gametype==1) {
                     if (!isSelected) {
                         if ((e.getX() > margin && e.getX() < getWidth() - margin) && (e.getY() > margin && e.getY() < getHeight() - margin)) {
-                            selectedX = (e.getX() - margin) / oneFieldWidth;
-                            selectedY = (e.getY() - margin) / oneFieldHeight;
+
+                            int intOneFieldWidth = (int)Math.round(oneFieldWidth);
+                            int intOneFieldHeight = (int)Math.round(oneFieldHeight);
+
+                            for(int i = 0; i < board.width-1;i++) {
+                                    if(e.getX()>=(margin+i*intOneFieldWidth) && e.getX()<margin+(i+1)*intOneFieldWidth) {
+                                        selectedX = i;
+                                        break;
+                                    }
+                                    if(e.getX()>=margin+(board.width-1)+intOneFieldWidth) {
+                                        selectedX=board.width-1;
+                                    }
+                            }
+
+                            for(int i = 0; i < board.height-1;i++) {
+                                if(e.getY()>=(margin+i*intOneFieldHeight) && e.getY()<margin+(i+1)*intOneFieldHeight) {
+                                    selectedY = i;
+                                    break;
+                                }
+                                if(e.getX()>=margin+(board.width-1)+intOneFieldHeight) {
+                                    selectedY=board.height-1;
+                                }
+                            }
+
+
+                          //  selectedY = (e.getY() - margin) /(int) Math.round(oneFieldHeight);
+
+
+
+
                             try {
                                 if (board.board[selectedX][selectedY] == 0) {
                                     isSelected = true;
@@ -175,8 +203,34 @@ public class BoardPanel extends Canvas {
                         }
                     } else {
                         if ((e.getX() > margin && e.getX() < getWidth() - margin) && (e.getY() > margin && e.getY() < getHeight() - margin)) {
-                            int tempSelectedX = (e.getX() - margin) / oneFieldWidth;
-                            int tempSelectedY = (e.getY() - margin) / oneFieldHeight;
+                            int tempSelectedX;
+                            int tempSelectedY;
+                            int intOneFieldWidth = (int)Math.round(oneFieldWidth);
+                            int intOneFieldHeight = (int)Math.round(oneFieldHeight);
+                            tempSelectedX=0;
+                            tempSelectedY=0;
+
+                            for(int i = 0; i < board.width-1;i++) {
+                                if(e.getX()>=(margin+i*intOneFieldWidth) && e.getX()<margin+(i+1)*intOneFieldWidth) {
+                                    tempSelectedX = i;
+                                    break;
+                                }
+                                if(e.getX()>=margin+(board.width-1)+intOneFieldWidth) {
+                                    tempSelectedX=board.width-1;
+                                }
+                            }
+
+                            for(int i = 0; i < board.height-1;i++) {
+                                if(e.getY()>=(margin+i*intOneFieldHeight) && e.getY()<margin+(i+1)*intOneFieldHeight) {
+                                    tempSelectedY = i;
+                                    break;
+                                }
+                                if(e.getX()>=margin+(board.width-1)+intOneFieldHeight) {
+                                    tempSelectedY=board.height-1;
+                                }
+                            }
+
+
 
                             if ((tempSelectedX == selectedX + 1) && tempSelectedY == selectedY) {
                                 if (directions[1]) {
@@ -341,7 +395,7 @@ public class BoardPanel extends Canvas {
             ex.printStackTrace();
         }
     }
-
+/*
     private void drawBoardFrame() {
         Graphics2D g2 = (Graphics2D) g;
         int width = getWidth();
@@ -394,7 +448,94 @@ public class BoardPanel extends Canvas {
         }
 
     }
+*/
+private void drawBoardFrame() {
+    Graphics2D g2 = (Graphics2D) g;
+    int width = getWidth();
+    int height = getHeight();
+    oneFieldWidth = (width - margin * 2.0) / (board.width*1.0);
+    oneFieldHeight = (height - margin * 2.0) / (board.height*1.0);
+    g2.setStroke(new BasicStroke(6));
+    g2.drawRect(margin, margin, width-margin*2, height-margin*2);
+    g2.setColor(Color.WHITE);
+    g2.fillRect(margin, margin, width-margin*2,height-margin*2);
+    int inFieldMargin = 0;
 
+
+    if (actualPlayer == 1) {
+        if (isSelected) {
+            g2.setColor(Bricks.mainFrame.playerFirstColor);
+            int j = selectedX;
+            int i = selectedY;
+            if(j!=board.width-1&&i!=board.height-1)
+                g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, (int)Math.round(oneFieldWidth) - 2 * inFieldMargin, (int)Math.round(oneFieldHeight) - 2 * inFieldMargin);
+            else if(j==board.width-1&&i!=board.height-1)
+                g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, width-margin*2-j * (int)Math.round(oneFieldWidth), (int)Math.round(oneFieldHeight) - 2 * inFieldMargin);
+            else if(j!=board.width-1&&i==board.height-1)
+                g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, (int)Math.round(oneFieldWidth) - 2 * inFieldMargin, height-margin*2-i*(int)Math.round(oneFieldHeight));
+            else
+                g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, width-margin*2-j * (int)Math.round(oneFieldWidth), height-margin*2-i*(int)Math.round(oneFieldHeight));
+        }
+    }
+    if (actualPlayer == 2) {
+        if (isSelected) {
+            g2.setColor(Bricks.mainFrame.playerSecondColor);
+            int j = selectedX;
+            int i = selectedY;
+            if(j!=board.width-1&&i!=board.height-1)
+                g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, (int)Math.round(oneFieldWidth) - 2 * inFieldMargin, (int)Math.round(oneFieldHeight) - 2 * inFieldMargin);
+            else if(j==board.width-1&&i!=board.height-1)
+                g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, width-margin*2-j * (int)Math.round(oneFieldWidth), (int)Math.round(oneFieldHeight) - 2 * inFieldMargin);
+            else if(j!=board.width-1&&i==board.height-1)
+                g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, (int)Math.round(oneFieldWidth) - 2 * inFieldMargin, height-margin*2-i*(int)Math.round(oneFieldHeight));
+            else
+                g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, width-margin*2-j * (int)Math.round(oneFieldWidth), height-margin*2-i*(int)Math.round(oneFieldHeight));
+        }
+    }
+
+    for (int i = 0; i < board.height; i++) {
+        for (int j = 0; j < board.width; j++) {
+            if (board.board[j][i] == 1) {
+                g2.setColor(Bricks.mainFrame.playerFirstColor);
+                if(j!=board.width-1&&i!=board.height-1)
+                     g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, (int)Math.round(oneFieldWidth) - 2 * inFieldMargin, (int)Math.round(oneFieldHeight) - 2 * inFieldMargin);
+                else if(j==board.width-1&&i!=board.height-1)
+                    g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, width-margin*2-j * (int)Math.round(oneFieldWidth), (int)Math.round(oneFieldHeight) - 2 * inFieldMargin);
+                else if(j!=board.width-1&&i==board.height-1)
+                    g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, (int)Math.round(oneFieldWidth) - 2 * inFieldMargin, height-margin*2-i*(int)Math.round(oneFieldHeight));
+                else
+                    g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, width-margin*2-j * (int)Math.round(oneFieldWidth), height-margin*2-i*(int)Math.round(oneFieldHeight));
+            }
+            if (board.board[j][i] == 2) {
+                g2.setColor(Bricks.mainFrame.playerSecondColor);
+                if(j!=board.width-1&&i!=board.height-1)
+                    g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, (int)Math.round(oneFieldWidth) - 2 * inFieldMargin, (int)Math.round(oneFieldHeight) - 2 * inFieldMargin);
+                else if(j==board.width-1&&i!=board.height-1)
+                    g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, width-margin*2-j * (int)Math.round(oneFieldWidth), (int)Math.round(oneFieldHeight) - 2 * inFieldMargin);
+                else if(j!=board.width-1&&i==board.height-1)
+                    g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, (int)Math.round(oneFieldWidth) - 2 * inFieldMargin, height-margin*2-i*(int)Math.round(oneFieldHeight));
+                else
+                    g2.fillRect(j * (int)Math.round(oneFieldWidth) + margin + inFieldMargin, i * (int)Math.round(oneFieldHeight) + margin + inFieldMargin, width-margin*2-j * (int)Math.round(oneFieldWidth), height-margin*2-i*(int)Math.round(oneFieldHeight));
+            }
+        }
+    }
+    for (int i = 0; i < board.height; i++) {
+        if (i > 0) {
+            g2.setStroke(new BasicStroke(2));
+            g2.setColor(Color.BLACK);
+            g2.drawLine(margin, margin + i * (int)Math.round(oneFieldHeight), width-margin, margin + i * (int)Math.round(oneFieldHeight));
+        }
+
+        for (int j = 0; j < board.width; j++) {
+            if (j > 0) {
+                g2.setStroke(new BasicStroke(2));
+                g2.setColor(Color.BLACK);
+                g2.drawLine(margin + j * (int)Math.round(oneFieldWidth), margin, margin + j * (int)Math.round(oneFieldWidth), height-margin);
+            }
+        }
+    }
+
+}
     public boolean checkNoMoves() {
         if (!board.anyMoves()) {
             int selection = 0;
@@ -637,8 +778,8 @@ public class BoardPanel extends Canvas {
 
     private int margin = 20;
 
-    private int oneFieldWidth;
-    private int oneFieldHeight;
+    private double oneFieldWidth;
+    private double oneFieldHeight;
 
     private boolean[] directions;
 
