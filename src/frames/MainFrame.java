@@ -80,7 +80,7 @@ public class MainFrame extends JFrame implements Runnable {
         actualPlayerColorPreview = new ColorPreview(playerFirstColor);
 
         //OS X AND macOS ONLY, ON WINDOWS/LINUX/UNIX must be set as a comment
-        com.apple.eawt.Application.getApplication().setDockIconImage(icon.getImage());
+        //com.apple.eawt.Application.getApplication().setDockIconImage(icon.getImage());
 
         gameName = new JLabel("Bricks", SwingConstants.CENTER);
         buttonsGridLayout = new JPanel(new GridLayout(11, 1));

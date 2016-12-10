@@ -40,7 +40,8 @@ public class BoardPanel extends Canvas {
                                 board.board[selectedX][selectedY] = actualPlayer;
                                 board.board[selectedX][selectedY - 1] = actualPlayer;
                                 movesStorage.addMove(selectedX, selectedY, selectedX, selectedY - 1);
-                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                if(Bricks.mainFrame.getComputerPlayerType()==0)
+                                     Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                 isSelected = false;
                                 playSound();
                                 if (actualPlayer == 1) {
@@ -67,7 +68,8 @@ public class BoardPanel extends Canvas {
                                 board.board[selectedX][selectedY] = actualPlayer;
                                 board.board[selectedX + 1][selectedY] = actualPlayer;
                                 movesStorage.addMove(selectedX, selectedY, selectedX + 1, selectedY);
-                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                if(Bricks.mainFrame.getComputerPlayerType()==0)
+                                    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                 isSelected = false;
                                 playSound();
                                 if (actualPlayer == 1) {
@@ -93,7 +95,8 @@ public class BoardPanel extends Canvas {
                                 board.board[selectedX][selectedY] = actualPlayer;
                                 board.board[selectedX][selectedY + 1] = actualPlayer;
                                 movesStorage.addMove(selectedX, selectedY, selectedX, selectedY + 1);
-                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                if(Bricks.mainFrame.getComputerPlayerType()==0)
+                                     Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                 isSelected = false;
                                 playSound();
                                 if (actualPlayer == 1) {
@@ -121,7 +124,8 @@ public class BoardPanel extends Canvas {
                                 board.board[selectedX][selectedY] = actualPlayer;
                                 board.board[selectedX - 1][selectedY] = actualPlayer;
                                 movesStorage.addMove(selectedX, selectedY, selectedX - 1, selectedY);
-                                Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                if(Bricks.mainFrame.getComputerPlayerType()==0)
+                                     Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                 isSelected = false;
                                 playSound();
                                 if (actualPlayer == 1) {
@@ -179,7 +183,8 @@ public class BoardPanel extends Canvas {
                                     board.board[selectedX][selectedY] = actualPlayer;
                                     board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                     movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
-                                    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                    if(Bricks.mainFrame.getComputerPlayerType()==0)
+                                        Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                     isSelected = false;
                                     playSound();
                                     if (actualPlayer == 1) {
@@ -208,7 +213,8 @@ public class BoardPanel extends Canvas {
                                     board.board[selectedX][selectedY] = actualPlayer;
                                     board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                     movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
-                                    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                    if(Bricks.mainFrame.getComputerPlayerType()==0)
+                                         Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                     isSelected = false;
                                     playSound();
                                     if (actualPlayer == 1) {
@@ -238,7 +244,8 @@ public class BoardPanel extends Canvas {
                                     board.board[selectedX][selectedY] = actualPlayer;
                                     board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                     movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
-                                    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                    if(Bricks.mainFrame.getComputerPlayerType()==0)
+                                          Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                     isSelected = false;
                                     playSound();
                                     if (actualPlayer == 1) {
@@ -268,7 +275,8 @@ public class BoardPanel extends Canvas {
                                     board.board[selectedX][selectedY] = actualPlayer;
                                     board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                     movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
-                                    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
+                                    if(Bricks.mainFrame.getComputerPlayerType()==0)
+                                         Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
                                     isSelected = false;
                                     playSound();
                                     if (actualPlayer == 1) {
