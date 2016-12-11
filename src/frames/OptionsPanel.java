@@ -269,11 +269,13 @@ class OptionsPanel extends JPanel {
         inputOwnRunTextPlayerFirstTextField = new JTextArea();
         inputOwnRunTextPlayerFirstTextField.setEnabled(false);
         inputOwnRunTextPlayerFirstTextField.setLineWrap(true);
+        inputOwnRunTextPlayerFirstTextField.setFont(new Font("Courier",Font.PLAIN,10));
         JScrollPane inputOwnTextScrollPane = new JScrollPane(inputOwnRunTextPlayerFirstTextField);
         inputOwnRunTextPlayerFirstTextField.setToolTipText("Aktywne tylko, jeśli 'Uruchom Jako' jest wybrane na 'Własne'");
         inputOwnRunTextPlayerSecondTextField = new JTextArea();
         inputOwnRunTextPlayerSecondTextField.setEnabled(false);
         inputOwnRunTextPlayerSecondTextField.setLineWrap(true);
+        inputOwnRunTextPlayerSecondTextField.setFont(new Font("Courier",Font.PLAIN,10));
         JScrollPane inputOwnTextSecondScrollPane = new JScrollPane(inputOwnRunTextPlayerSecondTextField);
         inputOwnRunTextPlayerSecondTextField.setToolTipText("Aktywne tylko, jeśli 'Uruchom Jako' jest wybrane na 'Własne'");
 
