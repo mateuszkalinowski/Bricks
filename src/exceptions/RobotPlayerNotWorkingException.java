@@ -5,7 +5,7 @@ package exceptions;
  * Project Bricks
  */
 public class RobotPlayerNotWorkingException extends Exception {
-        public RobotPlayerNotWorkingException(String message) {
-            super(message);
-        }
+    public RobotPlayerNotWorkingException(String message) {
+        super(message);
+    }
 }

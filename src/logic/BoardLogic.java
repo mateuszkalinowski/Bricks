@@ -19,26 +19,25 @@ public class BoardLogic {
     }
 
     public void reset() {
-                board = new int[staticSize][staticSize];
-                for (int i = 0; i < staticSize; i++)
-                    for (int j = 0; j < staticSize; j++)
-                        board[i][j] = 0;
+        board = new int[staticSize][staticSize];
+        for (int i = 0; i < staticSize; i++)
+            for (int j = 0; j < staticSize; j++)
+                board[i][j] = 0;
     }
 
-    public void saveToFile(){
+    public void saveToFile() {
         try {
-            PrintWriter createBoardFile = new PrintWriter(new File( System.getProperty("user.home") + "/Documents/Bricks/board.txt"));
+            PrintWriter createBoardFile = new PrintWriter(new File(System.getProperty("user.home") + "/Documents/Bricks/board.txt"));
             createBoardFile.println(this.width);
-            for(int i = 0; i < height;i++) {
+            for (int i = 0; i < height; i++) {
                 String line = "";
-                for(int j = 0; j < width;j++) {
-                    line+=board[j][i]+" ";
+                for (int j = 0; j < width; j++) {
+                    line += board[j][i] + " ";
                 }
                 createBoardFile.println(line);
             }
             createBoardFile.close();
-        }
-        catch (Exception e) {
+        } catch (Exception e) {
             System.out.println("Nie działa");
         }
     }
@@ -50,25 +49,25 @@ public class BoardLogic {
         result[2] = false;
         result[3] = false;
         try {
-            if (board[x][y-1] == 0) result[0] = true;
+            if (board[x][y - 1] == 0) result[0] = true;
         } catch (ArrayIndexOutOfBoundsException e) {
             result[0] = false;
         }
 
         try {
-            if (board[x+1][y] == 0) result[1] = true;
+            if (board[x + 1][y] == 0) result[1] = true;
         } catch (ArrayIndexOutOfBoundsException e) {
             result[1] = false;
         }
 
         try {
-            if (board[x][y+1] == 0) result[2] = true;
+            if (board[x][y + 1] == 0) result[2] = true;
         } catch (ArrayIndexOutOfBoundsException e) {
             result[2] = false;
         }
 
         try {
-            if (board[x-1][y] == 0) result[3] = true;
+            if (board[x - 1][y] == 0) result[3] = true;
         } catch (ArrayIndexOutOfBoundsException e) {
             result[3] = false;
         }
@@ -77,21 +76,22 @@ public class BoardLogic {
     }
 
     public boolean anyMoves() {
-        for(int i = 0; i < staticSize-1;i++) {
-            for(int j = 0; j < staticSize;j++) {
-                if((board[i][j]==0) && (board[i+1][j]==0))
+        for (int i = 0; i < staticSize - 1; i++) {
+            for (int j = 0; j < staticSize; j++) {
+                if ((board[i][j] == 0) && (board[i + 1][j] == 0))
                     return true;
             }
         }
-        for(int i = 0; i < staticSize;i++) {
-            for(int j = 0; j < staticSize-1;j++) {
-                if((board[i][j]==0) && (board[i][j+1]==0))
+        for (int i = 0; i < staticSize; i++) {
+            for (int j = 0; j < staticSize - 1; j++) {
+                if ((board[i][j] == 0) && (board[i][j + 1] == 0))
                     return true;
             }
         }
 
         return false;
     }
+
     public int width;
     public int height;
     int staticSize;

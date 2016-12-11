@@ -7,7 +7,7 @@ import java.awt.*;
  * Project Bricks
  */
 public class Settings {
-    public Settings(int BoardSize,Color playerFirstColor,Color playerSecondColor,boolean isSound,int volume,boolean debugMode,String path1,String path2,int programTypeFirst,int programTypeSecond,String runCommandFirst, String runCommandSecond,int computerPlayerType) {
+    public Settings(int BoardSize, Color playerFirstColor, Color playerSecondColor, boolean isSound, int volume, boolean debugMode, String path1, String path2, int programTypeFirst, int programTypeSecond, String runCommandFirst, String runCommandSecond, int computerPlayerType) {
         this.BoardSize = BoardSize;
         this.playerFirstColor = playerFirstColor;
         this.playerSecondColor = playerSecondColor;
@@ -22,43 +22,56 @@ public class Settings {
         secondPlayerRunCommand = runCommandSecond;
         this.computerPlayerType = computerPlayerType;
     }
+
     public String getFirstComputerPlayerPath() {
         return firstComputerPlayerPath;
     }
+
     public String getSecondComputerPlayerPath() {
         return secondComputerPlayerPath;
     }
-    public int getBoardSize(){
+
+    public int getBoardSize() {
         return BoardSize;
     }
-    public Color getPlayerFirstColor(){
+
+    public Color getPlayerFirstColor() {
         return playerFirstColor;
     }
-    public Color getPlayerSecondColor(){
+
+    public Color getPlayerSecondColor() {
         return playerSecondColor;
     }
+
     public boolean getIsSound() {
         return isSound;
     }
+
     public int getVolume() {
         return volume;
     }
+
     public boolean getDebugMode() {
         return debugMode;
     }
+
     public String getSecondPlayerRunCommand() {
         return secondPlayerRunCommand;
     }
+
     public String getFirstPlayerRunCommand() {
         return firstPlayerRunCommand;
     }
+
     public int getSecondPlayerProgramType() {
         return secondPlayerProgramType;
     }
+
     public int getFirstPlayerProgramType() {
         return firstPlayerProgramType;
     }
-    public int getComputerPlayerType(){
+
+    public int getComputerPlayerType() {
         return computerPlayerType;
     }
 

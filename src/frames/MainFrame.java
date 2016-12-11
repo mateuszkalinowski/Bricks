@@ -16,6 +16,7 @@ import java.awt.*;
 import java.awt.event.*;
 import java.io.*;
 import java.net.URL;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Mateusz on 20.05.2016.
@@ -23,9 +24,9 @@ import java.net.URL;
  */
 public class MainFrame extends JFrame implements Runnable {
 
-    public MainFrame(int initialBoardSize,Color firstPlayerColor,Color secondPlayerColor,boolean isSound,int volume,boolean debugModeInitialize,String firstPlayerPath, String secondPlayerPath,
-    int firstPlayerProgramTypeArgument,int secondPlayerProgramTypeArgument,
-                     String firstPlayerRunCommandArgument,String secondPlayerRunCommandArgument, int computerPlayerType) {
+    public MainFrame(int initialBoardSize, Color firstPlayerColor, Color secondPlayerColor, boolean isSound, int volume, boolean debugModeInitialize, String firstPlayerPath, String secondPlayerPath,
+                     int firstPlayerProgramTypeArgument, int secondPlayerProgramTypeArgument,
+                     String firstPlayerRunCommandArgument, String secondPlayerRunCommandArgument, int computerPlayerType) {
         setTitle("Bricks");
         setSize(600, 650);
         setMinimumSize(new Dimension(550, 650));
@@ -48,27 +49,27 @@ public class MainFrame extends JFrame implements Runnable {
         this.firstPlayerRunCommand = firstPlayerRunCommandArgument;
         this.secondPlayerRunCommand = secondPlayerRunCommandArgument;
 
-            if (playerFirstFullPath.length() > 7) {
-                int i = playerFirstFullPath.length() - 1;
-                for (; i > 0; i--) {
-                    if (playerFirstFullPath.charAt(i) == '/')
-                        break;
-                }
-                pathToPlayerOne = playerFirstFullPath.substring(0, i);
-                playerFirstProgramName = playerFirstFullPath.substring(i + 1, playerFirstFullPath.length());
-                playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 6);
+        if (playerFirstFullPath.length() > 7) {
+            int i = playerFirstFullPath.length() - 1;
+            for (; i > 0; i--) {
+                if (playerFirstFullPath.charAt(i) == '/')
+                    break;
+            }
+            pathToPlayerOne = playerFirstFullPath.substring(0, i);
+            playerFirstProgramName = playerFirstFullPath.substring(i + 1, playerFirstFullPath.length());
+            playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 6);
 
+        }
+        if (playerSecondFullPath.length() > 7) {
+            int i = playerSecondFullPath.length() - 1;
+            for (; i > 0; i--) {
+                if (playerSecondFullPath.charAt(i) == '/')
+                    break;
             }
-            if (playerSecondFullPath.length() > 7) {
-                int i = playerSecondFullPath.length() - 1;
-                for (; i > 0; i--) {
-                    if (playerSecondFullPath.charAt(i) == '/')
-                        break;
-                }
-                pathToPlayerTwo = playerSecondFullPath.substring(0, i);
-                playerSecondProgramName = playerSecondFullPath.substring(i + 1, playerSecondFullPath.length());
-                playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
-            }
+            pathToPlayerTwo = playerSecondFullPath.substring(0, i);
+            playerSecondProgramName = playerSecondFullPath.substring(i + 1, playerSecondFullPath.length());
+            playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
+        }
 
         URL imgURL = this.getClass().getResource("brick-wall.png");
         ImageIcon icon = new ImageIcon(imgURL);
@@ -80,7 +81,7 @@ public class MainFrame extends JFrame implements Runnable {
         actualPlayerColorPreview = new ColorPreview(playerFirstColor);
 
         //OS X AND macOS ONLY, ON WINDOWS/LINUX/UNIX must be set as a comment
-        //com.apple.eawt.Application.getApplication().setDockIconImage(icon.getImage());
+        com.apple.eawt.Application.getApplication().setDockIconImage(icon.getImage());
 
         gameName = new JLabel("Bricks", SwingConstants.CENTER);
         buttonsGridLayout = new JPanel(new GridLayout(11, 1));
@@ -113,62 +114,56 @@ public class MainFrame extends JFrame implements Runnable {
                 }
             };
             boolean computerPlayerFound = false;
-            if(this.computerPlayerType==1) {
-                if(firstPlayerProgramType==0) {
+            if (this.computerPlayerType == 1) {
+                if (firstPlayerProgramType == 0) {
                     try {
-                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerFirstFullPath,BoardSize);
+                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
                         computerPlayerFound = true;
-                    }
-                    catch (Exception ignored){
+                    } catch (Exception ignored) {
                     }
                 }
-                if(firstPlayerProgramType==1) {
+                if (firstPlayerProgramType == 1) {
                     try {
-                        Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainFrame.pathToPlayerOne +" "+Bricks.mainFrame.playerFirstProgramName,BoardSize);
+                        Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainFrame.pathToPlayerOne + " " + Bricks.mainFrame.playerFirstProgramName, BoardSize);
                         computerPlayerFound = true;
-                    }
-                    catch (Exception ignored){
+                    } catch (Exception ignored) {
                     }
 
                 }
-                if(firstPlayerProgramType==2) {
+                if (firstPlayerProgramType == 2) {
                     try {
-                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(firstPlayerRunCommand,BoardSize);
+                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(firstPlayerRunCommand, BoardSize);
                         computerPlayerFound = true;
-                    }
-                    catch (Exception ignored){
+                    } catch (Exception ignored) {
                     }
 
                 }
             }
-            if(this.computerPlayerType==2) {
-                if(secondPlayerProgramType==0) {
+            if (this.computerPlayerType == 2) {
+                if (secondPlayerProgramType == 0) {
                     try {
-                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerSecondFullPath,BoardSize);
+                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
                         computerPlayerFound = true;
-                    }
-                    catch (Exception ignored){
+                    } catch (Exception ignored) {
                     }
                 }
-                if(secondPlayerProgramType==1) {
+                if (secondPlayerProgramType == 1) {
                     try {
-                        Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainFrame.pathToPlayerTwo +" "+Bricks.mainFrame.playerSecondProgramName,BoardSize);
+                        Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainFrame.pathToPlayerTwo + " " + Bricks.mainFrame.playerSecondProgramName, BoardSize);
                         computerPlayerFound = true;
-                    }
-                    catch (Exception ignored){
+                    } catch (Exception ignored) {
                     }
 
                 }
-                if(secondPlayerProgramType==2) {
+                if (secondPlayerProgramType == 2) {
                     try {
-                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(secondPlayerRunCommand,BoardSize);
+                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(secondPlayerRunCommand, BoardSize);
                         computerPlayerFound = true;
-                    }
-                    catch (Exception ignored){
+                    } catch (Exception ignored) {
                     }
                 }
             }
-            if(this.computerPlayerType==0 || (computerPlayerFound)) {
+            if (this.computerPlayerType == 0 || (computerPlayerFound)) {
                 gameBorderLayout.getActionMap().put("backToMenuAction", backToMenuAction);
                 gameBorderLayout.getInputMap(JComponent.WHEN_FOCUSED).put(KeyStroke.getKeyStroke("ESCAPE"), "backToMenuAction");
                 board = new BoardLogic(BoardSize);
@@ -187,15 +182,12 @@ public class MainFrame extends JFrame implements Runnable {
                 game = new Thread(this);
                 game.start();
                 gameBorderLayout.requestFocus();
-            }
-            else {
+            } else {
                 JOptionPane.showConfirmDialog(null, "Sprawdź poprawność programu grającego", "Błąd" +
-                        " gry", JOptionPane.PLAIN_MESSAGE, JOptionPane.ERROR_MESSAGE);
+                        " gry", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
             }
         });
-        undoLastMoveButton.addActionListener(e -> {
-            boardPanel.undoLastMove();
-        });
+        undoLastMoveButton.addActionListener(e -> boardPanel.undoLastMove());
 
         runMultiPlayer.addActionListener(e -> {
             gameBorderLayout = new JPanel(new BorderLayout());
@@ -220,7 +212,7 @@ public class MainFrame extends JFrame implements Runnable {
             undoLastMoveButton.setEnabled(false);
             Bricks.mainFrame.restTiles.setText("Gracz: ");
             JPanel southBorderLayout = new JPanel(new BorderLayout());
-            JPanel southLeftGridLayout = new JPanel(new GridLayout(1,2));
+            JPanel southLeftGridLayout = new JPanel(new GridLayout(1, 2));
 
             southLeftGridLayout.add(restTiles);
             southLeftGridLayout.add(actualPlayerColorPreview);
@@ -242,59 +234,53 @@ public class MainFrame extends JFrame implements Runnable {
         runComputerPlayers.addActionListener(e -> {
             boolean checkFirstComputerPlayer = false;
             boolean checkSecondComputerPlayer = false;
-            if(firstPlayerProgramType==0) {
+            if (firstPlayerProgramType == 0) {
                 try {
-                    Bricks.firstRobotPlayer = new RobotPlayer(playerFirstFullPath,BoardSize);
+                    Bricks.firstRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
                     checkFirstComputerPlayer = true;
-                }
-                catch (Exception ignored){
+                } catch (Exception ignored) {
                 }
             }
-            if(firstPlayerProgramType==1) {
+            if (firstPlayerProgramType == 1) {
                 try {
-                    Bricks.firstRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainFrame.pathToPlayerOne +" "+Bricks.mainFrame.playerFirstProgramName,BoardSize);
+                    Bricks.firstRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainFrame.pathToPlayerOne + " " + Bricks.mainFrame.playerFirstProgramName, BoardSize);
                     checkFirstComputerPlayer = true;
-                }
-                catch (Exception ignored){
+                } catch (Exception ignored) {
                 }
 
             }
-            if(firstPlayerProgramType==2) {
+            if (firstPlayerProgramType == 2) {
                 try {
-                    Bricks.firstRobotPlayer = new RobotPlayer(firstPlayerRunCommand,BoardSize);
+                    Bricks.firstRobotPlayer = new RobotPlayer(firstPlayerRunCommand, BoardSize);
                     checkFirstComputerPlayer = true;
-                }
-                catch (Exception ignored){
-                }
-
-            }
-
-            if(secondPlayerProgramType==0) {
-                try {
-                    Bricks.secondRobotPlayer = new RobotPlayer(playerSecondFullPath,BoardSize);
-                    checkSecondComputerPlayer = true;
-                }
-                catch (Exception ignored){
-                }
-            }
-            if(secondPlayerProgramType==1) {
-                try {
-                    Bricks.secondRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainFrame.pathToPlayerTwo +" "+Bricks.mainFrame.playerSecondProgramName,BoardSize);
-                    checkSecondComputerPlayer = true;
-                }
-                catch (Exception ignored){
+                } catch (Exception ignored) {
                 }
 
             }
-            if(secondPlayerProgramType==2) {
+
+            if (secondPlayerProgramType == 0) {
                 try {
-                    Bricks.secondRobotPlayer = new RobotPlayer(secondPlayerRunCommand,BoardSize);
+                    Bricks.secondRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
                     checkSecondComputerPlayer = true;
-                }
-                catch (Exception ignored){
+                } catch (Exception ignored) {
                 }
             }
-            if(checkFirstComputerPlayer && checkSecondComputerPlayer) {
+            if (secondPlayerProgramType == 1) {
+                try {
+                    Bricks.secondRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainFrame.pathToPlayerTwo + " " + Bricks.mainFrame.playerSecondProgramName, BoardSize);
+                    checkSecondComputerPlayer = true;
+                } catch (Exception ignored) {
+                }
+
+            }
+            if (secondPlayerProgramType == 2) {
+                try {
+                    Bricks.secondRobotPlayer = new RobotPlayer(secondPlayerRunCommand, BoardSize);
+                    checkSecondComputerPlayer = true;
+                } catch (Exception ignored) {
+                }
+            }
+            if (checkFirstComputerPlayer && checkSecondComputerPlayer) {
                 gameBorderLayout = new JPanel(new BorderLayout());
                 Action backToMenuAction = new AbstractAction() {
                     @Override
@@ -319,47 +305,54 @@ public class MainFrame extends JFrame implements Runnable {
                 computerPlayerLabel = new JLabel("Gracz Numer " + computerPlayer);
                 nextMoveButton = new JButton("Następny Ruch");
                 nextMoveButton.addActionListener(e1 -> {
-                    //TODO
                     boolean gameFinished = false;
                     try {
                         computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
                         board.saveToFile();
                         int move[] = new int[4];
-                        if(computerPlayer==1) {
-                            if(boardPanel.movesStorage.isEmpty()) {
+                        if (computerPlayer == 1) {
+                            if (boardPanel.movesStorage.isEmpty()) {
                                 try {
                                     move = Bricks.firstRobotPlayer.makeMove("Zaczynaj");
+                                } catch (InvalidMoveException exception) {
+                                    boardPanel.walkover(computerPlayer, "BadMove");
+                                    gameFinished = true;
+                                } catch (TimeoutException exception) {
+                                    boardPanel.walkover(computerPlayer, "Timeout");
+                                    gameFinished = true;
                                 }
-                                catch (InvalidMoveException exception) {
-                                    boardPanel.walkover(computerPlayer,"Timeout");
-                                    gameFinished=true;
-                                }
-                            }
-                            else {
+                            } else {
                                 try {
                                     move = Bricks.firstRobotPlayer.makeMove(boardPanel.movesStorage.getLastMoveAsString());
-                                }
-                                catch (InvalidMoveException exception) {
-                                    boardPanel.walkover(computerPlayer,"Timeout");
-                                    gameFinished=true;
+                                } catch (InvalidMoveException exception) {
+                                    boardPanel.walkover(computerPlayer, "BadMove");
+                                    gameFinished = true;
+                                } catch (TimeoutException exception) {
+                                    boardPanel.walkover(computerPlayer, "Timeout");
+                                    gameFinished = true;
                                 }
                             }
                         }
-                        if(computerPlayer==2) {
-                            if(boardPanel.movesStorage.isEmpty()) {
+                        if (computerPlayer == 2) {
+                            if (boardPanel.movesStorage.isEmpty()) {
                                 try {
                                     move = Bricks.secondRobotPlayer.makeMove("Zaczynaj");
                                 } catch (InvalidMoveException exception) {
-                                    boardPanel.walkover(computerPlayer,"Timeout");
-                                    gameFinished=true;
+                                    boardPanel.walkover(computerPlayer, "BadMove");
+                                    gameFinished = true;
+                                } catch (TimeoutException exception) {
+                                    boardPanel.walkover(computerPlayer, "Timeout");
+                                    gameFinished = true;
                                 }
-                            }
-                            else {
+                            } else {
                                 try {
                                     move = Bricks.secondRobotPlayer.makeMove(boardPanel.movesStorage.getLastMoveAsString());
                                 } catch (InvalidMoveException exception) {
-                                    boardPanel.walkover(computerPlayer,"Timeout");
-                                    gameFinished=true;
+                                    boardPanel.walkover(computerPlayer, "BadMove");
+                                    gameFinished = true;
+                                } catch (TimeoutException exception) {
+                                    boardPanel.walkover(computerPlayer, "Timeout");
+                                    gameFinished = true;
                                 }
                             }
                         }
@@ -370,26 +363,24 @@ public class MainFrame extends JFrame implements Runnable {
                         int y2 = move[3];
 
 
-                        if(possibleMove(x1,y1,x2,y2,board.board) && !gameFinished)
-                         {
-                                board.board[x1][y1] = computerPlayer;
-                                board.board[x2][y2] = computerPlayer;
-                                boardPanel.playSound();
-                                boardPanel.movesStorage.addMove(x1, y1, x2, y2);
+                        if (possibleMove(x1, y1, x2, y2, board.board) && !gameFinished) {
+                            board.board[x1][y1] = computerPlayer;
+                            board.board[x2][y2] = computerPlayer;
+                            boardPanel.playSound();
+                            boardPanel.movesStorage.addMove(x1, y1, x2, y2);
 
 
-                                if (computerPlayer == 1) {
-                                    computerPlayer = 2;
-                                    actualPlayerColorPreview.setColor(playerSecondColor);
+                            if (computerPlayer == 1) {
+                                computerPlayer = 2;
+                                actualPlayerColorPreview.setColor(playerSecondColor);
 
-                                } else if (computerPlayer == 2) {
-                                    computerPlayer = 1;
-                                    actualPlayerColorPreview.setColor(playerFirstColor);
-                                }
-                                undoLastMoveButton.setEnabled(true);
-                        }
-                        else if (!gameFinished) {
-                            boardPanel.walkover(computerPlayer,"InvalidMove");
+                            } else if (computerPlayer == 2) {
+                                computerPlayer = 1;
+                                actualPlayerColorPreview.setColor(playerFirstColor);
+                            }
+                            undoLastMoveButton.setEnabled(true);
+                        } else if (!gameFinished) {
+                            boardPanel.walkover(computerPlayer, "InvalidMove");
                         }
                         repaintThis();
                         repaint();
@@ -401,9 +392,9 @@ public class MainFrame extends JFrame implements Runnable {
 
                 });
 
-                JPanel robotWarsControlGridPanel = new JPanel(new GridLayout(1,3));
+                JPanel robotWarsControlGridPanel = new JPanel(new GridLayout(1, 3));
 
-                JPanel speedControlGridLayout = new JPanel(new GridLayout(1,3));
+                JPanel speedControlGridLayout = new JPanel(new GridLayout(1, 3));
                 JTextField speedTextField = new JTextField("1");
                 speedTextField.setEditable(false);
                 speedTextField.setHorizontalAlignment(SwingConstants.CENTER);
@@ -411,16 +402,16 @@ public class MainFrame extends JFrame implements Runnable {
                 speedUpButton = new JButton("+");
                 speedUpButton.addActionListener(e13 -> {
                     int i = Integer.parseInt(speedTextField.getText());
-                    if(i<=9)
+                    if (i <= 9)
                         i++;
-                    speedTextField.setText(i+"");
+                    speedTextField.setText(i + "");
                 });
                 speedDownButton = new JButton("-");
                 speedDownButton.addActionListener(e12 -> {
                     int i = Integer.parseInt(speedTextField.getText());
-                    if(i>1)
+                    if (i > 1)
                         i--;
-                    speedTextField.setText(i+"");
+                    speedTextField.setText(i + "");
                 });
 
                 speedControlGridLayout.add(speedDownButton);
@@ -432,21 +423,18 @@ public class MainFrame extends JFrame implements Runnable {
                 robotWarsControlGridPanel.add(nextMoveButton);
 
 
-
                 runAutoMovesButton = new JButton("Automatyczna Gra");
                 runAutoMovesButton.addActionListener(e14 -> {
-                    if(runAutoMovesButton.getText().equals("Automatyczna Gra")) {
+                    if (runAutoMovesButton.getText().equals("Automatyczna Gra")) {
                         try {
                             runner = new Runner(Integer.parseInt(speedTextField.getText()));
+                        } catch (Exception ignored) {
                         }
-                        catch (Exception ignored) {
-                        }
-                        Bricks.autoPlayRunning=true;
+                        Bricks.autoPlayRunning = true;
                         runner.start();
                         controlAutoPlayButtons(false);
-                    }
-                    else {
-                        Bricks.autoPlayRunning=false;
+                    } else {
+                        Bricks.autoPlayRunning = false;
                         controlAutoPlayButtons(true);
                     }
                 });
@@ -470,18 +458,15 @@ public class MainFrame extends JFrame implements Runnable {
                 game = new Thread(this);
                 game.start();
                 gameBorderLayout.requestFocus();
-            }
-            else if (checkFirstComputerPlayer && !checkSecondComputerPlayer){
+            } else if (checkFirstComputerPlayer) {
                 JOptionPane.showConfirmDialog(null, "Sprawdź poprawność drugiego programu grającego", "Błąd" +
-                        " gry", JOptionPane.PLAIN_MESSAGE, JOptionPane.ERROR_MESSAGE);
-            }
-            else if (!checkFirstComputerPlayer && checkSecondComputerPlayer) {
+                        " gry", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+            } else if (checkSecondComputerPlayer) {
                 JOptionPane.showConfirmDialog(null, "Sprawdź poprawność pierwszego programu grającego", "Błąd" +
-                        " gry", JOptionPane.PLAIN_MESSAGE, JOptionPane.ERROR_MESSAGE);
-            }
-            else {
+                        " gry", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
+            } else {
                 JOptionPane.showConfirmDialog(null, "Sprawdź poprawność obu programów grających", "Błąd" +
-                        " gry", JOptionPane.PLAIN_MESSAGE, JOptionPane.ERROR_MESSAGE);
+                        " gry", JOptionPane.DEFAULT_OPTION, JOptionPane.ERROR_MESSAGE);
             }
 
         });
@@ -489,9 +474,9 @@ public class MainFrame extends JFrame implements Runnable {
         optionsButton.addActionListener(e -> {
             JPanel optionsPanel = new JPanel(new BorderLayout());
             OptionsPanel opcje = new OptionsPanel(new Settings(BoardSize, playerFirstColor, playerSecondColor,
-                    this.isSound,this.volume,this.debugMode,playerFirstFullPath,playerSecondFullPath,
-                    firstPlayerProgramType,secondPlayerProgramType,firstPlayerRunCommand,secondPlayerRunCommand,this.computerPlayerType));
-            optionsPanel.add(opcje,BorderLayout.CENTER);
+                    this.isSound, this.volume, this.debugMode, playerFirstFullPath, playerSecondFullPath,
+                    firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, this.computerPlayerType));
+            optionsPanel.add(opcje, BorderLayout.CENTER);
             this.getContentPane().removeAll();
             this.getContentPane().add(optionsPanel);
             revalidate();
@@ -516,7 +501,7 @@ public class MainFrame extends JFrame implements Runnable {
         exitButton.addActionListener(e -> System.exit(0));
 
         credits = new JLabel("<html><center>Autorzy: Mateusz Kalinowski, Michał Romaszko <br> Wersja: 0.9.6, Ikona: Madebyoliver, www.flaticon.com</center></html>");
-        credits.setHorizontalAlignment(0);
+        credits.setHorizontalAlignment(SwingConstants.CENTER);
 
 
         buttonsGridLayout.add(new JLabel());
@@ -551,11 +536,11 @@ public class MainFrame extends JFrame implements Runnable {
         game.interrupt();
         running = false;
         stopRunner();
-        if(Bricks.firstRobotPlayer!=null)
+        if (Bricks.firstRobotPlayer != null)
             Bricks.firstRobotPlayer.killRobot();
-        if(Bricks.secondRobotPlayer!=null)
+        if (Bricks.secondRobotPlayer != null)
             Bricks.secondRobotPlayer.killRobot();
-        if(Bricks.singlePlayerRobotPlayer!=null)
+        if (Bricks.singlePlayerRobotPlayer != null)
             Bricks.singlePlayerRobotPlayer.killRobot();
         this.getContentPane().removeAll();
         prepareMainBorderLayout();
@@ -564,6 +549,7 @@ public class MainFrame extends JFrame implements Runnable {
         validate();
         repaint();
     }
+
     void backToMenu() {
         this.getContentPane().removeAll();
         prepareMainBorderLayout();
@@ -620,88 +606,90 @@ public class MainFrame extends JFrame implements Runnable {
 
         }
     }
+
     public void repaintThis() {
         repaint();
     }
 
     void setSettings(Settings newSettings) {
-                BoardSize = newSettings.getBoardSize();
-                playerFirstColor = newSettings.getPlayerFirstColor();
-                playerSecondColor = newSettings.getPlayerSecondColor();
-                this.isSound = newSettings.getIsSound();
-                this.volume = newSettings.getVolume();
-                this.debugMode = newSettings.getDebugMode();
-                playerFirstFullPath = newSettings.getFirstComputerPlayerPath();
-                playerSecondFullPath = newSettings.getSecondComputerPlayerPath();
-                computerPlayerType = newSettings.getComputerPlayerType();
-                if(playerFirstFullPath.length()>7) {
-                    int i = playerFirstFullPath.length() - 1;
-                    for (; i > 0; i--) {
-                        if (playerFirstFullPath.charAt(i) == '/')
-                            break;
-                    }
-                    pathToPlayerOne = playerFirstFullPath.substring(0, i);
-                    playerFirstProgramName = playerFirstFullPath.substring(i + 1, playerFirstFullPath.length());
-                    playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 6);
+        BoardSize = newSettings.getBoardSize();
+        playerFirstColor = newSettings.getPlayerFirstColor();
+        playerSecondColor = newSettings.getPlayerSecondColor();
+        this.isSound = newSettings.getIsSound();
+        this.volume = newSettings.getVolume();
+        this.debugMode = newSettings.getDebugMode();
+        playerFirstFullPath = newSettings.getFirstComputerPlayerPath();
+        playerSecondFullPath = newSettings.getSecondComputerPlayerPath();
+        computerPlayerType = newSettings.getComputerPlayerType();
+        if (playerFirstFullPath.length() > 7) {
+            int i = playerFirstFullPath.length() - 1;
+            for (; i > 0; i--) {
+                if (playerFirstFullPath.charAt(i) == '/')
+                    break;
+            }
+            pathToPlayerOne = playerFirstFullPath.substring(0, i);
+            playerFirstProgramName = playerFirstFullPath.substring(i + 1, playerFirstFullPath.length());
+            playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 6);
 
-                }
-                if(playerSecondFullPath.length()>7) {
-                    int i = playerSecondFullPath.length() - 1;
-                    for (; i > 0; i--) {
-                        if (playerSecondFullPath.charAt(i) == '/')
-                            break;
-                    }
-                    pathToPlayerTwo = playerSecondFullPath.substring(0, i);
-                    playerSecondProgramName = playerSecondFullPath.substring(i + 1, playerSecondFullPath.length());
-                    playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
-                }
-                firstPlayerProgramType=newSettings.getFirstPlayerProgramType();
-                secondPlayerProgramType=newSettings.getSecondPlayerProgramType();
+        }
+        if (playerSecondFullPath.length() > 7) {
+            int i = playerSecondFullPath.length() - 1;
+            for (; i > 0; i--) {
+                if (playerSecondFullPath.charAt(i) == '/')
+                    break;
+            }
+            pathToPlayerTwo = playerSecondFullPath.substring(0, i);
+            playerSecondProgramName = playerSecondFullPath.substring(i + 1, playerSecondFullPath.length());
+            playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
+        }
+        firstPlayerProgramType = newSettings.getFirstPlayerProgramType();
+        secondPlayerProgramType = newSettings.getSecondPlayerProgramType();
 
-                firstPlayerRunCommand=newSettings.getFirstPlayerRunCommand();
-                secondPlayerRunCommand=newSettings.getSecondPlayerRunCommand();
-                exportSettings();
+        firstPlayerRunCommand = newSettings.getFirstPlayerRunCommand();
+        secondPlayerRunCommand = newSettings.getSecondPlayerRunCommand();
+        exportSettings();
     }
 
-    private boolean possibleMove(int x1,int y1,int x2,int y2,int[][] board) {
-        if(board[x1][y1]!=0 || board[x2][y2]!=0)
+    private boolean possibleMove(int x1, int y1, int x2, int y2, int[][] board) {
+        if (board[x1][y1] != 0 || board[x2][y2] != 0)
             return false;
-        boolean flag=false;
+        boolean flag = false;
 
-        if(y1==y2) {
-            if(x1+1==x2)
-                flag=true;
-            if(x1-1==x2)
-                flag=true;
+        if (y1 == y2) {
+            if (x1 + 1 == x2)
+                flag = true;
+            if (x1 - 1 == x2)
+                flag = true;
         }
-        if(x1==x2) {
-            if(y1+1==y2)
-                flag=true;
-            if(y1-1==y2)
-                flag=true;
+        if (x1 == x2) {
+            if (y1 + 1 == y2)
+                flag = true;
+            if (y1 - 1 == y2)
+                flag = true;
         }
 
         return flag;
     }
-    public void stopRunner(){
-        Bricks.autoPlayRunning=false;
+
+    public void stopRunner() {
+        Bricks.autoPlayRunning = false;
         controlAutoPlayButtons(true);
     }
 
-    public int getComputerPlayerType(){
+    public int getComputerPlayerType() {
         return computerPlayerType;
     }
+
     private void controlAutoPlayButtons(boolean turnOn) {
-        if(turnOn) {
-            if(speedUpButton!=null) {
+        if (turnOn) {
+            if (speedUpButton != null) {
                 speedUpButton.setEnabled(true);
                 speedDownButton.setEnabled(true);
                 runAutoMovesButton.setText("Automatyczna Gra");
                 nextMoveButton.setEnabled(true);
             }
-        }
-        else {
-            if(speedUpButton!=null) {
+        } else {
+            if (speedUpButton != null) {
                 speedUpButton.setEnabled(false);
                 speedDownButton.setEnabled(false);
                 runAutoMovesButton.setText("Przerwij");
@@ -710,7 +698,7 @@ public class MainFrame extends JFrame implements Runnable {
         }
     }
 
-    public boolean getDebugMode(){
+    public boolean getDebugMode() {
         return debugMode;
     }
 

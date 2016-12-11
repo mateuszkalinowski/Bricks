@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Mateusz on 08.12.2016.
@@ -29,7 +30,8 @@ public class RobotPlayer {
         }
         writer.println(size);
     }
-    public void reset() throws IOException, RobotPlayerNotWorkingException{
+
+    public void reset() throws IOException, RobotPlayerNotWorkingException {
         robotProc.destroy();
         robotProc = Runtime.getRuntime().exec(source);
         reader = new BufferedReader(new InputStreamReader(robotProc.getInputStream()));
@@ -41,14 +43,14 @@ public class RobotPlayer {
         writer.println(size);
     }
 
-    public int[] makeMove(String message) throws InvalidMoveException {
+    public int[] makeMove(String message) throws InvalidMoveException, TimeoutException {
         int[] move = new int[4];
         writer.println(message);
         String nextMove;
         try {
             for (int i = 0; i <= 10; i++) {     //pętla sprawdza co 100ms czy nie przyszła odpowiedź
                 if (i == 10)                    //przekroczony czas na odpowiedź, wyrzuca błąd
-                    throw new InvalidMoveException("Ruch wykonany przez komputer nie jest poprawny");
+                    throw new TimeoutException("Komputer przekroczył czas na wykonanie ruchu");
                 Thread.sleep(100);
                 if (reader.ready())             //jak linia gotowa do odczytu - przerywa pętlę
                     break;
@@ -73,6 +75,7 @@ public class RobotPlayer {
         reader = null;
         writer = null;
     }
+
     private String source;
 
     private int size;

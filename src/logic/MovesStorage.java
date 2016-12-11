@@ -52,16 +52,6 @@ public class MovesStorage {
         }
         return moveValues;
     }
-/*
-    public int[] getLastMove() {
-        int[] moveValues = new int[4];
-        moveValues[0] = moves.get(moves.size() - 1).x1;
-        moveValues[1] = moves.get(moves.size() - 1).y1;
-        moveValues[2] = moves.get(moves.size() - 1).x2;
-        moveValues[3] = moves.get(moves.size() - 1).y2;
-        return moveValues;
-    }
-*/
     public String getLastMoveAsString() {
         return moves.get(moves.size() - 1).x1 + " " +
                 moves.get(moves.size() - 1).y1 + " " +

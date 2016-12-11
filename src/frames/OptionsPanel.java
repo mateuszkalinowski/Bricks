@@ -35,8 +35,8 @@ class OptionsPanel extends JPanel {
 
         JButton chooseFirstPlayerColorButton = new JButton("Wybierz");
         chooseFirstPlayerColorButton.addActionListener(e -> {
-            Color newColor = JColorChooser.showDialog(null,"Wybierz kolor pierwszego gracza",playerFirstColor);
-            if(newColor!=null) {
+            Color newColor = JColorChooser.showDialog(null, "Wybierz kolor pierwszego gracza", playerFirstColor);
+            if (newColor != null) {
                 playerFirstColor = newColor;
                 firstPlayerColor.setColor(playerFirstColor);
                 repaint();
@@ -44,8 +44,8 @@ class OptionsPanel extends JPanel {
         });
         JButton chooseSecondPlayerColorButton = new JButton("Wybierz");
         chooseSecondPlayerColorButton.addActionListener(e -> {
-            Color newColor = JColorChooser.showDialog(null,"Wybierz kolor drugiego gracza",playerSecondColor);
-            if(newColor!=null) {
+            Color newColor = JColorChooser.showDialog(null, "Wybierz kolor drugiego gracza", playerSecondColor);
+            if (newColor != null) {
                 playerSecondColor = newColor;
                 secondPlayerColor.setColor(playerSecondColor);
                 repaint();
@@ -55,16 +55,16 @@ class OptionsPanel extends JPanel {
         JButton resetOptions = new JButton("Ustawienia Domyślne");
         resetOptions.addActionListener(e -> {
             BoardSize = 5;
-            playerFirstColor = new Color(69,136,58);
-            playerSecondColor = new Color(238,44,44);
+            playerFirstColor = new Color(69, 136, 58);
+            playerSecondColor = new Color(238, 44, 44);
             firstPlayerColor.setColor(playerFirstColor);
             secondPlayerColor.setColor(playerSecondColor);
             isSound = true;
             soundIsCheckBox.setSelected(true);
             volume = 0;
             soundVolumeSlider.setValue(volume);
-            for(int i = 0; i < boardSizeComboBox.getItemCount();i++) {
-                if(Integer.parseInt(boardSizeComboBox.getItemAt(i).split("x")[0])==BoardSize ) {
+            for (int i = 0; i < boardSizeComboBox.getItemCount(); i++) {
+                if (Integer.parseInt(boardSizeComboBox.getItemAt(i).split("x")[0]) == BoardSize) {
                     boardSizeComboBox.setSelectedIndex(i);
                 }
             }
@@ -92,8 +92,8 @@ class OptionsPanel extends JPanel {
             repaint();
         });
 
-        JPanel firstPlayerOptionsGridLayout = new JPanel(new GridLayout(1,2));
-        JPanel secondPlayerOptionsGridLayout = new JPanel(new GridLayout(1,2));
+        JPanel firstPlayerOptionsGridLayout = new JPanel(new GridLayout(1, 2));
+        JPanel secondPlayerOptionsGridLayout = new JPanel(new GridLayout(1, 2));
 
         boardSizeComboBox = new JComboBox<>();
         boardSizeComboBox.addItem("5x5");
@@ -118,8 +118,7 @@ class OptionsPanel extends JPanel {
         boardSizeComboBox.addActionListener(e -> {
             try {
                 BoardSize = Integer.parseInt(boardSizeComboBox.getSelectedItem().toString().split("x")[0]);
-            }
-            catch (Exception excIntegerParse) {
+            } catch (Exception excIntegerParse) {
                 BoardSize = 5;
             }
         });
@@ -130,23 +129,23 @@ class OptionsPanel extends JPanel {
         JButton saveChanges = new JButton("Zapisz zmiany");
 
         saveChanges.addActionListener(e -> {
-            Bricks.mainFrame.setSettings(new Settings(BoardSize,playerFirstColor,playerSecondColor,isSound,volume,
-                    debugMode,playerFirstFullPath,playerSecondFullPath,firstPlayerProgramType,secondPlayerProgramType,
-                    inputOwnRunTextPlayerFirstTextField.getText(),inputOwnRunTextPlayerSecondTextField.getText(),computerPlayerType));
+            Bricks.mainFrame.setSettings(new Settings(BoardSize, playerFirstColor, playerSecondColor, isSound, volume,
+                    debugMode, playerFirstFullPath, playerSecondFullPath, firstPlayerProgramType, secondPlayerProgramType,
+                    inputOwnRunTextPlayerFirstTextField.getText(), inputOwnRunTextPlayerSecondTextField.getText(), computerPlayerType));
             Bricks.mainFrame.backToMenu();
         });
 
-        JPanel southGridLayout = new JPanel(new GridLayout(2,1));
+        JPanel southGridLayout = new JPanel(new GridLayout(2, 1));
         southGridLayout.add(resetOptions);
         southGridLayout.add(saveChanges);
-        mainBorderLayout.add(southGridLayout,BorderLayout.SOUTH);
+        mainBorderLayout.add(southGridLayout, BorderLayout.SOUTH);
 
         JLabel soundIsLabel = new JLabel("Dźwięki:");
         soundIsLabel.setHorizontalAlignment(JLabel.CENTER);
         soundIsCheckBox = new JCheckBox();
         JLabel soundVolumeLabel = new JLabel("Głośność:");
         soundVolumeLabel.setHorizontalAlignment(JLabel.CENTER);
-        soundVolumeSlider = new JSlider(JSlider.HORIZONTAL,-80,6,0);
+        soundVolumeSlider = new JSlider(JSlider.HORIZONTAL, -80, 6, 0);
 
 
         soundIsCheckBox.addActionListener(e -> isSound = soundIsCheckBox.isSelected());
@@ -162,22 +161,20 @@ class OptionsPanel extends JPanel {
         JButton setFirstPath = new JButton("Ustal Komputer Pierwszy");
         JButton setSecondPath = new JButton("Ustal Komputer Drugi");
 
-        if(playerFirstFullPath.length()<=30) {
+        if (playerFirstFullPath.length() <= 30) {
             setFirstPathLabel.setText(playerFirstFullPath);
+        } else {
+            setFirstPathLabel.setText("..." + playerFirstFullPath.substring(playerFirstFullPath.length() - 30, playerFirstFullPath.length()));
         }
-        else {
-            setFirstPathLabel.setText("..."+playerFirstFullPath.substring(playerFirstFullPath.length()-30,playerFirstFullPath.length()));
-        }
-        if(playerSecondFullPath.length()<=30) {
+        if (playerSecondFullPath.length() <= 30) {
             setSecondPathLabel.setText(playerSecondFullPath);
-        }
-        else {
-            setSecondPathLabel.setText("..." + playerSecondFullPath.substring(playerSecondFullPath.length()-30,playerSecondFullPath.length()));
+        } else {
+            setSecondPathLabel.setText("..." + playerSecondFullPath.substring(playerSecondFullPath.length() - 30, playerSecondFullPath.length()));
         }
 
         JPanel mainGridLayout = new JPanel(new GridLayout(15, 2));
         JLabel generalSectionLabel = new JLabel("Ogólne:");
-        generalSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD,20));
+        generalSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
         mainGridLayout.add(new JLabel());
         mainGridLayout.add(new JLabel());
         mainGridLayout.add(generalSectionLabel);
@@ -197,7 +194,7 @@ class OptionsPanel extends JPanel {
         mainGridLayout.add(new JSeparator());
         mainGridLayout.add(new JSeparator());
         JLabel soundSectionLabel = new JLabel("Dźwięk:");
-        soundSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD,20));
+        soundSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
         mainGridLayout.add(soundSectionLabel);
         mainGridLayout.add(new JLabel());
         mainGridLayout.add(soundIsLabel);
@@ -209,7 +206,7 @@ class OptionsPanel extends JPanel {
         mainGridLayout.add(new JSeparator());
         mainGridLayout.add(new JSeparator());
         JLabel advancedSectionLabel = new JLabel("Zaawansowane:");
-        advancedSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD,20));
+        advancedSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
         mainGridLayout.add(advancedSectionLabel);
         mainGridLayout.add(new JLabel());
         mainGridLayout.add(debugModeLabel);
@@ -220,11 +217,10 @@ class OptionsPanel extends JPanel {
             int save = chooseFile.showOpenDialog(null);
             if (save == JFileChooser.APPROVE_OPTION) {
                 playerFirstFullPath = chooseFile.getSelectedFile().getPath();
-                if(playerFirstFullPath.length()<=30) {
+                if (playerFirstFullPath.length() <= 30) {
                     setFirstPathLabel.setText(playerFirstFullPath);
-                }
-                else {
-                    setFirstPathLabel.setText("..."+playerFirstFullPath.substring(playerFirstFullPath.length()-30,playerFirstFullPath.length()));
+                } else {
+                    setFirstPathLabel.setText("..." + playerFirstFullPath.substring(playerFirstFullPath.length() - 30, playerFirstFullPath.length()));
                 }
             }
         });
@@ -233,11 +229,10 @@ class OptionsPanel extends JPanel {
             int save = chooseFile.showOpenDialog(null);
             if (save == JFileChooser.APPROVE_OPTION) {
                 playerSecondFullPath = chooseFile.getSelectedFile().getPath();
-                if(playerSecondFullPath.length()<=30) {
+                if (playerSecondFullPath.length() <= 30) {
                     setSecondPathLabel.setText(playerSecondFullPath);
-                }
-                else {
-                    setSecondPathLabel.setText("..." + playerSecondFullPath.substring(playerSecondFullPath.length()-30,playerSecondFullPath.length()));
+                } else {
+                    setSecondPathLabel.setText("..." + playerSecondFullPath.substring(playerSecondFullPath.length() - 30, playerSecondFullPath.length()));
                 }
             }
         });
@@ -251,11 +246,11 @@ class OptionsPanel extends JPanel {
 
         JTabbedPane mainTabPane = new JTabbedPane();
         mainTabPane.add("Podstawowe", mainGridLayout);
-        mainBorderLayout.add(mainTabPane,BorderLayout.CENTER);
+        mainBorderLayout.add(mainTabPane, BorderLayout.CENTER);
 
         JPanel advancedGridLayout = new JPanel(new GridLayout(12, 2));
         JLabel robotsWarsSectionLabel = new JLabel("Ogólne:");
-        robotsWarsSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD,20));
+        robotsWarsSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
         advancedGridLayout.add(robotsWarsSectionLabel);
         advancedGridLayout.add(new JLabel());
         advancedGridLayout.add(new JSeparator());
@@ -284,11 +279,10 @@ class OptionsPanel extends JPanel {
 
         firstPlayerProgramTypeCombo.addActionListener(e -> {
             firstPlayerProgramType = firstPlayerProgramTypeCombo.getSelectedIndex();
-            if(firstPlayerProgramTypeCombo.getSelectedIndex()==2) {
+            if (firstPlayerProgramTypeCombo.getSelectedIndex() == 2) {
                 inputOwnRunTextPlayerFirstTextField.setEnabled(true);
                 setFirstPath.setEnabled(false);
-            }
-            else {
+            } else {
                 inputOwnRunTextPlayerFirstTextField.setEnabled(false);
                 setFirstPath.setEnabled(true);
             }
@@ -314,11 +308,10 @@ class OptionsPanel extends JPanel {
 
         secondPlayerProgramTypeCombo.addActionListener(e -> {
             secondPlayerProgramType = secondPlayerProgramTypeCombo.getSelectedIndex();
-            if(secondPlayerProgramTypeCombo.getSelectedIndex()==2) {
+            if (secondPlayerProgramTypeCombo.getSelectedIndex() == 2) {
                 inputOwnRunTextPlayerSecondTextField.setEnabled(true);
                 setSecondPath.setEnabled(false);
-            }
-            else {
+            } else {
                 inputOwnRunTextPlayerSecondTextField.setEnabled(false);
                 setSecondPath.setEnabled(true);
             }
@@ -352,8 +345,8 @@ class OptionsPanel extends JPanel {
         volume = firstSettings.getVolume();
         BoardSize = firstSettings.getBoardSize();
         debugMode = firstSettings.getDebugMode();
-        for(int i = 0; i < boardSizeComboBox.getItemCount();i++) {
-            if(Integer.parseInt(boardSizeComboBox.getItemAt(i).split("x")[0])==BoardSize ) {
+        for (int i = 0; i < boardSizeComboBox.getItemCount(); i++) {
+            if (Integer.parseInt(boardSizeComboBox.getItemAt(i).split("x")[0]) == BoardSize) {
                 boardSizeComboBox.setSelectedIndex(i);
             }
         }
@@ -368,20 +361,18 @@ class OptionsPanel extends JPanel {
         inputOwnRunTextPlayerFirstTextField.setEnabled(false);
         inputOwnRunTextPlayerSecondTextField.setEnabled(false);
 
-        if(firstPlayerProgramType==2) {
+        if (firstPlayerProgramType == 2) {
             inputOwnRunTextPlayerFirstTextField.setEnabled(true);
             setFirstPath.setEnabled(false);
-        }
-        else {
+        } else {
             inputOwnRunTextPlayerFirstTextField.setEnabled(false);
             setFirstPath.setEnabled(true);
             setSecondPath.setEnabled(false);
         }
 
-        if(secondPlayerProgramType==2) {
+        if (secondPlayerProgramType == 2) {
             inputOwnRunTextPlayerSecondTextField.setEnabled(true);
-        }
-        else {
+        } else {
             inputOwnRunTextPlayerSecondTextField.setEnabled(false);
             setSecondPath.setEnabled(true);
         }
@@ -391,7 +382,8 @@ class OptionsPanel extends JPanel {
 
         repaint();
     }
-    private JComboBox<String>  secondPlayerProgramTypeCombo;
+
+    private JComboBox<String> secondPlayerProgramTypeCombo;
     private JComboBox<String> firstPlayerProgramTypeCombo;
     private JComboBox<String> boardSizeComboBox;
 

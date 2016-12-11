@@ -5,17 +5,19 @@ package logic;
  * Project Bricks
  */
 public class ComputerPlayer {
-    public ComputerPlayer(){
+    public ComputerPlayer() {
 
     }
-    public void performMove(BoardLogic board,MovesStorage movesStorage){
+
+    public void performMove(BoardLogic board, MovesStorage movesStorage) {
         this.board = board;
         this.movesStorage = movesStorage;
-        while(true) {
-            if(FullRandomMove())
+        while (true) {
+            if (FullRandomMove())
                 return;
         }
     }
+
     private boolean FullRandomMove() {
         int x = (int) (Math.random() * (board.staticSize));
         int y = (int) (Math.random() * (board.staticSize));
@@ -50,6 +52,7 @@ public class ComputerPlayer {
         }
         return false;
     }
+
     private BoardLogic board;
     private MovesStorage movesStorage;
 }
