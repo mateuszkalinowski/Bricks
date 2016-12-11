@@ -32,6 +32,12 @@ public class MainFrame extends JFrame implements Runnable {
         setMinimumSize(new Dimension(550, 650));
         setResizable(true);
 
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        }
+        catch (Exception ignored) {
+
+        }
         BoardSize = initialBoardSize;
         playerFirstColor = firstPlayerColor;
         playerSecondColor = secondPlayerColor;
@@ -52,7 +58,7 @@ public class MainFrame extends JFrame implements Runnable {
         if (playerFirstFullPath.length() > 7) {
             int i = playerFirstFullPath.length() - 1;
             for (; i > 0; i--) {
-                if (playerFirstFullPath.charAt(i) == '/')
+                if (playerFirstFullPath.charAt(i) == '/' || playerFirstFullPath.charAt(i) == '\\')
                     break;
             }
             pathToPlayerOne = playerFirstFullPath.substring(0, i);
@@ -63,7 +69,7 @@ public class MainFrame extends JFrame implements Runnable {
         if (playerSecondFullPath.length() > 7) {
             int i = playerSecondFullPath.length() - 1;
             for (; i > 0; i--) {
-                if (playerSecondFullPath.charAt(i) == '/')
+                if (playerSecondFullPath.charAt(i) == '/' || playerFirstFullPath.charAt(i) == '\\')
                     break;
             }
             pathToPlayerTwo = playerSecondFullPath.substring(0, i);
@@ -81,7 +87,7 @@ public class MainFrame extends JFrame implements Runnable {
         actualPlayerColorPreview = new ColorPreview(playerFirstColor);
 
         //OS X AND macOS ONLY, ON WINDOWS/LINUX/UNIX must be set as a comment
-        com.apple.eawt.Application.getApplication().setDockIconImage(icon.getImage());
+       // com.apple.eawt.Application.getApplication().setDockIconImage(icon.getImage());
 
         gameName = new JLabel("Bricks", SwingConstants.CENTER);
         buttonsGridLayout = new JPanel(new GridLayout(11, 1));
@@ -99,6 +105,7 @@ public class MainFrame extends JFrame implements Runnable {
         runMultiPlayer.setFocusPainted(false);
         runComputerPlayers.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
         runComputerPlayers.setFocusPainted(false);
+
         runSinglePlayer.addActionListener(e -> {
             gameBorderLayout = new JPanel(new BorderLayout());
             Action backToMenuAction = new AbstractAction() {
@@ -495,12 +502,11 @@ public class MainFrame extends JFrame implements Runnable {
                 repaint();
             }
         });
-        JButton exitButton = new JButton("Wyjdź");
+        JButton exitButton = new JButton("Wyjście");
         exitButton.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
         exitButton.setFocusPainted(false);
         exitButton.addActionListener(e -> System.exit(0));
-
-        credits = new JLabel("<html><center>Autorzy: Mateusz Kalinowski, Michał Romaszko <br> Wersja: 0.9.6, Ikona: Madebyoliver, www.flaticon.com</center></html>");
+        credits = new JLabel("<html><center>Autorzy: Mateusz Kalinowski, Michał Romaszko <br> Wersja: 1.0.0, Ikona: Madebyoliver, www.flaticon.com</center></html>");
         credits.setHorizontalAlignment(SwingConstants.CENTER);
 
 

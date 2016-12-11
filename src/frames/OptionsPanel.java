@@ -249,7 +249,7 @@ class OptionsPanel extends JPanel {
         mainBorderLayout.add(mainTabPane, BorderLayout.CENTER);
 
         JPanel advancedGridLayout = new JPanel(new GridLayout(12, 2));
-        JLabel robotsWarsSectionLabel = new JLabel("Ogólne:");
+        JLabel robotsWarsSectionLabel = new JLabel("Wojna Robotów:");
         robotsWarsSectionLabel.setFont(new Font("Comic Sans MS", Font.BOLD, 20));
         advancedGridLayout.add(robotsWarsSectionLabel);
         advancedGridLayout.add(new JLabel());
@@ -260,8 +260,8 @@ class OptionsPanel extends JPanel {
         advancedGridLayout.add(new JLabel("Uruchom jako:"));
 
         firstPlayerProgramTypeCombo = new JComboBox<>();
-        firstPlayerProgramTypeCombo.addItem("C/C++/exe");
-        firstPlayerProgramTypeCombo.addItem("JAVA");
+        firstPlayerProgramTypeCombo.addItem("Plik exe/out");
+        firstPlayerProgramTypeCombo.addItem("Plik class (java)");
         firstPlayerProgramTypeCombo.addItem("Własne");
         firstPlayerProgramTypeCombo.setSelectedIndex(firstPlayerProgramType);
 
@@ -301,8 +301,8 @@ class OptionsPanel extends JPanel {
         advancedGridLayout.add(new JLabel("Uruchom jako:"));
 
         secondPlayerProgramTypeCombo = new JComboBox<>();
-        secondPlayerProgramTypeCombo.addItem("C/C++/exe");
-        secondPlayerProgramTypeCombo.addItem("JAVA");
+        secondPlayerProgramTypeCombo.addItem("Plik exe/out");
+        secondPlayerProgramTypeCombo.addItem("Plik class (java)");
         secondPlayerProgramTypeCombo.addItem("Własne");
         secondPlayerProgramTypeCombo.setSelectedIndex(secondPlayerProgramType);
 
