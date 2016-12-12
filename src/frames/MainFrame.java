@@ -630,7 +630,7 @@ public class MainFrame extends JFrame implements Runnable {
         if (playerFirstFullPath.length() > 7) {
             int i = playerFirstFullPath.length() - 1;
             for (; i > 0; i--) {
-                if (playerFirstFullPath.charAt(i) == '/')
+                if (playerFirstFullPath.charAt(i) == '/' || playerFirstFullPath.charAt(i) == '\\')
                     break;
             }
             pathToPlayerOne = playerFirstFullPath.substring(0, i);
@@ -641,7 +641,7 @@ public class MainFrame extends JFrame implements Runnable {
         if (playerSecondFullPath.length() > 7) {
             int i = playerSecondFullPath.length() - 1;
             for (; i > 0; i--) {
-                if (playerSecondFullPath.charAt(i) == '/')
+                if (playerSecondFullPath.charAt(i) == '/' || playerSecondFullPath.charAt(i) == '\\')
                     break;
             }
             pathToPlayerTwo = playerSecondFullPath.substring(0, i);
