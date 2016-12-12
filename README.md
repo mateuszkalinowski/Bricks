@@ -24,3 +24,5 @@ p2 - program drugi
 Programy grające nie otrzymują żadnego sygnału końca, uruchamia je i zamyka program sędziujący  
 Dozwolone języki programowania: Każdy, obsługujący standardowe wejście i wyjście (w ustawieniach programu sędziującego można 
 podać mu instrukcję jak uruchomić program o danym rozszerzeniu).
+##Przyszłe zmiany
+Możliwość masowego uruchamiania gier (użytkownik podaje ile gier chce uruchomić, podaje rozmiary plansz). Program wyświetla ile gier wygrał który program. (Skrócony opis, opcji będzie nieco więcej).
