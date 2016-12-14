@@ -178,7 +178,7 @@ public class BoardPanel extends Canvas {
                                     selectedY = i;
                                     break;
                                 }
-                                if (e.getX() >= margin + (board.width - 1) + intOneFieldHeight) {
+                                if (e.getY() >= margin + (board.height - 1) + intOneFieldHeight) {
                                     selectedY = board.height - 1;
                                 }
                             }
@@ -217,7 +217,7 @@ public class BoardPanel extends Canvas {
                                     tempSelectedY = i;
                                     break;
                                 }
-                                if (e.getX() >= margin + (board.width - 1) + intOneFieldHeight) {
+                                if (e.getY() >= margin + (board.height - 1) + intOneFieldHeight) {
                                     tempSelectedY = board.height - 1;
                                 }
                             }
