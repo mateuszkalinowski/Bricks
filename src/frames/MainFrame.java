@@ -431,10 +431,13 @@ public class MainFrame extends JFrame implements Runnable {
                 autoPlayButton = new JButton("Rozgrywki");
                 autoPlayFrame = new AutoGamesFrame(this);
                 autoPlayButton.addActionListener(action -> {
-                    int selection = JOptionPane.showConfirmDialog(null, "Spowoduje to zakończenie obecnej gry, kontynuować?", "Koniec" +
-                            " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    int selection = 0;
+                    if(!boardPanel.movesStorage.isEmpty()) {
+                        selection = JOptionPane.showConfirmDialog(null, "Spowoduje to zakończenie obecnej gry, kontynuować?", "Koniec" +
+                                " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    }
 
-                    if (selection == JOptionPane.OK_OPTION) {
+                    if (selection == JOptionPane.OK_OPTION || boardPanel.movesStorage.isEmpty()) {
                         stopRunner();
                         try {
                             Bricks.firstRobotPlayer.reset();

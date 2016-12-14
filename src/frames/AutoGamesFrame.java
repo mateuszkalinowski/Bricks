@@ -21,6 +21,7 @@ public class AutoGamesFrame extends JDialog {
         setSize(250,300);
         exitButton = new JButton("Powrót");
         exitButton.addActionListener(e -> setVisible(false));
+        setLocationRelativeTo(null);
 
         mainBorderLayout = new JPanel(new BorderLayout());
         bottomGridLayout = new JPanel(new GridLayout(1,3));
@@ -157,14 +158,26 @@ public class AutoGamesFrame extends JDialog {
         runButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                setProgress(0);
                 ArrayList<Integer> boardsSizes = new ArrayList<Integer>();
-                for(int i = 0; i < boardSizesListModel.getSize();i++) {
+                for(int i = boardSizesListModel.getSize()-1; i >=0;i--) {
                     try {
-                        boardsSizes.add(Integer.parseInt(boardSizesListModel.get(i)));
+                        int toAdd = Integer.parseInt(boardSizesListModel.get(i));
+                        if(toAdd>=5 && toAdd<=255 && toAdd%2==1) {
+                            boardsSizes.add(toAdd);
+                        }
+                        else {
+                            boardSizesListModel.remove(i);
+                        }
                     } catch (Exception ignored) {}
                 }
-                AutoGameThread autoGameThread = new AutoGameThread(boardsSizes);
-                autoGameThread.start();
+                if(boardsSizes.size()>0) {
+                    AutoGameThread autoGameThread = new AutoGameThread(boardsSizes);
+                    autoGameThread.start();
+                }
+                else {
+                    setProgress(100);
+                }
             }
         });
         runButton.setHorizontalAlignment(SwingConstants.CENTER);
@@ -193,6 +206,12 @@ public class AutoGamesFrame extends JDialog {
     public void setWinCounts(String s1,String s2) {
         firstPlayerWinsCount.setText(s1);
         secondPlayerWinsCount.setText(s2);
+        repaint();
+    }
+    public void setProgress(int value) {
+        if(value>=0 && value<=100)
+            progressBar.setValue(value);
+        repaint();
     }
     JList boardSizesList;
 

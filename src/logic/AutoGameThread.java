@@ -13,7 +13,9 @@ public class AutoGameThread extends Thread {
     public void run(){
         int firstPlayerWins = 0;
         int secondPlayerWins = 0;
+        int counter = 0;
         for (Integer boardsSize : boardsSizes) {
+            counter++;
             BoardLogic board = new BoardLogic(boardsSize);
             MovesStorage movesStorage = new MovesStorage();
             try {
@@ -77,14 +79,15 @@ public class AutoGameThread extends Thread {
                     }
                 }
                 else {
-                    if(player==1) {
+                    if (player == 1) {
                         player = 2;
-                    }
-                    else {
-                        player=1;
+                    } else {
+                        player = 1;
                     }
                 }
             }
+            double progress = ((counter*1.0)/(boardsSizes.size()*1.0))*100;
+            Bricks.mainFrame.autoPlayFrame.setProgress((int)Math.round(progress));
         }
         Bricks.mainFrame.autoPlayFrame.setWinCounts(firstPlayerWins + "",secondPlayerWins+"");
     }
