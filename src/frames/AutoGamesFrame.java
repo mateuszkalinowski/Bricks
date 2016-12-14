@@ -1,12 +1,15 @@
 package frames;
 
+import core.Bricks;
 import javafx.scene.input.KeyCode;
+import logic.AutoGameThread;
+import logic.BoardLogic;
+import logic.MovesStorage;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.KeyAdapter;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
+import java.awt.event.*;
+import java.util.ArrayList;
 
 /**
  * Created by Mateusz on 14.12.2016.
@@ -151,8 +154,18 @@ public class AutoGamesFrame extends JDialog {
         resultsGridLayout.add(secondPlayerWinsCount);
 
         runButton = new JButton("Uruchom");
-        runButton.addActionListener(e -> {
-
+        runButton.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                ArrayList<Integer> boardsSizes = new ArrayList<Integer>();
+                for(int i = 0; i < boardSizesListModel.getSize();i++) {
+                    try {
+                        boardsSizes.add(Integer.parseInt(boardSizesListModel.get(i)));
+                    } catch (Exception ignored) {}
+                }
+                AutoGameThread autoGameThread = new AutoGameThread(boardsSizes);
+                autoGameThread.start();
+            }
         });
         runButton.setHorizontalAlignment(SwingConstants.CENTER);
         resultsBorderLayout.add(runButton,BorderLayout.SOUTH);
@@ -176,6 +189,10 @@ public class AutoGamesFrame extends JDialog {
         mainBorderLayout.add(progressBarGridLayout,BorderLayout.SOUTH);
         mainBorderLayout.add(contentGridLayout,BorderLayout.CENTER);
         add(mainBorderLayout);
+    }
+    public void setWinCounts(String s1,String s2) {
+        firstPlayerWinsCount.setText(s1);
+        secondPlayerWinsCount.setText(s2);
     }
     JList boardSizesList;
 

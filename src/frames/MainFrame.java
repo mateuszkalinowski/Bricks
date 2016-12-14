@@ -429,7 +429,7 @@ public class MainFrame extends JFrame implements Runnable {
 
                 robotWarsControlGridPanel.add(nextMoveButton);
                 autoPlayButton = new JButton("Rozgrywki");
-                AutoGamesFrame autoPlayFrame = new AutoGamesFrame(this);
+                autoPlayFrame = new AutoGamesFrame(this);
                 autoPlayButton.addActionListener(action -> {
                     int selection = JOptionPane.showConfirmDialog(null, "Spowoduje to zakończenie obecnej gry, kontynuować?", "Koniec" +
                             " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -674,7 +674,7 @@ public class MainFrame extends JFrame implements Runnable {
         exportSettings();
     }
 
-    private boolean possibleMove(int x1, int y1, int x2, int y2, int[][] board) {
+    public boolean possibleMove(int x1, int y1, int x2, int y2, int[][] board) {
         if (board[x1][y1] != 0 || board[x2][y2] != 0)
             return false;
         boolean flag = false;
@@ -778,5 +778,7 @@ public class MainFrame extends JFrame implements Runnable {
     private JLabel gameName;
     private JLabel credits;
     public JLabel restTiles;
+
+    public AutoGamesFrame autoPlayFrame;
 
 }
