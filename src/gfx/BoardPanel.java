@@ -632,7 +632,7 @@ public class BoardPanel extends Canvas {
         }
     }
 
-    private void resetBoard() {
+    public void resetBoard() {
         board.reset();
         isSelected = false;
         movesStorage.reset();
