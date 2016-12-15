@@ -48,10 +48,10 @@ public class RobotPlayer {
         writer.println(message);
         String nextMove;
         try {
-            for (int i = 0; i <= 10; i++) {     //pętla sprawdza co 100ms czy nie przyszła odpowiedź
-                if (i == 10)                    //przekroczony czas na odpowiedź, wyrzuca błąd
+            for (int i = 0; i <= 50; i++) {     //pętla sprawdza co 100ms czy nie przyszła odpowiedź
+                if (i == 50)                    //przekroczony czas na odpowiedź, wyrzuca błąd
                     throw new TimeoutException("Komputer przekroczył czas na wykonanie ruchu");
-                Thread.sleep(100);
+                Thread.sleep(20);
                 if (reader.ready())             //jak linia gotowa do odczytu - przerywa pętlę
                     break;
             }

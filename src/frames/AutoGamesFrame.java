@@ -111,12 +111,15 @@ public class AutoGamesFrame extends JDialog {
                         repaint();
                     }
                     if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-                        if(currentText.length()>=1) {
+                        if(currentText.length()>=2) {
                             boardSizesListModel.set(selectedIndex,currentText.substring(0,currentText.length()-1));
                         }
-                        if(currentText.length()==0 && selectedIndex!=0) {
+                        if(currentText.length()==1 && boardSizesListModel.size()>1) {
                             boardSizesListModel.remove(selectedIndex);
                             boardSizesList.setSelectedIndex(selectedIndex-1);
+                        }
+                        if(currentText.length()==1 && boardSizesListModel.size()==1) {
+                            boardSizesListModel.set(selectedIndex,"");
                         }
                         repaint();
                     }
@@ -158,25 +161,32 @@ public class AutoGamesFrame extends JDialog {
         runButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                setProgress(0);
-                ArrayList<Integer> boardsSizes = new ArrayList<Integer>();
-                for(int i = boardSizesListModel.getSize()-1; i >=0;i--) {
-                    try {
-                        int toAdd = Integer.parseInt(boardSizesListModel.get(i));
-                        if(toAdd>=5 && toAdd<=255 && toAdd%2==1) {
-                            boardsSizes.add(toAdd);
+                if(runButton.getText().equals("Uruchom")) {
+                    setProgress(0);
+                    ArrayList<Integer> boardsSizes = new ArrayList<Integer>();
+                    for (int i = boardSizesListModel.getSize() - 1; i >= 0; i--) {
+                        try {
+                            int toAdd = Integer.parseInt(boardSizesListModel.get(i));
+                            if (toAdd >= 5 && toAdd <= 255 && toAdd % 2 == 1) {
+                                boardsSizes.add(toAdd);
+                            } else {
+                                boardSizesListModel.remove(i);
+                            }
+                        } catch (Exception ignored) {
                         }
-                        else {
-                            boardSizesListModel.remove(i);
-                        }
-                    } catch (Exception ignored) {}
-                }
-                if(boardsSizes.size()>0) {
-                    AutoGameThread autoGameThread = new AutoGameThread(boardsSizes);
-                    autoGameThread.start();
+                    }
+                    if (boardsSizes.size() > 0) {
+                        autoGameThread = new AutoGameThread(boardsSizes);
+                        autoGameThread.running = true;
+                        autoGameThread.start();
+                        runButton.setText("Przerwij");
+                    } else {
+                        setProgress(100);
+                    }
                 }
                 else {
-                    setProgress(100);
+                    autoGameThread.running = false;
+                    runButton.setText("Uruchom");
                 }
             }
         });
@@ -213,6 +223,13 @@ public class AutoGamesFrame extends JDialog {
             progressBar.setValue(value);
         repaint();
     }
+    public void setRunButton(boolean toSet){
+        if(toSet) {
+            runButton.setText("Uruchom");
+        }
+        else
+            runButton.setText("Przerwij");
+    }
     JList boardSizesList;
 
     JButton runButton;
@@ -232,5 +249,7 @@ public class AutoGamesFrame extends JDialog {
     JPanel contentGridLayout;
     JPanel listGridLayout;
     JPanel resultsGridLayout;
+
+    private AutoGameThread autoGameThread;
 
 }
