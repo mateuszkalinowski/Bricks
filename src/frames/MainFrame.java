@@ -409,7 +409,7 @@ public class MainFrame extends JFrame implements Runnable {
                 speedUpButton = new JButton("+");
                 speedUpButton.addActionListener(e13 -> {
                     int i = Integer.parseInt(speedTextField.getText());
-                    if (i <= 9)
+                    if (i <= 19)
                         i++;
                     speedTextField.setText(i + "");
                 });

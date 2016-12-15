@@ -9,17 +9,31 @@ import logic.MovesStorage;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.util.ArrayList;
+import java.util.Scanner;
 
 /**
- * Created by Mateusz on 14.12.2016.
+ * Created by Mateusz on 14.12.2016
  * Project Bricks
  */
 public class AutoGamesFrame extends JDialog {
-    public AutoGamesFrame(JFrame owner){
+    AutoGamesFrame(JFrame owner){
         super(owner,true);
-        setSize(250,300);
+        setSize(270,350);
         exitButton = new JButton("Powrót");
+        JMenuBar mainMenu = new JMenuBar();
+
+        JMenu fileMenu = new JMenu("Plik");
+        JMenu editMenu = new JMenu("Edycja");
+        mainMenu.add(fileMenu);
+        mainMenu.add(editMenu);
+
+        setJMenuBar(mainMenu);
+
         this.addWindowListener(new WindowAdapter() {
             @Override
             public void windowClosing(WindowEvent e) {
@@ -55,8 +69,8 @@ public class AutoGamesFrame extends JDialog {
         boardSizesList.setPrototypeCellValue("X:   Y:   ");
         boardSizesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         KeyListener[] lsnrs = boardSizesList.getKeyListeners();
-        for (int i = 0; i < lsnrs.length; i++) {
-            boardSizesList.removeKeyListener(lsnrs[i]);
+        for (KeyListener lsnr : lsnrs) {
+            boardSizesList.removeKeyListener(lsnr);
         }
         JScrollPane boardSizesListScrollPane = new JScrollPane(boardSizesList);
         boardSizesListModel.addElement("");
@@ -73,7 +87,7 @@ public class AutoGamesFrame extends JDialog {
             @Override
             public void keyReleased(KeyEvent e) {
                 int selectedIndex = boardSizesList.getSelectedIndex();
-                if (boardSizesListModel.size() > 0) {
+                if (boardSizesListModel.size() > 0 && selectedIndex>=0) {
                     String currentText = boardSizesListModel.get(selectedIndex);
                     if (selectedIndex >= 0) {
                         if (e.getKeyCode() == KeyEvent.VK_1) {
@@ -176,41 +190,110 @@ public class AutoGamesFrame extends JDialog {
         resultsGridLayout.add(secondPlayerWinsCount);
 
         runButton = new JButton("Uruchom");
-        runButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                if(runButton.getText().equals("Uruchom")) {
-                    setProgress(0);
-                    ArrayList<Integer> boardsSizes = new ArrayList<Integer>();
-                    for (int i = boardSizesListModel.getSize() - 1; i >= 0; i--) {
-                        try {
-                            int toAdd = Integer.parseInt(boardSizesListModel.get(i));
-                            if (toAdd >= 5 && toAdd <= 255 && toAdd % 2 == 1) {
-                                boardsSizes.add(toAdd);
-                            } else {
-                                boardSizesListModel.remove(i);
-                            }
-                        } catch (Exception ignored) {
+        runButton.addActionListener(e -> {
+            if(runButton.getText().equals("Uruchom")) {
+                setProgress(0);
+                ArrayList<Integer> boardsSizes = new ArrayList<Integer>();
+                for (int i = boardSizesListModel.getSize() - 1; i >= 0; i--) {
+                    try {
+                        int toAdd = Integer.parseInt(boardSizesListModel.get(i));
+                        if (toAdd >= 5 && toAdd <= 255 && toAdd % 2 == 1) {
+                            boardsSizes.add(toAdd);
+                        } else {
+                            boardSizesListModel.remove(i);
                         }
-                    }
-                    if(boardSizesListModel.size()==0)
-                        boardSizesListModel.addElement("");
-                    if (boardsSizes.size() > 0) {
-                        autoGameThread = new AutoGameThread(boardsSizes);
-                        autoGameThread.running = true;
-                        autoGameThread.start();
-                        runButton.setText("Przerwij");
-                        setWinCounts("0","0");
-                    } else {
-                        setProgress(100);
+                    } catch (Exception ignored) {
                     }
                 }
-                else {
-                    autoGameThread.running = false;
-                    runButton.setText("Uruchom");
+                if(boardSizesListModel.size()==0)
+                    boardSizesListModel.addElement("");
+                if (boardsSizes.size() > 0) {
+                    autoGameThread = new AutoGameThread(boardsSizes);
+                    autoGameThread.running = true;
+                    autoGameThread.start();
+                    runButton.setText("Przerwij");
+                    setWinCounts("0","0");
+                } else {
+                    setProgress(100);
+                }
+            }
+            else {
+                autoGameThread.running = false;
+                runButton.setText("Uruchom");
+            }
+        });
+
+        JMenuItem exportPointsAction = new JMenuItem("Eksportuj Punkty");
+
+        exportPointsAction.addActionListener(e -> {
+            JFileChooser chooseFile = new JFileChooser();
+            int save = chooseFile.showSaveDialog(null);
+            if (save == JFileChooser.APPROVE_OPTION) {
+                String filename = chooseFile.getSelectedFile().getPath();
+                PrintWriter writer;
+                try {
+                    writer = new PrintWriter(filename, "UTF-8");
+                    for (int i = 0; i < boardSizesListModel.size(); i++)
+                        writer.println(boardSizesListModel.getElementAt(i));
+
+                    writer.close();
+                } catch (FileNotFoundException | UnsupportedEncodingException exception) {
+                    JOptionPane.showMessageDialog(null, "Nie można wyeksportować danych do tego pliku.", "Błąd" +
+                            " danych",JOptionPane.ERROR_MESSAGE);
                 }
             }
         });
+
+        JMenuItem importPointsAction = new JMenuItem("Importuj Punkty");
+
+        importPointsAction.addActionListener(e -> {
+            JFileChooser chooseFile = new JFileChooser();
+            int save = chooseFile.showOpenDialog(null);
+            if (save == JFileChooser.APPROVE_OPTION) {
+                String filename = chooseFile.getSelectedFile().getPath();
+                String line;
+                try {
+                    Scanner in = new Scanner(new File(filename));
+                    boardSizesListModel.removeAllElements();
+
+                    while (in.hasNextLine()) {
+                        line = in.nextLine();
+                        try {
+                            int i = Integer.parseInt(line);
+                            if(i>=5 && i<=255 && i%2==1) {
+                                boardSizesListModel.addElement(i+"");
+                            }
+                        } catch (Exception ignored){}
+                    }
+                    if(boardSizesListModel.isEmpty())
+                        boardSizesListModel.addElement("");
+                    in.close();
+                    repaint();
+
+                } catch (FileNotFoundException exception) {
+                    JOptionPane.showMessageDialog(null, "Nie można czytać danych z tego pliku.", "Błąd" +
+                            " danych",JOptionPane.ERROR_MESSAGE);
+                }
+
+            }
+        });
+
+        JMenuItem clearListAction = new JMenuItem("Wyczyść Listę");
+        clearListAction.addActionListener(e -> {
+            boardSizesListModel.removeAllElements();
+            boardSizesListModel.addElement("");
+            boardSizesList.setSelectedIndex(0);
+            repaint();
+        });
+
+
+
+
+        fileMenu.add(exportPointsAction);
+        fileMenu.add(importPointsAction);
+
+        editMenu.add(clearListAction);
+
         runButton.setHorizontalAlignment(SwingConstants.CENTER);
         resultsBorderLayout.add(runButton,BorderLayout.SOUTH);
 

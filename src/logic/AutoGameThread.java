@@ -20,8 +20,8 @@ public class AutoGameThread extends Thread {
                 BoardLogic board = new BoardLogic(boardsSize);
                 MovesStorage movesStorage = new MovesStorage();
                 try {
-                    Bricks.firstRobotPlayer.reset();
-                    Bricks.secondRobotPlayer.reset();
+                    Bricks.firstRobotPlayer.reset(boardsSize);
+                    Bricks.secondRobotPlayer.reset(boardsSize);
                 } catch (Exception ignored) {
                     break;
                 }
