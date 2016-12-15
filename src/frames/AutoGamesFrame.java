@@ -20,7 +20,23 @@ public class AutoGamesFrame extends JDialog {
         super(owner,true);
         setSize(250,300);
         exitButton = new JButton("Powrót");
-        exitButton.addActionListener(e -> setVisible(false));
+        this.addWindowListener(new WindowAdapter() {
+            @Override
+            public void windowClosing(WindowEvent e) {
+                super.windowClosing(e);
+                try {
+                    Bricks.firstRobotPlayer.reset();
+                    Bricks.secondRobotPlayer.reset();
+                }catch (Exception ignored) {}
+            }
+        });
+        exitButton.addActionListener(e -> {
+            setVisible(false);
+            try {
+                Bricks.firstRobotPlayer.reset();
+                Bricks.secondRobotPlayer.reset();
+            }catch (Exception ignored) {}
+        });
         setLocationRelativeTo(null);
 
         mainBorderLayout = new JPanel(new BorderLayout());
@@ -180,6 +196,7 @@ public class AutoGamesFrame extends JDialog {
                         autoGameThread.running = true;
                         autoGameThread.start();
                         runButton.setText("Przerwij");
+                        setWinCounts("0","0");
                     } else {
                         setProgress(100);
                     }
