@@ -26,10 +26,6 @@ public class AutoGameThread extends Thread {
                     break;
                 }
                 int player = 1;
-                try {
-                    Thread.sleep(1000);
-                } catch (InterruptedException ignored) {
-                }
                 while (true && running) {
                     int[] move = new int[4];
                     if (movesStorage.isEmpty()) {

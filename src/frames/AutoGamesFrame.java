@@ -73,82 +73,84 @@ public class AutoGamesFrame extends JDialog {
             @Override
             public void keyReleased(KeyEvent e) {
                 int selectedIndex = boardSizesList.getSelectedIndex();
-                String currentText = boardSizesListModel.get(selectedIndex);
-                if(selectedIndex>=0) {
-                    if (e.getKeyCode() == KeyEvent.VK_1) {
-                        if(currentText.length()<=2)
-                            boardSizesListModel.set(selectedIndex,currentText+"1");
-                        repaint();
-                    }
-                    if (e.getKeyCode() == KeyEvent.VK_2) {
-                        if(currentText.length()<=2)
-                            boardSizesListModel.set(selectedIndex,currentText+"2");
-                        repaint();
-                    }
-                    if (e.getKeyCode() == KeyEvent.VK_3) {
-                        if(currentText.length()<=2)
-                            boardSizesListModel.set(selectedIndex,currentText+"3");
-                        repaint();
-                    }
-                    if (e.getKeyCode() == KeyEvent.VK_4) {
-                        if(currentText.length()<=2)
-                            boardSizesListModel.set(selectedIndex,currentText+"4");
-                        repaint();
-                    }
-                    if (e.getKeyCode() == KeyEvent.VK_5) {
-                        if(currentText.length()<=2)
-                            boardSizesListModel.set(selectedIndex,currentText+"5");
-                        repaint();
-                    }
-                    if (e.getKeyCode() == KeyEvent.VK_6) {
-                        if(currentText.length()<=2)
-                            boardSizesListModel.set(selectedIndex,currentText+"6");
-                        repaint();
-                    }
-                    if (e.getKeyCode() == KeyEvent.VK_7) {
-                        if(currentText.length()<=2)
-                            boardSizesListModel.set(selectedIndex,currentText+"7");
-                        repaint();
-                    }
-                    if (e.getKeyCode() == KeyEvent.VK_8) {
-                        if(currentText.length()<=2)
-                            boardSizesListModel.set(selectedIndex,currentText+"8");
-                        repaint();
-                    }
-                    if (e.getKeyCode() == KeyEvent.VK_9) {
-                        if(currentText.length()<=2)
-                            boardSizesListModel.set(selectedIndex,currentText+"9");
-                        repaint();
-                    }
-                    if (e.getKeyCode() == KeyEvent.VK_0) {
-                        if(currentText.length()<=2 && currentText.length()>=1)
-                            boardSizesListModel.set(selectedIndex,currentText+"0");
+                if (boardSizesListModel.size() > 0) {
+                    String currentText = boardSizesListModel.get(selectedIndex);
+                    if (selectedIndex >= 0) {
+                        if (e.getKeyCode() == KeyEvent.VK_1) {
+                            if (currentText.length() <= 2)
+                                boardSizesListModel.set(selectedIndex, currentText + "1");
+                            repaint();
+                        }
+                        if (e.getKeyCode() == KeyEvent.VK_2) {
+                            if (currentText.length() <= 2)
+                                boardSizesListModel.set(selectedIndex, currentText + "2");
+                            repaint();
+                        }
+                        if (e.getKeyCode() == KeyEvent.VK_3) {
+                            if (currentText.length() <= 2)
+                                boardSizesListModel.set(selectedIndex, currentText + "3");
+                            repaint();
+                        }
+                        if (e.getKeyCode() == KeyEvent.VK_4) {
+                            if (currentText.length() <= 2)
+                                boardSizesListModel.set(selectedIndex, currentText + "4");
+                            repaint();
+                        }
+                        if (e.getKeyCode() == KeyEvent.VK_5) {
+                            if (currentText.length() <= 2)
+                                boardSizesListModel.set(selectedIndex, currentText + "5");
+                            repaint();
+                        }
+                        if (e.getKeyCode() == KeyEvent.VK_6) {
+                            if (currentText.length() <= 2)
+                                boardSizesListModel.set(selectedIndex, currentText + "6");
+                            repaint();
+                        }
+                        if (e.getKeyCode() == KeyEvent.VK_7) {
+                            if (currentText.length() <= 2)
+                                boardSizesListModel.set(selectedIndex, currentText + "7");
+                            repaint();
+                        }
+                        if (e.getKeyCode() == KeyEvent.VK_8) {
+                            if (currentText.length() <= 2)
+                                boardSizesListModel.set(selectedIndex, currentText + "8");
+                            repaint();
+                        }
+                        if (e.getKeyCode() == KeyEvent.VK_9) {
+                            if (currentText.length() <= 2)
+                                boardSizesListModel.set(selectedIndex, currentText + "9");
+                            repaint();
+                        }
+                        if (e.getKeyCode() == KeyEvent.VK_0) {
+                            if (currentText.length() <= 2 && currentText.length() >= 1)
+                                boardSizesListModel.set(selectedIndex, currentText + "0");
 
-                        repaint();
-                    }
-                    if(e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
-                        if(currentText.length()>=2) {
-                            boardSizesListModel.set(selectedIndex,currentText.substring(0,currentText.length()-1));
+                            repaint();
                         }
-                        if(currentText.length()==1 && boardSizesListModel.size()>1) {
-                            boardSizesListModel.remove(selectedIndex);
-                            boardSizesList.setSelectedIndex(selectedIndex-1);
+                        if (e.getKeyCode() == KeyEvent.VK_BACK_SPACE) {
+                            if (currentText.length() >= 2) {
+                                boardSizesListModel.set(selectedIndex, currentText.substring(0, currentText.length() - 1));
+                            } else if (currentText.length() == 1 && boardSizesListModel.size() > 1) {
+                                boardSizesListModel.remove(selectedIndex);
+                                boardSizesList.setSelectedIndex(selectedIndex - 1);
+                            } else if (currentText.length() == 1 && boardSizesListModel.size() == 1) {
+                                boardSizesListModel.set(selectedIndex, "");
+                            } else if (currentText.length() == 0 && selectedIndex > 0) {
+                                boardSizesListModel.remove(selectedIndex);
+                                boardSizesList.setSelectedIndex(selectedIndex - 1);
+                            }
+                            repaint();
                         }
-                        if(currentText.length()==1 && boardSizesListModel.size()==1) {
-                            boardSizesListModel.set(selectedIndex,"");
+                        if (e.getKeyCode() == KeyEvent.VK_ENTER) {
+                            if (selectedIndex < boardSizesListModel.getSize() - 1 && boardSizesListModel.get(selectedIndex).length() > 0) {
+                                boardSizesList.setSelectedIndex(selectedIndex + 1);
+                            } else if (boardSizesListModel.get(selectedIndex).length() > 0) {
+                                boardSizesListModel.addElement("");
+                                boardSizesList.setSelectedIndex(selectedIndex + 1);
+                            }
+                            repaint();
+                            boardSizesListScrollPane.getVerticalScrollBar().setValue(Integer.MAX_VALUE);
                         }
-                        repaint();
-                    }
-                    if(e.getKeyCode() == KeyEvent.VK_ENTER) {
-                        if(selectedIndex<boardSizesListModel.getSize()-1 && boardSizesListModel.get(selectedIndex).length()>0) {
-                            boardSizesList.setSelectedIndex(selectedIndex+1);
-                        }
-                        else if(boardSizesListModel.get(selectedIndex).length()>0){
-                            boardSizesListModel.addElement("");
-                            boardSizesList.setSelectedIndex(selectedIndex+1);
-                        }
-                        repaint();
-                        boardSizesListScrollPane.getVerticalScrollBar().setValue(Integer.MAX_VALUE);
                     }
                 }
             }
@@ -191,6 +193,8 @@ public class AutoGamesFrame extends JDialog {
                         } catch (Exception ignored) {
                         }
                     }
+                    if(boardSizesListModel.size()==0)
+                        boardSizesListModel.addElement("");
                     if (boardsSizes.size() > 0) {
                         autoGameThread = new AutoGameThread(boardsSizes);
                         autoGameThread.running = true;
