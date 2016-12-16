@@ -1,10 +1,7 @@
 package frames;
 
 import core.Bricks;
-import javafx.scene.input.KeyCode;
 import logic.AutoGameThread;
-import logic.BoardLogic;
-import logic.MovesStorage;
 
 import javax.swing.*;
 import java.awt.*;
@@ -161,9 +158,10 @@ public class AutoGamesFrame extends JDialog {
                             } else if (boardSizesListModel.get(selectedIndex).length() > 0) {
                                 boardSizesListModel.addElement("");
                                 boardSizesList.setSelectedIndex(selectedIndex + 1);
+                                boardSizesListScrollPane.getVerticalScrollBar().setValue(boardSizesListScrollPane.getVerticalScrollBar().getMaximum());
                             }
+
                             repaint();
-                            boardSizesListScrollPane.getVerticalScrollBar().setValue(Integer.MAX_VALUE);
                         }
                     }
                 }
@@ -334,25 +332,25 @@ public class AutoGamesFrame extends JDialog {
         else
             runButton.setText("Przerwij");
     }
-    JList boardSizesList;
+    private JList boardSizesList;
 
-    JButton runButton;
+    private JButton runButton;
 
-    JLabel firstPlayerWinsCount;
-    JLabel secondPlayerWinsCount;
+    private JLabel firstPlayerWinsCount;
+    private JLabel secondPlayerWinsCount;
 
-    JProgressBar progressBar;
+    private JProgressBar progressBar;
 
-    JButton exitButton;
+    private JButton exitButton;
 
-    JPanel mainBorderLayout;
-    JPanel resultsBorderLayout;
+    private JPanel mainBorderLayout;
+    private JPanel resultsBorderLayout;
 
-    JPanel bottomGridLayout;
-    JPanel progressBarGridLayout;
-    JPanel contentGridLayout;
-    JPanel listGridLayout;
-    JPanel resultsGridLayout;
+    private JPanel bottomGridLayout;
+    private JPanel progressBarGridLayout;
+    private JPanel contentGridLayout;
+    private JPanel listGridLayout;
+    private JPanel resultsGridLayout;
 
     private AutoGameThread autoGameThread;
 
