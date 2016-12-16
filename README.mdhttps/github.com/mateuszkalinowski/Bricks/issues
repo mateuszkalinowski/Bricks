@@ -17,12 +17,14 @@ p2 - program drugi
 6. rozmiar planszy (przykład: "5") (s) -> (p2)  
 7. "Zaczynaj" (s) -> (p1)  
 8. Ruch (przykład: 0 0 1 0) (p1) - > (s)  
-9. Poprzedni ruch (przykład: 0 0 1 0) (s) -> (p2)
+9. Poprzedni ruch (przykład: 0 0 1 0) (s) -> (p2)  
 10. Ruch (p2) - > (s)  
 11. Poprzedni ruch (s) - > (p1)  
-12. Powrót do punktu 8  
+12. Powrót do punktu 8
 Programy grające nie otrzymują żadnego sygnału końca, uruchamia je i zamyka program sędziujący  
 Dozwolone języki programowania: Każdy, obsługujący standardowe wejście i wyjście (w ustawieniach programu sędziującego można 
 podać mu instrukcję jak uruchomić program o danym rozszerzeniu).
+#### Uwaga  
+Wysyłanie tekstu przez programy grające musi odbywać się "jednym ciągiem", przez komendę typu "println" (ze znakiem nowej linii na końcu). Wysyłanie kolejnych liczb po jednej, nawet jeśli wszytkie zmieszczą się w terminie jednej sekundy i nawet, jeśli dodawmy na końcu samodzielnie znak nowej linii, uznane będzie za niezgodne z protokołem i program sędziujący uzna to za ruch niepoprawny.
 ##Przyszłe zmiany
 Możliwość masowego uruchamiania gier (użytkownik podaje ile gier chce uruchomić, podaje rozmiary plansz). Program wyświetla ile gier wygrał który program. (Skrócony opis, opcji będzie nieco więcej).
