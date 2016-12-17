@@ -590,6 +590,7 @@ public class BoardPanel extends Canvas {
                 }
                 if (selection == JOptionPane.OK_OPTION) {
                     resetBoard();
+                    Bricks.mainFrame.stopRunner();
                 } else {
                     resetBoard();
                     Bricks.mainFrame.stopGame();
@@ -623,6 +624,7 @@ public class BoardPanel extends Canvas {
         Bricks.mainFrame.computerPlayer = 1;
         if (selection == JOptionPane.OK_OPTION) {
             resetBoard();
+            Bricks.mainFrame.stopRunner();
         } else {
             resetBoard();
             Bricks.mainFrame.stopGame();
