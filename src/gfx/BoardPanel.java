@@ -559,9 +559,7 @@ public class BoardPanel extends Canvas {
                 }
                 return true;
             } else {
-                Bricks.mainFrame.stopRunner();
                 if (gamemode == 2) {
-                    Bricks.mainFrame.runner.interrupt();
                     if (Bricks.mainFrame.computerPlayer == 1) {
                         selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał program drugi, chcesz zagrać jeszcze raz?", "Koniec" +
                                 " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
@@ -592,6 +590,7 @@ public class BoardPanel extends Canvas {
                 }
                 if (selection == JOptionPane.OK_OPTION) {
                     resetBoard();
+                    Bricks.mainFrame.stopRunner();
                 } else {
                     resetBoard();
                     Bricks.mainFrame.stopGame();
@@ -604,7 +603,6 @@ public class BoardPanel extends Canvas {
 
     public void walkover(int computerPlayer, String reason) {
         int selection;
-        Bricks.mainFrame.stopRunner();
         if (reason.equals("Timeout")) {
             System.out.println("Timeout");
             if (computerPlayer == 1) {
@@ -626,6 +624,7 @@ public class BoardPanel extends Canvas {
         Bricks.mainFrame.computerPlayer = 1;
         if (selection == JOptionPane.OK_OPTION) {
             resetBoard();
+            Bricks.mainFrame.stopRunner();
         } else {
             resetBoard();
             Bricks.mainFrame.stopGame();

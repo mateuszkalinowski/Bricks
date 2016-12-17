@@ -69,7 +69,7 @@ public class MainFrame extends JFrame implements Runnable {
         if (playerSecondFullPath.length() > 7) {
             int i = playerSecondFullPath.length() - 1;
             for (; i > 0; i--) {
-                if (playerSecondFullPath.charAt(i) == '/' || playerFirstFullPath.charAt(i) == '\\')
+                if (playerSecondFullPath.charAt(i) == '/' || playerSecondFullPath.charAt(i) == '\\')
                     break;
             }
             pathToPlayerTwo = playerSecondFullPath.substring(0, i);
@@ -315,7 +315,6 @@ public class MainFrame extends JFrame implements Runnable {
                     boolean gameFinished = false;
                     try {
                         computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
-                        board.saveToFile();
                         int move[] = new int[4];
                         if (computerPlayer == 1) {
                             if (boardPanel.movesStorage.isEmpty()) {
@@ -375,8 +374,6 @@ public class MainFrame extends JFrame implements Runnable {
                             board.board[x2][y2] = computerPlayer;
                             boardPanel.playSound();
                             boardPanel.movesStorage.addMove(x1, y1, x2, y2);
-
-
                             if (computerPlayer == 1) {
                                 computerPlayer = 2;
                                 actualPlayerColorPreview.setColor(playerSecondColor);
@@ -389,8 +386,7 @@ public class MainFrame extends JFrame implements Runnable {
                         } else if (!gameFinished) {
                             boardPanel.walkover(computerPlayer, "InvalidMove");
                         }
-                        repaintThis();
-                        repaint();
+
                         boardPanel.checkNoMoves();
 
                     } catch (Exception ignored) {
@@ -402,7 +398,7 @@ public class MainFrame extends JFrame implements Runnable {
                 JPanel robotWarsControlGridPanel = new JPanel(new GridLayout(1, 4));
 
                 JPanel speedControlGridLayout = new JPanel(new GridLayout(1, 3));
-                JTextField speedTextField = new JTextField("1");
+                JTextField speedTextField = new JTextField("5");
                 speedTextField.setEditable(false);
                 speedTextField.setHorizontalAlignment(SwingConstants.CENTER);
 
@@ -527,7 +523,7 @@ public class MainFrame extends JFrame implements Runnable {
         exitButton.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
         exitButton.setFocusPainted(false);
         exitButton.addActionListener(e -> System.exit(0));
-        credits = new JLabel("<html><center>Autorzy: Mateusz Kalinowski, Michał Romaszko <br> Wersja: 1.1.0, Ikona: Madebyoliver, www.flaticon.com</center></html>");
+        credits = new JLabel("<html><center>Autorzy: Mateusz Kalinowski, Michał Romaszko <br> Wersja: 1.2.0, Ikona: Madebyoliver, www.flaticon.com</center></html>");
         credits.setHorizontalAlignment(SwingConstants.CENTER);
 
 
@@ -611,7 +607,6 @@ public class MainFrame extends JFrame implements Runnable {
             }
         }
     }
-
     private void exportSettings() {
         try {
             PrintWriter createCfg = new PrintWriter(new File(Bricks.path + "/options"));
