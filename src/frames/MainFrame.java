@@ -374,8 +374,6 @@ public class MainFrame extends JFrame implements Runnable {
                             board.board[x2][y2] = computerPlayer;
                             boardPanel.playSound();
                             boardPanel.movesStorage.addMove(x1, y1, x2, y2);
-
-
                             if (computerPlayer == 1) {
                                 computerPlayer = 2;
                                 actualPlayerColorPreview.setColor(playerSecondColor);
@@ -388,8 +386,7 @@ public class MainFrame extends JFrame implements Runnable {
                         } else if (!gameFinished) {
                             boardPanel.walkover(computerPlayer, "InvalidMove");
                         }
-                        repaintThis();
-                        repaint();
+
                         boardPanel.checkNoMoves();
 
                     } catch (Exception ignored) {
@@ -401,14 +398,14 @@ public class MainFrame extends JFrame implements Runnable {
                 JPanel robotWarsControlGridPanel = new JPanel(new GridLayout(1, 4));
 
                 JPanel speedControlGridLayout = new JPanel(new GridLayout(1, 3));
-                JTextField speedTextField = new JTextField("1");
+                JTextField speedTextField = new JTextField("5");
                 speedTextField.setEditable(false);
                 speedTextField.setHorizontalAlignment(SwingConstants.CENTER);
 
                 speedUpButton = new JButton("+");
                 speedUpButton.addActionListener(e13 -> {
                     int i = Integer.parseInt(speedTextField.getText());
-                    if (i <= 19)
+                    if (i <= 9)
                         i++;
                     speedTextField.setText(i + "");
                 });
