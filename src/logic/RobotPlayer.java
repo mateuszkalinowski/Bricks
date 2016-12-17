@@ -64,7 +64,7 @@ public class RobotPlayer {
        int length;
        boolean exit = false;
        try {
-           for (int i = 0; i <= 100; i++) {     //pętla sprawdza co 100ms czy nie przyszła odpowiedź
+           for (int i = 0; i <= 100; i++) {     //pętla sprawdza co 10ms czy nie przyszła odpowiedź
                if (i == 100)                    //przekroczony czas na odpowiedź, wyrzuca błąd
                    throw new TimeoutException("Komputer przekroczył czas na wykonanie ruchu");
                Thread.sleep(10);

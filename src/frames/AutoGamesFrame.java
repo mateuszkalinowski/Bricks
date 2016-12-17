@@ -20,6 +20,7 @@ import java.util.Scanner;
 public class AutoGamesFrame extends JDialog {
     AutoGamesFrame(JFrame owner){
         super(owner,true);
+        setTitle("Rozgrywki");
         setSize(270,350);
         exitButton = new JButton("Powrót");
         JMenuBar mainMenu = new JMenuBar();
