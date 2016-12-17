@@ -559,7 +559,6 @@ public class BoardPanel extends Canvas {
                 }
                 return true;
             } else {
-                Bricks.mainFrame.stopRunner();
                 if (gamemode == 2) {
                     if (Bricks.mainFrame.computerPlayer == 1) {
                         selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał program drugi, chcesz zagrać jeszcze raz?", "Koniec" +
@@ -603,7 +602,6 @@ public class BoardPanel extends Canvas {
 
     public void walkover(int computerPlayer, String reason) {
         int selection;
-        Bricks.mainFrame.stopRunner();
         if (reason.equals("Timeout")) {
             System.out.println("Timeout");
             if (computerPlayer == 1) {
