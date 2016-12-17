@@ -56,52 +56,36 @@ public class RobotPlayer {
         writer.println(this.size);
     }
 
-    public int[] makeMove(String message) throws InvalidMoveException, TimeoutException {
-        int[] move = new int[4];
-        writer.println(message);
-        String nextMove = "";
-        char[] newline= new char[256];
-        try {
-            int lenght = 0;
-            for (int i = 0; i <= 100; i++) {     //pętla sprawdza co 100ms czy nie przyszła odpowiedź
-                if (i == 100)                    //przekroczony czas na odpowiedź, wyrzuca błąd
-                    throw new TimeoutException("Komputer przekroczył czas na wykonanie ruchu");
-                Thread.sleep(10);
-                if (reader.ready()) {//jak linia gotowa do odczytu - przerywa pętlę
-                    {
-                        //noinspection ResultOfMethodCallIgnored
-                        reader.read(newline,0,256);
-                        for(int m=0; m < 255;m++) {
-                            for(int j = 0; j < System.lineSeparator().length();j++) {
-                                if(newline[m]==System.lineSeparator().toCharArray()[j]){
-                                    lenght = m;
-                                    break;
-                                }
-                            }
-                        }
-                        if(lenght!=0)
-                            break;
-                        else {
-                            throw new InvalidMoveException("Format danych wyjsciowych nie jest poprawny");
-                        }
-                    }
-                }
-            }
-            for(int i = 0; i < lenght;i++)
-                nextMove +=newline[i];
-            String splittedValues[] = nextMove.split(" ");
-            move[0] = Integer.parseInt(splittedValues[0]);
-            move[1] = Integer.parseInt(splittedValues[1]);
-            move[2] = Integer.parseInt(splittedValues[2]);
-            move[3] = Integer.parseInt(splittedValues[3]);
-        } catch (IOException | ArrayIndexOutOfBoundsException e) {
-            throw new InvalidMoveException("Ruch wykonany przez komputer nie jest poprawny");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+   public int[] makeMove(String message) throws InvalidMoveException, TimeoutException {
+       int[] move = new int[4];
+       writer.println(message);
+       String nextMove;
+       char[] line = new char[256];
+       int length;
+       boolean exit = false;
+       try {
+           for (int i = 0; i <= 100; i++) {     //pętla sprawdza co 100ms czy nie przyszła odpowiedź
+               if (i == 100)                    //przekroczony czas na odpowiedź, wyrzuca błąd
+                   throw new TimeoutException("Komputer przekroczył czas na wykonanie ruchu");
+               Thread.sleep(10);
+               if (reader.ready()) {//jak linia gotowa do odczytu - przerywa pętlę
+                    break;
+               }
+           }
+           nextMove = reader.readLine();
+           String splittedValues[] = nextMove.split(" ");
+           move[0] = Integer.parseInt(splittedValues[0]);
+           move[1] = Integer.parseInt(splittedValues[1]);
+           move[2] = Integer.parseInt(splittedValues[2]);
+           move[3] = Integer.parseInt(splittedValues[3]);
+       } catch (IOException | ArrayIndexOutOfBoundsException e) {
+           throw new InvalidMoveException("Ruch wykonany przez komputer nie jest poprawny");
+       } catch (InterruptedException e) {
+           e.printStackTrace();
+       }
 
-        return move;
-    }
+       return move;
+   }
 
     public void killRobot() {
         robotProc.destroy();
