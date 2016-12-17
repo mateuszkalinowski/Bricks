@@ -69,7 +69,7 @@ public class MainFrame extends JFrame implements Runnable {
         if (playerSecondFullPath.length() > 7) {
             int i = playerSecondFullPath.length() - 1;
             for (; i > 0; i--) {
-                if (playerSecondFullPath.charAt(i) == '/' || playerFirstFullPath.charAt(i) == '\\')
+                if (playerSecondFullPath.charAt(i) == '/' || playerSecondFullPath.charAt(i) == '\\')
                     break;
             }
             pathToPlayerTwo = playerSecondFullPath.substring(0, i);
