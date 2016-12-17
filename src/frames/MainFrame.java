@@ -315,7 +315,6 @@ public class MainFrame extends JFrame implements Runnable {
                     boolean gameFinished = false;
                     try {
                         computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
-                        board.saveToFile();
                         int move[] = new int[4];
                         if (computerPlayer == 1) {
                             if (boardPanel.movesStorage.isEmpty()) {
@@ -611,7 +610,6 @@ public class MainFrame extends JFrame implements Runnable {
             }
         }
     }
-
     private void exportSettings() {
         try {
             PrintWriter createCfg = new PrintWriter(new File(Bricks.path + "/options"));

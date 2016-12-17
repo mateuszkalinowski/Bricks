@@ -15,7 +15,6 @@ public class Runner extends Thread {
         while (Bricks.autoPlayRunning) {
             int computerPlayer = Bricks.mainFrame.computerPlayer;
             Bricks.mainFrame.computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
-            Bricks.mainFrame.board.saveToFile();
             int move[] = new int[4];
             if (computerPlayer == 1) {
                 if (Bricks.mainFrame.boardPanel.movesStorage.isEmpty()) {

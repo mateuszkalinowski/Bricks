@@ -38,6 +38,7 @@ public class AutoGamesFrame extends JDialog {
                 try {
                     Bricks.firstRobotPlayer.reset();
                     Bricks.secondRobotPlayer.reset();
+                    exportPoints();
                 }catch (Exception ignored) {}
             }
         });
@@ -46,6 +47,7 @@ public class AutoGamesFrame extends JDialog {
             try {
                 Bricks.firstRobotPlayer.reset();
                 Bricks.secondRobotPlayer.reset();
+                exportPoints();
             }catch (Exception ignored) {}
         });
         setLocationRelativeTo(null);
@@ -57,7 +59,6 @@ public class AutoGamesFrame extends JDialog {
         listGridLayout = new JPanel(new GridLayout(1,3));
         //MAIN CONTENT LAYOUT
 
-        final DefaultListModel<String> boardSizesListModel = new DefaultListModel<>();
         boardSizesList = new JList<>();
         boardSizesList.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         boardSizesList.setLayoutOrientation(JList.HORIZONTAL_WRAP);
@@ -70,7 +71,7 @@ public class AutoGamesFrame extends JDialog {
             boardSizesList.removeKeyListener(lsnr);
         }
         JScrollPane boardSizesListScrollPane = new JScrollPane(boardSizesList);
-        boardSizesListModel.addElement("");
+        importPoints();
         boardSizesList.setSelectedIndex(0);
         boardSizesList.addKeyListener(new KeyAdapter() {
             @Override
@@ -315,6 +316,46 @@ public class AutoGamesFrame extends JDialog {
         mainBorderLayout.add(contentGridLayout,BorderLayout.CENTER);
         add(mainBorderLayout);
     }
+    private void importPoints(){
+        try {
+            String path = System.getProperty("user.home") + "/Documents/Bricks/boardsSizes";
+            Scanner in = new Scanner(new File(path));
+            boardSizesListModel.removeAllElements();
+            String line;
+            while (in.hasNextLine()) {
+                line = in.nextLine();
+                    int i = Integer.parseInt(line);
+                    if(i>=5 && i<=255 && i%2==1) {
+                        boardSizesListModel.addElement(i+"");
+                    }
+            }
+            if(boardSizesListModel.isEmpty())
+                boardSizesListModel.addElement("");
+            in.close();
+            repaint();
+        }
+        catch (Exception ignored){
+            if(boardSizesListModel.isEmpty())
+                boardSizesListModel.addElement("");
+        }
+    }
+    private void exportPoints(){
+        try {
+            String path = System.getProperty("user.home") + "/Documents/Bricks";
+            if (!new File(path + "/boardsSizes").exists()) {
+                new File(path + "/boardsSizes").createNewFile();
+            }
+            String filename = path + "/boardsSizes";
+            PrintWriter writer;
+                writer = new PrintWriter(filename, "UTF-8");
+                for (int i = 0; i < boardSizesListModel.size(); i++)
+                    writer.println(boardSizesListModel.getElementAt(i));
+                writer.close();
+
+        }
+        catch (Exception ignored) {}
+
+    }
     public void setWinCounts(String s1,String s2) {
         firstPlayerWinsCount.setText(s1);
         secondPlayerWinsCount.setText(s2);
@@ -353,5 +394,6 @@ public class AutoGamesFrame extends JDialog {
     private JPanel resultsGridLayout;
 
     private AutoGameThread autoGameThread;
+    final DefaultListModel<String> boardSizesListModel = new DefaultListModel<>();
 
 }

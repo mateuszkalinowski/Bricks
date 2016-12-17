@@ -42,6 +42,7 @@ public class RobotPlayer {
         }
         writer.println(size);
     }
+
     public void reset(int size) throws IOException, RobotPlayerNotWorkingException {
         robotProc.destroy();
         robotProc = Runtime.getRuntime().exec(source);
@@ -68,6 +69,7 @@ public class RobotPlayer {
                 Thread.sleep(10);
                 if (reader.ready()) {//jak linia gotowa do odczytu - przerywa pętlę
                     {
+                        //noinspection ResultOfMethodCallIgnored
                         reader.read(newline,0,256);
                         for(int m=0; m < 255;m++) {
                             for(int j = 0; j < System.lineSeparator().length();j++) {
