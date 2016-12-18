@@ -69,7 +69,7 @@ public class MainFrame extends JFrame implements Runnable {
         if (playerSecondFullPath.length() > 7) {
             int i = playerSecondFullPath.length() - 1;
             for (; i > 0; i--) {
-                if (playerSecondFullPath.charAt(i) == '/' || playerFirstFullPath.charAt(i) == '\\')
+                if (playerSecondFullPath.charAt(i) == '/' || playerSecondFullPath.charAt(i) == '\\')
                     break;
             }
             pathToPlayerTwo = playerSecondFullPath.substring(0, i);
@@ -315,7 +315,6 @@ public class MainFrame extends JFrame implements Runnable {
                     boolean gameFinished = false;
                     try {
                         computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
-                        board.saveToFile();
                         int move[] = new int[4];
                         if (computerPlayer == 1) {
                             if (boardPanel.movesStorage.isEmpty()) {
@@ -375,8 +374,6 @@ public class MainFrame extends JFrame implements Runnable {
                             board.board[x2][y2] = computerPlayer;
                             boardPanel.playSound();
                             boardPanel.movesStorage.addMove(x1, y1, x2, y2);
-
-
                             if (computerPlayer == 1) {
                                 computerPlayer = 2;
                                 actualPlayerColorPreview.setColor(playerSecondColor);
@@ -389,8 +386,7 @@ public class MainFrame extends JFrame implements Runnable {
                         } else if (!gameFinished) {
                             boardPanel.walkover(computerPlayer, "InvalidMove");
                         }
-                        repaintThis();
-                        repaint();
+
                         boardPanel.checkNoMoves();
 
                     } catch (Exception ignored) {
@@ -399,17 +395,17 @@ public class MainFrame extends JFrame implements Runnable {
 
                 });
 
-                JPanel robotWarsControlGridPanel = new JPanel(new GridLayout(1, 3));
+                JPanel robotWarsControlGridPanel = new JPanel(new GridLayout(1, 4));
 
                 JPanel speedControlGridLayout = new JPanel(new GridLayout(1, 3));
-                JTextField speedTextField = new JTextField("1");
+                JTextField speedTextField = new JTextField("5");
                 speedTextField.setEditable(false);
                 speedTextField.setHorizontalAlignment(SwingConstants.CENTER);
 
                 speedUpButton = new JButton("+");
                 speedUpButton.addActionListener(e13 -> {
                     int i = Integer.parseInt(speedTextField.getText());
-                    if (i <= 9)
+                    if (i <= 19)
                         i++;
                     speedTextField.setText(i + "");
                 });
@@ -428,6 +424,26 @@ public class MainFrame extends JFrame implements Runnable {
                 robotWarsControlGridPanel.add(speedControlGridLayout);
 
                 robotWarsControlGridPanel.add(nextMoveButton);
+                autoPlayButton = new JButton("Rozgrywki");
+                autoPlayFrame = new AutoGamesFrame(this);
+                autoPlayButton.addActionListener(action -> {
+                    int selection = 0;
+                    if(!boardPanel.movesStorage.isEmpty()) {
+                        selection = JOptionPane.showConfirmDialog(null, "Spowoduje to zakończenie obecnej gry, kontynuować?", "Koniec" +
+                                " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                    }
+
+                    if (selection == JOptionPane.OK_OPTION || boardPanel.movesStorage.isEmpty()) {
+                        stopRunner();
+                        try {
+                            Bricks.firstRobotPlayer.reset();
+                            Bricks.secondRobotPlayer.reset();
+                        }
+                        catch (Exception ignored){}
+                        boardPanel.resetBoard();
+                        autoPlayFrame.setVisible(true);
+                    }
+                });
 
 
                 runAutoMovesButton = new JButton("Automatyczna Gra");
@@ -446,6 +462,7 @@ public class MainFrame extends JFrame implements Runnable {
                     }
                 });
                 robotWarsControlGridPanel.add(runAutoMovesButton);
+                robotWarsControlGridPanel.add(autoPlayButton);
 
                 southBorderLayout.add(robotWarsControlGridPanel, BorderLayout.CENTER);
 
@@ -590,7 +607,6 @@ public class MainFrame extends JFrame implements Runnable {
             }
         }
     }
-
     private void exportSettings() {
         try {
             PrintWriter createCfg = new PrintWriter(new File(Bricks.path + "/options"));
@@ -656,7 +672,7 @@ public class MainFrame extends JFrame implements Runnable {
         exportSettings();
     }
 
-    private boolean possibleMove(int x1, int y1, int x2, int y2, int[][] board) {
+    public boolean possibleMove(int x1, int y1, int x2, int y2, int[][] board) {
         if (board[x1][y1] != 0 || board[x2][y2] != 0)
             return false;
         boolean flag = false;
@@ -693,6 +709,7 @@ public class MainFrame extends JFrame implements Runnable {
                 speedDownButton.setEnabled(true);
                 runAutoMovesButton.setText("Automatyczna Gra");
                 nextMoveButton.setEnabled(true);
+                autoPlayButton.setEnabled(true);
             }
         } else {
             if (speedUpButton != null) {
@@ -700,6 +717,7 @@ public class MainFrame extends JFrame implements Runnable {
                 speedDownButton.setEnabled(false);
                 runAutoMovesButton.setText("Przerwij");
                 nextMoveButton.setEnabled(false);
+                autoPlayButton.setEnabled(false);
             }
         }
     }
@@ -748,6 +766,7 @@ public class MainFrame extends JFrame implements Runnable {
     private JButton speedDownButton;
     private JButton nextMoveButton;
     public JButton undoLastMoveButton;
+    private JButton autoPlayButton;
 
     private JPanel gameBorderLayout;
     private JPanel mainBorderLayout;
@@ -757,5 +776,7 @@ public class MainFrame extends JFrame implements Runnable {
     private JLabel gameName;
     private JLabel credits;
     public JLabel restTiles;
+
+    public AutoGamesFrame autoPlayFrame;
 
 }

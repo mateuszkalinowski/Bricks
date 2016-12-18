@@ -25,23 +25,6 @@ public class BoardLogic {
                 board[i][j] = 0;
     }
 
-    public void saveToFile() {
-        try {
-            PrintWriter createBoardFile = new PrintWriter(new File(System.getProperty("user.home") + "/Documents/Bricks/board.txt"));
-            createBoardFile.println(this.width);
-            for (int i = 0; i < height; i++) {
-                String line = "";
-                for (int j = 0; j < width; j++) {
-                    line += board[j][i] + " ";
-                }
-                createBoardFile.println(line);
-            }
-            createBoardFile.close();
-        } catch (Exception e) {
-            System.out.println("Nie działa");
-        }
-    }
-
     public boolean[] possibleDirections(int x, int y) {
         boolean result[] = new boolean[4];
         result[0] = false;
