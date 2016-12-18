@@ -2,15 +2,12 @@ package core;
 
 
 import frames.MainFrame;
-import frames.MainStage;
+import stages.MainStage;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import logic.*;
 
-import javax.swing.*;
 import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -173,7 +170,7 @@ public class Bricks extends Application {
     public static RobotPlayer secondRobotPlayer;
     public static RobotPlayer singlePlayerRobotPlayer;
 
-    public MainStage mainStage;
+    public static MainStage mainStage;
 
 
     private static void loadDefaultSettings() {

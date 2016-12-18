@@ -1,10 +1,15 @@
-package frames;
+package stages;
 
+import core.Bricks;
 import javafx.application.Application;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.geometry.VPos;
+import javafx.scene.Group;
 import javafx.scene.Scene;
+import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -12,18 +17,18 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
+import scenes.GameScene;
 
 /**
  * Created by Mateusz on 18.12.2016.
  * Project InferenceEngine
  */
-public class MainStage extends Application {
+public class MainStage extends Application implements Runnable {
     public void start(Stage primaryStage) {
         BorderPane mainBorderPane = new BorderPane();
         GridPane mainGridPane = new GridPane();
         RowConstraints rowInMainMenu = new RowConstraints();
         rowInMainMenu.setPercentHeight(14);
-        //mainGridPane.setGridLinesVisible(true);
         for(int i = 0; i < 7; i++)
             mainGridPane.getRowConstraints().add(rowInMainMenu);
         ColumnConstraints columnInMainMenu = new ColumnConstraints();
@@ -45,6 +50,22 @@ public class MainStage extends Application {
         singlePlayerGameButtonHBox.getChildren().add(singlePlayerGameButton);
         HBox.setMargin(singlePlayerGameButton, new Insets(10,0,10,0));
         HBox.setHgrow(singlePlayerGameButton,Priority.ALWAYS);
+        singlePlayerGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                BorderPane gameBorderPane = new BorderPane();
+                gameScene = new GameScene();
+                gameBorderPane.setCenter(gameScene);
+                Scene gameScene = new Scene(gameBorderPane,mainScene.getWidth(),mainScene.getHeight());
+                mainStage.setScene(gameScene);
+                mainStage.show();
+                Thread game = new Thread(Bricks.mainStage);
+                running = true;
+                game.start();
+
+
+            }
+        });
 
         HBox twoPlayersGameButtonHBox = new HBox();
         twoPlayersGameButtonHBox.setAlignment(Pos.CENTER);
@@ -85,6 +106,7 @@ public class MainStage extends Application {
         exitButtonHBox.getChildren().add(exitButton);
         HBox.setMargin(exitButton, new Insets(10,0,10,0));
         HBox.setHgrow(exitButton,Priority.ALWAYS);
+        exitButton.setOnAction(event -> System.exit(0));
 
         mainGridPane.add(bricksTitleLabel,0,0,1,2);
         mainGridPane.add(singlePlayerGameButtonHBox,0,2);
@@ -101,11 +123,48 @@ public class MainStage extends Application {
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
-        Scene mainScene = new Scene(mainBorderPane, 500, 650);
+        mainScene = new Scene(mainBorderPane, 500, 650);
         mainStage = primaryStage;
         mainStage.setTitle("Bricks");
         mainStage.setScene(mainScene);
         mainStage.show();
     }
+    public void getSize(){
+        height = (int)Bricks.mainStage.mainScene.getHeight();
+        widht = (int)Bricks.mainStage.mainScene.getWidth();
+    }
+    @Override
+    public void run() {
+        long lastTime = System.nanoTime();
+
+        int FRAMERATE = 60;
+        double nsPerTick = 1000000000D / FRAMERATE;
+        long lastTimer = System.currentTimeMillis();
+        double delta = 0;
+        boolean shouldRender = false;
+        while (running) {
+            long now = System.nanoTime();
+            delta += (now - lastTime) / nsPerTick;
+            lastTime = now;
+            while (delta >= 1) {
+                shouldRender = true;
+                delta -= 1;
+            }
+            if (shouldRender) {
+                getSize();
+                gameScene.drawFrame(widht,height);
+                shouldRender = false;
+            }
+            if (System.currentTimeMillis() - lastTimer >= 1000) {
+                lastTimer += 1000;
+            }
+        }
+    }
+    private int height=100;
+    private int widht=100;
     private Stage mainStage;
+    private Scene mainScene;
+    private boolean running = false;
+
+    private GameScene gameScene;
 }
