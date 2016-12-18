@@ -2,6 +2,9 @@ package core;
 
 
 import frames.MainFrame;
+import frames.MainStage;
+import javafx.application.Application;
+import javafx.stage.Stage;
 import logic.*;
 
 import javax.swing.*;
@@ -16,10 +19,14 @@ import java.util.Scanner;
  * Created by Mateusz on 20.05.2016.
  * Project Bricks
  */
-public class Bricks {
+public class Bricks extends Application {
     @SuppressWarnings ("ResultOfMethodCallIgnored")
+    public void start(Stage primaryStage) throws Exception {
+        mainStage = new MainStage();
+        mainStage.start(primaryStage);
+    }
     public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
+        //EventQueue.invokeLater(() -> {
 
             path = System.getProperty("user.home") + "/Documents/Bricks";
             File resources = new File(path);
@@ -120,12 +127,13 @@ public class Bricks {
             } catch (Exception ignored) {
                 loadDefaultSettings();
             }
-            mainFrame = new MainFrame(initialBoardSize, firstPlayerColor, secondPlayerColor, isSound, volume, debugMode,
-                    firstPlayerPath, secondPlayerPath, firstPlayerProgramType, secondPlayerProgramType,
-                    firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType);
-            mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            mainFrame.setVisible(true);
-            mainFrame.addWindowListener(new WindowAdapter() {
+        launch();
+          //  mainFrame = new MainFrame(initialBoardSize, firstPlayerColor, secondPlayerColor, isSound, volume, debugMode,
+          //          firstPlayerPath, secondPlayerPath, firstPlayerProgramType, secondPlayerProgramType,
+          //          firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType);
+          //  mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
+          //  mainFrame.setVisible(true);
+            /*mainFrame.addWindowListener(new WindowAdapter() {
                 @Override
                 public void windowClosing(WindowEvent e) {
                     super.windowClosing(e);
@@ -136,8 +144,8 @@ public class Bricks {
                     if (singlePlayerRobotPlayer != null)
                         singlePlayerRobotPlayer.killRobot();
                 }
-            });
-        });
+            });*/
+       // });
     }
 
     private static boolean isSound;
@@ -164,6 +172,9 @@ public class Bricks {
     public static RobotPlayer firstRobotPlayer;
     public static RobotPlayer secondRobotPlayer;
     public static RobotPlayer singlePlayerRobotPlayer;
+
+    public MainStage mainStage;
+
 
     private static void loadDefaultSettings() {
         initialBoardSize = 5;
