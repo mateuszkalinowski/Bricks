@@ -16,6 +16,7 @@ import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
 import scenes.GameScene;
 
@@ -55,9 +56,8 @@ public class MainStage extends Application implements Runnable {
             public void handle(ActionEvent event) {
                 BorderPane gameBorderPane = new BorderPane();
                 gameScene = new GameScene();
-                gameBorderPane.setCenter(gameScene);
-                Scene gameScene = new Scene(gameBorderPane,mainScene.getWidth(),mainScene.getHeight());
-                mainStage.setScene(gameScene);
+                sceneOfTheGame = new Scene(gameScene,mainScene.getWidth(),mainScene.getHeight());
+                mainStage.setScene(sceneOfTheGame);
                 mainStage.show();
                 Thread game = new Thread(Bricks.mainStage);
                 running = true;
@@ -128,10 +128,19 @@ public class MainStage extends Application implements Runnable {
         mainStage.setTitle("Bricks");
         mainStage.setScene(mainScene);
         mainStage.show();
+
+
+        mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
+            @Override
+            public void handle(WindowEvent event) {
+                running=false;
+            }
+        });
+
     }
     public void getSize(){
-        height = (int)Bricks.mainStage.mainScene.getHeight();
-        widht = (int)Bricks.mainStage.mainScene.getWidth();
+        height = (int)Bricks.mainStage.sceneOfTheGame.getHeight();
+        widht = (int)Bricks.mainStage.sceneOfTheGame.getWidth();
     }
     @Override
     public void run() {
@@ -165,6 +174,8 @@ public class MainStage extends Application implements Runnable {
     private Stage mainStage;
     private Scene mainScene;
     private boolean running = false;
+
+    Scene sceneOfTheGame;
 
     private GameScene gameScene;
 }
