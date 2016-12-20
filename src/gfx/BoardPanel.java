@@ -385,60 +385,6 @@ public class BoardPanel extends Canvas {
         }
     }
 
-    /*
-        private void drawBoardFrame() {
-            Graphics2D g2 = (Graphics2D) g;
-            int width = getWidth();
-            int height = getHeight();
-            oneFieldWidth = (width - margin * 2) / board.width;
-            oneFieldHeight = (height - margin * 2) / board.height;
-            g2.setStroke(new BasicStroke(6));
-            g2.drawRect(margin, margin, oneFieldWidth * board.width, oneFieldHeight * board.height);
-            g2.setColor(Color.WHITE);
-            g2.fillRect(margin, margin, oneFieldWidth * board.width, oneFieldHeight * board.height);
-            int inFieldMargin = 0;
-            if (actualPlayer == 1) {
-                if (isSelected) {
-                    g2.setColor(Bricks.mainFrame.playerFirstColor);
-                    g2.fillRect(selectedX * oneFieldWidth + margin + inFieldMargin, selectedY * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
-                }
-            }
-            if (actualPlayer == 2) {
-                if (isSelected) {
-                    g2.setColor(Bricks.mainFrame.playerSecondColor);
-                    g2.fillRect(selectedX * oneFieldWidth + margin + inFieldMargin, selectedY * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
-                }
-            }
-
-            for (int i = 0; i < board.height; i++) {
-                for (int j = 0; j < board.width; j++) {
-                    if (board.board[j][i] == 1) {
-                        g2.setColor(Bricks.mainFrame.playerFirstColor);
-                        g2.fillRect(j * oneFieldWidth + margin + inFieldMargin, i * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
-                    }
-                    if (board.board[j][i] == 2) {
-                        g2.setColor(Bricks.mainFrame.playerSecondColor);
-                        g2.fillRect(j * oneFieldWidth + margin + inFieldMargin, i * oneFieldHeight + margin + inFieldMargin, oneFieldWidth - 2 * inFieldMargin, oneFieldHeight - 2 * inFieldMargin);
-                    }
-                }
-            }
-            for (int i = 0; i < board.height; i++) {
-                if (i > 0) {
-                    g2.setStroke(new BasicStroke(2));
-                    g2.setColor(Color.BLACK);
-                    g2.drawLine(margin, margin + i * oneFieldHeight, margin + oneFieldWidth * board.width, margin + i * oneFieldHeight);
-                }
-                for (int j = 0; j < board.width; j++) {
-                    if (j > 0) {
-                        g2.setStroke(new BasicStroke(2));
-                        g2.setColor(Color.BLACK);
-                        g2.drawLine(margin + j * oneFieldWidth, margin, margin + j * oneFieldWidth, oneFieldHeight * board.height + margin);
-                    }
-                }
-            }
-
-        }
-    */
     private void drawBoardFrame() {
         Graphics2D g2 = (Graphics2D) g;
         int width = getWidth();

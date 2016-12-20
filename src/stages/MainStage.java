@@ -1,15 +1,13 @@
 package stages;
 
 import core.Bricks;
+import gfx.BoardPanel;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.geometry.VPos;
-import javafx.scene.Group;
 import javafx.scene.Scene;
-import javafx.scene.canvas.Canvas;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
@@ -17,8 +15,8 @@ import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import org.omg.PortableInterceptor.SYSTEM_EXCEPTION;
-import scenes.GameScene;
+import logic.BoardLogic;
+import scenes.GamePane;
 
 /**
  * Created by Mateusz on 18.12.2016.
@@ -55,8 +53,8 @@ public class MainStage extends Application implements Runnable {
             @Override
             public void handle(ActionEvent event) {
                 BorderPane gameBorderPane = new BorderPane();
-                gameScene = new GameScene();
-                sceneOfTheGame = new Scene(gameScene,mainScene.getWidth(),mainScene.getHeight());
+                gamePane = new GamePane();
+                sceneOfTheGame = new Scene(gamePane,mainScene.getWidth(),mainScene.getHeight());
                 mainStage.setScene(sceneOfTheGame);
                 mainStage.show();
                 Thread game = new Thread(Bricks.mainStage);
@@ -106,7 +104,10 @@ public class MainStage extends Application implements Runnable {
         exitButtonHBox.getChildren().add(exitButton);
         HBox.setMargin(exitButton, new Insets(10,0,10,0));
         HBox.setHgrow(exitButton,Priority.ALWAYS);
-        exitButton.setOnAction(event -> System.exit(0));
+        exitButton.setOnAction(event -> {
+            running=false;
+            System.exit(0);
+        });
 
         mainGridPane.add(bricksTitleLabel,0,0,1,2);
         mainGridPane.add(singlePlayerGameButtonHBox,0,2);
@@ -133,7 +134,9 @@ public class MainStage extends Application implements Runnable {
         mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
             @Override
             public void handle(WindowEvent event) {
+
                 running=false;
+                System.exit(0);
             }
         });
 
@@ -161,7 +164,7 @@ public class MainStage extends Application implements Runnable {
             }
             if (shouldRender) {
                 getSize();
-                gameScene.drawFrame(widht,height);
+                gamePane.drawFrame(widht,height);
                 shouldRender = false;
             }
             if (System.currentTimeMillis() - lastTimer >= 1000) {
@@ -177,5 +180,12 @@ public class MainStage extends Application implements Runnable {
 
     Scene sceneOfTheGame;
 
-    private GameScene gameScene;
+    private GamePane gamePane;
+
+    public BoardLogic board;
+
+    public BoardPanel boardPanel;
+
+    public javafx.scene.paint.Color firstPlayerColor;
+    public javafx.scene.paint.Color secondPlayerColor;
 }
