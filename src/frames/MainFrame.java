@@ -319,7 +319,8 @@ public class MainFrame extends JFrame implements Runnable {
                         if (computerPlayer == 1) {
                             if (boardPanel.movesStorage.isEmpty()) {
                                 try {
-                                    move = Bricks.firstRobotPlayer.makeMove("Zaczynaj");
+                                    move = Bricks.firstRobotPlayer.makeMove("ZACZYNAJ");
+                                    System.out.println(move[0] + " "+move[1] + " "+move[2] + " "+ move[3]);
                                 } catch (InvalidMoveException exception) {
                                     boardPanel.walkover(computerPlayer, "BadMove");
                                     gameFinished = true;
@@ -341,8 +342,8 @@ public class MainFrame extends JFrame implements Runnable {
                         }
                         if (computerPlayer == 2) {
                             if (boardPanel.movesStorage.isEmpty()) {
-                                try {
-                                    move = Bricks.secondRobotPlayer.makeMove("Zaczynaj");
+                               try {
+                                    move = Bricks.secondRobotPlayer.makeMove("ZACZYNAJ");
                                 } catch (InvalidMoveException exception) {
                                     boardPanel.walkover(computerPlayer, "BadMove");
                                     gameFinished = true;
@@ -353,6 +354,7 @@ public class MainFrame extends JFrame implements Runnable {
                             } else {
                                 try {
                                     move = Bricks.secondRobotPlayer.makeMove(boardPanel.movesStorage.getLastMoveAsString());
+                                   System.out.println(move[0] + " "+move[1] + " "+move[2] + " "+ move[3]);
                                 } catch (InvalidMoveException exception) {
                                     boardPanel.walkover(computerPlayer, "BadMove");
                                     gameFinished = true;
@@ -367,7 +369,6 @@ public class MainFrame extends JFrame implements Runnable {
                         int y1 = move[1];
                         int x2 = move[2];
                         int y2 = move[3];
-
 
                         if (possibleMove(x1, y1, x2, y2, board.board) && !gameFinished) {
                             board.board[x1][y1] = computerPlayer;

@@ -53,10 +53,10 @@ public class MovesStorage {
         return moveValues;
     }
     public String getLastMoveAsString() {
-        return moves.get(moves.size() - 1).x1 + " " +
-                moves.get(moves.size() - 1).y1 + " " +
-                moves.get(moves.size() - 1).x2 + " " +
-                moves.get(moves.size() - 1).y2;
+        return moves.get(moves.size() - 1).x1+1 + " " +
+                moves.get(moves.size() - 1).y1+1 + " " +
+                moves.get(moves.size() - 1).x2+1 + " " +
+                moves.get(moves.size() - 1).y2+1;
     }
 
     public boolean isEmpty() {

@@ -71,7 +71,6 @@ public class BoardLogic {
                     return true;
             }
         }
-
         return false;
     }
 
