@@ -22,7 +22,7 @@ p2 - program drugi
 11. Poprzedni ruch (s) - > (p1)  
 12. Powrót do punktu 8
 13. WYGRAŁEŚ (s) -> program który wygrał  
-14. PRZEGRAŁEŚ (s) -> program który przegrał
+14. PRZEGRAŁEŚ (s) -> program który przegrał  
 Dozwolone języki programowania: Każdy, obsługujący standardowe wejście i wyjście (w ustawieniach programu sędziującego można 
 podać mu instrukcję jak uruchomić program o danym rozszerzeniu).
 #### Uwaga  
