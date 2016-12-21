@@ -62,6 +62,7 @@ public class AutoGameThread extends Thread {
                     if (Bricks.mainFrame.possibleMove(x1, y1, x2, y2, board.board)) {
                         board.board[x1][y1] = player;
                         board.board[x2][y2] = player;
+                        movesStorage.addMove(x1,y1,x2,y2);
                     }
                     if (!board.anyMoves()) {
                         if (player == 1) {

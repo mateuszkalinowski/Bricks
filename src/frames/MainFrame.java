@@ -522,7 +522,7 @@ public class MainFrame extends JFrame implements Runnable {
         exitButton.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
         exitButton.setFocusPainted(false);
         exitButton.addActionListener(e -> System.exit(0));
-        credits = new JLabel("<html><center>Autorzy: Mateusz Kalinowski, Michał Romaszko <br> Wersja: 1.2.1, Ikona: Madebyoliver, www.flaticon.com</center></html>");
+        credits = new JLabel("<html><center>Autorzy: Mateusz Kalinowski, Michał Romaszko <br> Wersja: 1.2.2, Ikona: Madebyoliver, www.flaticon.com</center></html>");
         credits.setHorizontalAlignment(SwingConstants.CENTER);
 
 
