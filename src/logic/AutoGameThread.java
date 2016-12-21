@@ -30,7 +30,7 @@ public class AutoGameThread extends Thread {
                     int[] move = new int[4];
                     if (movesStorage.isEmpty()) {
                         try {
-                            move = Bricks.firstRobotPlayer.makeMove("Zaczynaj");
+                            move = Bricks.firstRobotPlayer.makeMove("ZACZYNAJ");
                         } catch (Exception badMove) {
                             secondPlayerWins++;
                             break;

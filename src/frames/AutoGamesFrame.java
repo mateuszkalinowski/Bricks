@@ -37,8 +37,8 @@ public class AutoGamesFrame extends JDialog {
             public void windowClosing(WindowEvent e) {
                 super.windowClosing(e);
                 try {
-                    Bricks.firstRobotPlayer.reset();
-                    Bricks.secondRobotPlayer.reset();
+                    Bricks.firstRobotPlayer.reset(Bricks.mainFrame.BoardSize);
+                    Bricks.secondRobotPlayer.reset(Bricks.mainFrame.BoardSize);
                     exportPoints();
                 }catch (Exception ignored) {}
             }
@@ -46,8 +46,8 @@ public class AutoGamesFrame extends JDialog {
         exitButton.addActionListener(e -> {
             setVisible(false);
             try {
-                Bricks.firstRobotPlayer.reset();
-                Bricks.secondRobotPlayer.reset();
+                Bricks.firstRobotPlayer.reset(Bricks.mainFrame.BoardSize);
+                Bricks.secondRobotPlayer.reset(Bricks.mainFrame.BoardSize);
                 exportPoints();
             }catch (Exception ignored) {}
         });

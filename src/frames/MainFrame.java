@@ -320,7 +320,6 @@ public class MainFrame extends JFrame implements Runnable {
                             if (boardPanel.movesStorage.isEmpty()) {
                                 try {
                                     move = Bricks.firstRobotPlayer.makeMove("ZACZYNAJ");
-                                    System.out.println(move[0] + " "+move[1] + " "+move[2] + " "+ move[3]);
                                 } catch (InvalidMoveException exception) {
                                     boardPanel.walkover(computerPlayer, "BadMove");
                                     gameFinished = true;
@@ -354,7 +353,6 @@ public class MainFrame extends JFrame implements Runnable {
                             } else {
                                 try {
                                     move = Bricks.secondRobotPlayer.makeMove(boardPanel.movesStorage.getLastMoveAsString());
-                                   System.out.println(move[0] + " "+move[1] + " "+move[2] + " "+ move[3]);
                                 } catch (InvalidMoveException exception) {
                                     boardPanel.walkover(computerPlayer, "BadMove");
                                     gameFinished = true;
@@ -387,7 +385,7 @@ public class MainFrame extends JFrame implements Runnable {
                         } else if (!gameFinished) {
                             boardPanel.walkover(computerPlayer, "InvalidMove");
                         }
-
+                        repaint();
                         boardPanel.checkNoMoves();
 
                     } catch (Exception ignored) {
@@ -524,7 +522,7 @@ public class MainFrame extends JFrame implements Runnable {
         exitButton.setFont(new Font("Comic Sans MS", Font.BOLD, 25));
         exitButton.setFocusPainted(false);
         exitButton.addActionListener(e -> System.exit(0));
-        credits = new JLabel("<html><center>Autorzy: Mateusz Kalinowski, Michał Romaszko <br> Wersja: 1.2.0, Ikona: Madebyoliver, www.flaticon.com</center></html>");
+        credits = new JLabel("<html><center>Autorzy: Mateusz Kalinowski, Michał Romaszko <br> Wersja: 1.2.1, Ikona: Madebyoliver, www.flaticon.com</center></html>");
         credits.setHorizontalAlignment(SwingConstants.CENTER);
 
 
@@ -743,7 +741,7 @@ public class MainFrame extends JFrame implements Runnable {
     private int secondPlayerProgramType;
     public int volume;
     public int computerPlayer;
-    private int BoardSize;
+    public int BoardSize;
     private int computerPlayerType;
 
     public ColorPreview actualPlayerColorPreview;

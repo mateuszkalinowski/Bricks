@@ -19,7 +19,7 @@ public class Runner extends Thread {
             if (computerPlayer == 1) {
                 if (Bricks.mainFrame.boardPanel.movesStorage.isEmpty()) {
                     try {
-                        move = Bricks.firstRobotPlayer.makeMove("Zaczynaj");
+                        move = Bricks.firstRobotPlayer.makeMove("ZACZYNAJ");
                     } catch (InvalidMoveException exception) {
                         Bricks.mainFrame.boardPanel.walkover(computerPlayer, "BadMove");
                         break;
@@ -42,7 +42,7 @@ public class Runner extends Thread {
             if (computerPlayer == 2) {
                 if (Bricks.mainFrame.boardPanel.movesStorage.isEmpty()) {
                     try {
-                        move = Bricks.secondRobotPlayer.makeMove("Zaczynaj");
+                        move = Bricks.secondRobotPlayer.makeMove("ZACZYNAJ");
                     } catch (InvalidMoveException exception) {
                         Bricks.mainFrame.boardPanel.walkover(computerPlayer, "BadMove");
                         break;
