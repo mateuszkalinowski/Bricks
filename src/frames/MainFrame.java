@@ -741,7 +741,7 @@ public class MainFrame extends JFrame implements Runnable {
     private int secondPlayerProgramType;
     public int volume;
     public int computerPlayer;
-    public int BoardSize;
+    int BoardSize;
     private int computerPlayerType;
 
     public ColorPreview actualPlayerColorPreview;
@@ -758,7 +758,7 @@ public class MainFrame extends JFrame implements Runnable {
     private String firstPlayerRunCommand;
     private String secondPlayerRunCommand;
 
-    public Runner runner;
+    private Runner runner;
 
     private JButton runAutoMovesButton;
     private JButton speedUpButton;
