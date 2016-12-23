@@ -1,6 +1,7 @@
 package stages;
 
 import core.Bricks;
+import core.Settings;
 import gfx.BoardPanel;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
@@ -17,6 +18,7 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import logic.BoardLogic;
 import scenes.GamePane;
+import scenes.OptionsPane;
 
 /**
  * Created by Mateusz on 18.12.2016.
@@ -100,6 +102,15 @@ public class MainStage extends Application implements Runnable {
         optionsButtonHBox.getChildren().add(optionsButton);
         HBox.setMargin(optionsButton, new Insets(10,0,10,0));
         HBox.setHgrow(optionsButton,Priority.ALWAYS);
+        optionsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                optionsPane = new OptionsPane(mainScene.getWidth(),mainScene.getHeight());
+                sceneOfSettings = new Scene(optionsPane,mainScene.getWidth(),mainScene.getHeight());
+                mainStage.setScene(sceneOfSettings);
+                mainStage.show();
+            }
+        });
 
         HBox exitButtonHBox = new HBox();
         exitButtonHBox.setAlignment(Pos.CENTER);
@@ -134,6 +145,8 @@ public class MainStage extends Application implements Runnable {
         mainStage = primaryStage;
         mainStage.setTitle("Bricks");
         mainStage.setScene(mainScene);
+        mainStage.setMinWidth(400);
+        mainStage.setMinHeight(640);
         mainStage.show();
 
 
@@ -178,6 +191,9 @@ public class MainStage extends Application implements Runnable {
             }
         }
     }
+    public void backToMenu(){
+        mainStage.setScene(mainScene);
+    }
     private int height=100;
     private int widht=100;
     private Stage mainStage;
@@ -185,8 +201,10 @@ public class MainStage extends Application implements Runnable {
     private boolean running = false;
 
     private Scene sceneOfTheGame;
+    private Scene sceneOfSettings;
 
     private GamePane gamePane;
+    private OptionsPane optionsPane;
 
     public BoardLogic board;
 
