@@ -497,10 +497,10 @@ public class MainFrame extends JFrame implements Runnable {
         JButton optionsButton = new JButton("Opcje");
         optionsButton.addActionListener(e -> {
             JPanel optionsPanel = new JPanel(new BorderLayout());
-            OptionsPanel opcje = new OptionsPanel(new Settings(BoardSize, playerFirstColor, playerSecondColor,
+         /*   OptionsPanel opcje = new OptionsPanel(new Settings(BoardSize, playerFirstColor, playerSecondColor,
                     this.isSound, this.volume, this.debugMode, playerFirstFullPath, playerSecondFullPath,
-                    firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, this.computerPlayerType));
-            optionsPanel.add(opcje, BorderLayout.CENTER);
+                    firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, this.computerPlayerType));*/
+           // optionsPanel.add(opcje, BorderLayout.CENTER);
             this.getContentPane().removeAll();
             this.getContentPane().add(optionsPanel);
             revalidate();
@@ -635,8 +635,8 @@ public class MainFrame extends JFrame implements Runnable {
 
     void setSettings(Settings newSettings) {
         BoardSize = newSettings.getBoardSize();
-        playerFirstColor = newSettings.getPlayerFirstColor();
-        playerSecondColor = newSettings.getPlayerSecondColor();
+      //  playerFirstColor = newSettings.getPlayerFirstColor();
+      //  playerSecondColor = newSettings.getPlayerSecondColor();
         this.isSound = newSettings.getIsSound();
         this.volume = newSettings.getVolume();
         this.debugMode = newSettings.getDebugMode();

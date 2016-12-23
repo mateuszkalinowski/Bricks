@@ -2,12 +2,14 @@ package core;
 
 
 import frames.MainFrame;
+import javafx.scene.paint.*;
 import stages.MainStage;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import logic.*;
 
 import java.awt.*;
+import java.awt.Color;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -20,11 +22,13 @@ public class Bricks extends Application {
     @SuppressWarnings ("ResultOfMethodCallIgnored")
     public void start(Stage primaryStage) throws Exception {
         mainStage = new MainStage();
+        mainStage.setSettings(initialBoardSize, firstPlayerColor, secondPlayerColor, isSound, volume, debugMode,
+                          firstPlayerPath, secondPlayerPath, firstPlayerProgramType, secondPlayerProgramType,
+                          firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType);
         mainStage.start(primaryStage);
     }
     public static void main(String[] args) {
         //EventQueue.invokeLater(() -> {
-
             path = System.getProperty("user.home") + "/Documents/Bricks";
             File resources = new File(path);
             try {
@@ -55,17 +59,18 @@ public class Bricks extends Application {
                         String[] Divided = line.split("=");
                         initialBoardSize = Integer.parseInt(Divided[1]);
                         line = in.nextLine();
-                        String[] splittedLine = line.split("[=,/]");
-                        int r = Integer.parseInt(splittedLine[2]);
+                        String[] splittedLine = line.split("[=]");
+                        /*int r = Integer.parseInt(splittedLine[2]);
                         int g = Integer.parseInt(splittedLine[4]);
-                        int b = Integer.parseInt(splittedLine[6].substring(0, splittedLine[6].length() - 1));
-                        firstPlayerColor = new Color(r, g, b);
+                        int b = Integer.parseInt(splittedLine[6].substring(0, splittedLine[6].length() - 1));*/
+                        firstPlayerColor = javafx.scene.paint.Color.web(splittedLine[1]);
                         line = in.nextLine();
-                        splittedLine = line.split("[=,/]");
-                        r = Integer.parseInt(splittedLine[2]);
+                        splittedLine = line.split("[=]");
+                       /* r = Integer.parseInt(splittedLine[2]);
                         g = Integer.parseInt(splittedLine[4]);
                         b = Integer.parseInt(splittedLine[6].substring(0, splittedLine[6].length() - 1));
-                        secondPlayerColor = new Color(r, g, b);
+                        secondPlayerColor = new javafx.scene.paint.Color(r/255, g/255, b/255, 1);*/
+                        secondPlayerColor = javafx.scene.paint.Color.web(splittedLine[1]);
                         line = in.nextLine();
                         splittedLine = line.split("=");
                         isSound = splittedLine[1].equals("true");
@@ -155,8 +160,8 @@ public class Bricks extends Application {
     private static int secondPlayerProgramType;
     private static int computerPlayerType;
 
-    private static Color firstPlayerColor;
-    private static Color secondPlayerColor;
+    private static javafx.scene.paint.Color firstPlayerColor;
+    private static javafx.scene.paint.Color secondPlayerColor;
 
     private static String firstPlayerPath;
     private static String secondPlayerPath;
@@ -175,8 +180,8 @@ public class Bricks extends Application {
 
     private static void loadDefaultSettings() {
         initialBoardSize = 5;
-        firstPlayerColor = new Color(69, 136, 58);
-        secondPlayerColor = new Color(238, 44, 44);
+        firstPlayerColor = new javafx.scene.paint.Color(69.0/255, 136.0/255, 58.0/255.0, 1);
+        secondPlayerColor = new javafx.scene.paint.Color(238.0/255, 44.0/255, 44.0/255.0, 1);
         isSound = true;
         volume = 0;
         firstPlayerProgramType = 1;

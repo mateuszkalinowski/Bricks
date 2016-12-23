@@ -1,13 +1,16 @@
 package core;
 
+import javafx.scene.paint.*;
+
 import java.awt.*;
+import java.awt.Color;
 
 /**
  * Created by Mateusz on 04.10.2016.
  * Project Bricks
  */
 public class Settings {
-    public Settings(int BoardSize, Color playerFirstColor, Color playerSecondColor, boolean isSound, int volume, boolean debugMode, String path1, String path2, int programTypeFirst, int programTypeSecond, String runCommandFirst, String runCommandSecond, int computerPlayerType) {
+    public Settings(int BoardSize, javafx.scene.paint.Color playerFirstColor, javafx.scene.paint.Color playerSecondColor, boolean isSound, int volume, boolean debugMode, String path1, String path2, int programTypeFirst, int programTypeSecond, String runCommandFirst, String runCommandSecond, int computerPlayerType) {
         this.BoardSize = BoardSize;
         this.playerFirstColor = playerFirstColor;
         this.playerSecondColor = playerSecondColor;
@@ -35,11 +38,11 @@ public class Settings {
         return BoardSize;
     }
 
-    public Color getPlayerFirstColor() {
+    public javafx.scene.paint.Color getPlayerFirstColor() {
         return playerFirstColor;
     }
 
-    public Color getPlayerSecondColor() {
+    public javafx.scene.paint.Color getPlayerSecondColor() {
         return playerSecondColor;
     }
 
@@ -84,8 +87,8 @@ public class Settings {
     private int secondPlayerProgramType;
     private int computerPlayerType;
 
-    private Color playerFirstColor;
-    private Color playerSecondColor;
+    private javafx.scene.paint.Color playerFirstColor;
+    private javafx.scene.paint.Color playerSecondColor;
 
     private String firstComputerPlayerPath;
     private String secondComputerPlayerPath;

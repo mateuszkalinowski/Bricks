@@ -3,6 +3,7 @@ package frames;
 import core.Bricks;
 import core.Settings;
 import gfx.ColorPreview;
+import javafx.scene.control.Slider;
 
 import javax.swing.*;
 import java.awt.*;
@@ -129,10 +130,10 @@ class OptionsPanel extends JPanel {
         JButton saveChanges = new JButton("Zapisz zmiany");
 
         saveChanges.addActionListener(e -> {
-            Bricks.mainFrame.setSettings(new Settings(BoardSize, playerFirstColor, playerSecondColor, isSound, volume,
+           /* Bricks.mainFrame.setSettings(new Settings(BoardSize, playerFirstColor, playerSecondColor, isSound, volume,
                     debugMode, playerFirstFullPath, playerSecondFullPath, firstPlayerProgramType, secondPlayerProgramType,
                     inputOwnRunTextPlayerFirstTextField.getText(), inputOwnRunTextPlayerSecondTextField.getText(), computerPlayerType));
-            Bricks.mainFrame.backToMenu();
+            Bricks.mainFrame.backToMenu();*/
         });
 
         JPanel southGridLayout = new JPanel(new GridLayout(2, 1));
@@ -146,7 +147,6 @@ class OptionsPanel extends JPanel {
         JLabel soundVolumeLabel = new JLabel("Głośność:");
         soundVolumeLabel.setHorizontalAlignment(JLabel.CENTER);
         soundVolumeSlider = new JSlider(JSlider.HORIZONTAL, -80, 6, 0);
-
 
         soundIsCheckBox.addActionListener(e -> isSound = soundIsCheckBox.isSelected());
 
@@ -339,10 +339,10 @@ class OptionsPanel extends JPanel {
 
         add(mainBorderLayout);
 
-        firstPlayerColor.setColor(firstSettings.getPlayerFirstColor());
+    /*    firstPlayerColor.setColor(firstSettings.getPlayerFirstColor());
         secondPlayerColor.setColor(firstSettings.getPlayerSecondColor());
         playerFirstColor = firstSettings.getPlayerFirstColor();
-        playerSecondColor = firstSettings.getPlayerSecondColor();
+        playerSecondColor = firstSettings.getPlayerSecondColor();*/
         isSound = firstSettings.getIsSound();
         volume = firstSettings.getVolume();
         BoardSize = firstSettings.getBoardSize();

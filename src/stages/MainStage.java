@@ -12,6 +12,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -19,6 +20,9 @@ import javafx.stage.WindowEvent;
 import logic.BoardLogic;
 import scenes.GamePane;
 import scenes.OptionsPane;
+
+import java.io.File;
+import java.io.PrintWriter;
 
 /**
  * Created by Mateusz on 18.12.2016.
@@ -105,7 +109,9 @@ public class MainStage extends Application implements Runnable {
         optionsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                optionsPane = new OptionsPane(mainScene.getWidth(),mainScene.getHeight());
+                optionsPane = new OptionsPane(mainScene.getWidth(),mainScene.getHeight(),new Settings(BoardSize, firstPlayerColor, secondPlayerColor,
+                        isSound, volume, debugMode, playerFirstFullPath, playerSecondFullPath,
+                        firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType));
                 sceneOfSettings = new Scene(optionsPane,mainScene.getWidth(),mainScene.getHeight());
                 mainStage.setScene(sceneOfSettings);
                 mainStage.show();
@@ -194,9 +200,71 @@ public class MainStage extends Application implements Runnable {
     public void backToMenu(){
         mainStage.setScene(mainScene);
     }
+    public void setSettings(int initialBoardSize, Color firstPlayerColor, Color secondPlayerColor, boolean isSound, int volume, boolean debugModeInitialize, String firstPlayerPath, String secondPlayerPath,
+                                  int firstPlayerProgramTypeArgument, int secondPlayerProgramTypeArgument,
+                                  String firstPlayerRunCommandArgument, String secondPlayerRunCommandArgument, int computerPlayerType) {
+
+        this.BoardSize = initialBoardSize;
+        this.firstPlayerColor = firstPlayerColor;
+        this.secondPlayerColor = secondPlayerColor;
+        this.isSound = isSound;
+        this.volume = volume;
+        this.debugMode = debugModeInitialize;
+        this.playerFirstFullPath = firstPlayerPath;
+        this.playerSecondFullPath = secondPlayerPath;
+        this.firstPlayerProgramType = firstPlayerProgramTypeArgument;
+        this.secondPlayerProgramType = secondPlayerProgramTypeArgument;
+        this.firstPlayerRunCommand = firstPlayerRunCommandArgument;
+        this.secondPlayerRunCommand = secondPlayerRunCommandArgument;
+        this.computerPlayerType = computerPlayerType;
+
+        if (playerFirstFullPath.length() > 7) {
+            int i = playerFirstFullPath.length() - 1;
+            for (; i > 0; i--) {
+                if (playerFirstFullPath.charAt(i) == '/' || playerFirstFullPath.charAt(i) == '\\')
+                    break;
+            }
+            pathToPlayerOne = playerFirstFullPath.substring(0, i);
+            playerFirstProgramName = playerFirstFullPath.substring(i + 1, playerFirstFullPath.length());
+            playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 6);
+
+        }
+        if (playerSecondFullPath.length() > 7) {
+            int i = playerSecondFullPath.length() - 1;
+            for (; i > 0; i--) {
+                if (playerSecondFullPath.charAt(i) == '/' || playerSecondFullPath.charAt(i) == '\\')
+                    break;
+            }
+            pathToPlayerTwo = playerSecondFullPath.substring(0, i);
+            playerSecondProgramName = playerSecondFullPath.substring(i + 1, playerSecondFullPath.length());
+            playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
+        }
+        exportSettings();
+    }
+    private void exportSettings() {
+        try {
+            PrintWriter createCfg = new PrintWriter(new File(Bricks.path + "/options"));
+            createCfg.println("BoardSize=" + BoardSize);
+            createCfg.println("FirstColor=" + firstPlayerColor.toString());
+            createCfg.println("SecondColor=" + secondPlayerColor.toString());
+            createCfg.println("sound=" + isSound);
+            createCfg.println("volume=" + volume);
+            createCfg.println("debugMode=" + debugMode);
+            createCfg.println("firstPlayer=" + playerFirstFullPath);
+            createCfg.println("secondPlayer=" + playerSecondFullPath);
+            createCfg.println("firstPlayerProgramType=" + firstPlayerProgramType);
+            createCfg.println("secondPlayerProgramType=" + secondPlayerProgramType);
+            createCfg.println("firstPlayerRunCommand=" + firstPlayerRunCommand);
+            createCfg.println("secondPlayerRunCommand=" + secondPlayerRunCommand);
+            createCfg.println("computerPlayerType=" + computerPlayerType);
+            createCfg.close();
+        } catch (Exception ignored) {
+
+        }
+    }
     private int height=100;
     private int widht=100;
-    private Stage mainStage;
+    public Stage mainStage;
     private Scene mainScene;
     private boolean running = false;
 
@@ -210,6 +278,27 @@ public class MainStage extends Application implements Runnable {
 
     public BoardPanel boardPanel;
 
+    //USTAWIENIA GRY:
+    private int firstPlayerProgramType;
+    private int secondPlayerProgramType;
+    public int volume;
+    public int computerPlayer;
+    private int BoardSize;
+    private int computerPlayerType;
+
+    public boolean isSound;
+    private boolean debugMode;
+
     public javafx.scene.paint.Color firstPlayerColor;
     public javafx.scene.paint.Color secondPlayerColor;
+
+    private String playerFirstFullPath = "";
+    private String playerSecondFullPath = "";
+    private String pathToPlayerOne = "";
+    private String pathToPlayerTwo = "";
+    private String playerFirstProgramName = "";
+    private String playerSecondProgramName = "";
+    private String firstPlayerRunCommand;
+    private String secondPlayerRunCommand;
+
 }
