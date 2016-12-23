@@ -12,6 +12,8 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.input.InputMethodEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -20,6 +22,7 @@ import javafx.stage.FileChooser;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Optional;
 import java.util.Scanner;
 
 /**
@@ -361,13 +364,13 @@ public class OptionsPane extends Pane {
             }
         });
 
-        HBox defaultSettingsHBOx = new HBox();
+       /* HBox defaultSettingsHBOx = new HBox();
         defaultSettingsButton = new Button("Ustawienia Domyślne");
         defaultSettingsButton.setPrefWidth(300);
         defaultSettingsButton.setPrefHeight(Double.MAX_VALUE);
         defaultSettingsHBOx.setAlignment(Pos.CENTER);
         defaultSettingsHBOx.getChildren().add(defaultSettingsButton);
-        HBox.setMargin(defaultSettingsButton,new Insets(5,0,5,0));
+        HBox.setMargin(defaultSettingsButton,new Insets(5,0,5,0));*/
 
         HBox saveAndExitHBox = new HBox();
         saveAndExitButton = new Button("Zapisz Zmiany");
@@ -403,7 +406,7 @@ public class OptionsPane extends Pane {
         mainGridPane.add(secondPlayerColorPicker,1,4);
         mainGridPane.add(settingsLabel,0,0,2,1);
         mainGridPane.add(generalSettingsLabel,0,1,2,1);
-        mainGridPane.add(defaultSettingsHBOx,0,15,2,1);
+        //mainGridPane.add(defaultSettingsHBOx,0,15,2,1);
         mainGridPane.add(saveAndExitHBox,0,16,2,1);
         getChildren().add(mainGridPane);
 
@@ -414,7 +417,21 @@ public class OptionsPane extends Pane {
                 Bricks.mainStage.backToMenu();
             }
         });
-
+        setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode()== KeyCode.ESCAPE) {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Potwierdznie Wyjścia");
+                    alert.setHeaderText("Chcesz wyjść z ustawień?");
+                    alert.setContentText("Zmiany nie zostaną zapisane.");
+                    Optional<ButtonType> result=  alert.showAndWait();
+                    if(result.get() == ButtonType.OK){
+                        Bricks.mainStage.backToMenu();
+                    }
+                }
+            }
+        });
         widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -435,7 +452,7 @@ public class OptionsPane extends Pane {
             secondPlayerColor = newColor;
     }
 
-    private Button defaultSettingsButton;
+    //private Button defaultSettingsButton;
     private Button saveAndExitButton;
 
     private int firstPlayerProgramType;

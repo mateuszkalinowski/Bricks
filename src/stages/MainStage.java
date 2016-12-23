@@ -11,6 +11,7 @@ import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -21,8 +22,10 @@ import logic.BoardLogic;
 import scenes.GamePane;
 import scenes.OptionsPane;
 
+import javax.swing.*;
 import java.io.File;
 import java.io.PrintWriter;
+import java.net.URL;
 
 /**
  * Created by Mateusz on 18.12.2016.
@@ -143,7 +146,7 @@ public class MainStage extends Application implements Runnable {
         Label programInfoLabel = new Label();
         programInfoLabel.setMaxWidth(Double.MAX_VALUE);
         programInfoLabel.setAlignment(Pos.CENTER);
-        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.3.0");
+        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.3.0, Ikona: Madebyoliver, www.flaticon.com");
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
@@ -164,6 +167,7 @@ public class MainStage extends Application implements Runnable {
                 System.exit(0);
             }
         });
+        mainStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("brick-wall.png")));
 
     }
     public void getSize(){
