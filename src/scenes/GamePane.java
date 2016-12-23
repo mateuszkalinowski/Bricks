@@ -23,7 +23,9 @@ import java.awt.*;
  * Project InferenceEngine
  */
 public class GamePane extends Pane {
-    public GamePane(){
+    public GamePane(BoardLogic board, int gametype){
+        this.board = board;
+        this.gamemode = gametype;
         stop = new Button("Stop");
         canvas = new Canvas();
 
@@ -37,9 +39,7 @@ public class GamePane extends Pane {
         rowWithMenu.setPercentHeight(5);
         mainGridPane.getRowConstraints().add(rowWithGame);
         mainGridPane.getRowConstraints().add(rowWithMenu);
-
-        board = new BoardLogic(5);
-
+        this.board = board;
         mainGridPane.add(canvas,0,0);
 
         getChildren().add(mainGridPane);

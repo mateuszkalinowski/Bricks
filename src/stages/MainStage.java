@@ -27,25 +27,29 @@ public class MainStage extends Application implements Runnable {
         BorderPane mainBorderPane = new BorderPane();
         GridPane mainGridPane = new GridPane();
         RowConstraints rowInMainMenu = new RowConstraints();
-        rowInMainMenu.setPercentHeight(14);
-        for(int i = 0; i < 7; i++)
+        rowInMainMenu.setPercentHeight(12);
+        RowConstraints logoRowInMainMenu = new RowConstraints();
+        logoRowInMainMenu.setPercentHeight(40);
+        mainGridPane.getRowConstraints().add(logoRowInMainMenu);
+        for(int i = 0; i < 5; i++)
             mainGridPane.getRowConstraints().add(rowInMainMenu);
+
         ColumnConstraints columnInMainMenu = new ColumnConstraints();
         columnInMainMenu.setPercentWidth(100);
         mainGridPane.getColumnConstraints().add(columnInMainMenu);
 
         Label bricksTitleLabel = new Label();
         bricksTitleLabel.setText("Bricks");
-        bricksTitleLabel.setFont(new Font("Comic Sans MS",102));
+        bricksTitleLabel.setFont(new Font("Comic Sans MS",126));
         bricksTitleLabel.setMaxWidth(Double.MAX_VALUE);
         bricksTitleLabel.setAlignment(Pos.CENTER);
 
         HBox singlePlayerGameButtonHBox = new HBox();
         singlePlayerGameButtonHBox.setAlignment(Pos.CENTER);
         Button singlePlayerGameButton = new Button("Gra Jednoosobowa");
-        singlePlayerGameButton.setMaxWidth(420);
-        singlePlayerGameButton.setMaxHeight(Double.MAX_VALUE);
-        singlePlayerGameButton.setFont(new Font("Comic Sans MS",28));
+        singlePlayerGameButton.setMaxWidth(300);
+        singlePlayerGameButton.setMaxHeight(180);
+        singlePlayerGameButton.setFont(new Font("Comic Sans MS",22));
         singlePlayerGameButtonHBox.getChildren().add(singlePlayerGameButton);
         HBox.setMargin(singlePlayerGameButton, new Insets(10,0,10,0));
         HBox.setHgrow(singlePlayerGameButton,Priority.ALWAYS);
@@ -53,7 +57,9 @@ public class MainStage extends Application implements Runnable {
             @Override
             public void handle(ActionEvent event) {
                 BorderPane gameBorderPane = new BorderPane();
-                gamePane = new GamePane();
+                int gametype=0;
+                BoardLogic board = new BoardLogic(5);
+                gamePane = new GamePane(board,gametype);
                 sceneOfTheGame = new Scene(gamePane,mainScene.getWidth(),mainScene.getHeight());
                 mainStage.setScene(sceneOfTheGame);
                 mainStage.show();
@@ -68,9 +74,9 @@ public class MainStage extends Application implements Runnable {
         HBox twoPlayersGameButtonHBox = new HBox();
         twoPlayersGameButtonHBox.setAlignment(Pos.CENTER);
         Button twoPlayersGameButton = new Button("Gra Dwuosobowa");
-        twoPlayersGameButton.setMaxWidth(420);
-        twoPlayersGameButton.setMaxHeight(Double.MAX_VALUE);
-        twoPlayersGameButton.setFont(new Font("Comic Sans MS",28));
+        twoPlayersGameButton.setMaxWidth(300);
+        twoPlayersGameButton.setMaxHeight(180);
+        twoPlayersGameButton.setFont(new Font("Comic Sans MS",22));
         twoPlayersGameButtonHBox.getChildren().add(twoPlayersGameButton);
         HBox.setMargin(twoPlayersGameButton, new Insets(10,0,10,0));
         HBox.setHgrow(twoPlayersGameButton,Priority.ALWAYS);
@@ -78,9 +84,9 @@ public class MainStage extends Application implements Runnable {
         HBox robotWarsButtonHBox = new HBox();
         robotWarsButtonHBox.setAlignment(Pos.CENTER);
         Button robotWarsButton = new Button("Wojna Robotów");
-        robotWarsButton.setMaxWidth(420);
-        robotWarsButton.setMaxHeight(Double.MAX_VALUE);
-        robotWarsButton.setFont(new Font("Comic Sans MS",28));
+        robotWarsButton.setMaxWidth(300);
+        robotWarsButton.setMaxHeight(180);
+        robotWarsButton.setFont(new Font("Comic Sans MS",22));
         robotWarsButtonHBox.getChildren().add(robotWarsButton);
         HBox.setMargin(robotWarsButton, new Insets(10,0,10,0));
         HBox.setHgrow(robotWarsButton,Priority.ALWAYS);
@@ -88,9 +94,9 @@ public class MainStage extends Application implements Runnable {
         HBox optionsButtonHBox = new HBox();
         optionsButtonHBox.setAlignment(Pos.CENTER);
         Button optionsButton = new Button("Opcje");
-        optionsButton.setMaxWidth(420);
-        optionsButton.setMaxHeight(Double.MAX_VALUE);
-        optionsButton.setFont(new Font("Comic Sans MS",28));
+        optionsButton.setMaxWidth(300);
+        optionsButton.setMaxHeight(180);
+        optionsButton.setFont(new Font("Comic Sans MS",22));
         optionsButtonHBox.getChildren().add(optionsButton);
         HBox.setMargin(optionsButton, new Insets(10,0,10,0));
         HBox.setHgrow(optionsButton,Priority.ALWAYS);
@@ -98,9 +104,9 @@ public class MainStage extends Application implements Runnable {
         HBox exitButtonHBox = new HBox();
         exitButtonHBox.setAlignment(Pos.CENTER);
         Button exitButton = new Button("Wyjście");
-        exitButton.setMaxWidth(420);
-        exitButton.setMaxHeight(Double.MAX_VALUE);
-        exitButton.setFont(new Font("Comic Sans MS",28));
+        exitButton.setMaxWidth(300);
+        exitButton.setMaxHeight(180);
+        exitButton.setFont(new Font("Comic Sans MS",22));
         exitButtonHBox.getChildren().add(exitButton);
         HBox.setMargin(exitButton, new Insets(10,0,10,0));
         HBox.setHgrow(exitButton,Priority.ALWAYS);
@@ -109,12 +115,12 @@ public class MainStage extends Application implements Runnable {
             System.exit(0);
         });
 
-        mainGridPane.add(bricksTitleLabel,0,0,1,2);
-        mainGridPane.add(singlePlayerGameButtonHBox,0,2);
-        mainGridPane.add(twoPlayersGameButtonHBox,0,3);
-        mainGridPane.add(robotWarsButtonHBox,0,4);
-        mainGridPane.add(optionsButtonHBox,0,5);
-        mainGridPane.add(exitButtonHBox,0,6);
+        mainGridPane.add(bricksTitleLabel,0,0);
+        mainGridPane.add(singlePlayerGameButtonHBox,0,1);
+        mainGridPane.add(twoPlayersGameButtonHBox,0,2);
+        mainGridPane.add(robotWarsButtonHBox,0,3);
+        mainGridPane.add(optionsButtonHBox,0,4);
+        mainGridPane.add(exitButtonHBox,0,5);
         mainBorderPane.setCenter(mainGridPane);
 
         Label programInfoLabel = new Label();
@@ -178,7 +184,7 @@ public class MainStage extends Application implements Runnable {
     private Scene mainScene;
     private boolean running = false;
 
-    Scene sceneOfTheGame;
+    private Scene sceneOfTheGame;
 
     private GamePane gamePane;
 
