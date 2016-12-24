@@ -156,14 +156,14 @@ public class GamePane extends Pane {
                                         Bricks.mainFrame.repaint();
                                         actualPlayer = 1;
                                     }*/
+                                    isSelected=false;
+                                    checkNoMoves();
                                     if(gamemode==1) {
                                         if(actualPlayer==1)
                                             actualPlayer=2;
                                         else if(actualPlayer==2)
                                             actualPlayer=1;
                                     }
-                                    isSelected=false;
-                                    checkNoMoves();
                                 }
                             } else if ((tempSelectedX == selectedX - 1) && tempSelectedY == selectedY) {
                                 if (directions[3]) {
@@ -193,14 +193,14 @@ public class GamePane extends Pane {
                                         Bricks.mainFrame.repaint();
                                         actualPlayer = 1;
                                     }*/
+                                    isSelected=false;
+                                    checkNoMoves();
                                     if(gamemode==1) {
                                         if(actualPlayer==1)
                                             actualPlayer=2;
                                         else if(actualPlayer==2)
                                             actualPlayer=1;
                                     }
-                                    isSelected=false;
-                                    checkNoMoves();
 
                                 }
                             } else if ((tempSelectedX == selectedX) && tempSelectedY == selectedY + 1) {
@@ -231,14 +231,14 @@ public class GamePane extends Pane {
                                         Bricks.mainFrame.repaint();
                                         actualPlayer = 1;
                                     }*/
+                                    isSelected=false;
+                                    checkNoMoves();
                                     if(gamemode==1) {
                                         if(actualPlayer==1)
                                             actualPlayer=2;
                                         else if(actualPlayer==2)
                                             actualPlayer=1;
                                     }
-                                    isSelected=false;
-                                    checkNoMoves();
 
                                 }
                             } else if ((tempSelectedX == selectedX) && tempSelectedY == selectedY - 1) {
@@ -269,6 +269,7 @@ public class GamePane extends Pane {
                                         Bricks.mainFrame.repaint();
                                         actualPlayer = 1;
                                     }*/
+                                    checkNoMoves();
                                     if(gamemode==1) {
                                         if(actualPlayer==1)
                                             actualPlayer=2;
@@ -276,7 +277,6 @@ public class GamePane extends Pane {
                                             actualPlayer=1;
                                     }
                                     isSelected=false;
-                                    checkNoMoves();
 
                                 }
                             } else {
@@ -287,16 +287,14 @@ public class GamePane extends Pane {
                             isSelected = false;
                     }
                 }
+                drawFrame();
             }
         });
-
-
-        
-        
     }
-    public void drawFrame(int w,int h){
-        int width = w;
-        int height = (int)mainGridPane.getRowConstraints().get(0).getPercentHeight()*h/100;
+    public void drawFrame(){
+        int[] rozmiar= Bricks.mainStage.getSizeAsArray();
+        int width = rozmiar[0];
+        int height = (int)mainGridPane.getRowConstraints().get(0).getPercentHeight()*rozmiar[1]/100;
         //canvas = new Canvas();
         canvas.setHeight(height);
         canvas.setWidth(width);
@@ -319,13 +317,13 @@ public class GamePane extends Pane {
                 int j = selectedX;
                 int i = selectedY;
                 if (j != board.width - 1 && i != board.height - 1)
-                    gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, (int) (oneFieldWidth) - 2 * inFieldMargin, (int) (oneFieldHeight) - 2 * inFieldMargin);
+                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin,  (oneFieldHeight) - 2 * inFieldMargin);
                 else if (j == board.width - 1 && i != board.height - 1)
-                    gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (int) (oneFieldWidth), (int) (oneFieldHeight) - 2 * inFieldMargin);
+                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth),  (oneFieldHeight) - 2 * inFieldMargin);
                 else if (j != board.width - 1 && i == board.height - 1)
-                    gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, (int) (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i * (int) (oneFieldHeight));
+                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i *  (oneFieldHeight));
                 else
-                    gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (int) (oneFieldWidth), height - margin * 2 - i * (int) (oneFieldHeight));
+                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth), height - margin * 2 - i *  (oneFieldHeight));
             }
         }
         if (actualPlayer == 2) {
@@ -334,13 +332,13 @@ public class GamePane extends Pane {
                 int j = selectedX;
                 int i = selectedY;
                 if (j != board.width - 1 && i != board.height - 1)
-                    gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, (int) (oneFieldWidth) - 2 * inFieldMargin, (int) (oneFieldHeight) - 2 * inFieldMargin);
+                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin,  (oneFieldHeight) - 2 * inFieldMargin);
                 else if (j == board.width - 1 && i != board.height - 1)
-                    gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (int) (oneFieldWidth), (int) (oneFieldHeight) - 2 * inFieldMargin);
+                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth),  (oneFieldHeight) - 2 * inFieldMargin);
                 else if (j != board.width - 1 && i == board.height - 1)
-                    gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, (int) (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i * (int) (oneFieldHeight));
+                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i *  (oneFieldHeight));
                 else
-                    gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (int) (oneFieldWidth), height - margin * 2 - i * (int) (oneFieldHeight));
+                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth), height - margin * 2 - i *  (oneFieldHeight));
             }
         }
 
@@ -349,24 +347,24 @@ public class GamePane extends Pane {
                 if (board.board[j][i] == 1) {
                     gc.setFill(firstPlayerColor);
                     if (j != board.width - 1 && i != board.height - 1)
-                        gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, (int) (oneFieldWidth) - 2 * inFieldMargin, (int) (oneFieldHeight) - 2 * inFieldMargin);
+                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin,  (oneFieldHeight) - 2 * inFieldMargin);
                     else if (j == board.width - 1 && i != board.height - 1)
-                        gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (int) (oneFieldWidth), (int) (oneFieldHeight) - 2 * inFieldMargin);
+                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth),  (oneFieldHeight) - 2 * inFieldMargin);
                     else if (j != board.width - 1 && i == board.height - 1)
-                        gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, (int) (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i * (int) (oneFieldHeight));
+                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i *  (oneFieldHeight));
                     else
-                        gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (int) (oneFieldWidth), height - margin * 2 - i * (int) (oneFieldHeight));
+                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth), height - margin * 2 - i *  (oneFieldHeight));
                 }
                 if (board.board[j][i] == 2) {
                     gc.setFill(secondPlayerColor);
                     if (j != board.width - 1 && i != board.height - 1)
-                        gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, (int) (oneFieldWidth) - 2 * inFieldMargin, (int) (oneFieldHeight) - 2 * inFieldMargin);
+                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin,  (oneFieldHeight) - 2 * inFieldMargin);
                     else if (j == board.width - 1 && i != board.height - 1)
-                        gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (int) (oneFieldWidth), (int) (oneFieldHeight) - 2 * inFieldMargin);
+                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth),  (oneFieldHeight) - 2 * inFieldMargin);
                     else if (j != board.width - 1 && i == board.height - 1)
-                        gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, (int) (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i * (int) (oneFieldHeight));
+                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i *  (oneFieldHeight));
                     else
-                        gc.fillRect(j * (int) (oneFieldWidth) + margin + inFieldMargin, i * (int) (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (int) (oneFieldWidth), height - margin * 2 - i * (int) (oneFieldHeight));
+                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth), height - margin * 2 - i *  (oneFieldHeight));
                 }
             }
         }

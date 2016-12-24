@@ -70,6 +70,7 @@ public class MainStage extends Application implements Runnable {
                 BoardLogic board = new BoardLogic(BoardSize);
                 gamePane = new GamePane(board,gametype);
                 sceneOfTheGame = new Scene(gamePane,mainScene.getWidth(),mainScene.getHeight());
+                gamePane.drawFrame();
                 mainStage.setScene(sceneOfTheGame);
                 mainStage.show();
                 Thread game = new Thread(Bricks.mainStage);
@@ -97,11 +98,12 @@ public class MainStage extends Application implements Runnable {
                 BoardLogic board = new BoardLogic(BoardSize);
                 gamePane = new GamePane(board,gametype);
                 sceneOfTheGame = new Scene(gamePane,mainScene.getWidth(),mainScene.getHeight());
+                gamePane.drawFrame();
                 mainStage.setScene(sceneOfTheGame);
                 mainStage.show();
-                Thread game = new Thread(Bricks.mainStage);
-                running = true;
-                game.start();
+                //Thread game = new Thread(Bricks.mainStage);
+                //running = true;
+                //game.start();
 
 
             }
@@ -191,6 +193,12 @@ public class MainStage extends Application implements Runnable {
         height = (int)Bricks.mainStage.sceneOfTheGame.getHeight();
         widht = (int)Bricks.mainStage.sceneOfTheGame.getWidth();
     }
+    public int[] getSizeAsArray(){
+        int[] size = new int[2];
+        size[0] = (int)Bricks.mainStage.sceneOfTheGame.getWidth();
+        size[1] = (int)Bricks.mainStage.sceneOfTheGame.getHeight();
+        return size;
+    }
     @Override
     public void run() {
         long lastTime = System.nanoTime();
@@ -210,7 +218,7 @@ public class MainStage extends Application implements Runnable {
             }
             if (shouldRender) {
                 getSize();
-                gamePane.drawFrame(widht,height);
+               // gamePane.drawFrame(widht,height);
                 shouldRender = false;
             }
             if (System.currentTimeMillis() - lastTimer >= 1000) {
