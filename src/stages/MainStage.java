@@ -288,7 +288,9 @@ public class MainStage extends Application {
     }
 
     public void backToMenu(){
-        gamePane.resetBoard();
+        if(gamePane!=null) {
+            gamePane.resetBoard();
+        }
         mainStage.setScene(mainScene);
     }
     public void setSettings(int initialBoardSize, Color firstPlayerColor, Color secondPlayerColor, boolean isSound, int volume, boolean debugModeInitialize, String firstPlayerPath, String secondPlayerPath,
