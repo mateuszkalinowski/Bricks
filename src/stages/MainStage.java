@@ -89,6 +89,23 @@ public class MainStage extends Application implements Runnable {
         twoPlayersGameButtonHBox.getChildren().add(twoPlayersGameButton);
         HBox.setMargin(twoPlayersGameButton, new Insets(10,0,10,0));
         HBox.setHgrow(twoPlayersGameButton,Priority.ALWAYS);
+        twoPlayersGameButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                BorderPane gameBorderPane = new BorderPane();
+                int gametype=1;
+                BoardLogic board = new BoardLogic(BoardSize);
+                gamePane = new GamePane(board,gametype);
+                sceneOfTheGame = new Scene(gamePane,mainScene.getWidth(),mainScene.getHeight());
+                mainStage.setScene(sceneOfTheGame);
+                mainStage.show();
+                Thread game = new Thread(Bricks.mainStage);
+                running = true;
+                game.start();
+
+
+            }
+        });
 
         HBox robotWarsButtonHBox = new HBox();
         robotWarsButtonHBox.setAlignment(Pos.CENTER);
