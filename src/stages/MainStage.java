@@ -67,7 +67,7 @@ public class MainStage extends Application implements Runnable {
             public void handle(ActionEvent event) {
                 BorderPane gameBorderPane = new BorderPane();
                 int gametype=0;
-                BoardLogic board = new BoardLogic(5);
+                BoardLogic board = new BoardLogic(BoardSize);
                 gamePane = new GamePane(board,gametype);
                 sceneOfTheGame = new Scene(gamePane,mainScene.getWidth(),mainScene.getHeight());
                 mainStage.setScene(sceneOfTheGame);

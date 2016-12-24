@@ -58,22 +58,18 @@ public class OptionsPane extends Pane {
         mainGridPane.getColumnConstraints().add(column);
         mainGridPane.getColumnConstraints().add(column);
         RowConstraints row = new RowConstraints();
-        row.setPercentHeight(6);
-        for(int i = 0; i < 17;i++) {
+        row.setPercentHeight(6.25);
+        for(int i = 0; i < 16;i++) {
             mainGridPane.getRowConstraints().add(row);
         }
-        Label settingsLabel = new Label("Ustawienia:");
-        settingsLabel.setFont(Font.font("Comic Sans MS",26));
-        settingsLabel.setPrefWidth(Double.MAX_VALUE);
-        settingsLabel.setAlignment(Pos.CENTER);
 
         Label generalSettingsLabel = new Label("Ogólne:");
-        generalSettingsLabel.setFont(Font.font("Comic Sans MS",24));
+        generalSettingsLabel.setFont(Font.font("Comic Sans MS",20));
         generalSettingsLabel.setPrefWidth(Double.MAX_VALUE);
         generalSettingsLabel.setAlignment(Pos.CENTER);
 
         Label boardSizeLabel = new Label("Rozmiar Planszy:  ");
-        boardSizeLabel.setFont(Font.font("Comic Sans MS",18));
+        boardSizeLabel.setFont(Font.font("Comic Sans MS",16));
         boardSizeLabel.setPrefWidth(Double.MAX_VALUE);
         boardSizeLabel.setAlignment(Pos.BASELINE_RIGHT);
 
@@ -104,7 +100,7 @@ public class OptionsPane extends Pane {
             }
         });
         Label firstPlayerColorLabel = new Label("Kolor pierwszego gracza:  ");
-        firstPlayerColorLabel.setFont(Font.font("Comic Sans MS",18));
+        firstPlayerColorLabel.setFont(Font.font("Comic Sans MS",16));
         firstPlayerColorLabel.setPrefWidth(Double.MAX_VALUE);
         firstPlayerColorLabel.setAlignment(Pos.BASELINE_RIGHT);
         ColorPicker firstPlayerColorPicker = new ColorPicker();
@@ -117,7 +113,7 @@ public class OptionsPane extends Pane {
         });
 
         Label secondPlayerColorLabel = new Label("Kolor drugiego gracza:  ");
-        secondPlayerColorLabel.setFont(Font.font("Comic Sans MS",18));
+        secondPlayerColorLabel.setFont(Font.font("Comic Sans MS",16));
         secondPlayerColorLabel.setPrefWidth(Double.MAX_VALUE);
         secondPlayerColorLabel.setAlignment(Pos.BASELINE_RIGHT);
         ColorPicker secondPlayerColorPicker = new ColorPicker();
@@ -130,12 +126,12 @@ public class OptionsPane extends Pane {
         });
 
         Label soundSettingsLabel = new Label("Dźwięk:");
-        soundSettingsLabel.setFont(Font.font("Comic Sans MS",24));
+        soundSettingsLabel.setFont(Font.font("Comic Sans MS",20));
         soundSettingsLabel.setPrefWidth(Double.MAX_VALUE);
         soundSettingsLabel.setAlignment(Pos.CENTER);
 
         Label volumeSettingLabel = new Label("Głośność:  ");
-        volumeSettingLabel.setFont(Font.font("Comic Sans MS",18));
+        volumeSettingLabel.setFont(Font.font("Comic Sans MS",16));
         volumeSettingLabel.setPrefWidth(Double.MAX_VALUE);
         volumeSettingLabel.setAlignment(Pos.CENTER_RIGHT);
 
@@ -158,6 +154,7 @@ public class OptionsPane extends Pane {
 
         firstProgramRunCommandTextArea = new TextArea();
         firstProgramRunCommandTextArea.setText(firstPlayerRunCommand);
+        firstProgramRunCommandTextArea.setMaxWidth(200);
         firstProgramRunCommandTextArea.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -172,6 +169,7 @@ public class OptionsPane extends Pane {
         }
         secondProgramRunCommandTextArea = new TextArea();
         secondProgramRunCommandTextArea.setText(secondPlayerRunCommand);
+        secondProgramRunCommandTextArea.setMaxWidth(200);
         secondProgramRunCommandTextArea.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
@@ -203,7 +201,7 @@ public class OptionsPane extends Pane {
         }
 
         Label robotWarsLabel = new Label("Wojny Robotów:");
-        robotWarsLabel.setFont(Font.font("Comic Sans MS",24));
+        robotWarsLabel.setFont(Font.font("Comic Sans MS",20));
         robotWarsLabel.setPrefWidth(Double.MAX_VALUE);
         robotWarsLabel.setAlignment(Pos.CENTER);
 
@@ -211,7 +209,7 @@ public class OptionsPane extends Pane {
         Button chooseFirstComputerPlayerButton = new Button("Pierwszy Gracz");
         chooseFirstComputerPlayerButton.setFont(Font.font("Comic Sans MS",14));
         chooseFirstComputerPlayerButton.setPrefWidth(150);
-        chooseFirstComputerPlayerButton.setPadding(new Insets(5,0,5,0));
+        //chooseFirstComputerPlayerButton.setPadding(new Insets(5,0,5,0));
         chooseFirstComputerPlayerHBox.getChildren().add(chooseFirstComputerPlayerButton);
         chooseFirstComputerPlayerHBox.setAlignment(Pos.BASELINE_RIGHT);
 
@@ -238,12 +236,12 @@ public class OptionsPane extends Pane {
 
 
         Label runAsFirstPlayerLabel = new Label("Uruchom jako:  ");
-        runAsFirstPlayerLabel.setFont(Font.font("Comic Sans MS",18));
+        runAsFirstPlayerLabel.setFont(Font.font("Comic Sans MS",16));
         runAsFirstPlayerLabel.setPrefWidth(Double.MAX_VALUE);
         runAsFirstPlayerLabel.setAlignment(Pos.BASELINE_RIGHT);
 
         Label parametersFirstPlayerLabel = new Label("Parametry uruchomienia:  ");
-        parametersFirstPlayerLabel.setFont(Font.font("Comic Sans MS",18));
+        parametersFirstPlayerLabel.setFont(Font.font("Comic Sans MS",16));
         parametersFirstPlayerLabel.setPrefWidth(Double.MAX_VALUE);
         parametersFirstPlayerLabel.setAlignment(Pos.BASELINE_RIGHT);
 
@@ -251,7 +249,7 @@ public class OptionsPane extends Pane {
         Button chooseSecondComputerPlayerButton = new Button("Drugi Gracz");
         chooseSecondComputerPlayerButton.setFont(Font.font("Comic Sans MS",14));
         chooseSecondComputerPlayerButton.setPrefWidth(150);
-        chooseSecondComputerPlayerButton.setPadding(new Insets(5,0,5,0));
+        //chooseSecondComputerPlayerButton.setPadding(new Insets(5,0,5,0));
         chooseSecondComputerPlayerHBox.getChildren().add(chooseSecondComputerPlayerButton);
         chooseSecondComputerPlayerHBox.setAlignment(Pos.BASELINE_RIGHT);
         chooseSecondComputerPlayerButton.setOnAction(new EventHandler<ActionEvent>() {
@@ -276,17 +274,17 @@ public class OptionsPane extends Pane {
         });
 
         Label runAsSecondPlayerLabel = new Label("Uruchom jako:  ");
-        runAsSecondPlayerLabel.setFont(Font.font("Comic Sans MS",18));
+        runAsSecondPlayerLabel.setFont(Font.font("Comic Sans MS",16));
         runAsSecondPlayerLabel.setPrefWidth(Double.MAX_VALUE);
         runAsSecondPlayerLabel.setAlignment(Pos.BASELINE_RIGHT);
 
         Label parametersSecondPlayerLabel = new Label("Parametry uruchomienia:  ");
-        parametersSecondPlayerLabel.setFont(Font.font("Comic Sans MS",18));
+        parametersSecondPlayerLabel.setFont(Font.font("Comic Sans MS",16));
         parametersSecondPlayerLabel.setPrefWidth(Double.MAX_VALUE);
         parametersSecondPlayerLabel.setAlignment(Pos.BASELINE_RIGHT);
 
         Label singPlayerComputerPlayerLabel = new Label("Gracz Komputerowy:  ");
-        singPlayerComputerPlayerLabel.setFont(Font.font("Comic Sans MS",18));
+        singPlayerComputerPlayerLabel.setFont(Font.font("Comic Sans MS",16));
         singPlayerComputerPlayerLabel.setPrefWidth(Double.MAX_VALUE);
         singPlayerComputerPlayerLabel.setAlignment(Pos.BASELINE_RIGHT);
 
@@ -380,34 +378,33 @@ public class OptionsPane extends Pane {
         saveAndExitHBox.getChildren().add(saveAndExitButton);
         HBox.setMargin(saveAndExitButton,new Insets(5,0,5,0));
         HBox.setHgrow(saveAndExitButton,Priority.ALWAYS);
-        mainGridPane.add(chooseCompterTypeComboBox,1,14);
-        mainGridPane.add(singPlayerComputerPlayerLabel,0,14);
-        mainGridPane.add(secondProgramRunCommandTextArea,1,13);
-        mainGridPane.add(parametersSecondPlayerLabel,0,13);
-        mainGridPane.add(secondProgramTypeComboBox,1,12);
-        mainGridPane.add(runAsSecondPlayerLabel,0,12);
-        mainGridPane.add(secondProgramNameLabel,1,11);
-        mainGridPane.add(chooseSecondComputerPlayerHBox,0,11);
-        mainGridPane.add(firstProgramRunCommandTextArea,1,10);
-        mainGridPane.add(parametersFirstPlayerLabel,0,10);
-        mainGridPane.add(firstProgramTypeComboBox,1,9);
-        mainGridPane.add(runAsFirstPlayerLabel,0,9);
-        mainGridPane.add(firstProgramNameLabel,1,8);
-        mainGridPane.add(chooseFirstComputerPlayerHBox,0,8);
-        mainGridPane.add(robotWarsLabel,0,7,2,1);
-        mainGridPane.add(volumeSlider,1,6);
-        mainGridPane.add(volumeSettingLabel,0,6);
-        mainGridPane.add(soundSettingsLabel,0,5,2,1);
-        mainGridPane.add(boardSizeLabel,0,2);
-        mainGridPane.add(boardSizeComboBoxHBox,1,2);
-        mainGridPane.add(firstPlayerColorLabel,0,3);
-        mainGridPane.add(firstPlayerColorPicker,1,3);
-        mainGridPane.add(secondPlayerColorLabel,0,4);
-        mainGridPane.add(secondPlayerColorPicker,1,4);
-        mainGridPane.add(settingsLabel,0,0,2,1);
-        mainGridPane.add(generalSettingsLabel,0,1,2,1);
+        mainGridPane.add(chooseCompterTypeComboBox,1,13);
+        mainGridPane.add(singPlayerComputerPlayerLabel,0,13);
+        mainGridPane.add(secondProgramRunCommandTextArea,1,12);
+        mainGridPane.add(parametersSecondPlayerLabel,0,12);
+        mainGridPane.add(secondProgramTypeComboBox,1,11);
+        mainGridPane.add(runAsSecondPlayerLabel,0,11);
+        mainGridPane.add(secondProgramNameLabel,1,10);
+        mainGridPane.add(chooseSecondComputerPlayerHBox,0,10);
+        mainGridPane.add(firstProgramRunCommandTextArea,1,9);
+        mainGridPane.add(parametersFirstPlayerLabel,0,9);
+        mainGridPane.add(firstProgramTypeComboBox,1,8);
+        mainGridPane.add(runAsFirstPlayerLabel,0,8);
+        mainGridPane.add(firstProgramNameLabel,1,7);
+        mainGridPane.add(chooseFirstComputerPlayerHBox,0,7);
+        mainGridPane.add(robotWarsLabel,0,6,2,1);
+        mainGridPane.add(volumeSlider,1,5);
+        mainGridPane.add(volumeSettingLabel,0,5);
+        mainGridPane.add(soundSettingsLabel,0,4,2,1);
+        mainGridPane.add(boardSizeLabel,0,1);
+        mainGridPane.add(boardSizeComboBoxHBox,1,1);
+        mainGridPane.add(firstPlayerColorLabel,0,2);
+        mainGridPane.add(firstPlayerColorPicker,1,2);
+        mainGridPane.add(secondPlayerColorLabel,0,3);
+        mainGridPane.add(secondPlayerColorPicker,1,3);
+        mainGridPane.add(generalSettingsLabel,0,0,2,1);
         //mainGridPane.add(defaultSettingsHBOx,0,15,2,1);
-        mainGridPane.add(saveAndExitHBox,0,16,2,1);
+        mainGridPane.add(saveAndExitHBox,0,14,2,1);
         getChildren().add(mainGridPane);
 
         saveAndExitButton.setOnAction(new EventHandler<ActionEvent>() {

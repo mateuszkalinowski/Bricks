@@ -134,13 +134,13 @@ public class GamePane extends Pane {
         for (int i = 0; i < board.height; i++) {
             if (i > 0) {
                 gc.setStroke(javafx.scene.paint.Color.BLACK);
-                gc.strokeLine(margin, margin + i * (int) Math.round(oneFieldHeight), width - margin, margin + i * (int) Math.round(oneFieldHeight));
+                gc.strokeLine(margin, margin + i * oneFieldHeight, width - margin, margin + i * oneFieldHeight);
             }
 
             for (int j = 0; j < board.width; j++) {
                 if (j > 0) {
                     gc.setStroke(javafx.scene.paint.Color.BLACK);
-                    gc.strokeLine(margin + j * (int) Math.round(oneFieldWidth), margin, margin + j * (int) Math.round(oneFieldWidth), height - margin);
+                    gc.strokeLine(margin + j * oneFieldWidth, margin, margin + j * oneFieldWidth, height - margin);
                 }
             }
         }
