@@ -9,9 +9,13 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -19,6 +23,7 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import logic.BoardLogic;
+import logic.RobotPlayer;
 import scenes.GamePane;
 import scenes.OptionsPane;
 
@@ -26,12 +31,13 @@ import javax.swing.*;
 import java.io.File;
 import java.io.PrintWriter;
 import java.net.URL;
+import java.util.Optional;
 
 /**
  * Created by Mateusz on 18.12.2016.
  * Project InferenceEngine
  */
-public class MainStage extends Application implements Runnable {
+public class MainStage extends Application {
     public void start(Stage primaryStage) {
         BorderPane mainBorderPane = new BorderPane();
         GridPane mainGridPane = new GridPane();
@@ -65,19 +71,88 @@ public class MainStage extends Application implements Runnable {
         singlePlayerGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                BorderPane gameBorderPane = new BorderPane();
-                int gametype=0;
-                BoardLogic board = new BoardLogic(BoardSize);
-                gamePane = new GamePane(board,gametype);
-                sceneOfTheGame = new Scene(gamePane,mainScene.getWidth(),mainScene.getHeight());
-                gamePane.drawFrame();
-                mainStage.setScene(sceneOfTheGame);
-                mainStage.show();
-                Thread game = new Thread(Bricks.mainStage);
-                running = true;
-                game.start();
+                boolean computerPlayerFound = false;
+                if (computerPlayerType == 1) {
+                    if (firstPlayerProgramType == 0) {
+                        try {
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
+                            computerPlayerFound = true;
+                        } catch (Exception ignored) {
+                        }
+                    }
+                    if (firstPlayerProgramType == 1) {
+                        try {
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerOne + " " + playerFirstProgramName, BoardSize);
+                            computerPlayerFound = true;
+                        } catch (Exception ignored) {
+                        }
 
+                    }
+                    if (firstPlayerProgramType == 2) {
+                        try {
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(firstPlayerRunCommand, BoardSize);
+                            computerPlayerFound = true;
+                        } catch (Exception ignored) {
+                        }
 
+                    }
+                }
+                if (computerPlayerType == 2) {
+                    if (secondPlayerProgramType == 0) {
+                        try {
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
+                            computerPlayerFound = true;
+                        } catch (Exception ignored) {
+                        }
+                    }
+                    if (secondPlayerProgramType == 1) {
+                        try {
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerTwo + " " + playerSecondProgramName, BoardSize);
+                            computerPlayerFound = true;
+                        } catch (Exception ignored) {
+                        }
+
+                    }
+                    if (secondPlayerProgramType == 2) {
+                        try {
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(secondPlayerRunCommand, BoardSize);
+                            computerPlayerFound = true;
+                        } catch (Exception ignored) {
+                        }
+                    }
+                }
+
+                if (computerPlayerType == 0 || (computerPlayerType != 0 && computerPlayerFound)) {
+                    int gametype = 0;
+                    BoardLogic board = new BoardLogic(BoardSize);
+                    gamePane = new GamePane(board, gametype);
+                    sceneOfTheGame = new Scene(gamePane, mainScene.getWidth(), mainScene.getHeight());
+                    gamePane.drawFrame();
+                    mainStage.setScene(sceneOfTheGame);
+                    mainStage.show();
+                    sceneOfTheGame.setOnKeyReleased(new EventHandler<KeyEvent>() {
+                        @Override
+                        public void handle(KeyEvent event) {
+                            if (event.getCode() == KeyCode.ESCAPE) {
+                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                alert.setTitle("Potwierdznie Wyjścia");
+                                alert.setHeaderText("Chcesz wrócić do menu głównego?");
+                                alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
+                                Optional<ButtonType> result = alert.showAndWait();
+                                if (result.get() == ButtonType.OK) {
+                                    Bricks.mainStage.backToMenu();
+                                }
+                            }
+                        }
+                    });
+                }
+                else {
+                    Alert error = new Alert(Alert.AlertType.ERROR);
+                    error.setTitle("Błąd uruchamiania gry");
+                    error.setHeaderText("Gracz komputerowy nie mógł zostać uruchomiony.");
+                    error.setContentText("Sprawdź podaną w ustawieniach ścieżkę do pliku.");
+                    error.showAndWait();
+                }
             }
         });
 
@@ -93,7 +168,6 @@ public class MainStage extends Application implements Runnable {
         twoPlayersGameButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                BorderPane gameBorderPane = new BorderPane();
                 int gametype=1;
                 BoardLogic board = new BoardLogic(BoardSize);
                 gamePane = new GamePane(board,gametype);
@@ -101,11 +175,21 @@ public class MainStage extends Application implements Runnable {
                 gamePane.drawFrame();
                 mainStage.setScene(sceneOfTheGame);
                 mainStage.show();
-                //Thread game = new Thread(Bricks.mainStage);
-                //running = true;
-                //game.start();
-
-
+                sceneOfTheGame.setOnKeyReleased(new EventHandler<KeyEvent>() {
+                    @Override
+                    public void handle(KeyEvent event) {
+                        if(event.getCode()== KeyCode.ESCAPE) {
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.setTitle("Potwierdznie Wyjścia");
+                            alert.setHeaderText("Chcesz wrócić do menu głównego?");
+                            alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
+                            Optional<ButtonType> result=  alert.showAndWait();
+                            if(result.get() == ButtonType.OK){
+                                Bricks.mainStage.backToMenu();
+                            }
+                        }
+                    }
+                });
             }
         });
 
@@ -193,40 +277,18 @@ public class MainStage extends Application implements Runnable {
         height = (int)Bricks.mainStage.sceneOfTheGame.getHeight();
         widht = (int)Bricks.mainStage.sceneOfTheGame.getWidth();
     }
-    public int[] getSizeAsArray(){
+    public int[] getSizeAsArray() throws NullPointerException{
         int[] size = new int[2];
+        if(Bricks.mainStage.sceneOfTheGame==null) {
+            throw new NullPointerException();
+        }
         size[0] = (int)Bricks.mainStage.sceneOfTheGame.getWidth();
         size[1] = (int)Bricks.mainStage.sceneOfTheGame.getHeight();
         return size;
     }
-    @Override
-    public void run() {
-        long lastTime = System.nanoTime();
 
-        int FRAMERATE = 60;
-        double nsPerTick = 1000000000D / FRAMERATE;
-        long lastTimer = System.currentTimeMillis();
-        double delta = 0;
-        boolean shouldRender = false;
-        while (running) {
-            long now = System.nanoTime();
-            delta += (now - lastTime) / nsPerTick;
-            lastTime = now;
-            while (delta >= 1) {
-                shouldRender = true;
-                delta -= 1;
-            }
-            if (shouldRender) {
-                getSize();
-               // gamePane.drawFrame(widht,height);
-                shouldRender = false;
-            }
-            if (System.currentTimeMillis() - lastTimer >= 1000) {
-                lastTimer += 1000;
-            }
-        }
-    }
     public void backToMenu(){
+        gamePane.resetBoard();
         mainStage.setScene(mainScene);
     }
     public void setSettings(int initialBoardSize, Color firstPlayerColor, Color secondPlayerColor, boolean isSound, int volume, boolean debugModeInitialize, String firstPlayerPath, String secondPlayerPath,
@@ -308,12 +370,12 @@ public class MainStage extends Application implements Runnable {
     public BoardPanel boardPanel;
 
     //USTAWIENIA GRY:
-    private int firstPlayerProgramType;
-    private int secondPlayerProgramType;
+    public int firstPlayerProgramType;
+    public int secondPlayerProgramType;
     public int volume;
     public int computerPlayer;
-    private int BoardSize;
-    private int computerPlayerType;
+    public int BoardSize;
+    public int computerPlayerType;
 
     public boolean isSound;
     private boolean debugMode;
@@ -321,13 +383,13 @@ public class MainStage extends Application implements Runnable {
     public javafx.scene.paint.Color firstPlayerColor;
     public javafx.scene.paint.Color secondPlayerColor;
 
-    private String playerFirstFullPath = "";
-    private String playerSecondFullPath = "";
-    private String pathToPlayerOne = "";
-    private String pathToPlayerTwo = "";
-    private String playerFirstProgramName = "";
-    private String playerSecondProgramName = "";
-    private String firstPlayerRunCommand;
-    private String secondPlayerRunCommand;
+    public String playerFirstFullPath = "";
+    public String playerSecondFullPath = "";
+    public String pathToPlayerOne = "";
+    public String pathToPlayerTwo = "";
+    public String playerFirstProgramName = "";
+    public String playerSecondProgramName = "";
+    public String firstPlayerRunCommand;
+    public String secondPlayerRunCommand;
 
 }
