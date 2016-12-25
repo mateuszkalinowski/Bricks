@@ -1,8 +1,8 @@
 package stages;
 
-import com.apple.eawt.Application;
 import core.Bricks;
 import exceptions.InvalidMoveException;
+import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
