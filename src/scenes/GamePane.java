@@ -18,6 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import logic.*;
+import stages.GamesStage;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
@@ -353,6 +354,46 @@ public class GamePane extends Pane {
 
             gamesButton = new Button("Rozgrywki");
             gamemodeRobotsWarsHBox.getChildren().add(gamesButton);
+            gamesButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    Optional<ButtonType> result;
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Przejście do \"rozgrywek\"");
+                    alert.setContentText("Spowoduje to zakończenie obecnej partii.");
+                    alert.setHeaderText("Przejść do \"rozgrywek\"?");
+                    ButtonType buttonYes = new ButtonType("OK");
+                    ButtonType buttonNo = new ButtonType("Anuluj");
+                    alert.getButtonTypes().setAll(buttonNo,buttonYes);
+                    if(!movesStorage.isEmpty()) {
+                        result = alert.showAndWait();
+                        if (result.get() == buttonYes) {
+                            resetBoard();
+                            Bricks.autoPlayRunning = false;
+                            try {
+                                Bricks.firstRobotPlayer.reset();
+                                Bricks.secondRobotPlayer.reset();
+                            } catch (Exception ignored) {
+
+                            }
+                            GamesStage gamesStage = new GamesStage();
+                            gamesStage.start(Bricks.mainStage.mainStage);
+                        }
+                    }
+                    else {
+                        resetBoard();
+                        Bricks.autoPlayRunning = false;
+                        try {
+                            Bricks.firstRobotPlayer.reset();
+                            Bricks.secondRobotPlayer.reset();
+                        } catch (Exception ignored) {
+
+                        }
+                        GamesStage gamesStage = new GamesStage();
+                        gamesStage.start(Bricks.mainStage.mainStage);
+                    }
+                }
+            });
 
             gamemodeRobotsWarsHBox.setSpacing(10);
             gamemodeRobotsWarsHBox.setAlignment(Pos.CENTER);
