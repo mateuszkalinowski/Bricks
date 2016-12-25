@@ -60,9 +60,6 @@ public class RobotPlayer {
         int[] move = new int[4];
         writer.println(message);
         String nextMove;
-        char[] line = new char[256];
-        int length;
-        boolean exit = false;
         try {
             for (int i = 0; i <= 100; i++) {     //pętla sprawdza co 10ms czy nie przyszła odpowiedź
                 if (i == 100)                    //przekroczony czas na odpowiedź, wyrzuca błąd

@@ -3,7 +3,6 @@ package stages;
 import core.Bricks;
 import core.Settings;
 import javafx.application.Application;
-import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -20,7 +19,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import logic.BoardLogic;
 import logic.RobotPlayer;
 import scenes.*;
@@ -64,91 +62,85 @@ public class MainStage extends Application {
         singlePlayerGameButtonHBox.getChildren().add(singlePlayerGameButton);
         HBox.setMargin(singlePlayerGameButton, new Insets(10,0,10,0));
         HBox.setHgrow(singlePlayerGameButton,Priority.ALWAYS);
-        singlePlayerGameButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                boolean computerPlayerFound = false;
-                if (computerPlayerType == 1) {
-                    if (firstPlayerProgramType == 0) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
-                    }
-                    if (firstPlayerProgramType == 1) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerOne + " " + playerFirstProgramName, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
-
-                    }
-                    if (firstPlayerProgramType == 2) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(firstPlayerRunCommand, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
-
+        singlePlayerGameButton.setOnAction(event -> {
+            boolean computerPlayerFound = false;
+            if (computerPlayerType == 1) {
+                if (firstPlayerProgramType == 0) {
+                    try {
+                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
+                        computerPlayerFound = true;
+                    } catch (Exception ignored) {
                     }
                 }
-                if (computerPlayerType == 2) {
-                    if (secondPlayerProgramType == 0) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
+                if (firstPlayerProgramType == 1) {
+                    try {
+                        Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerOne + " " + playerFirstProgramName, BoardSize);
+                        computerPlayerFound = true;
+                    } catch (Exception ignored) {
                     }
-                    if (secondPlayerProgramType == 1) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerTwo + " " + playerSecondProgramName, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
 
-                    }
-                    if (secondPlayerProgramType == 2) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(secondPlayerRunCommand, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
-                    }
                 }
+                if (firstPlayerProgramType == 2) {
+                    try {
+                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(firstPlayerRunCommand, BoardSize);
+                        computerPlayerFound = true;
+                    } catch (Exception ignored) {
+                    }
 
-                if (computerPlayerType == 0 || (computerPlayerType != 0 && computerPlayerFound)) {
-                    int gametype = 0;
-                    BoardLogic board = new BoardLogic(BoardSize);
-                    gamePane = new GamePane(board, gametype);
-                    sceneOfTheGame = new Scene(gamePane, mainScene.getWidth(), mainScene.getHeight());
-                    gamePane.drawFrame();
-                    mainStage.setScene(sceneOfTheGame);
-                    mainStage.show();
-                    sceneOfTheGame.setOnKeyReleased(new EventHandler<KeyEvent>() {
-                        @Override
-                        public void handle(KeyEvent event) {
-                            if (event.getCode() == KeyCode.ESCAPE) {
-                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                                alert.setTitle("Potwierdznie Wyjścia");
-                                alert.setHeaderText("Chcesz wrócić do menu głównego?");
-                                alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
-                                Optional<ButtonType> result = alert.showAndWait();
-                                if (result.get() == ButtonType.OK) {
-                                    Bricks.mainStage.backToMenu();
-                                }
-                            }
+                }
+            }
+            if (computerPlayerType == 2) {
+                if (secondPlayerProgramType == 0) {
+                    try {
+                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
+                        computerPlayerFound = true;
+                    } catch (Exception ignored) {
+                    }
+                }
+                if (secondPlayerProgramType == 1) {
+                    try {
+                        Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerTwo + " " + playerSecondProgramName, BoardSize);
+                        computerPlayerFound = true;
+                    } catch (Exception ignored) {
+                    }
+
+                }
+                if (secondPlayerProgramType == 2) {
+                    try {
+                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(secondPlayerRunCommand, BoardSize);
+                        computerPlayerFound = true;
+                    } catch (Exception ignored) {
+                    }
+                }
+            }
+
+            if (computerPlayerType == 0 || (computerPlayerType != 0 && computerPlayerFound)) {
+                int gametype = 0;
+                BoardLogic board1 = new BoardLogic(BoardSize);
+                gamePane = new GamePane(board1, gametype);
+                sceneOfTheGame = new Scene(gamePane, mainScene.getWidth(), mainScene.getHeight());
+                gamePane.drawFrame();
+                mainStage.setScene(sceneOfTheGame);
+                mainStage.show();
+                sceneOfTheGame.setOnKeyReleased(event12 -> {
+                    if (event12.getCode() == KeyCode.ESCAPE) {
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.setTitle("Potwierdznie Wyjścia");
+                        alert.setHeaderText("Chcesz wrócić do menu głównego?");
+                        alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.get() == ButtonType.OK) {
+                            Bricks.mainStage.backToMenu();
                         }
-                    });
-                }
-                else {
-                    Alert error = new Alert(Alert.AlertType.ERROR);
-                    error.setTitle("Błąd uruchamiania gry");
-                    error.setHeaderText("Gracz komputerowy nie mógł zostać uruchomiony.");
-                    error.setContentText("Sprawdź podaną w ustawieniach ścieżkę do pliku.");
-                    error.showAndWait();
-                }
+                    }
+                });
+            }
+            else {
+                Alert error = new Alert(Alert.AlertType.ERROR);
+                error.setTitle("Błąd uruchamiania gry");
+                error.setHeaderText("Gracz komputerowy nie mógł zostać uruchomiony.");
+                error.setContentText("Sprawdź podaną w ustawieniach ścieżkę do pliku.");
+                error.showAndWait();
             }
         });
 
@@ -161,32 +153,26 @@ public class MainStage extends Application {
         twoPlayersGameButtonHBox.getChildren().add(twoPlayersGameButton);
         HBox.setMargin(twoPlayersGameButton, new Insets(10,0,10,0));
         HBox.setHgrow(twoPlayersGameButton,Priority.ALWAYS);
-        twoPlayersGameButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                int gametype=1;
-                BoardLogic board = new BoardLogic(BoardSize);
-                gamePane = new GamePane(board,gametype);
-                sceneOfTheGame = new Scene(gamePane,mainScene.getWidth(),mainScene.getHeight());
-                gamePane.drawFrame();
-                mainStage.setScene(sceneOfTheGame);
-                mainStage.show();
-                sceneOfTheGame.setOnKeyReleased(new EventHandler<KeyEvent>() {
-                    @Override
-                    public void handle(KeyEvent event) {
-                        if(event.getCode()== KeyCode.ESCAPE) {
-                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                            alert.setTitle("Potwierdznie Wyjścia");
-                            alert.setHeaderText("Chcesz wrócić do menu głównego?");
-                            alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
-                            Optional<ButtonType> result=  alert.showAndWait();
-                            if(result.get() == ButtonType.OK){
-                                Bricks.mainStage.backToMenu();
-                            }
-                        }
+        twoPlayersGameButton.setOnAction(event -> {
+            int gametype=1;
+            BoardLogic board12 = new BoardLogic(BoardSize);
+            gamePane = new GamePane(board12,gametype);
+            sceneOfTheGame = new Scene(gamePane,mainScene.getWidth(),mainScene.getHeight());
+            gamePane.drawFrame();
+            mainStage.setScene(sceneOfTheGame);
+            mainStage.show();
+            sceneOfTheGame.setOnKeyReleased(event1 -> {
+                if(event1.getCode()== KeyCode.ESCAPE) {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.setTitle("Potwierdznie Wyjścia");
+                    alert.setHeaderText("Chcesz wrócić do menu głównego?");
+                    alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
+                    Optional<ButtonType> result=  alert.showAndWait();
+                    if(result.get() == ButtonType.OK){
+                        Bricks.mainStage.backToMenu();
                     }
-                });
-            }
+                }
+            });
         });
 
         HBox robotWarsButtonHBox = new HBox();
@@ -198,101 +184,98 @@ public class MainStage extends Application {
         robotWarsButtonHBox.getChildren().add(robotWarsButton);
         HBox.setMargin(robotWarsButton, new Insets(10,0,10,0));
         HBox.setHgrow(robotWarsButton,Priority.ALWAYS);
-        robotWarsButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                boolean checkFirstComputerPlayer = false;
-                boolean checkSecondComputerPlayer = false;
-                if (firstPlayerProgramType == 0) {
-                    try {
-                        Bricks.firstRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
-                        checkFirstComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
+        robotWarsButton.setOnAction(event -> {
+            boolean checkFirstComputerPlayer = false;
+            boolean checkSecondComputerPlayer = false;
+            if (firstPlayerProgramType == 0) {
+                try {
+                    Bricks.firstRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
+                    checkFirstComputerPlayer = true;
+                } catch (Exception ignored) {
                 }
-                if (firstPlayerProgramType == 1) {
-                    try {
-                        Bricks.firstRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainStage.pathToPlayerOne + " " + Bricks.mainStage.playerFirstProgramName, BoardSize);
-                        checkFirstComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
-
-                }
-                if (firstPlayerProgramType == 2) {
-                    try {
-                        Bricks.firstRobotPlayer = new RobotPlayer(firstPlayerRunCommand, BoardSize);
-                        checkFirstComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
-
+            }
+            if (firstPlayerProgramType == 1) {
+                try {
+                    Bricks.firstRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainStage.pathToPlayerOne + " " + Bricks.mainStage.playerFirstProgramName, BoardSize);
+                    checkFirstComputerPlayer = true;
+                } catch (Exception ignored) {
                 }
 
-                if (secondPlayerProgramType == 0) {
-                    try {
-                        Bricks.secondRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
-                        checkSecondComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
+            }
+            if (firstPlayerProgramType == 2) {
+                try {
+                    Bricks.firstRobotPlayer = new RobotPlayer(firstPlayerRunCommand, BoardSize);
+                    checkFirstComputerPlayer = true;
+                } catch (Exception ignored) {
                 }
-                if (secondPlayerProgramType == 1) {
-                    try {
-                        Bricks.secondRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainStage.pathToPlayerTwo + " " + Bricks.mainStage.playerSecondProgramName, BoardSize);
-                        checkSecondComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
 
+            }
+
+            if (secondPlayerProgramType == 0) {
+                try {
+                    Bricks.secondRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
+                    checkSecondComputerPlayer = true;
+                } catch (Exception ignored) {
                 }
-                if (secondPlayerProgramType == 2) {
-                    try {
-                        Bricks.secondRobotPlayer = new RobotPlayer(secondPlayerRunCommand, BoardSize);
-                        checkSecondComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
+            }
+            if (secondPlayerProgramType == 1) {
+                try {
+                    Bricks.secondRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainStage.pathToPlayerTwo + " " + Bricks.mainStage.playerSecondProgramName, BoardSize);
+                    checkSecondComputerPlayer = true;
+                } catch (Exception ignored) {
                 }
-                if(checkFirstComputerPlayer && checkSecondComputerPlayer) {
-                    int gametype = 2;
-                    BoardLogic board = new BoardLogic(BoardSize);
-                    gamePane = new GamePane(board, gametype);
-                    sceneOfTheGame = new Scene(gamePane, mainScene.getWidth(), mainScene.getHeight());
-                    gamePane.drawFrame();
-                    mainStage.setScene(sceneOfTheGame);
-                    mainStage.show();
-                    sceneOfTheGame.setOnKeyReleased(new EventHandler<KeyEvent>() {
-                        @Override
-                        public void handle(KeyEvent event) {
-                            if (event.getCode() == KeyCode.ESCAPE) {
-                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                                alert.setTitle("Potwierdznie Wyjścia");
-                                alert.setHeaderText("Chcesz wrócić do menu głównego?");
-                                alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
-                                Optional<ButtonType> result = alert.showAndWait();
-                                if (result.get() == ButtonType.OK) {
-                                    gamePane.resetBoard();
-                                    Bricks.mainStage.backToMenu();
-                                }
+
+            }
+            if (secondPlayerProgramType == 2) {
+                try {
+                    Bricks.secondRobotPlayer = new RobotPlayer(secondPlayerRunCommand, BoardSize);
+                    checkSecondComputerPlayer = true;
+                } catch (Exception ignored) {
+                }
+            }
+            if(checkFirstComputerPlayer && checkSecondComputerPlayer) {
+                int gametype = 2;
+                BoardLogic board13 = new BoardLogic(BoardSize);
+                gamePane = new GamePane(board13, gametype);
+                sceneOfTheGame = new Scene(gamePane, mainScene.getWidth(), mainScene.getHeight());
+                gamePane.drawFrame();
+                mainStage.setScene(sceneOfTheGame);
+                mainStage.show();
+                sceneOfTheGame.setOnKeyReleased(new EventHandler<KeyEvent>() {
+                    @Override
+                    public void handle(KeyEvent event) {
+                        if (event.getCode() == KeyCode.ESCAPE) {
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.setTitle("Potwierdznie Wyjścia");
+                            alert.setHeaderText("Chcesz wrócić do menu głównego?");
+                            alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
+                            Optional<ButtonType> result = alert.showAndWait();
+                            if (result.get() == ButtonType.OK) {
+                                gamePane.resetBoard();
+                                Bricks.mainStage.backToMenu();
                             }
                         }
-                    });
-                }
-                else if (!checkFirstComputerPlayer && checkSecondComputerPlayer) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Błąd uruchamiania gry");
-                    alert.setHeaderText("Pierwszy program grający nie działa.");
-                    alert.setContentText("Sprawdź podaną w ustawienaich ścieżkę.");
-                    alert.showAndWait();
-                } else  if(checkFirstComputerPlayer && !checkSecondComputerPlayer) {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Błąd uruchamiania gry");
-                    alert.setHeaderText("Drugi program grający nie działa.");
-                    alert.setContentText("Sprawdź podaną w ustawienaich ścieżkę.");
-                    alert.showAndWait();
-                } else {
-                    Alert alert = new Alert(Alert.AlertType.ERROR);
-                    alert.setTitle("Błąd uruchamiania gry");
-                    alert.setHeaderText("Oba programy grające nie działają.");
-                    alert.setContentText("Sprawdź podane w ustawienaich ścieżki.");
-                    alert.showAndWait();
-                }
+                    }
+                });
+            }
+            else if (!checkFirstComputerPlayer && checkSecondComputerPlayer) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Błąd uruchamiania gry");
+                alert.setHeaderText("Pierwszy program grający nie działa.");
+                alert.setContentText("Sprawdź podaną w ustawienaich ścieżkę.");
+                alert.showAndWait();
+            } else  if(checkFirstComputerPlayer && !checkSecondComputerPlayer) {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Błąd uruchamiania gry");
+                alert.setHeaderText("Drugi program grający nie działa.");
+                alert.setContentText("Sprawdź podaną w ustawienaich ścieżkę.");
+                alert.showAndWait();
+            } else {
+                Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Błąd uruchamiania gry");
+                alert.setHeaderText("Oba programy grające nie działają.");
+                alert.setContentText("Sprawdź podane w ustawienaich ścieżki.");
+                alert.showAndWait();
             }
         });
 
@@ -305,16 +288,13 @@ public class MainStage extends Application {
         optionsButtonHBox.getChildren().add(optionsButton);
         HBox.setMargin(optionsButton, new Insets(10,0,10,0));
         HBox.setHgrow(optionsButton,Priority.ALWAYS);
-        optionsButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                optionsPane = new OptionsPane(mainScene.getWidth(),mainScene.getHeight(),new Settings(BoardSize, firstPlayerColor, secondPlayerColor,
-                        isSound, volume, debugMode, playerFirstFullPath, playerSecondFullPath,
-                        firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType));
-                sceneOfSettings = new Scene(optionsPane,mainScene.getWidth(),mainScene.getHeight());
-                mainStage.setScene(sceneOfSettings);
-                mainStage.show();
-            }
+        optionsButton.setOnAction(event -> {
+            optionsPane = new OptionsPane(mainScene.getWidth(),mainScene.getHeight(),new Settings(BoardSize, firstPlayerColor, secondPlayerColor,
+                    isSound, volume, debugMode, playerFirstFullPath, playerSecondFullPath,
+                    firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType));
+            sceneOfSettings = new Scene(optionsPane,mainScene.getWidth(),mainScene.getHeight());
+            mainStage.setScene(sceneOfSettings);
+            mainStage.show();
         });
 
         HBox exitButtonHBox = new HBox();
@@ -327,7 +307,10 @@ public class MainStage extends Application {
         HBox.setMargin(exitButton, new Insets(10,0,10,0));
         HBox.setHgrow(exitButton,Priority.ALWAYS);
         exitButton.setOnAction(event -> {
-            running=false;
+            if(Bricks.firstRobotPlayer!=null)
+                Bricks.firstRobotPlayer.killRobot();
+            if(Bricks.secondRobotPlayer!=null)
+            Bricks.secondRobotPlayer.killRobot();
             System.exit(0);
         });
 
@@ -356,20 +339,15 @@ public class MainStage extends Application {
         mainStage.show();
 
 
-        mainStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-
-                running=false;
-                System.exit(0);
-            }
+        mainStage.setOnCloseRequest(event -> {
+            if(Bricks.firstRobotPlayer!=null)
+                Bricks.firstRobotPlayer.killRobot();
+            if(Bricks.secondRobotPlayer!=null)
+                Bricks.secondRobotPlayer.killRobot();
+            System.exit(0);
         });
         mainStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("brick-wall.png")));
 
-    }
-    public void getSize(){
-        height = (int)Bricks.mainStage.sceneOfTheGame.getHeight();
-        widht = (int)Bricks.mainStage.sceneOfTheGame.getWidth();
     }
     public int[] getSizeAsArray() throws NullPointerException{
         int[] size = new int[2];
@@ -449,7 +427,7 @@ public class MainStage extends Application {
 
         }
     }
-    public boolean possibleMove(int x1, int y1, int x2, int y2, int[][] board) {
+    boolean possibleMove(int x1, int y1, int x2, int y2, int[][] board) {
         if (board[x1][y1] != 0 || board[x2][y2] != 0)
             return false;
         boolean flag = false;
@@ -469,11 +447,8 @@ public class MainStage extends Application {
 
         return flag;
     }
-    private int height=100;
-    private int widht=100;
     public Stage mainStage;
     private Scene mainScene;
-    private boolean running = false;
 
     private Scene sceneOfTheGame;
     private Scene sceneOfSettings;
@@ -481,14 +456,11 @@ public class MainStage extends Application {
     public GamePane gamePane;
     private OptionsPane optionsPane;
 
-    public BoardLogic board;
-
     //USTAWIENIA GRY:
-    public int firstPlayerProgramType;
-    public int secondPlayerProgramType;
+    private int firstPlayerProgramType;
+    private int secondPlayerProgramType;
     public int volume;
-    public int computerPlayer;
-    public int BoardSize;
+    int BoardSize;
     public int computerPlayerType;
 
     public boolean isSound;
@@ -497,13 +469,13 @@ public class MainStage extends Application {
     public javafx.scene.paint.Color firstPlayerColor;
     public javafx.scene.paint.Color secondPlayerColor;
 
-    public String playerFirstFullPath = "";
-    public String playerSecondFullPath = "";
-    public String pathToPlayerOne = "";
-    public String pathToPlayerTwo = "";
-    public String playerFirstProgramName = "";
-    public String playerSecondProgramName = "";
-    public String firstPlayerRunCommand;
-    public String secondPlayerRunCommand;
+    private String playerFirstFullPath = "";
+    private String playerSecondFullPath = "";
+    private String pathToPlayerOne = "";
+    private String pathToPlayerTwo = "";
+    private String playerFirstProgramName = "";
+    private String playerSecondProgramName = "";
+    private String firstPlayerRunCommand;
+    private String secondPlayerRunCommand;
 
 }

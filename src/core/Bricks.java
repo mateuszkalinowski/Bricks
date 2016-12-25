@@ -1,7 +1,5 @@
 package core;
 
-
-import frames.MainFrame;
 import stages.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -24,6 +22,7 @@ public class Bricks extends Application {
                           firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType);
         mainStage.start(primaryStage);
     }
+    @SuppressWarnings ("ResultOfMethodCallIgnored")
     public static void main(String[] args) {
         //EventQueue.invokeLater(() -> {
             path = System.getProperty("user.home") + "/Documents/Bricks";
@@ -140,8 +139,6 @@ public class Bricks extends Application {
     private static String firstPlayerRunCommand;
     private static String secondPlayerRunCommand;
     public static String path;
-
-    public static MainFrame mainFrame;
 
     public static RobotPlayer firstRobotPlayer;
     public static RobotPlayer secondRobotPlayer;

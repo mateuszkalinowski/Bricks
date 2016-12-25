@@ -972,7 +972,6 @@ public class GamePane extends Pane {
 
     private int autoGameSpeed;
 
-    public Runner runner;
 
     Task<Void> autoGame;
 

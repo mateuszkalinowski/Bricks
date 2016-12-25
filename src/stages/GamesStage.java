@@ -18,11 +18,13 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
-import logic.AutoGameThread;
 import logic.BoardLogic;
 import logic.MovesStorage;
 
+import java.io.File;
+import java.io.PrintWriter;
 import java.util.ArrayList;
+import java.util.Scanner;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -49,9 +51,8 @@ public class GamesStage extends Application {
         boardsSizesListView.setMaxHeight(Double.MAX_VALUE);
         mainGridPane.add(boardsSizesListView,1,0,1,6);
 
-        boardsSizesListView.getItems().add("");
         boardsSizesListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-        boardsSizesListView.getSelectionModel().selectFirst();
+        importPoints();
 
         boardsSizesListView.setOnKeyReleased(new EventHandler<KeyEvent>() {
             @Override
@@ -326,6 +327,7 @@ public class GamesStage extends Application {
                 }
                 running=false;
                 gamesProgressBar.progressProperty().unbind();
+                exportPoints();
                 gamesStage.close();
             }
         });
@@ -358,8 +360,48 @@ public class GamesStage extends Application {
                 } catch (Exception e) {
 
                 }
+                exportPoints();
             }
         });
+
+    }
+    private void importPoints(){
+        try {
+            String path = System.getProperty("user.home") + "/Documents/Bricks/boardsSizes";
+            Scanner in = new Scanner(new File(path));
+            boardsSizesListView.getItems().clear();
+            String line;
+            while (in.hasNextLine()) {
+                line = in.nextLine();
+                int i = Integer.parseInt(line);
+                if(i>=5 && i<=255 && i%2==1) {
+                    boardsSizesListView.getItems().add(i+"");
+                }
+            }
+            if(boardsSizesListView.getItems().isEmpty())
+                boardsSizesListView.getItems().add("");
+            in.close();
+        }
+        catch (Exception ignored){
+            if(boardsSizesListView.getItems().isEmpty())
+                boardsSizesListView.getItems().add("");
+        }
+    }
+    private void exportPoints(){
+        try {
+            String path = System.getProperty("user.home") + "/Documents/Bricks";
+            if (!new File(path + "/boardsSizes").exists()) {
+                new File(path + "/boardsSizes").createNewFile();
+            }
+            String filename = path + "/boardsSizes";
+            PrintWriter writer;
+            writer = new PrintWriter(filename, "UTF-8");
+            for (int i = 0; i < boardsSizesListView.getItems().size(); i++)
+                writer.println(boardsSizesListView.getItems().get(i));
+            writer.close();
+
+        }
+        catch (Exception ignored) {}
 
     }
     ListView<String> boardsSizesListView;

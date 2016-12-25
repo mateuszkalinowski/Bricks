@@ -1,10 +1,5 @@
 package core;
 
-import javafx.scene.paint.*;
-
-import java.awt.*;
-import java.awt.Color;
-
 /**
  * Created by Mateusz on 04.10.2016.
  * Project Bricks
