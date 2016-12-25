@@ -2,14 +2,11 @@ package core;
 
 
 import frames.MainFrame;
-import javafx.scene.paint.*;
-import stages.MainStage;
+import stages.*;
 import javafx.application.Application;
 import javafx.stage.Stage;
 import logic.*;
 
-import java.awt.*;
-import java.awt.Color;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Scanner;

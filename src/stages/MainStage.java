@@ -2,7 +2,6 @@ package stages;
 
 import core.Bricks;
 import core.Settings;
-import gfx.BoardPanel;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -24,13 +23,10 @@ import javafx.stage.Stage;
 import javafx.stage.WindowEvent;
 import logic.BoardLogic;
 import logic.RobotPlayer;
-import scenes.GamePane;
-import scenes.OptionsPane;
+import scenes.*;
 
-import javax.swing.*;
 import java.io.File;
 import java.io.PrintWriter;
-import java.net.URL;
 import java.util.Optional;
 
 /**
@@ -354,6 +350,7 @@ public class MainStage extends Application {
         mainStage = primaryStage;
         mainStage.setTitle("Bricks");
         mainStage.setScene(mainScene);
+        mainScene.getStylesheets().add(MainStage.class.getResource("../style.css").toExternalForm());
         mainStage.setMinWidth(500);
         mainStage.setMinHeight(640);
         mainStage.show();
@@ -451,6 +448,26 @@ public class MainStage extends Application {
         } catch (Exception ignored) {
 
         }
+    }
+    public boolean possibleMove(int x1, int y1, int x2, int y2, int[][] board) {
+        if (board[x1][y1] != 0 || board[x2][y2] != 0)
+            return false;
+        boolean flag = false;
+
+        if (y1 == y2) {
+            if (x1 + 1 == x2)
+                flag = true;
+            if (x1 - 1 == x2)
+                flag = true;
+        }
+        if (x1 == x2) {
+            if (y1 + 1 == y2)
+                flag = true;
+            if (y1 - 1 == y2)
+                flag = true;
+        }
+
+        return flag;
     }
     private int height=100;
     private int widht=100;

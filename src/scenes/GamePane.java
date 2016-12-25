@@ -1,6 +1,6 @@
 package scenes;
 
-import core.Bricks;
+import core.*;
 import exceptions.InvalidMoveException;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -18,7 +18,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import logic.*;
-import stages.GamesStage;
+import stages.*;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
