@@ -60,16 +60,9 @@ public class Bricks extends Application {
                         initialBoardSize = Integer.parseInt(Divided[1]);
                         line = in.nextLine();
                         String[] splittedLine = line.split("[=]");
-                        /*int r = Integer.parseInt(splittedLine[2]);
-                        int g = Integer.parseInt(splittedLine[4]);
-                        int b = Integer.parseInt(splittedLine[6].substring(0, splittedLine[6].length() - 1));*/
                         firstPlayerColor = javafx.scene.paint.Color.web(splittedLine[1]);
                         line = in.nextLine();
                         splittedLine = line.split("[=]");
-                       /* r = Integer.parseInt(splittedLine[2]);
-                        g = Integer.parseInt(splittedLine[4]);
-                        b = Integer.parseInt(splittedLine[6].substring(0, splittedLine[6].length() - 1));
-                        secondPlayerColor = new javafx.scene.paint.Color(r/255, g/255, b/255, 1);*/
                         secondPlayerColor = javafx.scene.paint.Color.web(splittedLine[1]);
                         line = in.nextLine();
                         splittedLine = line.split("=");
@@ -130,24 +123,6 @@ public class Bricks extends Application {
                 loadDefaultSettings();
             }
         launch();
-          //  mainFrame = new MainFrame(initialBoardSize, firstPlayerColor, secondPlayerColor, isSound, volume, debugMode,
-          //          firstPlayerPath, secondPlayerPath, firstPlayerProgramType, secondPlayerProgramType,
-          //          firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType);
-          //  mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-          //  mainFrame.setVisible(true);
-            /*mainFrame.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    super.windowClosing(e);
-                    if (firstRobotPlayer != null)
-                        firstRobotPlayer.killRobot();
-                    if (secondRobotPlayer != null)
-                        secondRobotPlayer.killRobot();
-                    if (singlePlayerRobotPlayer != null)
-                        singlePlayerRobotPlayer.killRobot();
-                }
-            });*/
-       // });
     }
 
     private static boolean isSound;

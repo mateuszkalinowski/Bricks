@@ -78,8 +78,19 @@ public class OptionsPane extends Pane {
         boardSizeComboBox.getItems().add("5x5");
         boardSizeComboBox.getItems().add("9x9");
         boardSizeComboBox.getItems().add("13x13");
+        boardSizeComboBox.getItems().add("17x17");
         boardSizeComboBox.getItems().add("21x21");
+        boardSizeComboBox.getItems().add("25x25");
+        boardSizeComboBox.getItems().add("29x29");
+        boardSizeComboBox.getItems().add("33x33");
+        boardSizeComboBox.getItems().add("37x37");
+        boardSizeComboBox.getItems().add("41x41");
         boardSizeComboBox.getItems().add("45x45");
+        boardSizeComboBox.getItems().add("49x49");
+        boardSizeComboBox.getItems().add("53x53");
+        boardSizeComboBox.getItems().add("57x57");
+        boardSizeComboBox.getItems().add("61x61");
+        boardSizeComboBox.getItems().add("65x65");
         boardSizeComboBoxHBox.getChildren().add(boardSizeComboBox);
         boardSizeComboBoxHBox.setAlignment(Pos.CENTER_LEFT);
         for(int i = 0; i < boardSizeComboBox.getItems().size();i++) {

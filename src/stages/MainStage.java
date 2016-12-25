@@ -202,6 +202,103 @@ public class MainStage extends Application {
         robotWarsButtonHBox.getChildren().add(robotWarsButton);
         HBox.setMargin(robotWarsButton, new Insets(10,0,10,0));
         HBox.setHgrow(robotWarsButton,Priority.ALWAYS);
+        robotWarsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                boolean checkFirstComputerPlayer = false;
+                boolean checkSecondComputerPlayer = false;
+                if (firstPlayerProgramType == 0) {
+                    try {
+                        Bricks.firstRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
+                        checkFirstComputerPlayer = true;
+                    } catch (Exception ignored) {
+                    }
+                }
+                if (firstPlayerProgramType == 1) {
+                    try {
+                        Bricks.firstRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainStage.pathToPlayerOne + " " + Bricks.mainStage.playerFirstProgramName, BoardSize);
+                        checkFirstComputerPlayer = true;
+                    } catch (Exception ignored) {
+                    }
+
+                }
+                if (firstPlayerProgramType == 2) {
+                    try {
+                        Bricks.firstRobotPlayer = new RobotPlayer(firstPlayerRunCommand, BoardSize);
+                        checkFirstComputerPlayer = true;
+                    } catch (Exception ignored) {
+                    }
+
+                }
+
+                if (secondPlayerProgramType == 0) {
+                    try {
+                        Bricks.secondRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
+                        checkSecondComputerPlayer = true;
+                    } catch (Exception ignored) {
+                    }
+                }
+                if (secondPlayerProgramType == 1) {
+                    try {
+                        Bricks.secondRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainStage.pathToPlayerTwo + " " + Bricks.mainStage.playerSecondProgramName, BoardSize);
+                        checkSecondComputerPlayer = true;
+                    } catch (Exception ignored) {
+                    }
+
+                }
+                if (secondPlayerProgramType == 2) {
+                    try {
+                        Bricks.secondRobotPlayer = new RobotPlayer(secondPlayerRunCommand, BoardSize);
+                        checkSecondComputerPlayer = true;
+                    } catch (Exception ignored) {
+                    }
+                }
+                if(checkFirstComputerPlayer && checkSecondComputerPlayer) {
+                    int gametype = 2;
+                    BoardLogic board = new BoardLogic(BoardSize);
+                    gamePane = new GamePane(board, gametype);
+                    sceneOfTheGame = new Scene(gamePane, mainScene.getWidth(), mainScene.getHeight());
+                    gamePane.drawFrame();
+                    mainStage.setScene(sceneOfTheGame);
+                    mainStage.show();
+                    sceneOfTheGame.setOnKeyReleased(new EventHandler<KeyEvent>() {
+                        @Override
+                        public void handle(KeyEvent event) {
+                            if (event.getCode() == KeyCode.ESCAPE) {
+                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                alert.setTitle("Potwierdznie Wyjścia");
+                                alert.setHeaderText("Chcesz wrócić do menu głównego?");
+                                alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
+                                Optional<ButtonType> result = alert.showAndWait();
+                                if (result.get() == ButtonType.OK) {
+                                    gamePane.resetBoard();
+                                    Bricks.mainStage.backToMenu();
+                                }
+                            }
+                        }
+                    });
+                }
+                else if (!checkFirstComputerPlayer && checkSecondComputerPlayer) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Błąd uruchamiania gry");
+                    alert.setHeaderText("Pierwszy program grający nie działa.");
+                    alert.setContentText("Sprawdź podaną w ustawienaich ścieżkę.");
+                    alert.showAndWait();
+                } else  if(checkFirstComputerPlayer && !checkSecondComputerPlayer) {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Błąd uruchamiania gry");
+                    alert.setHeaderText("Drugi program grający nie działa.");
+                    alert.setContentText("Sprawdź podaną w ustawienaich ścieżkę.");
+                    alert.showAndWait();
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.ERROR);
+                    alert.setTitle("Błąd uruchamiania gry");
+                    alert.setHeaderText("Oba programy grające nie działają.");
+                    alert.setContentText("Sprawdź podane w ustawienaich ścieżki.");
+                    alert.showAndWait();
+                }
+            }
+        });
 
         HBox optionsButtonHBox = new HBox();
         optionsButtonHBox.setAlignment(Pos.CENTER);
@@ -257,7 +354,7 @@ public class MainStage extends Application {
         mainStage = primaryStage;
         mainStage.setTitle("Bricks");
         mainStage.setScene(mainScene);
-        mainStage.setMinWidth(400);
+        mainStage.setMinWidth(500);
         mainStage.setMinHeight(640);
         mainStage.show();
 
@@ -364,12 +461,10 @@ public class MainStage extends Application {
     private Scene sceneOfTheGame;
     private Scene sceneOfSettings;
 
-    private GamePane gamePane;
+    public GamePane gamePane;
     private OptionsPane optionsPane;
 
     public BoardLogic board;
-
-    public BoardPanel boardPanel;
 
     //USTAWIENIA GRY:
     public int firstPlayerProgramType;

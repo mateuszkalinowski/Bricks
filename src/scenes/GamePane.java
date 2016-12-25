@@ -2,38 +2,27 @@ package scenes;
 
 import core.Bricks;
 import exceptions.InvalidMoveException;
-import javafx.application.Application;
-import javafx.beans.NamedArg;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
+import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
-import javafx.scene.control.Alert;
+import javafx.scene.control.*;
 import javafx.scene.control.Button;
-import javafx.scene.control.ButtonBar;
-import javafx.scene.control.ButtonType;
-import javafx.scene.effect.Effect;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.control.TextField;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
-import javafx.scene.paint.*;
 import javafx.scene.paint.Color;
-import javafx.stage.Stage;
-import logic.BoardLogic;
-import logic.ComputerPlayer;
-import logic.MovesStorage;
-import logic.RobotPlayer;
+import logic.*;
 
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
-import javax.swing.*;
-import java.awt.*;
 import java.net.URL;
 import java.util.Optional;
 import java.util.concurrent.TimeoutException;
@@ -69,10 +58,311 @@ public class GamePane extends Pane {
         if(gamemode==0 && Bricks.mainStage.computerPlayerType==0)
             comp = new ComputerPlayer();
 
+        if(gamemode==2) {
+            HBox gamemodeRobotsWarsHBox = new HBox();
+            javafx.scene.control.Label speedLabel = new javafx.scene.control.Label("Prędkość:");
+            speedLabel.setFont(javafx.scene.text.Font.font("Comic Sans MS",12));
+            //gamemodeRobotsWarsHBox.getChildren().add(speedLabel);
+
+            speedDownButton = new Button("-");
+            gamemodeRobotsWarsHBox.getChildren().add(speedDownButton);
+            speedDownButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    int i = Integer.parseInt(speedTextField.getText());
+                    if(i>1) {
+                        i--;
+                        speedTextField.setText(i+"");
+                    }
+                }
+            });
+
+            autoGameSpeed = 5;
+            speedTextField = new TextField(autoGameSpeed + "");
+            speedTextField.setMaxWidth(32);
+            speedTextField.setMinWidth(32);
+            speedTextField.setEditable(false);
+            gamemodeRobotsWarsHBox.getChildren().add(speedTextField);
+
+            speedUpButton = new Button("+");
+            gamemodeRobotsWarsHBox.getChildren().add(speedUpButton);
+            speedUpButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    int i = Integer.parseInt(speedTextField.getText());
+                    if(i<20) {
+                        i++;
+                        speedTextField.setText(i+"");
+                    }
+                }
+            });
+            computerPlayer=1;
+            nextMoveButton = new Button("Następny Ruch");
+            gamemodeRobotsWarsHBox.getChildren().add(nextMoveButton);
+            nextMoveButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    boolean gameFinished = false;
+                    nextMoveButton.setDisable(true);
+                    try {
+                        int move[] = new int[4];
+                        if (computerPlayer == 1) {
+                            if (movesStorage.isEmpty()) {
+                                try {
+                                    move = Bricks.firstRobotPlayer.makeMove("ZACZYNAJ");
+                                } catch (InvalidMoveException exception) {
+                                    walkover(computerPlayer, "BadMove");
+                                    gameFinished = true;
+                                } catch (TimeoutException exception) {
+                                    walkover(computerPlayer, "Timeout");
+                                    gameFinished = true;
+                                }
+                            } else {
+                                try {
+                                    move = Bricks.firstRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
+                                } catch (InvalidMoveException exception) {
+                                    walkover(computerPlayer, "BadMove");
+                                    gameFinished = true;
+                                } catch (TimeoutException exception) {
+                                    walkover(computerPlayer, "Timeout");
+                                    gameFinished = true;
+                                }
+                            }
+                        }
+                        if (computerPlayer == 2) {
+                            if (movesStorage.isEmpty()) {
+                                try {
+                                    move = Bricks.secondRobotPlayer.makeMove("ZACZYNAJ");
+                                } catch (InvalidMoveException exception) {
+                                    walkover(computerPlayer, "BadMove");
+                                    gameFinished = true;
+                                } catch (TimeoutException exception) {
+                                    walkover(computerPlayer, "Timeout");
+                                    gameFinished = true;
+                                }
+                            } else {
+                                try {
+                                    move = Bricks.secondRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
+                                } catch (InvalidMoveException exception) {
+                                    walkover(computerPlayer, "BadMove");
+                                    gameFinished = true;
+                                } catch (TimeoutException exception) {
+                                    walkover(computerPlayer, "Timeout");
+                                    gameFinished = true;
+                                }
+                            }
+                        }
+
+                        int x1 = move[0];
+                        int y1 = move[1];
+                        int x2 = move[2];
+                        int y2 = move[3];
+
+
+                        if (possibleMove(x1, y1, x2, y2) && !gameFinished) {
+                            board.board[x1][y1] = computerPlayer;
+                            board.board[x2][y2] = computerPlayer;
+                            playSound();
+                            drawFrame();
+                            movesStorage.addMove(x1, y1, x2, y2);
+                            if (computerPlayer == 1) {
+                                computerPlayer = 2;
+
+                            } else if (computerPlayer == 2) {
+                                computerPlayer = 1;
+                            }
+                        } else if (!gameFinished) {
+                            walkover(computerPlayer, "InvalidMove");
+                        }
+                        nextMoveButton.setDisable(false);
+                        checkNoMoves();
+
+                    } catch (Exception ignored) {
+                        nextMoveButton.setDisable(false);
+                    }
+                }
+            });
+
+            autoPlayButton = new Button("Automatyczna Gra");
+            autoPlayButton.setMinWidth(150);
+            gamemodeRobotsWarsHBox.getChildren().add(autoPlayButton);
+            autoPlayButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    if(autoPlayButton.getText().equals("Automatyczna Gra")){
+                        controlAutoPlayButtons(false);
+                        Bricks.autoPlayRunning=true;
+                        cancelReason=0;
+                        isGameFinished=false;
+                        autoGame = new Task<Void>() {
+                            @Override
+                            protected Void call() {
+                                while (Bricks.autoPlayRunning) {
+                                    int computerPlayer = Bricks.mainStage.gamePane.computerPlayer;
+                                    //Bricks.mainFrame.computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
+                                    int move[] = new int[4];
+                                    if (computerPlayer == 1) {
+                                        if (Bricks.mainStage.gamePane.movesStorage.isEmpty()) {
+                                            try {
+                                                move = Bricks.firstRobotPlayer.makeMove("ZACZYNAJ");
+                                            } catch (InvalidMoveException exception) {
+                                                cancelReason=1;
+                                                cancel();
+                                            } catch (TimeoutException exception) {
+                                                cancelReason=2;
+                                                cancel();
+                                            }
+                                        } else {
+                                            try {
+                                                move = Bricks.firstRobotPlayer.makeMove(Bricks.mainStage.gamePane.movesStorage.getLastMoveAsString());
+                                            } catch (InvalidMoveException exception) {
+                                                cancelReason=1;
+                                                cancel();
+                                            } catch (TimeoutException exception) {
+                                                cancelReason=2;
+                                                cancel();
+                                            }
+                                        }
+                                    }
+                                    if (computerPlayer == 2) {
+                                        if (Bricks.mainStage.gamePane.movesStorage.isEmpty()) {
+                                            try {
+                                                move = Bricks.secondRobotPlayer.makeMove("ZACZYNAJ");
+                                            } catch (InvalidMoveException exception) {
+                                                cancelReason=1;
+                                                cancel();
+                                            } catch (TimeoutException exception) {
+                                                cancelReason=2;
+                                                cancel();
+                                            }
+                                        } else {
+                                            try {
+                                                move = Bricks.secondRobotPlayer.makeMove(Bricks.mainStage.gamePane.movesStorage.getLastMoveAsString());
+                                            } catch (InvalidMoveException exception) {
+                                                cancelReason=1;
+                                                cancel();
+                                            } catch (TimeoutException exception) {
+                                                cancelReason=2;
+                                                cancel();
+                                            }
+                                        }
+                                    }
+
+                                    int x1 = move[0];
+                                    int y1 = move[1];
+                                    int x2 = move[2];
+                                    int y2 = move[3];
+                                    if (Bricks.mainStage.gamePane.possibleMove(x1, y1, x2, y2)) {
+                                        Bricks.mainStage.gamePane.board.board[x1][y1] = computerPlayer;
+                                        Bricks.mainStage.gamePane.board.board[x2][y2] = computerPlayer;
+                                        Bricks.mainStage.gamePane.playSound();
+                                        Bricks.mainStage.gamePane.drawFrame();
+                                        Bricks.mainStage.gamePane.movesStorage.addMove(x1, y1, x2, y2);
+
+
+                                        if (computerPlayer == 1) {
+                                            computerPlayer = 2;
+
+                                        } else if (computerPlayer == 2) {
+                                            computerPlayer = 1;
+                                        }
+                                        Bricks.mainStage.gamePane.computerPlayer = computerPlayer;
+                                    } else {
+                                        cancelReason=1;
+                                        cancel();
+                                    }
+                                    if(!Bricks.mainStage.gamePane.board.anyMoves()) {
+                                        isGameFinished=true;
+                                        break;
+
+                                    }
+                                    try {
+                                        Thread.sleep(1000 / Integer.parseInt(speedTextField.getText()));
+                                    } catch (InterruptedException e) {
+                                        cancel();
+                                    }
+                                }
+                                return null;
+                            }
+
+                        };
+                        Thread autoGameThread = new Thread(autoGame);
+                        autoGameThread.start();
+                        autoGame.setOnCancelled(new EventHandler<WorkerStateEvent>() {
+                            @Override
+                            public void handle(WorkerStateEvent event) {
+                                Optional<ButtonType> result;
+                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                alert.setTitle("Koniec Gry");
+                                alert.setContentText("Co chcesz zrobić?");
+                                ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
+                                ButtonType buttonExitToMenu = new ButtonType("Powrót do Menu");
+                                alert.getButtonTypes().setAll(buttonPlayAgain,buttonExitToMenu);
+                                if(cancelReason==1) {
+                                    if(computerPlayer==1)
+                                        alert.setHeaderText("Komputer pierwszy wykonał błędny ruch, wygrał komputer drugi.");
+                                    if(computerPlayer==2)
+                                        alert.setHeaderText("Komputer drugi wykonał błędny ruch, wygrał komputer pierwszy.");
+                                }
+                                if(cancelReason==2) {
+                                    if(computerPlayer==1)
+                                        alert.setHeaderText("Komputer pierwszy przekroczył czas ruchu, wygrał komputer drugi.");
+                                    if(computerPlayer==2)
+                                        alert.setHeaderText("Komputer drugi przekroczył czas ruchu, wygrał komputer pierwszy.");
+                                }
+                                if(cancelReason==1 || cancelReason==2) {
+                                    result = alert.showAndWait();
+                                    resetBoard();
+                                    controlAutoPlayButtons(true);
+                                    if (result.get() == buttonExitToMenu)
+                                        Bricks.mainStage.backToMenu();
+                                }
+                            }
+                        });
+                        autoGame.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+                            @Override
+                            public void handle(WorkerStateEvent event) {
+                                if(isGameFinished) {
+                                    Optional<ButtonType> result;
+                                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                    alert.setTitle("Koniec Gry");
+                                    alert.setContentText("Co chcesz zrobić?");
+                                    ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
+                                    ButtonType buttonExitToMenu = new ButtonType("Powrót do Menu");
+
+                                    alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
+                                    if (computerPlayer == 1)
+                                        alert.setHeaderText("Wygrał komputer drugi");
+                                    else
+                                        alert.setHeaderText("Wygrał komputer drugi");
+                                    result = alert.showAndWait();
+                                    resetBoard();
+                                    controlAutoPlayButtons(true);
+                                    if (result.get() == buttonExitToMenu)
+                                        Bricks.mainStage.backToMenu();
+                                }
+                            }
+                        });
+                    }
+                    else {
+                        Bricks.autoPlayRunning=false;
+                        controlAutoPlayButtons(true);
+                    }
+                }
+            });
+
+            gamesButton = new Button("Rozgrywki");
+            gamemodeRobotsWarsHBox.getChildren().add(gamesButton);
+
+            gamemodeRobotsWarsHBox.setSpacing(10);
+            gamemodeRobotsWarsHBox.setAlignment(Pos.CENTER);
+            mainGridPane.add(gamemodeRobotsWarsHBox,0,1);
+        }
+
         setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                if (gametype == 0 || gametype == 1) {
+                if (gamemode == 0 || gamemode == 1) {
                     if (!isSelected) {
                         if ((e.getX() > margin && e.getX() < getWidth() - margin) && (e.getY() > margin && e.getY() < getHeight() - margin)) {
 
@@ -113,8 +403,8 @@ public class GamePane extends Pane {
                         if ((e.getX() > margin && e.getX() < getWidth() - margin) && (e.getY() > margin && e.getY() < getHeight() - margin)) {
                             int tempSelectedX;
                             int tempSelectedY;
-                            int intOneFieldWidth = (int) Math.round(oneFieldWidth);
-                            int intOneFieldHeight = (int) Math.round(oneFieldHeight);
+                            double intOneFieldWidth = (oneFieldWidth);
+                            double intOneFieldHeight = (oneFieldHeight);
                             tempSelectedX = 0;
                             tempSelectedY = 0;
 
@@ -421,17 +711,15 @@ public class GamePane extends Pane {
             ButtonType buttonExitToMenu = new ButtonType("Wróć do menu");
 
             alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
-                /*if (gamemode == 2) {
-                    if (Bricks.mainFrame.computerPlayer == 1) {
-                        selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał program drugi, chcesz zagrać jeszcze raz?", "Koniec" +
-                                " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+            if (gamemode == 2) {
+                    if (computerPlayer == 1) {
+                        alert.setHeaderText("Koniec możliwych ruchów, wygrał program drugi.");
                     } else {
-                        selection = JOptionPane.showConfirmDialog(null, "Koniec możliwych ruchów, wygrał program pierwszy, chcesz zagrać jeszcze raz?", "Koniec" +
-                                " gry", JOptionPane.YES_NO_OPTION, JOptionPane.QUESTION_MESSAGE);
+                        alert.setHeaderText("Koniec możliwych ruchów, wygrał program pierwszy.");
                     }
-                    Bricks.mainFrame.computerPlayer = 1;
+                    computerPlayer = 1;
 
-                }*/
+                }
                 if (gamemode == 1) {
                     if (actualPlayer == 1) {
                         alert.setHeaderText("Koniec możliwych ruchów, wygrał gracz drugi.");
@@ -457,6 +745,42 @@ public class GamePane extends Pane {
             }
         return false;
     }
+
+    public void walkover(int computerPlayer, String reason) {
+        //int selection;
+        Optional<ButtonType> result;
+        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.setTitle("Koniec Gry");
+        alert.setContentText("Co chcesz zrobić?");
+        ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
+        ButtonType buttonExitToMenu = new ButtonType("Powrót do Menu");
+
+        alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
+
+        if (reason.equals("Timeout")) {
+            System.out.println("Timeout");
+            if (computerPlayer == 1) {
+                alert.setHeaderText("Komputer numer 1 przekroczył czas na wykonanie ruchu, wygrał program drugi");
+            } else {
+                alert.setHeaderText("Komputer numer 2 przekroczył czas na wykonanie ruchu, wygrał program pierwszy");
+            }
+        } else {
+            if (computerPlayer == 1) {
+                alert.setHeaderText("Komputer numer 1 wykonał błędny ruch, wygrał program drugi");
+            } else {
+                alert.setHeaderText("Komputer numer 2 wykonał błędny ruch, wygrał program pierwszy");
+            }
+        }
+        this.computerPlayer = 1;
+        result = alert.showAndWait();
+        if (result.get()==buttonPlayAgain) {
+            resetBoard();
+        } else {
+            resetBoard();
+            Bricks.mainStage.backToMenu();
+        }
+    }
+
     private void singlePlayerComputerMakeMove() {
         int[] move = new int[4];
         try {
@@ -516,6 +840,7 @@ public class GamePane extends Pane {
         movesStorage.reset();
         if (gamemode == 2) {
             try {
+                Bricks.autoPlayRunning=false;
                 Bricks.firstRobotPlayer.reset();
                 Bricks.secondRobotPlayer.reset();
             } catch (Exception ignored) {
@@ -530,6 +855,7 @@ public class GamePane extends Pane {
             }
         }
         actualPlayer = 1;
+        drawFrame();
     }
     public boolean possibleMove(int x1, int y1, int x2, int y2) {
         if (board.board[x1][y1] != 0 || board.board[x2][y2] != 0)
@@ -551,7 +877,29 @@ public class GamePane extends Pane {
 
         return flag;
     }
-    private BoardLogic board;
+
+    private void controlAutoPlayButtons(boolean turnOn) {
+        if (turnOn) {
+            if (speedUpButton != null) {
+                speedUpButton.setDisable(false);
+                speedDownButton.setDisable(false);
+                autoPlayButton.setText("Automatyczna Gra");
+                nextMoveButton.setDisable(false);
+                autoPlayButton.setDisable(false);
+                gamesButton.setDisable(false);
+            }
+        } else {
+            if (speedUpButton != null) {
+                speedUpButton.setDisable(true);
+                speedDownButton.setDisable(true);
+                autoPlayButton.setText("Przerwij");
+                nextMoveButton.setDisable(true);
+                gamesButton.setDisable(true);
+            }
+        }
+    }
+
+    public BoardLogic board;
 
     private int actualPlayer = 1;
 
@@ -566,11 +914,28 @@ public class GamePane extends Pane {
     private int selectedX;
     private int selectedY;
 
+    public int computerPlayer;
+
 
     public MovesStorage movesStorage;
     private int gamemode;
 
     private ComputerPlayer comp;
 
+    Button speedUpButton;
+    Button speedDownButton;
+    Button nextMoveButton;
+    Button autoPlayButton;
+    Button gamesButton;
+    TextField speedTextField;
+
+    private int autoGameSpeed;
+
+    public Runner runner;
+
+    Task<Void> autoGame;
+
+    boolean isGameFinished = false;
+    int cancelReason = 0;
 
 }
