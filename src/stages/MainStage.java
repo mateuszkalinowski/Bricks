@@ -333,7 +333,7 @@ public class MainStage extends Application {
         mainStage = primaryStage;
         mainStage.setTitle("Bricks");
         mainStage.setScene(mainScene);
-        mainScene.getStylesheets().add(MainStage.class.getResource("../style.css").toExternalForm());
+       // mainScene.getStylesheets().add(MainStage.class.getResource("../style.css").toExternalForm());
         mainStage.setMinWidth(500);
         mainStage.setMinHeight(640);
         mainStage.show();
