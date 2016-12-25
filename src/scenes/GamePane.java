@@ -940,42 +940,37 @@ public class GamePane extends Pane {
         }
     }
 
-    public BoardLogic board;
+    Task<Void> autoGame;
+
+    private BoardLogic board;
 
     private int actualPlayer = 1;
-
     private int margin = 20;
+    private int selectedX;
+    private int selectedY;
+    public int computerPlayer;
+    private int gamemode;
+    private int autoGameSpeed;
+    private int cancelReason = 0;
 
     private double oneFieldWidth;
     private double oneFieldHeight;
 
     private boolean[] directions;
-
     private boolean isSelected = false;
-    private int selectedX;
-    private int selectedY;
-
-    public int computerPlayer;
+    private boolean isGameFinished = false;
 
 
-    public MovesStorage movesStorage;
-    private int gamemode;
+    private MovesStorage movesStorage;
 
     private ComputerPlayer comp;
 
-    Button speedUpButton;
-    Button speedDownButton;
-    Button nextMoveButton;
-    Button autoPlayButton;
-    Button gamesButton;
+    private Button speedUpButton;
+    private Button speedDownButton;
+    private Button nextMoveButton;
+    private Button autoPlayButton;
+    private Button gamesButton;
+
     TextField speedTextField;
-
-    private int autoGameSpeed;
-
-
-    Task<Void> autoGame;
-
-    boolean isGameFinished = false;
-    int cancelReason = 0;
 
 }
