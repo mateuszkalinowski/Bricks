@@ -1,28 +1,28 @@
 .root {
-    -fx-background-color: linear-gradient(white,gray);
+    -fx-background-color: linear-gradient(white,silver);
 }
 #logo {
    -fx-font-size: 150;
    -fx-font-family: "Comic Sans MS";
    -fx-font-weight: bold;
-   -fx-fill:linear-gradient(red, black);
+   -fx-fill: firebrick;
    -fx-stroke: black;
    -fx-stroke-width: 5;
 }
 .button {
-    -fx-background-color: linear-gradient(red, black);
+    -fx-background-color: darkred;
     -fx-background-radius: 30;
     -fx-background-insets: 0;
     -fx-text-fill: white;
 }
 .button:hover {
-    -fx-background-color: linear-gradient(black, red);
+    -fx-background-color: red;
     -fx-background-radius: 30;
     -fx-background-insets: 0;
     -fx-text-fill: white;
 }
 #buttonInMainMenu {
     -fx-border-color: black;
-    -fx-border-width: 5;
+    -fx-border-width: 4;
     -fx-border-radius: 30;
 }

@@ -368,13 +368,13 @@ public class MainStage extends Application {
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
-        mainScene = new Scene(mainBorderPane, 500, 650);
+        mainScene = new Scene(mainBorderPane, 500, 670);
         mainStage = primaryStage;
         mainStage.setTitle("Bricks");
         mainStage.setScene(mainScene);
         mainScene.getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
         mainStage.setMinWidth(500);
-        mainStage.setMinHeight(640);
+        mainStage.setMinHeight(670);
         mainStage.show();
 
 

@@ -325,7 +325,6 @@ public class GamePane extends Pane {
                                     Optional<ButtonType> result;
                                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                     alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
-                                    alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                                     alert.setTitle("Koniec Gry");
                                     alert.setContentText("Co chcesz zrobić?");
                                     ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
@@ -333,9 +332,9 @@ public class GamePane extends Pane {
 
                                     alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
                                     if (computerPlayer == 1)
-                                        alert.setHeaderText("Wygrał komputer drugi");
+                                        alert.setHeaderText("Koniec możliwych ruchów, wygrał program drugi.");
                                     else
-                                        alert.setHeaderText("Wygrał komputer drugi");
+                                        alert.setHeaderText("Koniec możliwych ruchów, wygrał program pierwszy.");
                                     result = alert.showAndWait();
                                     resetBoard();
                                     controlAutoPlayButtons(true);
@@ -884,6 +883,7 @@ public class GamePane extends Pane {
         board.reset();
         isSelected = false;
         movesStorage.reset();
+        computerPlayer=1;
         if (gamemode == 2) {
             try {
                 Bricks.autoPlayRunning=false;
