@@ -1,8 +1,5 @@
 package logic;
 
-import java.io.File;
-import java.io.PrintWriter;
-
 /**
  * Created by Mateusz on 20.05.2016.
  * Project Bricks

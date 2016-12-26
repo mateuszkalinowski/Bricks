@@ -1,13 +1,10 @@
 package core;
 
-
-import frames.MainFrame;
+import stages.*;
+import javafx.application.Application;
+import javafx.stage.Stage;
 import logic.*;
 
-import javax.swing.*;
-import java.awt.*;
-import java.awt.event.WindowAdapter;
-import java.awt.event.WindowEvent;
 import java.io.File;
 import java.io.PrintWriter;
 import java.util.Scanner;
@@ -16,11 +13,18 @@ import java.util.Scanner;
  * Created by Mateusz on 20.05.2016.
  * Project Bricks
  */
-public class Bricks {
+public class Bricks extends Application {
+    @SuppressWarnings ("ResultOfMethodCallIgnored")
+    public void start(Stage primaryStage) throws Exception {
+        mainStage = new MainStage();
+        mainStage.setSettings(initialBoardSize, firstPlayerColor, secondPlayerColor, isSound, volume, debugMode,
+                          firstPlayerPath, secondPlayerPath, firstPlayerProgramType, secondPlayerProgramType,
+                          firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType);
+        mainStage.start(primaryStage);
+    }
     @SuppressWarnings ("ResultOfMethodCallIgnored")
     public static void main(String[] args) {
-        EventQueue.invokeLater(() -> {
-
+        //EventQueue.invokeLater(() -> {
             path = System.getProperty("user.home") + "/Documents/Bricks";
             File resources = new File(path);
             try {
@@ -51,17 +55,11 @@ public class Bricks {
                         String[] Divided = line.split("=");
                         initialBoardSize = Integer.parseInt(Divided[1]);
                         line = in.nextLine();
-                        String[] splittedLine = line.split("[=,/]");
-                        int r = Integer.parseInt(splittedLine[2]);
-                        int g = Integer.parseInt(splittedLine[4]);
-                        int b = Integer.parseInt(splittedLine[6].substring(0, splittedLine[6].length() - 1));
-                        firstPlayerColor = new Color(r, g, b);
+                        String[] splittedLine = line.split("[=]");
+                        firstPlayerColor = javafx.scene.paint.Color.web(splittedLine[1]);
                         line = in.nextLine();
-                        splittedLine = line.split("[=,/]");
-                        r = Integer.parseInt(splittedLine[2]);
-                        g = Integer.parseInt(splittedLine[4]);
-                        b = Integer.parseInt(splittedLine[6].substring(0, splittedLine[6].length() - 1));
-                        secondPlayerColor = new Color(r, g, b);
+                        splittedLine = line.split("[=]");
+                        secondPlayerColor = javafx.scene.paint.Color.web(splittedLine[1]);
                         line = in.nextLine();
                         splittedLine = line.split("=");
                         isSound = splittedLine[1].equals("true");
@@ -120,24 +118,7 @@ public class Bricks {
             } catch (Exception ignored) {
                 loadDefaultSettings();
             }
-            mainFrame = new MainFrame(initialBoardSize, firstPlayerColor, secondPlayerColor, isSound, volume, debugMode,
-                    firstPlayerPath, secondPlayerPath, firstPlayerProgramType, secondPlayerProgramType,
-                    firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType);
-            mainFrame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
-            mainFrame.setVisible(true);
-            mainFrame.addWindowListener(new WindowAdapter() {
-                @Override
-                public void windowClosing(WindowEvent e) {
-                    super.windowClosing(e);
-                    if (firstRobotPlayer != null)
-                        firstRobotPlayer.killRobot();
-                    if (secondRobotPlayer != null)
-                        secondRobotPlayer.killRobot();
-                    if (singlePlayerRobotPlayer != null)
-                        singlePlayerRobotPlayer.killRobot();
-                }
-            });
-        });
+        launch();
     }
 
     private static boolean isSound;
@@ -150,8 +131,8 @@ public class Bricks {
     private static int secondPlayerProgramType;
     private static int computerPlayerType;
 
-    private static Color firstPlayerColor;
-    private static Color secondPlayerColor;
+    private static javafx.scene.paint.Color firstPlayerColor;
+    private static javafx.scene.paint.Color secondPlayerColor;
 
     private static String firstPlayerPath;
     private static String secondPlayerPath;
@@ -159,16 +140,17 @@ public class Bricks {
     private static String secondPlayerRunCommand;
     public static String path;
 
-    public static MainFrame mainFrame;
-
     public static RobotPlayer firstRobotPlayer;
     public static RobotPlayer secondRobotPlayer;
     public static RobotPlayer singlePlayerRobotPlayer;
 
+    public static MainStage mainStage;
+
+
     private static void loadDefaultSettings() {
         initialBoardSize = 5;
-        firstPlayerColor = new Color(69, 136, 58);
-        secondPlayerColor = new Color(238, 44, 44);
+        firstPlayerColor = new javafx.scene.paint.Color(69.0/255, 136.0/255, 58.0/255.0, 1);
+        secondPlayerColor = new javafx.scene.paint.Color(238.0/255, 44.0/255, 44.0/255.0, 1);
         isSound = true;
         volume = 0;
         firstPlayerProgramType = 1;
