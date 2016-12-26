@@ -1,4 +1,4 @@
-package scenes;
+package stages;
 
 import core.*;
 import exceptions.InvalidMoveException;
@@ -61,9 +61,6 @@ public class GamePane extends Pane {
 
         if(gamemode==2) {
             HBox gamemodeRobotsWarsHBox = new HBox();
-            javafx.scene.control.Label speedLabel = new javafx.scene.control.Label("Prędkość:");
-            speedLabel.setFont(javafx.scene.text.Font.font("Comic Sans MS",12));
-            //gamemodeRobotsWarsHBox.getChildren().add(speedLabel);
 
             speedDownButton = new Button("-");
             gamemodeRobotsWarsHBox.getChildren().add(speedDownButton);
@@ -294,6 +291,7 @@ public class GamePane extends Pane {
                             public void handle(WorkerStateEvent event) {
                                 Optional<ButtonType> result;
                                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                                 alert.setTitle("Koniec Gry");
                                 alert.setContentText("Co chcesz zrobić?");
                                 ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
@@ -326,6 +324,7 @@ public class GamePane extends Pane {
                                 if(isGameFinished) {
                                     Optional<ButtonType> result;
                                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                    alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                                     alert.setTitle("Koniec Gry");
                                     alert.setContentText("Co chcesz zrobić?");
                                     ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
@@ -333,9 +332,9 @@ public class GamePane extends Pane {
 
                                     alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
                                     if (computerPlayer == 1)
-                                        alert.setHeaderText("Wygrał komputer drugi");
+                                        alert.setHeaderText("Koniec możliwych ruchów, wygrał program drugi.");
                                     else
-                                        alert.setHeaderText("Wygrał komputer drugi");
+                                        alert.setHeaderText("Koniec możliwych ruchów, wygrał program pierwszy.");
                                     result = alert.showAndWait();
                                     resetBoard();
                                     controlAutoPlayButtons(true);
@@ -359,6 +358,7 @@ public class GamePane extends Pane {
                 public void handle(ActionEvent event) {
                     Optional<ButtonType> result;
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                     alert.setTitle("Przejście do \"rozgrywek\"");
                     alert.setContentText("Spowoduje to zakończenie obecnej partii.");
                     alert.setHeaderText("Przejść do \"rozgrywek\"?");
@@ -399,7 +399,6 @@ public class GamePane extends Pane {
             gamemodeRobotsWarsHBox.setAlignment(Pos.CENTER);
             mainGridPane.add(gamemodeRobotsWarsHBox,0,1);
         }
-
         setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -716,7 +715,8 @@ public class GamePane extends Pane {
             }
         }
         }
-        catch (NullPointerException ignored) {}//JESZCZE NIE ZOSTALA STWORZONA MAINGAMESCENE w MAINSTAGE, NIE PROBLEM
+        catch (NullPointerException ignored) {
+        }//JESZCZE NIE ZOSTALA STWORZONA MAINGAMESCENE w MAINSTAGE, NIE PROBLEM
 
 
     }
@@ -745,6 +745,7 @@ public class GamePane extends Pane {
         if (!board.anyMoves()) {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
             alert.setTitle("Koniec Gry");
             alert.setContentText("Co chcesz zrobić?");
 
@@ -791,6 +792,7 @@ public class GamePane extends Pane {
         //int selection;
         Optional<ButtonType> result;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
         alert.setTitle("Koniec Gry");
         alert.setContentText("Co chcesz zrobić?");
         ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
@@ -829,6 +831,7 @@ public class GamePane extends Pane {
         } catch (InvalidMoveException exception) {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
             alert.setTitle("Koniec Gry");
             alert.setContentText("Co chcesz zrobić?");
 
@@ -846,6 +849,7 @@ public class GamePane extends Pane {
         } catch (TimeoutException exception) {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
             alert.setTitle("Koniec Gry");
             alert.setContentText("Co chcesz zrobić?");
 
@@ -879,6 +883,7 @@ public class GamePane extends Pane {
         board.reset();
         isSelected = false;
         movesStorage.reset();
+        computerPlayer=1;
         if (gamemode == 2) {
             try {
                 Bricks.autoPlayRunning=false;

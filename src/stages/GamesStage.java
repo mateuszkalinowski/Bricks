@@ -270,9 +270,6 @@ public class GamesStage extends Application {
                                         }
                                     }
                                     if (running) {
-                                    double progress = ((counter * 1.0) / (boardsSizes.size() * 1.0)) * 100;
-                                    // Bricks.mainFrame.autoPlayFrame.setProgress((int) Math.round(progress));
-                                    //gamesProgressBar.setProgress(progress);
                                         updateProgress(counter,boardsSizes.size());
                                     }
                                 } else {
@@ -348,6 +345,8 @@ public class GamesStage extends Application {
         gamesStage.setResizable(true);
         gamesStage.setMinHeight(350);
         gamesStage.setMinWidth(270);
+
+        gamesScene.getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
 
 
         gamesStage.setOnCloseRequest(new EventHandler<WindowEvent>() {

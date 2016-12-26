@@ -17,11 +17,11 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import logic.BoardLogic;
 import logic.RobotPlayer;
-import scenes.*;
 
 import java.io.File;
 import java.io.PrintWriter;
@@ -46,16 +46,20 @@ public class MainStage extends Application {
         ColumnConstraints columnInMainMenu = new ColumnConstraints();
         columnInMainMenu.setPercentWidth(100);
         mainGridPane.getColumnConstraints().add(columnInMainMenu);
-
-        Label bricksTitleLabel = new Label();
+        HBox bricksTitleHBox = new HBox();
+        bricksTitleHBox.setAlignment(Pos.CENTER);
+        Text bricksTitleLabel = new Text();
         bricksTitleLabel.setText("Bricks");
-        bricksTitleLabel.setFont(new Font("Comic Sans MS",126));
-        bricksTitleLabel.setMaxWidth(Double.MAX_VALUE);
-        bricksTitleLabel.setAlignment(Pos.CENTER);
+        //bricksTitleLabel.setFont(new Font("Comic Sans MS",126));
+        //bricksTitleLabel.setMaxWidth(Double.MAX_VALUE);
+        //bricksTitleLabel.setAlignment(Pos.CENTER);
+        bricksTitleLabel.setId("logo");
+        bricksTitleHBox.getChildren().add(bricksTitleLabel);
 
         HBox singlePlayerGameButtonHBox = new HBox();
         singlePlayerGameButtonHBox.setAlignment(Pos.CENTER);
         Button singlePlayerGameButton = new Button("Gra Jednoosobowa");
+        singlePlayerGameButton.setId("buttonInMainMenu");
         singlePlayerGameButton.setMaxWidth(300);
         singlePlayerGameButton.setMaxHeight(180);
         singlePlayerGameButton.setFont(new Font("Comic Sans MS",22));
@@ -119,19 +123,29 @@ public class MainStage extends Application {
                 BoardLogic board1 = new BoardLogic(BoardSize);
                 gamePane = new GamePane(board1, gametype);
                 sceneOfTheGame = new Scene(gamePane, mainScene.getWidth(), mainScene.getHeight());
+                sceneOfTheGame.getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                 gamePane.drawFrame();
                 mainStage.setScene(sceneOfTheGame);
                 mainStage.show();
                 sceneOfTheGame.setOnKeyReleased(event12 -> {
                     if (event12.getCode() == KeyCode.ESCAPE) {
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                         alert.setTitle("Potwierdznie Wyjścia");
                         alert.setHeaderText("Chcesz wrócić do menu głównego?");
                         alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
+                        ButtonType buttonYes = new ButtonType("Tak");
+                        ButtonType resetBoard = new ButtonType("Zresetuj Grę");
+                        ButtonType buttonNo = new ButtonType("Anuluj");
+                        alert.getButtonTypes().setAll(buttonNo,resetBoard,buttonYes);
                         Optional<ButtonType> result = alert.showAndWait();
-                        if (result.get() == ButtonType.OK) {
+                        if (result.get() == buttonYes) {
                             Bricks.mainStage.backToMenu();
                         }
+                        else if(result.get() == resetBoard) {
+                            gamePane.resetBoard();
+                        }
+
                     }
                 });
             }
@@ -147,6 +161,7 @@ public class MainStage extends Application {
         HBox twoPlayersGameButtonHBox = new HBox();
         twoPlayersGameButtonHBox.setAlignment(Pos.CENTER);
         Button twoPlayersGameButton = new Button("Gra Dwuosobowa");
+        twoPlayersGameButton.setId("buttonInMainMenu");
         twoPlayersGameButton.setMaxWidth(300);
         twoPlayersGameButton.setMaxHeight(180);
         twoPlayersGameButton.setFont(new Font("Comic Sans MS",22));
@@ -158,18 +173,27 @@ public class MainStage extends Application {
             BoardLogic board12 = new BoardLogic(BoardSize);
             gamePane = new GamePane(board12,gametype);
             sceneOfTheGame = new Scene(gamePane,mainScene.getWidth(),mainScene.getHeight());
+            sceneOfTheGame.getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
             gamePane.drawFrame();
             mainStage.setScene(sceneOfTheGame);
             mainStage.show();
             sceneOfTheGame.setOnKeyReleased(event1 -> {
                 if(event1.getCode()== KeyCode.ESCAPE) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                     alert.setTitle("Potwierdznie Wyjścia");
                     alert.setHeaderText("Chcesz wrócić do menu głównego?");
                     alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
-                    Optional<ButtonType> result=  alert.showAndWait();
-                    if(result.get() == ButtonType.OK){
+                    ButtonType buttonYes = new ButtonType("Tak");
+                    ButtonType resetBoard = new ButtonType("Zresetuj Grę");
+                    ButtonType buttonNo = new ButtonType("Anuluj");
+                    alert.getButtonTypes().setAll(buttonNo,resetBoard,buttonYes);
+                    Optional<ButtonType> result = alert.showAndWait();
+                    if (result.get() == buttonYes) {
                         Bricks.mainStage.backToMenu();
+                    }
+                    else if(result.get() == resetBoard) {
+                        gamePane.resetBoard();
                     }
                 }
             });
@@ -178,6 +202,7 @@ public class MainStage extends Application {
         HBox robotWarsButtonHBox = new HBox();
         robotWarsButtonHBox.setAlignment(Pos.CENTER);
         Button robotWarsButton = new Button("Wojna Robotów");
+        robotWarsButton.setId("buttonInMainMenu");
         robotWarsButton.setMaxWidth(300);
         robotWarsButton.setMaxHeight(180);
         robotWarsButton.setFont(new Font("Comic Sans MS",22));
@@ -238,6 +263,7 @@ public class MainStage extends Application {
                 BoardLogic board13 = new BoardLogic(BoardSize);
                 gamePane = new GamePane(board13, gametype);
                 sceneOfTheGame = new Scene(gamePane, mainScene.getWidth(), mainScene.getHeight());
+                sceneOfTheGame.getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                 gamePane.drawFrame();
                 mainStage.setScene(sceneOfTheGame);
                 mainStage.show();
@@ -246,13 +272,20 @@ public class MainStage extends Application {
                     public void handle(KeyEvent event) {
                         if (event.getCode() == KeyCode.ESCAPE) {
                             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                             alert.setTitle("Potwierdznie Wyjścia");
                             alert.setHeaderText("Chcesz wrócić do menu głównego?");
                             alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
+                            ButtonType buttonYes = new ButtonType("Tak");
+                            ButtonType resetBoard = new ButtonType("Zresetuj Grę");
+                            ButtonType buttonNo = new ButtonType("Anuluj");
+                            alert.getButtonTypes().setAll(buttonNo,resetBoard,buttonYes);
                             Optional<ButtonType> result = alert.showAndWait();
-                            if (result.get() == ButtonType.OK) {
-                                gamePane.resetBoard();
+                            if (result.get() == buttonYes) {
                                 Bricks.mainStage.backToMenu();
+                            }
+                            else if(result.get() == resetBoard) {
+                                gamePane.resetBoard();
                             }
                         }
                     }
@@ -260,18 +293,21 @@ public class MainStage extends Application {
             }
             else if (!checkFirstComputerPlayer && checkSecondComputerPlayer) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                 alert.setTitle("Błąd uruchamiania gry");
                 alert.setHeaderText("Pierwszy program grający nie działa.");
                 alert.setContentText("Sprawdź podaną w ustawienaich ścieżkę.");
                 alert.showAndWait();
             } else  if(checkFirstComputerPlayer && !checkSecondComputerPlayer) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                 alert.setTitle("Błąd uruchamiania gry");
                 alert.setHeaderText("Drugi program grający nie działa.");
                 alert.setContentText("Sprawdź podaną w ustawienaich ścieżkę.");
                 alert.showAndWait();
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                 alert.setTitle("Błąd uruchamiania gry");
                 alert.setHeaderText("Oba programy grające nie działają.");
                 alert.setContentText("Sprawdź podane w ustawienaich ścieżki.");
@@ -282,6 +318,7 @@ public class MainStage extends Application {
         HBox optionsButtonHBox = new HBox();
         optionsButtonHBox.setAlignment(Pos.CENTER);
         Button optionsButton = new Button("Opcje");
+        optionsButton.setId("buttonInMainMenu");
         optionsButton.setMaxWidth(300);
         optionsButton.setMaxHeight(180);
         optionsButton.setFont(new Font("Comic Sans MS",22));
@@ -293,6 +330,7 @@ public class MainStage extends Application {
                     isSound, volume, debugMode, playerFirstFullPath, playerSecondFullPath,
                     firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType));
             sceneOfSettings = new Scene(optionsPane,mainScene.getWidth(),mainScene.getHeight());
+            sceneOfSettings.getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
             mainStage.setScene(sceneOfSettings);
             mainStage.show();
         });
@@ -300,6 +338,7 @@ public class MainStage extends Application {
         HBox exitButtonHBox = new HBox();
         exitButtonHBox.setAlignment(Pos.CENTER);
         Button exitButton = new Button("Wyjście");
+        exitButton.setId("buttonInMainMenu");
         exitButton.setMaxWidth(300);
         exitButton.setMaxHeight(180);
         exitButton.setFont(new Font("Comic Sans MS",22));
@@ -314,7 +353,7 @@ public class MainStage extends Application {
             System.exit(0);
         });
 
-        mainGridPane.add(bricksTitleLabel,0,0);
+        mainGridPane.add(bricksTitleHBox,0,0);
         mainGridPane.add(singlePlayerGameButtonHBox,0,1);
         mainGridPane.add(twoPlayersGameButtonHBox,0,2);
         mainGridPane.add(robotWarsButtonHBox,0,3);
@@ -325,17 +364,17 @@ public class MainStage extends Application {
         Label programInfoLabel = new Label();
         programInfoLabel.setMaxWidth(Double.MAX_VALUE);
         programInfoLabel.setAlignment(Pos.CENTER);
-        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.3.0, Ikona: Madebyoliver, www.flaticon.com");
+        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.3.1, Ikona: Madebyoliver, www.flaticon.com");
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
-        mainScene = new Scene(mainBorderPane, 500, 650);
+        mainScene = new Scene(mainBorderPane, 500, 670);
         mainStage = primaryStage;
         mainStage.setTitle("Bricks");
         mainStage.setScene(mainScene);
-       // mainScene.getStylesheets().add(MainStage.class.getResource("../style.css").toExternalForm());
+        mainScene.getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
         mainStage.setMinWidth(500);
-        mainStage.setMinHeight(640);
+        mainStage.setMinHeight(670);
         mainStage.show();
 
 
