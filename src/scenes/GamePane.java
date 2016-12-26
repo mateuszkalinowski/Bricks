@@ -61,9 +61,6 @@ public class GamePane extends Pane {
 
         if(gamemode==2) {
             HBox gamemodeRobotsWarsHBox = new HBox();
-            javafx.scene.control.Label speedLabel = new javafx.scene.control.Label("Prędkość:");
-            speedLabel.setFont(javafx.scene.text.Font.font("Comic Sans MS",12));
-            //gamemodeRobotsWarsHBox.getChildren().add(speedLabel);
 
             speedDownButton = new Button("-");
             gamemodeRobotsWarsHBox.getChildren().add(speedDownButton);
@@ -399,7 +396,6 @@ public class GamePane extends Pane {
             gamemodeRobotsWarsHBox.setAlignment(Pos.CENTER);
             mainGridPane.add(gamemodeRobotsWarsHBox,0,1);
         }
-
         setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
@@ -716,7 +712,8 @@ public class GamePane extends Pane {
             }
         }
         }
-        catch (NullPointerException ignored) {}//JESZCZE NIE ZOSTALA STWORZONA MAINGAMESCENE w MAINSTAGE, NIE PROBLEM
+        catch (NullPointerException ignored) {
+        }//JESZCZE NIE ZOSTALA STWORZONA MAINGAMESCENE w MAINSTAGE, NIE PROBLEM
 
 
     }
