@@ -1,4 +1,4 @@
-package scenes;
+package stages;
 
 import core.Bricks;
 import core.Settings;

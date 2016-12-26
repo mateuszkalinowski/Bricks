@@ -22,7 +22,6 @@ import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import logic.BoardLogic;
 import logic.RobotPlayer;
-import scenes.*;
 
 import java.io.File;
 import java.io.PrintWriter;

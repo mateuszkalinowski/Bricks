@@ -1,4 +1,4 @@
-package scenes;
+package stages;
 
 import core.*;
 import exceptions.InvalidMoveException;
@@ -291,6 +291,7 @@ public class GamePane extends Pane {
                             public void handle(WorkerStateEvent event) {
                                 Optional<ButtonType> result;
                                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                                 alert.setTitle("Koniec Gry");
                                 alert.setContentText("Co chcesz zrobić?");
                                 ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
@@ -323,6 +324,8 @@ public class GamePane extends Pane {
                                 if(isGameFinished) {
                                     Optional<ButtonType> result;
                                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                                    alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                                    alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                                     alert.setTitle("Koniec Gry");
                                     alert.setContentText("Co chcesz zrobić?");
                                     ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
@@ -356,6 +359,7 @@ public class GamePane extends Pane {
                 public void handle(ActionEvent event) {
                     Optional<ButtonType> result;
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                     alert.setTitle("Przejście do \"rozgrywek\"");
                     alert.setContentText("Spowoduje to zakończenie obecnej partii.");
                     alert.setHeaderText("Przejść do \"rozgrywek\"?");
@@ -742,6 +746,7 @@ public class GamePane extends Pane {
         if (!board.anyMoves()) {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
             alert.setTitle("Koniec Gry");
             alert.setContentText("Co chcesz zrobić?");
 
@@ -788,6 +793,7 @@ public class GamePane extends Pane {
         //int selection;
         Optional<ButtonType> result;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+        alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
         alert.setTitle("Koniec Gry");
         alert.setContentText("Co chcesz zrobić?");
         ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
@@ -826,6 +832,7 @@ public class GamePane extends Pane {
         } catch (InvalidMoveException exception) {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
             alert.setTitle("Koniec Gry");
             alert.setContentText("Co chcesz zrobić?");
 
@@ -843,6 +850,7 @@ public class GamePane extends Pane {
         } catch (TimeoutException exception) {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
             alert.setTitle("Koniec Gry");
             alert.setContentText("Co chcesz zrobić?");
 
