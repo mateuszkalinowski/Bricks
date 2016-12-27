@@ -14,18 +14,25 @@ import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
+import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.stage.Stage;
 import logic.*;
 import stages.*;
 
+import javax.jws.soap.SOAPBinding;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
 import java.net.URL;
 import java.util.Optional;
+import java.util.Random;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -50,6 +57,15 @@ public class GamePane extends Pane {
         mainGridPane.getRowConstraints().add(rowWithMenu);
         this.board = board;
         mainGridPane.add(canvas,0,0);
+
+        randomBackground = new int[board.width];
+
+        Random rnd = new Random();
+        boardStyle = rnd.nextInt(3);
+
+        for(int i = 0; i < board.width;i++) {
+            randomBackground[i] = rnd.nextInt(2);
+        }
 
         getChildren().add(mainGridPane);
 
@@ -292,6 +308,8 @@ public class GamePane extends Pane {
                                 Optional<ButtonType> result;
                                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                 alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                                 alert.setTitle("Koniec Gry");
                                 alert.setContentText("Co chcesz zrobić?");
                                 ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
@@ -325,6 +343,8 @@ public class GamePane extends Pane {
                                     Optional<ButtonType> result;
                                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                                     alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                                    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                                    alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                                     alert.setTitle("Koniec Gry");
                                     alert.setContentText("Co chcesz zrobić?");
                                     ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
@@ -359,6 +379,8 @@ public class GamePane extends Pane {
                     Optional<ButtonType> result;
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                     alert.setTitle("Przejście do \"rozgrywek\"");
                     alert.setContentText("Spowoduje to zakończenie obecnej partii.");
                     alert.setHeaderText("Przejść do \"rozgrywek\"?");
@@ -610,6 +632,18 @@ public class GamePane extends Pane {
                 drawFrame();
             }
         });
+
+        firstPlayerImage = new Image(MainStage.class.getResourceAsStream("resources/brick_grey.png"));
+        secondPlayerImage = new Image(MainStage.class.getResourceAsStream("resources/brick_red.png"));
+        normalBackground = new Image(MainStage.class.getResourceAsStream("resources/dirt.png"));
+        grassBackground = new Image(MainStage.class.getResourceAsStream("resources/dirt_grass.png"));
+        sandBackground = new Image(MainStage.class.getResourceAsStream("resources/dirt_sand.png"));
+        snowBackground = new Image(MainStage.class.getResourceAsStream("resources/dirt_snow.png"));
+        skyboxside = new Image(MainStage.class.getResourceAsStream("resources/skybox_side.png"));
+        skyboxtop = new Image(MainStage.class.getResourceAsStream("resources/skybox_top.png"));
+        skyboxsideclouds = new Image(MainStage.class.getResourceAsStream("resources/skybox_sideClouds.png"));
+        skyboxsidehills = new Image(MainStage.class.getResourceAsStream("resources/skybox_sideHills.png"));
+
         widthProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
@@ -626,98 +660,159 @@ public class GamePane extends Pane {
     public void drawFrame(){
         try {
             int[] rozmiar = Bricks.mainStage.getSizeAsArray();
-        int width = rozmiar[0];
-        int height = (int)mainGridPane.getRowConstraints().get(0).getPercentHeight()*rozmiar[1]/100;
-        //canvas = new Canvas();
-        canvas.setHeight(height);
-        canvas.setWidth(width);
-        GraphicsContext gc = canvas.getGraphicsContext2D();
-        gc.clearRect(0,0,width,height);
-        oneFieldWidth = (width - margin * 2.0) / (board.width * 1.0);
-        oneFieldHeight = (height - margin * 2.0) / (board.height * 1.0);
-        gc.setStroke(Color.BLACK);
-        gc.setLineWidth(2);
-        gc.strokeRect(margin, margin, width - margin * 2, height - margin * 2);
-        int inFieldMargin = 0;
-        
-        javafx.scene.paint.Color firstPlayerColor = Bricks.mainStage.firstPlayerColor;
-        
-        javafx.scene.paint.Color secondPlayerColor = Bricks.mainStage.secondPlayerColor;
+            int width = rozmiar[0];
+            int height = (int)mainGridPane.getRowConstraints().get(0).getPercentHeight()*rozmiar[1]/100;
+            //canvas = new Canvas();
+            canvas.setHeight(height);
+            canvas.setWidth(width);
+            GraphicsContext gc = canvas.getGraphicsContext2D();
 
-        if (actualPlayer == 1) {
-            if (isSelected) {
-                gc.setFill(firstPlayerColor);
-                int j = selectedX;
-                int i = selectedY;
-                if (j != board.width - 1 && i != board.height - 1)
-                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin,  (oneFieldHeight) - 2 * inFieldMargin);
-                else if (j == board.width - 1 && i != board.height - 1)
-                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth),  (oneFieldHeight) - 2 * inFieldMargin);
-                else if (j != board.width - 1 && i == board.height - 1)
-                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i *  (oneFieldHeight));
-                else
-                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth), height - margin * 2 - i *  (oneFieldHeight));
-            }
-        }
-        if (actualPlayer == 2) {
-            if (isSelected) {
-                gc.setFill(secondPlayerColor);
-                int j = selectedX;
-                int i = selectedY;
-                if (j != board.width - 1 && i != board.height - 1)
-                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin,  (oneFieldHeight) - 2 * inFieldMargin);
-                else if (j == board.width - 1 && i != board.height - 1)
-                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth),  (oneFieldHeight) - 2 * inFieldMargin);
-                else if (j != board.width - 1 && i == board.height - 1)
-                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i *  (oneFieldHeight));
-                else
-                    gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth), height - margin * 2 - i *  (oneFieldHeight));
-            }
-        }
+            gc.clearRect(0,0,width,height);
+            oneFieldWidth = (width - margin * 2.0) / (board.width * 1.0);
+            oneFieldHeight = (height - margin * 2.0) / (board.height * 1.0);
+            gc.setStroke(Color.BLACK);
+            gc.setLineWidth(2);
+            gc.strokeRect(margin, margin, width - margin * 2, height - margin * 2);
+            int inFieldMargin = 0;
+            javafx.scene.paint.Color firstPlayerColor = Bricks.mainStage.firstPlayerColor;
 
-        for (int i = 0; i < board.height; i++) {
-            for (int j = 0; j < board.width; j++) {
-                if (board.board[j][i] == 1) {
-                    gc.setFill(firstPlayerColor);
-                    if (j != board.width - 1 && i != board.height - 1)
-                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin,  (oneFieldHeight) - 2 * inFieldMargin);
-                    else if (j == board.width - 1 && i != board.height - 1)
-                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth),  (oneFieldHeight) - 2 * inFieldMargin);
-                    else if (j != board.width - 1 && i == board.height - 1)
-                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i *  (oneFieldHeight));
+            javafx.scene.paint.Color secondPlayerColor = Bricks.mainStage.secondPlayerColor;
+
+            for (int i = 0; i < board.height; i++) {
+                for (int j = 0; j < board.width; j++) {
+                    if(i<board.height/2)
+                        gc.drawImage(skyboxtop,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                    else if(i==board.height/2) {
+
+                        if(randomBackground[j]==0)
+                            gc.drawImage(skyboxsideclouds, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                        if(randomBackground[j]==1)
+                            gc.drawImage(skyboxsidehills, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                    }
+                    else if(i==board.height/2+1) {
+                        if(boardStyle==0)
+                            gc.drawImage(grassBackground,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                        if(boardStyle==1)
+                            gc.drawImage(sandBackground,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                        if(boardStyle==2)
+                            gc.drawImage(snowBackground,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                    }
                     else
-                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth), height - margin * 2 - i *  (oneFieldHeight));
-                }
-                if (board.board[j][i] == 2) {
-                    gc.setFill(secondPlayerColor);
-                    if (j != board.width - 1 && i != board.height - 1)
-                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin,  (oneFieldHeight) - 2 * inFieldMargin);
-                    else if (j == board.width - 1 && i != board.height - 1)
-                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth),  (oneFieldHeight) - 2 * inFieldMargin);
-                    else if (j != board.width - 1 && i == board.height - 1)
-                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin,  (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i *  (oneFieldHeight));
-                    else
-                        gc.fillRect(j *  (oneFieldWidth) + margin + inFieldMargin, i *  (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j *  (oneFieldWidth), height - margin * 2 - i *  (oneFieldHeight));
+                        gc.drawImage(normalBackground,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+
+
+
+                    if (board.board[j][i] == 1) {
+                            gc.drawImage(firstPlayerImage,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                    }
+                    if (board.board[j][i] == 2) {
+                            gc.drawImage(secondPlayerImage,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                    }
                 }
             }
-        }
-        for (int i = 0; i < board.height; i++) {
-            if (i > 0) {
-                gc.setStroke(javafx.scene.paint.Color.BLACK);
-                gc.strokeLine(margin, margin + i * oneFieldHeight, width - margin, margin + i * oneFieldHeight);
+            if (actualPlayer == 1) {
+                if (isSelected) {
+                    //gc.setFill(firstPlayerColor);
+                    int j = selectedX;
+                    int i = selectedY;
+                    gc.drawImage(firstPlayerImage,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                }
             }
-
-            for (int j = 0; j < board.width; j++) {
-                if (j > 0) {
+            if (actualPlayer == 2) {
+                if (isSelected) {
+                    //gc.setFill(secondPlayerColor);
+                    int j = selectedX;
+                    int i = selectedY;
+                        gc.drawImage(secondPlayerImage,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                }
+            }
+            for (int i = 0; i < board.height; i++) {
+                if (i > 0) {
                     gc.setStroke(javafx.scene.paint.Color.BLACK);
-                    gc.strokeLine(margin + j * oneFieldWidth, margin, margin + j * oneFieldWidth, height - margin);
+                    gc.strokeLine(margin, margin + i * oneFieldHeight, width - margin, margin + i * oneFieldHeight);
+                }
+
+                for (int j = 0; j < board.width; j++) {
+                    if (j > 0) {
+                        gc.setStroke(javafx.scene.paint.Color.BLACK);
+                        gc.strokeLine(margin + j * oneFieldWidth, margin, margin + j * oneFieldWidth, height - margin);
+                    }
                 }
             }
-        }
+                /*
+                if (actualPlayer == 1) {
+                    if (isSelected) {
+                        gc.setFill(firstPlayerColor);
+                        int j = selectedX;
+                        int i = selectedY;
+                        if (j != board.width - 1 && i != board.height - 1)
+                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                        else if (j == board.width - 1 && i != board.height - 1)
+                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), (oneFieldHeight) - 2 * inFieldMargin);
+                        else if (j != board.width - 1 && i == board.height - 1)
+                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i * (oneFieldHeight));
+                        else
+                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), height - margin * 2 - i * (oneFieldHeight));
+                    }
+                }
+                if (actualPlayer == 2) {
+                    if (isSelected) {
+                        gc.setFill(secondPlayerColor);
+                        int j = selectedX;
+                        int i = selectedY;
+                        if (j != board.width - 1 && i != board.height - 1)
+                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                        else if (j == board.width - 1 && i != board.height - 1)
+                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), (oneFieldHeight) - 2 * inFieldMargin);
+                        else if (j != board.width - 1 && i == board.height - 1)
+                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i * (oneFieldHeight));
+                        else
+                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), height - margin * 2 - i * (oneFieldHeight));
+                    }
+                }
+
+                for (int i = 0; i < board.height; i++) {
+                    for (int j = 0; j < board.width; j++) {
+                        if (board.board[j][i] == 1) {
+                            gc.setFill(firstPlayerColor);
+                            if (j != board.width - 1 && i != board.height - 1)
+                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                            else if (j == board.width - 1 && i != board.height - 1)
+                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), (oneFieldHeight) - 2 * inFieldMargin);
+                            else if (j != board.width - 1 && i == board.height - 1)
+                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i * (oneFieldHeight));
+                            else
+                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), height - margin * 2 - i * (oneFieldHeight));
+                        }
+                        if (board.board[j][i] == 2) {
+                            gc.setFill(secondPlayerColor);
+                            if (j != board.width - 1 && i != board.height - 1)
+                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                            else if (j == board.width - 1 && i != board.height - 1)
+                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), (oneFieldHeight) - 2 * inFieldMargin);
+                            else if (j != board.width - 1 && i == board.height - 1)
+                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i * (oneFieldHeight));
+                            else
+                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), height - margin * 2 - i * (oneFieldHeight));
+                        }
+                    }
+                }
+                for (int i = 0; i < board.height; i++) {
+                    if (i > 0) {
+                        gc.setStroke(javafx.scene.paint.Color.BLACK);
+                        gc.strokeLine(margin, margin + i * oneFieldHeight, width - margin, margin + i * oneFieldHeight);
+                    }
+
+                    for (int j = 0; j < board.width; j++) {
+                        if (j > 0) {
+                            gc.setStroke(javafx.scene.paint.Color.BLACK);
+                            gc.strokeLine(margin + j * oneFieldWidth, margin, margin + j * oneFieldWidth, height - margin);
+                        }
+                    }
+                }*/
         }
         catch (NullPointerException ignored) {
         }//JESZCZE NIE ZOSTALA STWORZONA MAINGAMESCENE w MAINSTAGE, NIE PROBLEM
-
 
     }
     Button stop;
@@ -746,6 +841,8 @@ public class GamePane extends Pane {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
             alert.setTitle("Koniec Gry");
             alert.setContentText("Co chcesz zrobić?");
 
@@ -793,6 +890,8 @@ public class GamePane extends Pane {
         Optional<ButtonType> result;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+        alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
         alert.setTitle("Koniec Gry");
         alert.setContentText("Co chcesz zrobić?");
         ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
@@ -832,6 +931,8 @@ public class GamePane extends Pane {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
             alert.setTitle("Koniec Gry");
             alert.setContentText("Co chcesz zrobić?");
 
@@ -850,6 +951,8 @@ public class GamePane extends Pane {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
             alert.setTitle("Koniec Gry");
             alert.setContentText("Co chcesz zrobić?");
 
@@ -977,5 +1080,20 @@ public class GamePane extends Pane {
     private Button gamesButton;
 
     TextField speedTextField;
+
+    private int randomBackground[];
+
+    private int boardStyle;
+
+    Image firstPlayerImage;
+    Image secondPlayerImage;
+    Image normalBackground;
+    Image grassBackground;
+    Image sandBackground;
+    Image snowBackground;
+    Image skyboxside;
+    Image skyboxtop;
+    Image skyboxsideclouds;
+    Image skyboxsidehills;
 
 }

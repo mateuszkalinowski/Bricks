@@ -5,7 +5,7 @@ package core;
  * Project Bricks
  */
 public class Settings {
-    public Settings(int BoardSize, javafx.scene.paint.Color playerFirstColor, javafx.scene.paint.Color playerSecondColor, boolean isSound, int volume, boolean debugMode, String path1, String path2, int programTypeFirst, int programTypeSecond, String runCommandFirst, String runCommandSecond, int computerPlayerType) {
+    public Settings(int BoardSize, javafx.scene.paint.Color playerFirstColor, javafx.scene.paint.Color playerSecondColor, boolean isSound, int volume, boolean debugMode, String path1, String path2, int programTypeFirst, int programTypeSecond, String runCommandFirst, String runCommandSecond, int computerPlayerType,int theme) {
         this.BoardSize = BoardSize;
         this.playerFirstColor = playerFirstColor;
         this.playerSecondColor = playerSecondColor;
@@ -19,6 +19,7 @@ public class Settings {
         firstPlayerRunCommand = runCommandFirst;
         secondPlayerRunCommand = runCommandSecond;
         this.computerPlayerType = computerPlayerType;
+        this.theme = theme;
     }
 
     public String getFirstComputerPlayerPath() {
@@ -73,6 +74,8 @@ public class Settings {
         return computerPlayerType;
     }
 
+    public int getTheme() {return theme;}
+
     private boolean isSound;
     private boolean debugMode;
 
@@ -89,4 +92,6 @@ public class Settings {
     private String secondComputerPlayerPath;
     private String firstPlayerRunCommand;
     private String secondPlayerRunCommand;
+
+    private int theme;
 }

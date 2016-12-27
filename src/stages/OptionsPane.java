@@ -9,12 +9,14 @@ import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 
 import java.io.File;
 import java.io.IOException;
@@ -43,6 +45,8 @@ public class OptionsPane extends Pane {
         playerSecondFullPath = settings.getSecondComputerPlayerPath();
         firstPlayerRunCommand = settings.getFirstPlayerRunCommand();
         secondPlayerRunCommand = settings.getSecondPlayerRunCommand();
+
+        theme= settings.getTheme();
 
 
         GridPane mainGridPane = new GridPane();
@@ -131,12 +135,19 @@ public class OptionsPane extends Pane {
             }
         });
 
-        Label soundSettingsLabel = new Label("Dźwięk:");
-        soundSettingsLabel.setFont(Font.font("Comic Sans MS",20));
+        Label soundSettingsLabel = new Label("Motyw Graficzny:  ");
+        soundSettingsLabel.setFont(Font.font("Comic Sans MS",16));
         soundSettingsLabel.setPrefWidth(Double.MAX_VALUE);
-        soundSettingsLabel.setAlignment(Pos.CENTER);
+        soundSettingsLabel.setAlignment(Pos.CENTER_RIGHT);
 
-        Label volumeSettingLabel = new Label("Głośność:  ");
+        ComboBox<String> chooseTheme = new ComboBox<>();
+
+        chooseTheme.getItems().add("Standardowy");
+        chooseTheme.getItems().add("\"Minecraft\"");
+
+        chooseTheme.getSelectionModel().select(theme);
+
+        Label volumeSettingLabel = new Label("Głośność Dźwięków Gry:  ");
         volumeSettingLabel.setFont(Font.font("Comic Sans MS",16));
         volumeSettingLabel.setPrefWidth(Double.MAX_VALUE);
         volumeSettingLabel.setAlignment(Pos.CENTER_RIGHT);
@@ -401,7 +412,8 @@ public class OptionsPane extends Pane {
         mainGridPane.add(robotWarsLabel,0,6,2,1);
         mainGridPane.add(volumeSlider,1,5);
         mainGridPane.add(volumeSettingLabel,0,5);
-        mainGridPane.add(soundSettingsLabel,0,4,2,1);
+        mainGridPane.add(chooseTheme,1,4);
+        mainGridPane.add(soundSettingsLabel,0,4);
         mainGridPane.add(boardSizeLabel,0,1);
         mainGridPane.add(boardSizeComboBoxHBox,1,1);
         mainGridPane.add(firstPlayerColorLabel,0,2);
@@ -426,6 +438,8 @@ public class OptionsPane extends Pane {
                 if(event.getCode()== KeyCode.ESCAPE) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                     alert.setTitle("Potwierdznie Wyjścia");
                     alert.setHeaderText("Chcesz wyjść z ustawień?");
                     alert.setContentText("Zmiany nie zostaną zapisane.");
@@ -458,6 +472,8 @@ public class OptionsPane extends Pane {
 
     //private Button defaultSettingsButton;
     private Button saveAndExitButton;
+
+    private int theme;
 
     private int firstPlayerProgramType;
     private int secondPlayerProgramType;
