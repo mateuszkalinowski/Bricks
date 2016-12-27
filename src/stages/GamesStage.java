@@ -353,7 +353,7 @@ public class GamesStage extends Application {
         gamesStage.setTitle("Rozgrywki");
         gamesStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
 
-        gamesScene.getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+        gamesScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
 
 
         gamesStage.setOnCloseRequest(new EventHandler<WindowEvent>() {

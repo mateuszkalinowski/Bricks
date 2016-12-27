@@ -46,7 +46,7 @@ public class Bricks extends Application {
                     createCfg.println("secondPlayerProgramType=1");
                     createCfg.println("firstPlayerRunCommand=");
                     createCfg.println("secondPlayerRunCommand=");
-                    createCfg.println("theme=1");
+                    createCfg.println("theme=0");
                     createCfg.close();
                     loadDefaultSettings();
                 } else {
@@ -173,7 +173,7 @@ public class Bricks extends Application {
 
         computerPlayerType = 0;
 
-         theme = 1;
+        theme = 0;
 
     }
 }
