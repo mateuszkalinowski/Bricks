@@ -26,5 +26,7 @@ Dozwolone języki programowania: Każdy, obsługujący standardowe wejście i wy
 podać mu instrukcję jak uruchomić program o danym rozszerzeniu).
 #### Uwaga  
 Wysyłanie tekstu przez programy grające musi odbywać się "jednym ciągiem", przez komendę typu "println" (ze znakiem nowej linii na końcu). Wysyłanie kolejnych liczb po jednej, nawet jeśli wszytkie zmieszczą się w terminie jednej sekundy i nawet, jeśli dodawmy na końcu samodzielnie znak nowej linii, uznane będzie za niezgodne z protokołem i program sędziujący uzna to za ruch niepoprawny.
-##Przyszłe zmiany
-Możliwość masowego uruchamiania gier (użytkownik podaje ile gier chce uruchomić, podaje rozmiary plansz). Program wyświetla ile gier wygrał który program. (Skrócony opis, opcji będzie nieco więcej).
+##Zmiany (od wersji pierwotenej)  
+-Naprawa kilkunastu błędów (w tym już niemal całkowita poprawa w kwestiach kompatybilności z protokołem)  
+-Dodanie partii automatycznych (rozgrywek), wraz z zapisywaniem ich wyników  
+-Zmiana wyglądu programu, przepisanie do javyfx, dodanie alternatywnego stylu graficznego plansz
