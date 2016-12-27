@@ -425,6 +425,7 @@ public class OptionsPane extends Pane {
             public void handle(KeyEvent event) {
                 if(event.getCode()== KeyCode.ESCAPE) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
                     alert.setTitle("Potwierdznie Wyjścia");
                     alert.setHeaderText("Chcesz wyjść z ustawień?");
                     alert.setContentText("Zmiany nie zostaną zapisane.");
