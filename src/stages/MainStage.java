@@ -20,6 +20,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
 import logic.BoardLogic;
 import logic.RobotPlayer;
 
@@ -131,7 +132,9 @@ public class MainStage extends Application {
                     if (event12.getCode() == KeyCode.ESCAPE) {
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
-                        alert.setTitle("Potwierdznie Wyjścia");
+                        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                        alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                        alert.setTitle("Potwierdzenie Wyjścia");
                         alert.setHeaderText("Chcesz wrócić do menu głównego?");
                         alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
                         ButtonType buttonYes = new ButtonType("Tak");
@@ -181,7 +184,9 @@ public class MainStage extends Application {
                 if(event1.getCode()== KeyCode.ESCAPE) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
-                    alert.setTitle("Potwierdznie Wyjścia");
+                    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                    alert.setTitle("Potwierdzenie Wyjścia");
                     alert.setHeaderText("Chcesz wrócić do menu głównego?");
                     alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
                     ButtonType buttonYes = new ButtonType("Tak");
@@ -273,7 +278,9 @@ public class MainStage extends Application {
                         if (event.getCode() == KeyCode.ESCAPE) {
                             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                             alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
-                            alert.setTitle("Potwierdznie Wyjścia");
+                            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                            alert.setTitle("Potwierdzenie Wyjścia");
                             alert.setHeaderText("Chcesz wrócić do menu głównego?");
                             alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
                             ButtonType buttonYes = new ButtonType("Tak");
@@ -294,6 +301,8 @@ public class MainStage extends Application {
             else if (!checkFirstComputerPlayer && checkSecondComputerPlayer) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                 alert.setTitle("Błąd uruchamiania gry");
                 alert.setHeaderText("Pierwszy program grający nie działa.");
                 alert.setContentText("Sprawdź podaną w ustawienaich ścieżkę.");
@@ -301,6 +310,8 @@ public class MainStage extends Application {
             } else  if(checkFirstComputerPlayer && !checkSecondComputerPlayer) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                 alert.setTitle("Błąd uruchamiania gry");
                 alert.setHeaderText("Drugi program grający nie działa.");
                 alert.setContentText("Sprawdź podaną w ustawienaich ścieżkę.");
@@ -308,6 +319,8 @@ public class MainStage extends Application {
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                 alert.setTitle("Błąd uruchamiania gry");
                 alert.setHeaderText("Oba programy grające nie działają.");
                 alert.setContentText("Sprawdź podane w ustawienaich ścieżki.");
@@ -328,7 +341,7 @@ public class MainStage extends Application {
         optionsButton.setOnAction(event -> {
             optionsPane = new OptionsPane(mainScene.getWidth(),mainScene.getHeight(),new Settings(BoardSize, firstPlayerColor, secondPlayerColor,
                     isSound, volume, debugMode, playerFirstFullPath, playerSecondFullPath,
-                    firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType));
+                    firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType,theme));
             sceneOfSettings = new Scene(optionsPane,mainScene.getWidth(),mainScene.getHeight());
             sceneOfSettings.getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
             mainStage.setScene(sceneOfSettings);
@@ -364,7 +377,7 @@ public class MainStage extends Application {
         Label programInfoLabel = new Label();
         programInfoLabel.setMaxWidth(Double.MAX_VALUE);
         programInfoLabel.setAlignment(Pos.CENTER);
-        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.3.1, Ikona: Madebyoliver, www.flaticon.com");
+        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.4.0, Ikona: Madebyoliver, www.flaticon.com");
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
@@ -385,7 +398,7 @@ public class MainStage extends Application {
                 Bricks.secondRobotPlayer.killRobot();
             System.exit(0);
         });
-        mainStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("brick-wall.png")));
+        mainStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
 
     }
     public int[] getSizeAsArray() throws NullPointerException{
@@ -406,7 +419,7 @@ public class MainStage extends Application {
     }
     public void setSettings(int initialBoardSize, Color firstPlayerColor, Color secondPlayerColor, boolean isSound, int volume, boolean debugModeInitialize, String firstPlayerPath, String secondPlayerPath,
                                   int firstPlayerProgramTypeArgument, int secondPlayerProgramTypeArgument,
-                                  String firstPlayerRunCommandArgument, String secondPlayerRunCommandArgument, int computerPlayerType) {
+                                  String firstPlayerRunCommandArgument, String secondPlayerRunCommandArgument, int computerPlayerType,int theme) {
 
         this.BoardSize = initialBoardSize;
         this.firstPlayerColor = firstPlayerColor;
@@ -421,6 +434,7 @@ public class MainStage extends Application {
         this.firstPlayerRunCommand = firstPlayerRunCommandArgument;
         this.secondPlayerRunCommand = secondPlayerRunCommandArgument;
         this.computerPlayerType = computerPlayerType;
+        this.theme = theme;
 
         if (playerFirstFullPath.length() > 7) {
             int i = playerFirstFullPath.length() - 1;
@@ -461,6 +475,7 @@ public class MainStage extends Application {
             createCfg.println("firstPlayerRunCommand=" + firstPlayerRunCommand);
             createCfg.println("secondPlayerRunCommand=" + secondPlayerRunCommand);
             createCfg.println("computerPlayerType=" + computerPlayerType);
+            createCfg.println("theme=" + theme);
             createCfg.close();
         } catch (Exception ignored) {
 
@@ -512,9 +527,11 @@ public class MainStage extends Application {
     private String playerSecondFullPath = "";
     private String pathToPlayerOne = "";
     private String pathToPlayerTwo = "";
-    private String playerFirstProgramName = "";
-    private String playerSecondProgramName = "";
+    public String playerFirstProgramName = "";
+    public String playerSecondProgramName = "";
     private String firstPlayerRunCommand;
     private String secondPlayerRunCommand;
+
+    public int theme;
 
 }

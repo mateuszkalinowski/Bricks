@@ -19,7 +19,7 @@ public class Bricks extends Application {
         mainStage = new MainStage();
         mainStage.setSettings(initialBoardSize, firstPlayerColor, secondPlayerColor, isSound, volume, debugMode,
                           firstPlayerPath, secondPlayerPath, firstPlayerProgramType, secondPlayerProgramType,
-                          firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType);
+                          firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType, theme);
         mainStage.start(primaryStage);
     }
     @SuppressWarnings ("ResultOfMethodCallIgnored")
@@ -46,6 +46,7 @@ public class Bricks extends Application {
                     createCfg.println("secondPlayerProgramType=1");
                     createCfg.println("firstPlayerRunCommand=");
                     createCfg.println("secondPlayerRunCommand=");
+                    createCfg.println("theme=1");
                     createCfg.close();
                     loadDefaultSettings();
                 } else {
@@ -111,6 +112,12 @@ public class Bricks extends Application {
                         } else {
                             computerPlayerType = 0;
                         }
+                        line = in.nextLine();
+                        splittedLine = line.split("=");
+                        if(splittedLine[1].equals("1"))
+                            theme=1;
+                        else
+                            theme=0;
                     } catch (Exception ignored) {
                         loadDefaultSettings();
                     }
@@ -146,6 +153,8 @@ public class Bricks extends Application {
 
     public static MainStage mainStage;
 
+    private static int theme;
+
 
     private static void loadDefaultSettings() {
         initialBoardSize = 5;
@@ -164,6 +173,7 @@ public class Bricks extends Application {
 
         computerPlayerType = 0;
 
+         theme = 1;
 
     }
 }
