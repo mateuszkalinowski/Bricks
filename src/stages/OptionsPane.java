@@ -147,6 +147,13 @@ public class OptionsPane extends Pane {
 
         chooseTheme.getSelectionModel().select(theme);
 
+        chooseTheme.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
+                theme=chooseTheme.getSelectionModel().getSelectedIndex();
+            }
+        });
+
         Label volumeSettingLabel = new Label("Głośność Dźwięków Gry:  ");
         volumeSettingLabel.setFont(Font.font("Comic Sans MS",16));
         volumeSettingLabel.setPrefWidth(Double.MAX_VALUE);
@@ -428,7 +435,7 @@ public class OptionsPane extends Pane {
         saveAndExitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                Bricks.mainStage.setSettings(BoardSize,firstPlayerColor,secondPlayerColor,isSound,volume,debugMode,playerFirstFullPath,playerSecondFullPath,firstPlayerProgramType,secondPlayerProgramType,firstPlayerRunCommand,secondPlayerRunCommand,computerPlayerType);
+                Bricks.mainStage.setSettings(BoardSize,firstPlayerColor,secondPlayerColor,isSound,volume,debugMode,playerFirstFullPath,playerSecondFullPath,firstPlayerProgramType,secondPlayerProgramType,firstPlayerRunCommand,secondPlayerRunCommand,computerPlayerType,theme);
                 Bricks.mainStage.backToMenu();
             }
         });
@@ -473,8 +480,6 @@ public class OptionsPane extends Pane {
     //private Button defaultSettingsButton;
     private Button saveAndExitButton;
 
-    private int theme;
-
     private int firstPlayerProgramType;
     private int secondPlayerProgramType;
     public int volume;
@@ -502,5 +507,7 @@ public class OptionsPane extends Pane {
 
     TextArea firstProgramRunCommandTextArea;
     TextArea secondProgramRunCommandTextArea;
+
+    private int theme;
 
 }

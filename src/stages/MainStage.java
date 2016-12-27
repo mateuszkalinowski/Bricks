@@ -341,7 +341,7 @@ public class MainStage extends Application {
         optionsButton.setOnAction(event -> {
             optionsPane = new OptionsPane(mainScene.getWidth(),mainScene.getHeight(),new Settings(BoardSize, firstPlayerColor, secondPlayerColor,
                     isSound, volume, debugMode, playerFirstFullPath, playerSecondFullPath,
-                    firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType));
+                    firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType,theme));
             sceneOfSettings = new Scene(optionsPane,mainScene.getWidth(),mainScene.getHeight());
             sceneOfSettings.getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
             mainStage.setScene(sceneOfSettings);
@@ -419,7 +419,7 @@ public class MainStage extends Application {
     }
     public void setSettings(int initialBoardSize, Color firstPlayerColor, Color secondPlayerColor, boolean isSound, int volume, boolean debugModeInitialize, String firstPlayerPath, String secondPlayerPath,
                                   int firstPlayerProgramTypeArgument, int secondPlayerProgramTypeArgument,
-                                  String firstPlayerRunCommandArgument, String secondPlayerRunCommandArgument, int computerPlayerType) {
+                                  String firstPlayerRunCommandArgument, String secondPlayerRunCommandArgument, int computerPlayerType,int theme) {
 
         this.BoardSize = initialBoardSize;
         this.firstPlayerColor = firstPlayerColor;
@@ -434,6 +434,7 @@ public class MainStage extends Application {
         this.firstPlayerRunCommand = firstPlayerRunCommandArgument;
         this.secondPlayerRunCommand = secondPlayerRunCommandArgument;
         this.computerPlayerType = computerPlayerType;
+        this.theme = theme;
 
         if (playerFirstFullPath.length() > 7) {
             int i = playerFirstFullPath.length() - 1;
@@ -474,6 +475,7 @@ public class MainStage extends Application {
             createCfg.println("firstPlayerRunCommand=" + firstPlayerRunCommand);
             createCfg.println("secondPlayerRunCommand=" + secondPlayerRunCommand);
             createCfg.println("computerPlayerType=" + computerPlayerType);
+            createCfg.println("theme=" + theme);
             createCfg.close();
         } catch (Exception ignored) {
 
@@ -529,5 +531,7 @@ public class MainStage extends Application {
     public String playerSecondProgramName = "";
     private String firstPlayerRunCommand;
     private String secondPlayerRunCommand;
+
+    public int theme;
 
 }

@@ -678,68 +678,69 @@ public class GamePane extends Pane {
 
             javafx.scene.paint.Color secondPlayerColor = Bricks.mainStage.secondPlayerColor;
 
-            for (int i = 0; i < board.height; i++) {
-                for (int j = 0; j < board.width; j++) {
-                    if(i<board.height/2)
-                        gc.drawImage(skyboxtop,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
-                    else if(i==board.height/2) {
+            if(Bricks.mainStage.theme==1) {
 
-                        if(randomBackground[j]==0)
-                            gc.drawImage(skyboxsideclouds, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
-                        if(randomBackground[j]==1)
-                            gc.drawImage(skyboxsidehills, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
-                    }
-                    else if(i==board.height/2+1) {
-                        if(boardStyle==0)
-                            gc.drawImage(grassBackground,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
-                        if(boardStyle==1)
-                            gc.drawImage(sandBackground,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
-                        if(boardStyle==2)
-                            gc.drawImage(snowBackground,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
-                    }
-                    else
-                        gc.drawImage(normalBackground,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                for (int i = 0; i < board.height; i++) {
+                    for (int j = 0; j < board.width; j++) {
+                        if (i < board.height / 2)
+                            gc.drawImage(skyboxtop, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                        else if (i == board.height / 2) {
+
+                            if (randomBackground[j] == 0)
+                                gc.drawImage(skyboxsideclouds, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                            if (randomBackground[j] == 1)
+                                gc.drawImage(skyboxsidehills, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                        } else if (i == board.height / 2 + 1) {
+                            if (boardStyle == 0)
+                                gc.drawImage(grassBackground, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                            if (boardStyle == 1)
+                                gc.drawImage(sandBackground, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                            if (boardStyle == 2)
+                                gc.drawImage(snowBackground, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                        } else
+                            gc.drawImage(normalBackground, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
 
 
-
-                    if (board.board[j][i] == 1) {
-                            gc.drawImage(firstPlayerImage,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
-                    }
-                    if (board.board[j][i] == 2) {
-                            gc.drawImage(secondPlayerImage,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                        if (board.board[j][i] == 1) {
+                            gc.drawImage(firstPlayerImage, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                        }
+                        if (board.board[j][i] == 2) {
+                            gc.drawImage(secondPlayerImage, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                        }
                     }
                 }
-            }
-            if (actualPlayer == 1) {
-                if (isSelected) {
-                    //gc.setFill(firstPlayerColor);
-                    int j = selectedX;
-                    int i = selectedY;
-                    gc.drawImage(firstPlayerImage,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                if (actualPlayer == 1) {
+                    if (isSelected) {
+                        //gc.setFill(firstPlayerColor);
+                        int j = selectedX;
+                        int i = selectedY;
+                        gc.drawImage(firstPlayerImage, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                    }
                 }
-            }
-            if (actualPlayer == 2) {
-                if (isSelected) {
-                    //gc.setFill(secondPlayerColor);
-                    int j = selectedX;
-                    int i = selectedY;
-                        gc.drawImage(secondPlayerImage,j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                if (actualPlayer == 2) {
+                    if (isSelected) {
+                        //gc.setFill(secondPlayerColor);
+                        int j = selectedX;
+                        int i = selectedY;
+                        gc.drawImage(secondPlayerImage, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                    }
                 }
-            }
-            for (int i = 0; i < board.height; i++) {
-                if (i > 0) {
-                    gc.setStroke(javafx.scene.paint.Color.BLACK);
-                    gc.strokeLine(margin, margin + i * oneFieldHeight, width - margin, margin + i * oneFieldHeight);
-                }
-
-                for (int j = 0; j < board.width; j++) {
-                    if (j > 0) {
+                for (int i = 0; i < board.height; i++) {
+                    if (i > 0) {
                         gc.setStroke(javafx.scene.paint.Color.BLACK);
-                        gc.strokeLine(margin + j * oneFieldWidth, margin, margin + j * oneFieldWidth, height - margin);
+                        gc.strokeLine(margin, margin + i * oneFieldHeight, width - margin, margin + i * oneFieldHeight);
+                    }
+
+                    for (int j = 0; j < board.width; j++) {
+                        if (j > 0) {
+                            gc.setStroke(javafx.scene.paint.Color.BLACK);
+                            gc.strokeLine(margin + j * oneFieldWidth, margin, margin + j * oneFieldWidth, height - margin);
+                        }
                     }
                 }
             }
-                /*
+                if(Bricks.mainStage.theme==0) {
+
                 if (actualPlayer == 1) {
                     if (isSelected) {
                         gc.setFill(firstPlayerColor);
@@ -809,7 +810,8 @@ public class GamePane extends Pane {
                             gc.strokeLine(margin + j * oneFieldWidth, margin, margin + j * oneFieldWidth, height - margin);
                         }
                     }
-                }*/
+                }
+                }
         }
         catch (NullPointerException ignored) {
         }//JESZCZE NIE ZOSTALA STWORZONA MAINGAMESCENE w MAINSTAGE, NIE PROBLEM
