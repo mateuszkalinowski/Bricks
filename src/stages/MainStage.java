@@ -124,14 +124,14 @@ public class MainStage extends Application {
                 BoardLogic board1 = new BoardLogic(BoardSize);
                 gamePane = new GamePane(board1, gametype);
                 sceneOfTheGame = new Scene(gamePane, mainScene.getWidth(), mainScene.getHeight());
-                sceneOfTheGame.getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                sceneOfTheGame.getStylesheets().add(selectedTheme);
                 gamePane.drawFrame();
                 mainStage.setScene(sceneOfTheGame);
                 mainStage.show();
                 sceneOfTheGame.setOnKeyReleased(event12 -> {
                     if (event12.getCode() == KeyCode.ESCAPE) {
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                        alert.getDialogPane().getStylesheets().add(selectedTheme);
                         Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
                         alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                         alert.setTitle("Potwierdzenie Wyjścia");
@@ -176,14 +176,14 @@ public class MainStage extends Application {
             BoardLogic board12 = new BoardLogic(BoardSize);
             gamePane = new GamePane(board12,gametype);
             sceneOfTheGame = new Scene(gamePane,mainScene.getWidth(),mainScene.getHeight());
-            sceneOfTheGame.getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+            sceneOfTheGame.getStylesheets().add(selectedTheme);
             gamePane.drawFrame();
             mainStage.setScene(sceneOfTheGame);
             mainStage.show();
             sceneOfTheGame.setOnKeyReleased(event1 -> {
                 if(event1.getCode()== KeyCode.ESCAPE) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                    alert.getDialogPane().getStylesheets().add(selectedTheme);
                     Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
                     alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                     alert.setTitle("Potwierdzenie Wyjścia");
@@ -268,7 +268,7 @@ public class MainStage extends Application {
                 BoardLogic board13 = new BoardLogic(BoardSize);
                 gamePane = new GamePane(board13, gametype);
                 sceneOfTheGame = new Scene(gamePane, mainScene.getWidth(), mainScene.getHeight());
-                sceneOfTheGame.getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                sceneOfTheGame.getStylesheets().add(selectedTheme);
                 gamePane.drawFrame();
                 mainStage.setScene(sceneOfTheGame);
                 mainStage.show();
@@ -277,7 +277,7 @@ public class MainStage extends Application {
                     public void handle(KeyEvent event) {
                         if (event.getCode() == KeyCode.ESCAPE) {
                             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                            alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                            alert.getDialogPane().getStylesheets().add(selectedTheme);
                             Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
                             alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                             alert.setTitle("Potwierdzenie Wyjścia");
@@ -300,7 +300,7 @@ public class MainStage extends Application {
             }
             else if (!checkFirstComputerPlayer && checkSecondComputerPlayer) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                alert.getDialogPane().getStylesheets().add(selectedTheme);
                 Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
                 alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                 alert.setTitle("Błąd uruchamiania gry");
@@ -309,7 +309,7 @@ public class MainStage extends Application {
                 alert.showAndWait();
             } else  if(checkFirstComputerPlayer && !checkSecondComputerPlayer) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                alert.getDialogPane().getStylesheets().add(selectedTheme);
                 Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
                 alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                 alert.setTitle("Błąd uruchamiania gry");
@@ -318,7 +318,7 @@ public class MainStage extends Application {
                 alert.showAndWait();
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                alert.getDialogPane().getStylesheets().add(selectedTheme);
                 Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
                 alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                 alert.setTitle("Błąd uruchamiania gry");
@@ -343,7 +343,7 @@ public class MainStage extends Application {
                     isSound, volume, debugMode, playerFirstFullPath, playerSecondFullPath,
                     firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType,theme));
             sceneOfSettings = new Scene(optionsPane,mainScene.getWidth(),mainScene.getHeight());
-            sceneOfSettings.getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+            sceneOfSettings.getStylesheets().add(selectedTheme);
             mainStage.setScene(sceneOfSettings);
             mainStage.show();
         });
@@ -385,9 +385,12 @@ public class MainStage extends Application {
         mainStage = primaryStage;
         mainStage.setTitle("Bricks");
         mainStage.setScene(mainScene);
-        mainScene.getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+        if(theme==0)
+            mainScene.getStylesheets().add(selectedTheme);
+        if(theme==1)
+            mainScene.getStylesheets().add(MainStage.class.getResource("style2.css").toExternalForm());
         mainStage.setMinWidth(500);
-        mainStage.setMinHeight(670);
+        mainStage.setMinHeight(710);
         mainStage.show();
 
 
@@ -456,6 +459,24 @@ public class MainStage extends Application {
             pathToPlayerTwo = playerSecondFullPath.substring(0, i);
             playerSecondProgramName = playerSecondFullPath.substring(i + 1, playerSecondFullPath.length());
             playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
+        }
+        if(mainScene!=null) {
+            mainScene.getStylesheets().removeAll(classicTheme,minecraftTheme);
+           if (theme == 0) {
+               mainScene.getStylesheets().add(classicTheme);
+               selectedTheme = classicTheme;
+           }
+            if (theme == 1) {
+                mainScene.getStylesheets().add(minecraftTheme);
+                selectedTheme = minecraftTheme;
+            }
+        }
+        else {
+            if(theme == 0) {
+                selectedTheme = classicTheme;
+            }
+            if(theme == 1)
+                selectedTheme = minecraftTheme;
         }
         exportSettings();
     }
@@ -533,5 +554,9 @@ public class MainStage extends Application {
     private String secondPlayerRunCommand;
 
     public int theme;
+
+    public String classicTheme = MainStage.class.getResource("style.css").toExternalForm();
+    public String minecraftTheme = MainStage.class.getResource("style2.css").toExternalForm();
+    public String selectedTheme;
 
 }

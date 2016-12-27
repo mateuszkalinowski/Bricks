@@ -444,7 +444,7 @@ public class OptionsPane extends Pane {
             public void handle(KeyEvent event) {
                 if(event.getCode()== KeyCode.ESCAPE) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                    alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
                     Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
                     alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                     alert.setTitle("Potwierdznie Wyjścia");

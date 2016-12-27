@@ -58,12 +58,12 @@ public class GamePane extends Pane {
         this.board = board;
         mainGridPane.add(canvas,0,0);
 
-        randomBackground = new int[board.width];
+        randomBackground = new int[board.width+10];
 
         Random rnd = new Random();
         boardStyle = rnd.nextInt(3);
 
-        for(int i = 0; i < board.width;i++) {
+        for(int i = 0; i < board.width+10;i++) {
             randomBackground[i] = rnd.nextInt(2);
         }
 
@@ -307,7 +307,7 @@ public class GamePane extends Pane {
                             public void handle(WorkerStateEvent event) {
                                 Optional<ButtonType> result;
                                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                                alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
                                 Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
                                 alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                                 alert.setTitle("Koniec Gry");
@@ -342,7 +342,7 @@ public class GamePane extends Pane {
                                 if(isGameFinished) {
                                     Optional<ButtonType> result;
                                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                                    alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                                    alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
                                     Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
                                     alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                                     alert.setTitle("Koniec Gry");
@@ -378,7 +378,7 @@ public class GamePane extends Pane {
                 public void handle(ActionEvent event) {
                     Optional<ButtonType> result;
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+                    alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
                     Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
                     alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                     alert.setTitle("Przejście do \"rozgrywek\"");
@@ -666,29 +666,29 @@ public class GamePane extends Pane {
             canvas.setHeight(height);
             canvas.setWidth(width);
             GraphicsContext gc = canvas.getGraphicsContext2D();
-
             gc.clearRect(0,0,width,height);
             oneFieldWidth = (width - margin * 2.0) / (board.width * 1.0);
             oneFieldHeight = (height - margin * 2.0) / (board.height * 1.0);
-            gc.setStroke(Color.BLACK);
-            gc.setLineWidth(2);
-            gc.strokeRect(margin, margin, width - margin * 2, height - margin * 2);
             int inFieldMargin = 0;
+            if(Bricks.mainStage.theme==0) {
+                gc.setStroke(Color.BLACK);
+                gc.setLineWidth(2);
+                gc.strokeRect(margin, margin, width - margin * 2, height - margin * 2);
+            }
             javafx.scene.paint.Color firstPlayerColor = Bricks.mainStage.firstPlayerColor;
 
             javafx.scene.paint.Color secondPlayerColor = Bricks.mainStage.secondPlayerColor;
 
             if(Bricks.mainStage.theme==1) {
 
-                for (int i = 0; i < board.height; i++) {
-                    for (int j = 0; j < board.width; j++) {
+                for (int i = -10; i < board.height; i++) {
+                    for (int j = -5; j <= board.width+4; j++) {
                         if (i < board.height / 2)
                             gc.drawImage(skyboxtop, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                         else if (i == board.height / 2) {
-
-                            if (randomBackground[j] == 0)
+                            if (randomBackground[j+5] == 0)
                                 gc.drawImage(skyboxsideclouds, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
-                            if (randomBackground[j] == 1)
+                            if (randomBackground[j+5] == 1)
                                 gc.drawImage(skyboxsidehills, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                         } else if (i == board.height / 2 + 1) {
                             if (boardStyle == 0)
@@ -699,8 +699,11 @@ public class GamePane extends Pane {
                                 gc.drawImage(snowBackground, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                         } else
                             gc.drawImage(normalBackground, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                    }
+                }
 
-
+                for (int i = 0; i < board.height; i++) {
+                    for (int j = 0; j < board.width; j++) {
                         if (board.board[j][i] == 1) {
                             gc.drawImage(firstPlayerImage, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                         }
@@ -708,6 +711,11 @@ public class GamePane extends Pane {
                             gc.drawImage(secondPlayerImage, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                         }
                     }
+                }
+                if(Bricks.mainStage.theme==1) {
+                    gc.setStroke(Color.BLACK);
+                    gc.setLineWidth(2);
+                    gc.strokeRect(margin, margin, width - margin * 2, height - margin * 2);
                 }
                 if (actualPlayer == 1) {
                     if (isSelected) {
@@ -842,7 +850,7 @@ public class GamePane extends Pane {
         if (!board.anyMoves()) {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+            alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
             Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
             alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
             alert.setTitle("Koniec Gry");
@@ -891,7 +899,7 @@ public class GamePane extends Pane {
         //int selection;
         Optional<ButtonType> result;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+        alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
         Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
         alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
         alert.setTitle("Koniec Gry");
@@ -932,7 +940,7 @@ public class GamePane extends Pane {
         } catch (InvalidMoveException exception) {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+            alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
             Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
             alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
             alert.setTitle("Koniec Gry");
@@ -952,7 +960,7 @@ public class GamePane extends Pane {
         } catch (TimeoutException exception) {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.getDialogPane().getStylesheets().add(MainStage.class.getResource("style.css").toExternalForm());
+            alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
             Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
             alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
             alert.setTitle("Koniec Gry");
