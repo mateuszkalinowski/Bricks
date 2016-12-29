@@ -416,8 +416,8 @@ public class MainStage extends Application {
             gamePane.resetBoard();
         }
         mainStage.setScene(mainScene);
-        mainScene.getStylesheets().removeAll(selectedTheme);
-        mainScene.getStylesheets().add(selectedTheme);
+        mainStage.setWidth(500);
+        mainStage.setHeight(670);
     }
     public void setSettings(int initialBoardSize, Color firstPlayerColor, Color secondPlayerColor, boolean isSound, int volume, boolean debugModeInitialize, String firstPlayerPath, String secondPlayerPath,
                                   int firstPlayerProgramTypeArgument, int secondPlayerProgramTypeArgument,
