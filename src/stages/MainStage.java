@@ -377,7 +377,7 @@ public class MainStage extends Application {
         Label programInfoLabel = new Label();
         programInfoLabel.setMaxWidth(Double.MAX_VALUE);
         programInfoLabel.setAlignment(Pos.CENTER);
-        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.4.1, Ikona: Madebyoliver, www.flaticon.com");
+        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.4.2, Ikona: Madebyoliver, www.flaticon.com");
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
@@ -385,10 +385,7 @@ public class MainStage extends Application {
         mainStage = primaryStage;
         mainStage.setTitle("Bricks");
         mainStage.setScene(mainScene);
-        if(theme==0)
-            mainScene.getStylesheets().add(selectedTheme);
-        if(theme==1)
-            mainScene.getStylesheets().add(MainStage.class.getResource("style2.css").toExternalForm());
+        mainScene.getStylesheets().add(selectedTheme);
         mainStage.setMinWidth(500);
         mainStage.setMinHeight(710);
         mainStage.show();
@@ -419,6 +416,8 @@ public class MainStage extends Application {
             gamePane.resetBoard();
         }
         mainStage.setScene(mainScene);
+        mainScene.getStylesheets().removeAll(selectedTheme);
+        mainScene.getStylesheets().add(selectedTheme);
     }
     public void setSettings(int initialBoardSize, Color firstPlayerColor, Color secondPlayerColor, boolean isSound, int volume, boolean debugModeInitialize, String firstPlayerPath, String secondPlayerPath,
                                   int firstPlayerProgramTypeArgument, int secondPlayerProgramTypeArgument,
