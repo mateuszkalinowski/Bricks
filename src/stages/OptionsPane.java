@@ -57,8 +57,8 @@ public class OptionsPane extends Pane {
         mainGridPane.getColumnConstraints().add(column);
         mainGridPane.getColumnConstraints().add(column);
         RowConstraints row = new RowConstraints();
-        row.setPercentHeight(6.25);
-        for(int i = 0; i < 16;i++) {
+        row.setPercentHeight(6.66);
+        for(int i = 0; i < 15;i++) {
             mainGridPane.getRowConstraints().add(row);
         }
 
@@ -428,7 +428,6 @@ public class OptionsPane extends Pane {
         mainGridPane.add(secondPlayerColorLabel,0,3);
         mainGridPane.add(secondPlayerColorPicker,1,3);
         mainGridPane.add(generalSettingsLabel,0,0,2,1);
-        //mainGridPane.add(defaultSettingsHBOx,0,15,2,1);
         mainGridPane.add(saveAndExitHBox,0,14,2,1);
         getChildren().add(mainGridPane);
 

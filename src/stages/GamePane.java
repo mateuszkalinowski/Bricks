@@ -8,6 +8,7 @@ import javafx.concurrent.Task;
 import javafx.concurrent.WorkerStateEvent;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
@@ -74,6 +75,39 @@ public class GamePane extends Pane {
 
         if(gamemode==0 && Bricks.mainStage.computerPlayerType==0)
             comp = new ComputerPlayer();
+
+        if(gamemode==1) {
+            HBox gamemodeTwoPlayerHBox = new HBox();
+            undoMoveButton = new Button("Cofnij Ruch");
+            gamemodeTwoPlayerHBox.getChildren().add(undoMoveButton);
+            gamemodeTwoPlayerHBox.setAlignment(Pos.CENTER);
+            gamemodeTwoPlayerHBox.setPadding(new Insets(0,20,0,0));
+            gamemodeTwoPlayerHBox.setAlignment(Pos.TOP_RIGHT);
+            mainGridPane.add(gamemodeTwoPlayerHBox,0,1);
+
+            undoMoveButton.setDisable(true);
+
+            undoMoveButton.setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    int[] move = movesStorage.returnMoveLikeArray();
+
+                    board.board[move[0]][move[1]] = 0;
+                    board.board[move[2]][move[3]] = 0;
+
+                    drawFrame();
+                    if(actualPlayer==1)
+                        actualPlayer=2;
+                    else if(actualPlayer==2)
+                        actualPlayer=1;
+
+                    if(movesStorage.isEmpty())
+                        undoMoveButton.setDisable(true);
+                }
+            });
+
+
+        }
 
         if(gamemode==2) {
             HBox gamemodeRobotsWarsHBox = new HBox();
@@ -424,7 +458,7 @@ public class GamePane extends Pane {
         setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent e) {
-                if (gamemode == 0 || gamemode == 1) {
+                if ((gamemode == 0 || gamemode == 1) && e.getY()<getHeight()*0.95) {
                     if (!isSelected) {
                         if ((e.getX() > margin && e.getX() < getWidth() - margin) && (e.getY() > margin && e.getY() < getHeight() - margin)) {
 
@@ -494,6 +528,9 @@ public class GamePane extends Pane {
                                     board.board[selectedX][selectedY] = actualPlayer;
                                     board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                     movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
+                                    if(gamemode==1) {
+                                        undoMoveButton.setDisable(false);
+                                    }
                                     drawFrame();
                                     //if (Bricks.mainFrame.getComputerPlayerType() == 0)
                                     //    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
@@ -527,6 +564,9 @@ public class GamePane extends Pane {
                                     board.board[selectedX][selectedY] = actualPlayer;
                                     board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                     movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
+                                    if(gamemode==1) {
+                                        undoMoveButton.setDisable(false);
+                                    }
                                     drawFrame();
                                     //if (Bricks.mainFrame.getComputerPlayerType() == 0)
                                     //    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
@@ -560,6 +600,9 @@ public class GamePane extends Pane {
                                     board.board[selectedX][selectedY] = actualPlayer;
                                     board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                     movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
+                                    if(gamemode==1) {
+                                        undoMoveButton.setDisable(false);
+                                    }
                                     drawFrame();
                                     //if (Bricks.mainFrame.getComputerPlayerType() == 0)
                                     //    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
@@ -593,6 +636,9 @@ public class GamePane extends Pane {
                                     board.board[selectedX][selectedY] = actualPlayer;
                                     board.board[tempSelectedX][tempSelectedY] = actualPlayer;
                                     movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
+                                    if(gamemode==1) {
+                                        undoMoveButton.setDisable(false);
+                                    }
                                     drawFrame();
                                     //if (Bricks.mainFrame.getComputerPlayerType() == 0)
                                     //    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
@@ -994,6 +1040,8 @@ public class GamePane extends Pane {
 
     public void resetBoard() {
         board.reset();
+        if(gamemode==1)
+            undoMoveButton.setDisable(true);
         isSelected = false;
         movesStorage.reset();
         computerPlayer=1;
@@ -1070,6 +1118,8 @@ public class GamePane extends Pane {
     private int gamemode;
     private int autoGameSpeed;
     private int cancelReason = 0;
+    private int randomBackground[];
+    private int boardStyle;
 
     private double oneFieldWidth;
     private double oneFieldHeight;
@@ -1088,12 +1138,9 @@ public class GamePane extends Pane {
     private Button nextMoveButton;
     private Button autoPlayButton;
     private Button gamesButton;
+    private Button undoMoveButton;
 
     TextField speedTextField;
-
-    private int randomBackground[];
-
-    private int boardStyle;
 
     Image firstPlayerImage;
     Image secondPlayerImage;
@@ -1105,5 +1152,6 @@ public class GamePane extends Pane {
     Image skyboxtop;
     Image skyboxsideclouds;
     Image skyboxsidehills;
+
 
 }
