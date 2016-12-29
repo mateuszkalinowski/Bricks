@@ -70,7 +70,7 @@ public class MainStage extends Application {
         singlePlayerGameButton.setId("buttonInMainMenu");
         singlePlayerGameButton.setMaxWidth(300);
         singlePlayerGameButton.setMaxHeight(180);
-        singlePlayerGameButton.setFont(new Font("Comic Sans MS",23.6));
+        singlePlayerGameButton.setFont(new Font("Comic Sans MS",22.1));
         singlePlayerGameButtonHBox.getChildren().add(singlePlayerGameButton);
         HBox.setMargin(singlePlayerGameButton, new Insets(10,0,10,0));
         HBox.setHgrow(singlePlayerGameButton,Priority.ALWAYS);
@@ -174,7 +174,7 @@ public class MainStage extends Application {
         twoPlayersGameButton.setId("buttonInMainMenu");
         twoPlayersGameButton.setMaxWidth(300);
         twoPlayersGameButton.setMaxHeight(180);
-        twoPlayersGameButton.setFont(new Font("Comic Sans MS",23.6));
+        twoPlayersGameButton.setFont(new Font("Comic Sans MS",22.1));
         twoPlayersGameButtonHBox.getChildren().add(twoPlayersGameButton);
         HBox.setMargin(twoPlayersGameButton, new Insets(10,0,10,0));
         HBox.setHgrow(twoPlayersGameButton,Priority.ALWAYS);
@@ -217,7 +217,7 @@ public class MainStage extends Application {
         robotWarsButton.setId("buttonInMainMenu");
         robotWarsButton.setMaxWidth(300);
         robotWarsButton.setMaxHeight(180);
-        robotWarsButton.setFont(new Font("Comic Sans MS",23.6));
+        robotWarsButton.setFont(new Font("Comic Sans MS",22.1));
         robotWarsButtonHBox.getChildren().add(robotWarsButton);
         HBox.setMargin(robotWarsButton, new Insets(10,0,10,0));
         HBox.setHgrow(robotWarsButton,Priority.ALWAYS);
@@ -341,7 +341,7 @@ public class MainStage extends Application {
         optionsButton.setId("buttonInMainMenu");
         optionsButton.setMaxWidth(300);
         optionsButton.setMaxHeight(180);
-        optionsButton.setFont(new Font("Comic Sans MS",23.6));
+        optionsButton.setFont(new Font("Comic Sans MS",22.1));
         optionsButtonHBox.getChildren().add(optionsButton);
         HBox.setMargin(optionsButton, new Insets(10,0,10,0));
         HBox.setHgrow(optionsButton,Priority.ALWAYS);
@@ -361,7 +361,7 @@ public class MainStage extends Application {
         exitButton.setId("buttonInMainMenu");
         exitButton.setMaxWidth(300);
         exitButton.setMaxHeight(180);
-        exitButton.setFont(new Font("Comic Sans MS",23.6));
+        exitButton.setFont(new Font("Comic Sans MS",22.1));
         exitButtonHBox.getChildren().add(exitButton);
         HBox.setMargin(exitButton, new Insets(10,0,10,0));
         HBox.setHgrow(exitButton,Priority.ALWAYS);
@@ -412,12 +412,11 @@ public class MainStage extends Application {
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 bricksTitleLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/4.7));
 
-                singlePlayerGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/30));
-                twoPlayersGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/30));
-                robotWarsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/30));
-                optionsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/30));
-                exitButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/30));
-
+                singlePlayerGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
+                twoPlayersGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
+                robotWarsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
+                optionsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
+                exitButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
                 FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
                 buttonWidth = fontLoader.computeStringWidth(bricksTitleLabel.getText(),bricksTitleLabel.getFont())*(2.0/3.0);
                 if(buttonWidth>300) {
