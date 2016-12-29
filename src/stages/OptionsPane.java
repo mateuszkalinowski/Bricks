@@ -57,8 +57,8 @@ public class OptionsPane extends Pane {
         mainGridPane.getColumnConstraints().add(column);
         mainGridPane.getColumnConstraints().add(column);
         RowConstraints row = new RowConstraints();
-        row.setPercentHeight(6.25);
-        for(int i = 0; i < 16;i++) {
+        row.setPercentHeight(6.66);
+        for(int i = 0; i < 15;i++) {
             mainGridPane.getRowConstraints().add(row);
         }
 
@@ -207,17 +207,19 @@ public class OptionsPane extends Pane {
             secondProgramRunCommandTextArea.setEditable(false);
         }
         firstProgramNameLabel = new Label();
-        firstProgramNameLabel.setAlignment(Pos.CENTER);
+        firstProgramNameLabel.setAlignment(Pos.CENTER_LEFT);
         firstProgramNameLabel.setPrefWidth(Double.MAX_VALUE);
+        firstProgramNameLabel.setPadding(new Insets(0,0,0,20));
         if (playerFirstFullPath.length() <= 30) {
             firstProgramNameLabel.setText(playerFirstFullPath);
         } else {
             firstProgramNameLabel.setText("..." + playerFirstFullPath.substring(playerFirstFullPath.length() - 30, playerFirstFullPath.length()));
         }
         secondProgramNameLabel = new Label();
-        secondProgramNameLabel.setAlignment(Pos.CENTER);
+        secondProgramNameLabel.setAlignment(Pos.CENTER_LEFT);
         secondProgramNameLabel.setPrefWidth(Double.MAX_VALUE);
         secondProgramNameLabel.setText(playerSecondFullPath);
+        secondProgramNameLabel.setPadding(new Insets(0,0,0,20));
         if (playerSecondFullPath.length() <= 30) {
             secondProgramNameLabel.setText(playerSecondFullPath);
         } else {
@@ -235,7 +237,7 @@ public class OptionsPane extends Pane {
         chooseFirstComputerPlayerButton.setPrefWidth(150);
         //chooseFirstComputerPlayerButton.setPadding(new Insets(5,0,5,0));
         chooseFirstComputerPlayerHBox.getChildren().add(chooseFirstComputerPlayerButton);
-        chooseFirstComputerPlayerHBox.setAlignment(Pos.BASELINE_RIGHT);
+        chooseFirstComputerPlayerHBox.setAlignment(Pos.CENTER_RIGHT);
 
         chooseFirstComputerPlayerButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -275,7 +277,7 @@ public class OptionsPane extends Pane {
         chooseSecondComputerPlayerButton.setPrefWidth(150);
         //chooseSecondComputerPlayerButton.setPadding(new Insets(5,0,5,0));
         chooseSecondComputerPlayerHBox.getChildren().add(chooseSecondComputerPlayerButton);
-        chooseSecondComputerPlayerHBox.setAlignment(Pos.BASELINE_RIGHT);
+        chooseSecondComputerPlayerHBox.setAlignment(Pos.CENTER_RIGHT);
         chooseSecondComputerPlayerButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
@@ -386,14 +388,6 @@ public class OptionsPane extends Pane {
             }
         });
 
-       /* HBox defaultSettingsHBOx = new HBox();
-        defaultSettingsButton = new Button("Ustawienia Domyślne");
-        defaultSettingsButton.setPrefWidth(300);
-        defaultSettingsButton.setPrefHeight(Double.MAX_VALUE);
-        defaultSettingsHBOx.setAlignment(Pos.CENTER);
-        defaultSettingsHBOx.getChildren().add(defaultSettingsButton);
-        HBox.setMargin(defaultSettingsButton,new Insets(5,0,5,0));*/
-
         HBox saveAndExitHBox = new HBox();
         saveAndExitButton = new Button("Zapisz Zmiany");
         saveAndExitButton.setPrefWidth(300);
@@ -428,7 +422,6 @@ public class OptionsPane extends Pane {
         mainGridPane.add(secondPlayerColorLabel,0,3);
         mainGridPane.add(secondPlayerColorPicker,1,3);
         mainGridPane.add(generalSettingsLabel,0,0,2,1);
-        //mainGridPane.add(defaultSettingsHBOx,0,15,2,1);
         mainGridPane.add(saveAndExitHBox,0,14,2,1);
         getChildren().add(mainGridPane);
 

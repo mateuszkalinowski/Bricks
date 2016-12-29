@@ -2,9 +2,6 @@
     -fx-background-image: url("resources/dirt.png");
 }
 #logo {
-   -fx-font-size: 150;
-   -fx-font-family: "Comic Sans MS";
-   -fx-font-weight: bold;
    -fx-fill: gray;
    -fx-stroke: black;
    -fx-stroke-width: 5;

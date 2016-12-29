@@ -1,8 +1,12 @@
 package stages;
 
+import com.sun.javafx.tk.FontLoader;
+import com.sun.javafx.tk.Toolkit;
 import core.Bricks;
 import core.Settings;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -17,6 +21,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
@@ -49,21 +54,23 @@ public class MainStage extends Application {
         mainGridPane.getColumnConstraints().add(columnInMainMenu);
         HBox bricksTitleHBox = new HBox();
         bricksTitleHBox.setAlignment(Pos.CENTER);
-        Text bricksTitleLabel = new Text();
+        bricksTitleLabel = new Text();
         bricksTitleLabel.setText("Bricks");
         //bricksTitleLabel.setFont(new Font("Comic Sans MS",126));
         //bricksTitleLabel.setMaxWidth(Double.MAX_VALUE);
         //bricksTitleLabel.setAlignment(Pos.CENTER);
         bricksTitleLabel.setId("logo");
+        if(theme==1)
+        bricksTitleLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,151));
         bricksTitleHBox.getChildren().add(bricksTitleLabel);
 
         HBox singlePlayerGameButtonHBox = new HBox();
         singlePlayerGameButtonHBox.setAlignment(Pos.CENTER);
-        Button singlePlayerGameButton = new Button("Gra Jednoosobowa");
+        singlePlayerGameButton = new Button("Gra Jednoosobowa");
         singlePlayerGameButton.setId("buttonInMainMenu");
         singlePlayerGameButton.setMaxWidth(300);
         singlePlayerGameButton.setMaxHeight(180);
-        singlePlayerGameButton.setFont(new Font("Comic Sans MS",22));
+        singlePlayerGameButton.setFont(new Font("Comic Sans MS",22.1));
         singlePlayerGameButtonHBox.getChildren().add(singlePlayerGameButton);
         HBox.setMargin(singlePlayerGameButton, new Insets(10,0,10,0));
         HBox.setHgrow(singlePlayerGameButton,Priority.ALWAYS);
@@ -163,11 +170,11 @@ public class MainStage extends Application {
 
         HBox twoPlayersGameButtonHBox = new HBox();
         twoPlayersGameButtonHBox.setAlignment(Pos.CENTER);
-        Button twoPlayersGameButton = new Button("Gra Dwuosobowa");
+        twoPlayersGameButton = new Button("Gra Dwuosobowa");
         twoPlayersGameButton.setId("buttonInMainMenu");
         twoPlayersGameButton.setMaxWidth(300);
         twoPlayersGameButton.setMaxHeight(180);
-        twoPlayersGameButton.setFont(new Font("Comic Sans MS",22));
+        twoPlayersGameButton.setFont(new Font("Comic Sans MS",22.1));
         twoPlayersGameButtonHBox.getChildren().add(twoPlayersGameButton);
         HBox.setMargin(twoPlayersGameButton, new Insets(10,0,10,0));
         HBox.setHgrow(twoPlayersGameButton,Priority.ALWAYS);
@@ -206,11 +213,11 @@ public class MainStage extends Application {
 
         HBox robotWarsButtonHBox = new HBox();
         robotWarsButtonHBox.setAlignment(Pos.CENTER);
-        Button robotWarsButton = new Button("Wojna Robotów");
+        robotWarsButton = new Button("Wojna Robotów");
         robotWarsButton.setId("buttonInMainMenu");
         robotWarsButton.setMaxWidth(300);
         robotWarsButton.setMaxHeight(180);
-        robotWarsButton.setFont(new Font("Comic Sans MS",22));
+        robotWarsButton.setFont(new Font("Comic Sans MS",22.1));
         robotWarsButtonHBox.getChildren().add(robotWarsButton);
         HBox.setMargin(robotWarsButton, new Insets(10,0,10,0));
         HBox.setHgrow(robotWarsButton,Priority.ALWAYS);
@@ -330,11 +337,11 @@ public class MainStage extends Application {
 
         HBox optionsButtonHBox = new HBox();
         optionsButtonHBox.setAlignment(Pos.CENTER);
-        Button optionsButton = new Button("Opcje");
+        optionsButton = new Button("Opcje");
         optionsButton.setId("buttonInMainMenu");
         optionsButton.setMaxWidth(300);
         optionsButton.setMaxHeight(180);
-        optionsButton.setFont(new Font("Comic Sans MS",22));
+        optionsButton.setFont(new Font("Comic Sans MS",22.1));
         optionsButtonHBox.getChildren().add(optionsButton);
         HBox.setMargin(optionsButton, new Insets(10,0,10,0));
         HBox.setHgrow(optionsButton,Priority.ALWAYS);
@@ -350,11 +357,11 @@ public class MainStage extends Application {
 
         HBox exitButtonHBox = new HBox();
         exitButtonHBox.setAlignment(Pos.CENTER);
-        Button exitButton = new Button("Wyjście");
+        exitButton = new Button("Wyjście");
         exitButton.setId("buttonInMainMenu");
         exitButton.setMaxWidth(300);
         exitButton.setMaxHeight(180);
-        exitButton.setFont(new Font("Comic Sans MS",22));
+        exitButton.setFont(new Font("Comic Sans MS",22.1));
         exitButtonHBox.getChildren().add(exitButton);
         HBox.setMargin(exitButton, new Insets(10,0,10,0));
         HBox.setHgrow(exitButton,Priority.ALWAYS);
@@ -377,7 +384,7 @@ public class MainStage extends Application {
         Label programInfoLabel = new Label();
         programInfoLabel.setMaxWidth(Double.MAX_VALUE);
         programInfoLabel.setAlignment(Pos.CENTER);
-        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.4.1, Ikona: Madebyoliver, www.flaticon.com");
+        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.4.2");
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
@@ -385,10 +392,7 @@ public class MainStage extends Application {
         mainStage = primaryStage;
         mainStage.setTitle("Bricks");
         mainStage.setScene(mainScene);
-        if(theme==0)
-            mainScene.getStylesheets().add(selectedTheme);
-        if(theme==1)
-            mainScene.getStylesheets().add(MainStage.class.getResource("style2.css").toExternalForm());
+        mainScene.getStylesheets().add(selectedTheme);
         mainStage.setMinWidth(500);
         mainStage.setMinHeight(710);
         mainStage.show();
@@ -402,6 +406,35 @@ public class MainStage extends Application {
             System.exit(0);
         });
         mainStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+
+        mainStage.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                bricksTitleLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/4.7));
+
+                singlePlayerGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
+                twoPlayersGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
+                robotWarsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
+                optionsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
+                exitButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
+                FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
+                buttonWidth = fontLoader.computeStringWidth(bricksTitleLabel.getText(),bricksTitleLabel.getFont())*(2.0/3.0);
+                if(buttonWidth>300) {
+                    singlePlayerGameButton.setMaxWidth(buttonWidth);
+                    twoPlayersGameButton.setMaxWidth(buttonWidth);
+                    robotWarsButton.setMaxWidth(buttonWidth);
+                    optionsButton.setMaxWidth(buttonWidth);
+                    exitButton.setMaxWidth(buttonWidth);
+                }
+                else {
+                    singlePlayerGameButton.setMaxWidth(300);
+                    twoPlayersGameButton.setMaxWidth(300);
+                    robotWarsButton.setMaxWidth(300);
+                    optionsButton.setMaxWidth(300);
+                    exitButton.setMaxWidth(300);
+                }
+            }
+        });
 
     }
     public int[] getSizeAsArray() throws NullPointerException{
@@ -418,7 +451,34 @@ public class MainStage extends Application {
         if(gamePane!=null) {
             gamePane.resetBoard();
         }
+        double width = mainStage.getWidth();
+        double height = mainStage.getHeight();
+        bricksTitleLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,height/4.7));
+
+        singlePlayerGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,height/32));
+        twoPlayersGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,height/32));
+        robotWarsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,height/32));
+        optionsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,height/32));
+        exitButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,height/32));
+        FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
+        buttonWidth = fontLoader.computeStringWidth(bricksTitleLabel.getText(),bricksTitleLabel.getFont())*(2.0/3.0);
+        if(buttonWidth>300) {
+            singlePlayerGameButton.setMaxWidth(buttonWidth);
+            twoPlayersGameButton.setMaxWidth(buttonWidth);
+            robotWarsButton.setMaxWidth(buttonWidth);
+            optionsButton.setMaxWidth(buttonWidth);
+            exitButton.setMaxWidth(buttonWidth);
+        }
+        else {
+            singlePlayerGameButton.setMaxWidth(300);
+            twoPlayersGameButton.setMaxWidth(300);
+            robotWarsButton.setMaxWidth(300);
+            optionsButton.setMaxWidth(300);
+            exitButton.setMaxWidth(300);
+        }
         mainStage.setScene(mainScene);
+        mainStage.setWidth(width);
+        mainStage.setHeight(height);
     }
     public void setSettings(int initialBoardSize, Color firstPlayerColor, Color secondPlayerColor, boolean isSound, int volume, boolean debugModeInitialize, String firstPlayerPath, String secondPlayerPath,
                                   int firstPlayerProgramTypeArgument, int secondPlayerProgramTypeArgument,
@@ -538,6 +598,8 @@ public class MainStage extends Application {
     int BoardSize;
     public int computerPlayerType;
 
+    private double buttonWidth;
+
     public boolean isSound;
     private boolean debugMode;
 
@@ -558,5 +620,13 @@ public class MainStage extends Application {
     public String classicTheme = MainStage.class.getResource("style.css").toExternalForm();
     public String minecraftTheme = MainStage.class.getResource("style2.css").toExternalForm();
     public String selectedTheme;
+
+    Button singlePlayerGameButton;
+    Button twoPlayersGameButton;
+    Button robotWarsButton;
+    Button optionsButton;
+    Button exitButton;
+
+    Text bricksTitleLabel;
 
 }

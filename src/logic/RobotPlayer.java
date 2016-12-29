@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.util.StringJoiner;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -59,7 +60,6 @@ public class RobotPlayer {
     public int[] makeMove(String message) throws InvalidMoveException, TimeoutException {
         int[] move = new int[4];
         writer.println(message);
-        String nextMove;
         try {
             for (int i = 0; i <= 100; i++) {     //pętla sprawdza co 10ms czy nie przyszła odpowiedź
                 if (i == 100)                    //przekroczony czas na odpowiedź, wyrzuca błąd
@@ -69,12 +69,26 @@ public class RobotPlayer {
                     break;
                 }
             }
-            nextMove = reader.readLine();
-            String splittedValues[] = nextMove.split(" ");
-            move[0] = Integer.parseInt(splittedValues[0])-1;
-            move[1] = Integer.parseInt(splittedValues[1])-1;
-            move[2] = Integer.parseInt(splittedValues[2])-1;
-            move[3] = Integer.parseInt(splittedValues[3])-1;
+
+            boolean hasNewLine = false;
+            char[] buffor = new char[256];
+            reader.read(buffor);
+            String nextMove="";
+            for(int i = 0; i < 255; i++) {
+                System.out.print(buffor[i]);
+                nextMove+=buffor[i];
+            }
+            if(nextMove.contains(System.lineSeparator())) {
+                String splittedValues[] = nextMove.split("\\s+");
+                move[0] = Integer.parseInt(splittedValues[0]) - 1;
+                move[1] = Integer.parseInt(splittedValues[1]) - 1;
+                move[2] = Integer.parseInt(splittedValues[2]) - 1;
+                move[3] = Integer.parseInt(splittedValues[3]) - 1;
+            }
+            else {
+                System.out.println("Wyjątek 1");
+                throw new InvalidMoveException("Linia nie kończy się znakiem nowej linii");
+            }
         } catch (IOException | ArrayIndexOutOfBoundsException e) {
             throw new InvalidMoveException("Ruch wykonany przez komputer nie jest poprawny");
         } catch (InterruptedException e) {
