@@ -59,12 +59,12 @@ public class GamePane extends Pane {
         this.board = board;
         mainGridPane.add(canvas,0,0);
 
-        randomBackground = new int[board.width+10];
+        randomBackground = new int[board.width+100];
 
         Random rnd = new Random();
         boardStyle = rnd.nextInt(3);
 
-        for(int i = 0; i < board.width+10;i++) {
+        for(int i = 0; i < board.width+100;i++) {
             randomBackground[i] = rnd.nextInt(2);
         }
 
@@ -460,27 +460,27 @@ public class GamePane extends Pane {
             public void handle(MouseEvent e) {
                 if ((gamemode == 0 || gamemode == 1) && e.getY()<getHeight()*0.95) {
                     if (!isSelected) {
-                        if ((e.getX() > margin && e.getX() < getWidth() - margin) && (e.getY() > margin && e.getY() < getHeight() - margin)) {
+                        if ((e.getX() > marginX && e.getX() < getWidth() - marginX) && (e.getY() > marginY && e.getY() < getHeight() - marginY)) {
 
                             double intOneFieldWidth = (oneFieldWidth);
                             double intOneFieldHeight = (oneFieldHeight);
 
                             for (int i = 0; i < board.width - 1; i++) {
-                                if (e.getX() >= (margin + i * intOneFieldWidth) && e.getX() < margin + (i + 1) * intOneFieldWidth) {
+                                if (e.getX() >= (marginX + i * intOneFieldWidth) && e.getX() < marginX + (i + 1) * intOneFieldWidth) {
                                     selectedX = i;
                                     break;
                                 }
-                                if (e.getX() >= margin + (board.width - 1) + intOneFieldWidth) {
+                                if (e.getX() >= marginX + (board.width - 1) + intOneFieldWidth) {
                                     selectedX = board.width - 1;
                                 }
                             }
 
                             for (int i = 0; i < board.height - 1; i++) {
-                                if (e.getY() >= (margin + i * intOneFieldHeight) && e.getY() < margin + (i + 1) * intOneFieldHeight) {
+                                if (e.getY() >= (marginY + i * intOneFieldHeight) && e.getY() < marginY + (i + 1) * intOneFieldHeight) {
                                     selectedY = i;
                                     break;
                                 }
-                                if (e.getY() >= margin + (board.height - 1) + intOneFieldHeight) {
+                                if (e.getY() >= marginY + (board.height - 1) + intOneFieldHeight) {
                                     selectedY = board.height - 1;
                                 }
                             }
@@ -496,7 +496,7 @@ public class GamePane extends Pane {
 
                         }
                     } else {
-                        if ((e.getX() > margin && e.getX() < getWidth() - margin) && (e.getY() > margin && e.getY() < getHeight() - margin)) {
+                        if ((e.getX() > marginX && e.getX() < getWidth() - marginX) && (e.getY() > marginY && e.getY() < getHeight() - marginY)) {
                             int tempSelectedX;
                             int tempSelectedY;
                             double intOneFieldWidth = (oneFieldWidth);
@@ -505,21 +505,21 @@ public class GamePane extends Pane {
                             tempSelectedY = 0;
 
                             for (int i = 0; i < board.width - 1; i++) {
-                                if (e.getX() >= (margin + i * intOneFieldWidth) && e.getX() < margin + (i + 1) * intOneFieldWidth) {
+                                if (e.getX() >= (marginX + i * intOneFieldWidth) && e.getX() < marginX + (i + 1) * intOneFieldWidth) {
                                     tempSelectedX = i;
                                     break;
                                 }
-                                if (e.getX() >= margin + (board.width - 1) + intOneFieldWidth) {
+                                if (e.getX() >= marginX + (board.width - 1) + intOneFieldWidth) {
                                     tempSelectedX = board.width - 1;
                                 }
                             }
 
                             for (int i = 0; i < board.height - 1; i++) {
-                                if (e.getY() >= (margin + i * intOneFieldHeight) && e.getY() < margin + (i + 1) * intOneFieldHeight) {
+                                if (e.getY() >= (marginY + i * intOneFieldHeight) && e.getY() < marginY + (i + 1) * intOneFieldHeight) {
                                     tempSelectedY = i;
                                     break;
                                 }
-                                if (e.getY() >= margin + (board.height - 1) + intOneFieldHeight) {
+                                if (e.getY() >= marginY + (board.height - 1) + intOneFieldHeight) {
                                     tempSelectedY = board.height - 1;
                                 }
                             }
@@ -708,18 +708,27 @@ public class GamePane extends Pane {
             int[] rozmiar = Bricks.mainStage.getSizeAsArray();
             int width = rozmiar[0];
             int height = (int)mainGridPane.getRowConstraints().get(0).getPercentHeight()*rozmiar[1]/100;
-            //canvas = new Canvas();
+            if(width>height) {
+                double difference = (width-height)/2.0;
+                if(difference/2.0>20)
+                    marginX = difference/2.0;
+                else
+                    marginX = marginY;
+            }
+            else {
+                marginX = marginY;
+            }
             canvas.setHeight(height);
             canvas.setWidth(width);
             GraphicsContext gc = canvas.getGraphicsContext2D();
             gc.clearRect(0,0,width,height);
-            oneFieldWidth = (width - margin * 2.0) / (board.width * 1.0);
-            oneFieldHeight = (height - margin * 2.0) / (board.height * 1.0);
+            oneFieldWidth = (width - marginX * 2.0) / (board.width * 1.0);
+            oneFieldHeight = (height - marginY * 2.0) / (board.height * 1.0);
             int inFieldMargin = 0;
             if(Bricks.mainStage.theme==0) {
                 gc.setStroke(Color.BLACK);
                 gc.setLineWidth(2);
-                gc.strokeRect(margin, margin, width - margin * 2, height - margin * 2);
+                gc.strokeRect(marginX, marginY, width - marginX * 2, height - marginY * 2);
             }
             javafx.scene.paint.Color firstPlayerColor = Bricks.mainStage.firstPlayerColor;
 
@@ -728,47 +737,47 @@ public class GamePane extends Pane {
             if(Bricks.mainStage.theme==1) {
 
                 for (int i = -10; i < board.height; i++) {
-                    for (int j = -5; j <= board.width+4; j++) {
+                    for (int j = -50; j <= board.width+49; j++) {
                         if (i < board.height / 2)
-                            gc.drawImage(skyboxtop, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                            gc.drawImage(skyboxtop, j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin+1);
                         else if (i == board.height / 2) {
-                            if (randomBackground[j+5] == 0)
-                                gc.drawImage(skyboxsideclouds, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
-                            if (randomBackground[j+5] == 1)
-                                gc.drawImage(skyboxsidehills, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                            if (randomBackground[j+50] == 0)
+                                gc.drawImage(skyboxsideclouds, j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin+1, (oneFieldHeight) - 2 * inFieldMargin+1);
+                            if (randomBackground[j+50] == 1)
+                                gc.drawImage(skyboxsidehills, j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin+1, (oneFieldHeight) - 2 * inFieldMargin+1);
                         } else if (i == board.height / 2 + 1) {
                             if (boardStyle == 0)
-                                gc.drawImage(grassBackground, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                                gc.drawImage(grassBackground, j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                             if (boardStyle == 1)
-                                gc.drawImage(sandBackground, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                                gc.drawImage(sandBackground, j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                             if (boardStyle == 2)
-                                gc.drawImage(snowBackground, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                                gc.drawImage(snowBackground, j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                         } else
-                            gc.drawImage(normalBackground, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                            gc.drawImage(normalBackground, j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                     }
                 }
 
                 for (int i = 0; i < board.height; i++) {
                     for (int j = 0; j < board.width; j++) {
                         if (board.board[j][i] == 1) {
-                            gc.drawImage(firstPlayerImage, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                            gc.drawImage(firstPlayerImage, j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                         }
                         if (board.board[j][i] == 2) {
-                            gc.drawImage(secondPlayerImage, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                            gc.drawImage(secondPlayerImage, j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                         }
                     }
                 }
                 if(Bricks.mainStage.theme==1) {
                     gc.setStroke(Color.BLACK);
                     gc.setLineWidth(2);
-                    gc.strokeRect(margin, margin, width - margin * 2, height - margin * 2);
+                    gc.strokeRect(marginX, marginY, width - marginX * 2, height - marginY * 2);
                 }
                 if (actualPlayer == 1) {
                     if (isSelected) {
                         //gc.setFill(firstPlayerColor);
                         int j = selectedX;
                         int i = selectedY;
-                        gc.drawImage(firstPlayerImage, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                        gc.drawImage(firstPlayerImage, j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                     }
                 }
                 if (actualPlayer == 2) {
@@ -776,19 +785,19 @@ public class GamePane extends Pane {
                         //gc.setFill(secondPlayerColor);
                         int j = selectedX;
                         int i = selectedY;
-                        gc.drawImage(secondPlayerImage, j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                        gc.drawImage(secondPlayerImage, j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                     }
                 }
                 for (int i = 0; i < board.height; i++) {
                     if (i > 0) {
                         gc.setStroke(javafx.scene.paint.Color.BLACK);
-                        gc.strokeLine(margin, margin + i * oneFieldHeight, width - margin, margin + i * oneFieldHeight);
+                        gc.strokeLine(marginX, marginY + i * oneFieldHeight, width - marginX, marginY + i * oneFieldHeight);
                     }
 
                     for (int j = 0; j < board.width; j++) {
                         if (j > 0) {
                             gc.setStroke(javafx.scene.paint.Color.BLACK);
-                            gc.strokeLine(margin + j * oneFieldWidth, margin, margin + j * oneFieldWidth, height - margin);
+                            gc.strokeLine(marginX + j * oneFieldWidth, marginY, marginX + j * oneFieldWidth, height - marginY);
                         }
                     }
                 }
@@ -801,13 +810,13 @@ public class GamePane extends Pane {
                         int j = selectedX;
                         int i = selectedY;
                         if (j != board.width - 1 && i != board.height - 1)
-                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                            gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                         else if (j == board.width - 1 && i != board.height - 1)
-                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), (oneFieldHeight) - 2 * inFieldMargin);
+                            gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, width - marginX * 2 - j * (oneFieldWidth), (oneFieldHeight) - 2 * inFieldMargin);
                         else if (j != board.width - 1 && i == board.height - 1)
-                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i * (oneFieldHeight));
+                            gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, height - marginY * 2 - i * (oneFieldHeight));
                         else
-                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), height - margin * 2 - i * (oneFieldHeight));
+                            gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, width - marginX * 2 - j * (oneFieldWidth), height - marginY * 2 - i * (oneFieldHeight));
                     }
                 }
                 if (actualPlayer == 2) {
@@ -816,13 +825,13 @@ public class GamePane extends Pane {
                         int j = selectedX;
                         int i = selectedY;
                         if (j != board.width - 1 && i != board.height - 1)
-                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                            gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                         else if (j == board.width - 1 && i != board.height - 1)
-                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), (oneFieldHeight) - 2 * inFieldMargin);
+                            gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, width - marginX * 2 - j * (oneFieldWidth), (oneFieldHeight) - 2 * inFieldMargin);
                         else if (j != board.width - 1 && i == board.height - 1)
-                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i * (oneFieldHeight));
+                            gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, height - marginY * 2 - i * (oneFieldHeight));
                         else
-                            gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), height - margin * 2 - i * (oneFieldHeight));
+                            gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, width - marginX * 2 - j * (oneFieldWidth), height - marginY * 2 - i * (oneFieldHeight));
                     }
                 }
 
@@ -831,37 +840,37 @@ public class GamePane extends Pane {
                         if (board.board[j][i] == 1) {
                             gc.setFill(firstPlayerColor);
                             if (j != board.width - 1 && i != board.height - 1)
-                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                                gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                             else if (j == board.width - 1 && i != board.height - 1)
-                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), (oneFieldHeight) - 2 * inFieldMargin);
+                                gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, width - marginX * 2 - j * (oneFieldWidth), (oneFieldHeight) - 2 * inFieldMargin);
                             else if (j != board.width - 1 && i == board.height - 1)
-                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i * (oneFieldHeight));
+                                gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, height - marginY * 2 - i * (oneFieldHeight));
                             else
-                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), height - margin * 2 - i * (oneFieldHeight));
+                                gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, width - marginX * 2 - j * (oneFieldWidth), height - marginY * 2 - i * (oneFieldHeight));
                         }
                         if (board.board[j][i] == 2) {
                             gc.setFill(secondPlayerColor);
                             if (j != board.width - 1 && i != board.height - 1)
-                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
+                                gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
                             else if (j == board.width - 1 && i != board.height - 1)
-                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), (oneFieldHeight) - 2 * inFieldMargin);
+                                gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, width - marginX * 2 - j * (oneFieldWidth), (oneFieldHeight) - 2 * inFieldMargin);
                             else if (j != board.width - 1 && i == board.height - 1)
-                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, height - margin * 2 - i * (oneFieldHeight));
+                                gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, height - marginY * 2 - i * (oneFieldHeight));
                             else
-                                gc.fillRect(j * (oneFieldWidth) + margin + inFieldMargin, i * (oneFieldHeight) + margin + inFieldMargin, width - margin * 2 - j * (oneFieldWidth), height - margin * 2 - i * (oneFieldHeight));
+                                gc.fillRect(j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, width - marginX * 2 - j * (oneFieldWidth), height - marginY * 2 - i * (oneFieldHeight));
                         }
                     }
                 }
                 for (int i = 0; i < board.height; i++) {
                     if (i > 0) {
                         gc.setStroke(javafx.scene.paint.Color.BLACK);
-                        gc.strokeLine(margin, margin + i * oneFieldHeight, width - margin, margin + i * oneFieldHeight);
+                        gc.strokeLine(marginX, marginY + i * oneFieldHeight, width - marginX, marginY + i * oneFieldHeight);
                     }
 
                     for (int j = 0; j < board.width; j++) {
                         if (j > 0) {
                             gc.setStroke(javafx.scene.paint.Color.BLACK);
-                            gc.strokeLine(margin + j * oneFieldWidth, margin, margin + j * oneFieldWidth, height - margin);
+                            gc.strokeLine(marginX + j * oneFieldWidth, marginY, marginX + j * oneFieldWidth, height - marginY);
                         }
                     }
                 }
@@ -1111,7 +1120,8 @@ public class GamePane extends Pane {
     private BoardLogic board;
 
     private int actualPlayer = 1;
-    private int margin = 20;
+    private double marginX = 20;
+    private double marginY = 20;
     private int selectedX;
     private int selectedY;
     public int computerPlayer;

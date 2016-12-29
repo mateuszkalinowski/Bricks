@@ -54,7 +54,7 @@ public class MainStage extends Application {
         mainGridPane.getColumnConstraints().add(columnInMainMenu);
         HBox bricksTitleHBox = new HBox();
         bricksTitleHBox.setAlignment(Pos.CENTER);
-        Text bricksTitleLabel = new Text();
+        bricksTitleLabel = new Text();
         bricksTitleLabel.setText("Bricks");
         //bricksTitleLabel.setFont(new Font("Comic Sans MS",126));
         //bricksTitleLabel.setMaxWidth(Double.MAX_VALUE);
@@ -66,7 +66,7 @@ public class MainStage extends Application {
 
         HBox singlePlayerGameButtonHBox = new HBox();
         singlePlayerGameButtonHBox.setAlignment(Pos.CENTER);
-        Button singlePlayerGameButton = new Button("Gra Jednoosobowa");
+        singlePlayerGameButton = new Button("Gra Jednoosobowa");
         singlePlayerGameButton.setId("buttonInMainMenu");
         singlePlayerGameButton.setMaxWidth(300);
         singlePlayerGameButton.setMaxHeight(180);
@@ -170,7 +170,7 @@ public class MainStage extends Application {
 
         HBox twoPlayersGameButtonHBox = new HBox();
         twoPlayersGameButtonHBox.setAlignment(Pos.CENTER);
-        Button twoPlayersGameButton = new Button("Gra Dwuosobowa");
+        twoPlayersGameButton = new Button("Gra Dwuosobowa");
         twoPlayersGameButton.setId("buttonInMainMenu");
         twoPlayersGameButton.setMaxWidth(300);
         twoPlayersGameButton.setMaxHeight(180);
@@ -213,7 +213,7 @@ public class MainStage extends Application {
 
         HBox robotWarsButtonHBox = new HBox();
         robotWarsButtonHBox.setAlignment(Pos.CENTER);
-        Button robotWarsButton = new Button("Wojna Robotów");
+        robotWarsButton = new Button("Wojna Robotów");
         robotWarsButton.setId("buttonInMainMenu");
         robotWarsButton.setMaxWidth(300);
         robotWarsButton.setMaxHeight(180);
@@ -337,7 +337,7 @@ public class MainStage extends Application {
 
         HBox optionsButtonHBox = new HBox();
         optionsButtonHBox.setAlignment(Pos.CENTER);
-        Button optionsButton = new Button("Opcje");
+        optionsButton = new Button("Opcje");
         optionsButton.setId("buttonInMainMenu");
         optionsButton.setMaxWidth(300);
         optionsButton.setMaxHeight(180);
@@ -357,7 +357,7 @@ public class MainStage extends Application {
 
         HBox exitButtonHBox = new HBox();
         exitButtonHBox.setAlignment(Pos.CENTER);
-        Button exitButton = new Button("Wyjście");
+        exitButton = new Button("Wyjście");
         exitButton.setId("buttonInMainMenu");
         exitButton.setMaxWidth(300);
         exitButton.setMaxHeight(180);
@@ -453,6 +453,29 @@ public class MainStage extends Application {
         }
         double width = mainStage.getWidth();
         double height = mainStage.getHeight();
+        bricksTitleLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,height/4.7));
+
+        singlePlayerGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,height/32));
+        twoPlayersGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,height/32));
+        robotWarsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,height/32));
+        optionsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,height/32));
+        exitButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,height/32));
+        FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
+        buttonWidth = fontLoader.computeStringWidth(bricksTitleLabel.getText(),bricksTitleLabel.getFont())*(2.0/3.0);
+        if(buttonWidth>300) {
+            singlePlayerGameButton.setMaxWidth(buttonWidth);
+            twoPlayersGameButton.setMaxWidth(buttonWidth);
+            robotWarsButton.setMaxWidth(buttonWidth);
+            optionsButton.setMaxWidth(buttonWidth);
+            exitButton.setMaxWidth(buttonWidth);
+        }
+        else {
+            singlePlayerGameButton.setMaxWidth(300);
+            twoPlayersGameButton.setMaxWidth(300);
+            robotWarsButton.setMaxWidth(300);
+            optionsButton.setMaxWidth(300);
+            exitButton.setMaxWidth(300);
+        }
         mainStage.setScene(mainScene);
         mainStage.setWidth(width);
         mainStage.setHeight(height);
@@ -597,5 +620,13 @@ public class MainStage extends Application {
     public String classicTheme = MainStage.class.getResource("style.css").toExternalForm();
     public String minecraftTheme = MainStage.class.getResource("style2.css").toExternalForm();
     public String selectedTheme;
+
+    Button singlePlayerGameButton;
+    Button twoPlayersGameButton;
+    Button robotWarsButton;
+    Button optionsButton;
+    Button exitButton;
+
+    Text bricksTitleLabel;
 
 }
