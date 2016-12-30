@@ -63,7 +63,7 @@ public class OptionsPane extends Pane {
         }
 
         Label generalSettingsLabel = new Label("Ogólne:");
-        generalSettingsLabel.setFont(Font.font("Comic Sans MS",20));
+        generalSettingsLabel.setFont(Font.font("Comic Sans MS",28.4));
         generalSettingsLabel.setPrefWidth(Double.MAX_VALUE);
         generalSettingsLabel.setAlignment(Pos.CENTER);
 
@@ -227,7 +227,7 @@ public class OptionsPane extends Pane {
         }
 
         Label robotWarsLabel = new Label("Wojny Robotów:");
-        robotWarsLabel.setFont(Font.font("Comic Sans MS",20));
+        robotWarsLabel.setFont(Font.font("Comic Sans MS",28.4));
         robotWarsLabel.setPrefWidth(Double.MAX_VALUE);
         robotWarsLabel.setAlignment(Pos.CENTER);
 
@@ -390,6 +390,7 @@ public class OptionsPane extends Pane {
 
         HBox saveAndExitHBox = new HBox();
         saveAndExitButton = new Button("Zapisz Zmiany");
+        saveAndExitButton.setFont(Font.font("Comic Sans MS",12.9));
         saveAndExitButton.setPrefWidth(300);
         saveAndExitButton.setPrefHeight(Double.MAX_VALUE);
         saveAndExitHBox.setAlignment(Pos.CENTER);
@@ -425,11 +426,90 @@ public class OptionsPane extends Pane {
         mainGridPane.add(saveAndExitHBox,0,14,2,1);
         getChildren().add(mainGridPane);
 
+        generalSettingsLabel.setFont(Font.font("Comic Sans MS",Bricks.mainStage.mainStage.getHeight()/25));
+        robotWarsLabel.setFont(Font.font("Comic Sans MS",Bricks.mainStage.mainStage.getHeight()/25));
+        saveAndExitButton.setFont(Font.font("Comic Sans MS",Bricks.mainStage.mainStage.getHeight()/55));
+
+        boardSizeLabel.setFont(Font.font("Comic Sans MS",Bricks.mainStage.mainStage.getHeight()/40));
+        firstPlayerColorLabel.setFont(Font.font("Comic Sans MS",Bricks.mainStage.mainStage.getHeight()/40));
+        secondPlayerColorLabel.setFont(Font.font("Comic Sans MS",Bricks.mainStage.mainStage.getHeight()/40));
+        soundSettingsLabel.setFont(Font.font("Comic Sans MS",Bricks.mainStage.mainStage.getHeight()/40));
+        volumeSettingLabel.setFont(Font.font("Comic Sans MS",Bricks.mainStage.mainStage.getHeight()/40));
+        runAsFirstPlayerLabel.setFont(Font.font("Comic Sans MS",Bricks.mainStage.mainStage.getHeight()/40));
+        runAsSecondPlayerLabel.setFont(Font.font("Comic Sans MS",Bricks.mainStage.mainStage.getHeight()/40));
+        singPlayerComputerPlayerLabel.setFont(Font.font("Comic Sans MS",Bricks.mainStage.mainStage.getHeight()/40));
+        parametersFirstPlayerLabel.setFont(Font.font("Comic Sans MS",Bricks.mainStage.mainStage.getHeight()/40));
+        parametersSecondPlayerLabel.setFont(Font.font("Comic Sans MS",Bricks.mainStage.mainStage.getHeight()/40));
+        firstProgramNameLabel.setFont(Font.font("Comic Sans MS",Bricks.mainStage.mainStage.getHeight()/55));
+        secondProgramNameLabel.setFont(Font.font("Comic Sans MS",Bricks.mainStage.mainStage.getHeight()/55));
+
+        boardSizeComboBoxHBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight()/40);
+        boardSizeComboBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight()/40);
+
+        chooseFirstComputerPlayerHBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight()/40);
+        firstProgramTypeComboBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight()/40);
+
+        chooseSecondComputerPlayerHBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight()/40);
+        secondProgramTypeComboBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight()/40);
+
+        if(Bricks.mainStage.mainStage.getHeight()/40>25) {
+            firstPlayerColorPicker.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 40);
+            secondPlayerColorPicker.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 40);
+        }
+        else {
+            firstPlayerColorPicker.setMaxHeight(25);
+            secondPlayerColorPicker.setMaxHeight(25);
+        }
+
+        chooseTheme.setMaxHeight(Bricks.mainStage.mainStage.getHeight()/40);
+
         saveAndExitButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
                 Bricks.mainStage.setSettings(BoardSize,firstPlayerColor,secondPlayerColor,isSound,volume,debugMode,playerFirstFullPath,playerSecondFullPath,firstPlayerProgramType,secondPlayerProgramType,firstPlayerRunCommand,secondPlayerRunCommand,computerPlayerType,theme);
                 Bricks.mainStage.backToMenu();
+            }
+        });
+
+        Bricks.mainStage.mainStage.heightProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                generalSettingsLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+                robotWarsLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+                saveAndExitButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/55));
+
+                boardSizeLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+                firstPlayerColorLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+                secondPlayerColorLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+                soundSettingsLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+                volumeSettingLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+                runAsFirstPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+                runAsSecondPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+                singPlayerComputerPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+                parametersFirstPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+                parametersSecondPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+                firstProgramNameLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/55));
+                secondProgramNameLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/55));
+
+                boardSizeComboBoxHBox.setMaxHeight(newValue.doubleValue()/40);
+                boardSizeComboBox.setMaxHeight(newValue.doubleValue()/40);
+
+                chooseFirstComputerPlayerHBox.setMaxHeight(newValue.doubleValue()/40);
+                firstProgramTypeComboBox.setMaxHeight(newValue.doubleValue()/40);
+
+                chooseSecondComputerPlayerHBox.setMaxHeight(newValue.doubleValue()/40);
+                secondProgramTypeComboBox.setMaxHeight(newValue.doubleValue()/40);
+
+                if(newValue.doubleValue()/40>25) {
+                    firstPlayerColorPicker.setMaxHeight(newValue.doubleValue() / 40);
+                    secondPlayerColorPicker.setMaxHeight(newValue.doubleValue() / 40);
+                }
+                else {
+                    firstPlayerColorPicker.setMaxHeight(25);
+                    secondPlayerColorPicker.setMaxHeight(25);
+                }
+
+                chooseTheme.setMaxHeight(newValue.doubleValue()/40);
             }
         });
         setOnKeyReleased(new EventHandler<KeyEvent>() {
