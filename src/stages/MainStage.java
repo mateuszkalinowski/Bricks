@@ -5,9 +5,6 @@ import com.sun.javafx.tk.Toolkit;
 import core.Bricks;
 import core.Settings;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,7 +14,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -25,7 +21,6 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 import logic.BoardLogic;
 import logic.RobotPlayer;
 
@@ -56,9 +51,6 @@ public class MainStage extends Application {
         bricksTitleHBox.setAlignment(Pos.CENTER);
         bricksTitleLabel = new Text();
         bricksTitleLabel.setText("Bricks");
-        //bricksTitleLabel.setFont(new Font("Comic Sans MS",126));
-        //bricksTitleLabel.setMaxWidth(Double.MAX_VALUE);
-        //bricksTitleLabel.setAlignment(Pos.CENTER);
         bricksTitleLabel.setId("logo");
         bricksTitleLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,151));
         bricksTitleHBox.getChildren().add(bricksTitleLabel);
@@ -148,10 +140,10 @@ public class MainStage extends Application {
                         ButtonType buttonNo = new ButtonType("Anuluj");
                         alert.getButtonTypes().setAll(buttonNo,resetBoard,buttonYes);
                         Optional<ButtonType> result = alert.showAndWait();
-                        if (result.get() == buttonYes) {
+                        if (result.isPresent() && result.get() == buttonYes) {
                             Bricks.mainStage.backToMenu();
                         }
-                        else if(result.get() == resetBoard) {
+                        else if(result.isPresent() && result.get() == resetBoard) {
                             gamePane.resetBoard();
                         }
 
@@ -200,10 +192,10 @@ public class MainStage extends Application {
                     ButtonType buttonNo = new ButtonType("Anuluj");
                     alert.getButtonTypes().setAll(buttonNo,resetBoard,buttonYes);
                     Optional<ButtonType> result = alert.showAndWait();
-                    if (result.get() == buttonYes) {
+                    if (result.isPresent() && result.get() == buttonYes) {
                         Bricks.mainStage.backToMenu();
                     }
-                    else if(result.get() == resetBoard) {
+                    else if(result.isPresent() && result.get() == resetBoard) {
                         gamePane.resetBoard();
                     }
                 }
@@ -278,28 +270,25 @@ public class MainStage extends Application {
                 gamePane.drawFrame();
                 mainStage.setScene(sceneOfTheGame);
                 mainStage.show();
-                sceneOfTheGame.setOnKeyReleased(new EventHandler<KeyEvent>() {
-                    @Override
-                    public void handle(KeyEvent event) {
-                        if (event.getCode() == KeyCode.ESCAPE) {
-                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                            alert.getDialogPane().getStylesheets().add(selectedTheme);
-                            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                            alert.setTitle("Potwierdzenie Wyjścia");
-                            alert.setHeaderText("Chcesz wrócić do menu głównego?");
-                            alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
-                            ButtonType buttonYes = new ButtonType("Tak");
-                            ButtonType resetBoard = new ButtonType("Zresetuj Grę");
-                            ButtonType buttonNo = new ButtonType("Anuluj");
-                            alert.getButtonTypes().setAll(buttonNo,resetBoard,buttonYes);
-                            Optional<ButtonType> result = alert.showAndWait();
-                            if (result.get() == buttonYes) {
-                                Bricks.mainStage.backToMenu();
-                            }
-                            else if(result.get() == resetBoard) {
-                                gamePane.resetBoard();
-                            }
+                sceneOfTheGame.setOnKeyReleased(event13 -> {
+                    if (event13.getCode() == KeyCode.ESCAPE) {
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.getDialogPane().getStylesheets().add(selectedTheme);
+                        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                        alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                        alert.setTitle("Potwierdzenie Wyjścia");
+                        alert.setHeaderText("Chcesz wrócić do menu głównego?");
+                        alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
+                        ButtonType buttonYes = new ButtonType("Tak");
+                        ButtonType resetBoard = new ButtonType("Zresetuj Grę");
+                        ButtonType buttonNo = new ButtonType("Anuluj");
+                        alert.getButtonTypes().setAll(buttonNo,resetBoard,buttonYes);
+                        Optional<ButtonType> result = alert.showAndWait();
+                        if (result.isPresent() && result.get() == buttonYes) {
+                            Bricks.mainStage.backToMenu();
+                        }
+                        else if(result.isPresent() && result.get() == resetBoard) {
+                            gamePane.resetBoard();
                         }
                     }
                 });
@@ -313,7 +302,7 @@ public class MainStage extends Application {
                 alert.setHeaderText("Pierwszy program grający nie działa.");
                 alert.setContentText("Sprawdź podaną w ustawienaich ścieżkę.");
                 alert.showAndWait();
-            } else  if(checkFirstComputerPlayer && !checkSecondComputerPlayer) {
+            } else  if(checkFirstComputerPlayer) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
                 alert.getDialogPane().getStylesheets().add(selectedTheme);
                 Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
@@ -406,37 +395,34 @@ public class MainStage extends Application {
         });
         mainStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
 
-        mainStage.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                bricksTitleLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/4.7));
+        mainStage.heightProperty().addListener((observable, oldValue, newValue) -> {
+            bricksTitleLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/4.7));
 
-                singlePlayerGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
-                twoPlayersGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
-                robotWarsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
-                optionsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
-                exitButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
-                FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
-                buttonWidth = fontLoader.computeStringWidth(bricksTitleLabel.getText(),bricksTitleLabel.getFont())*(2.0/3.0);
-                if(buttonWidth>300) {
-                    singlePlayerGameButton.setMaxWidth(buttonWidth);
-                    twoPlayersGameButton.setMaxWidth(buttonWidth);
-                    robotWarsButton.setMaxWidth(buttonWidth);
-                    optionsButton.setMaxWidth(buttonWidth);
-                    exitButton.setMaxWidth(buttonWidth);
-                }
-                else {
-                    singlePlayerGameButton.setMaxWidth(300);
-                    twoPlayersGameButton.setMaxWidth(300);
-                    robotWarsButton.setMaxWidth(300);
-                    optionsButton.setMaxWidth(300);
-                    exitButton.setMaxWidth(300);
-                }
+            singlePlayerGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
+            twoPlayersGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
+            robotWarsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
+            optionsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
+            exitButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
+            FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
+            buttonWidth = fontLoader.computeStringWidth(bricksTitleLabel.getText(),bricksTitleLabel.getFont())*(2.0/3.0);
+            if(buttonWidth>300) {
+                singlePlayerGameButton.setMaxWidth(buttonWidth);
+                twoPlayersGameButton.setMaxWidth(buttonWidth);
+                robotWarsButton.setMaxWidth(buttonWidth);
+                optionsButton.setMaxWidth(buttonWidth);
+                exitButton.setMaxWidth(buttonWidth);
+            }
+            else {
+                singlePlayerGameButton.setMaxWidth(300);
+                twoPlayersGameButton.setMaxWidth(300);
+                robotWarsButton.setMaxWidth(300);
+                optionsButton.setMaxWidth(300);
+                exitButton.setMaxWidth(300);
             }
         });
 
     }
-    public int[] getSizeAsArray() throws NullPointerException{
+    int[] getSizeAsArray() throws NullPointerException{
         int[] size = new int[2];
         if(Bricks.mainStage.sceneOfTheGame==null) {
             throw new NullPointerException();
@@ -446,7 +432,7 @@ public class MainStage extends Application {
         return size;
     }
 
-    public void backToMenu(){
+    void backToMenu(){
         if(gamePane!=null) {
             gamePane.resetBoard();
         }
@@ -581,51 +567,51 @@ public class MainStage extends Application {
 
         return flag;
     }
-    public Stage mainStage;
+    Stage mainStage;
     private Scene mainScene;
 
     private Scene sceneOfTheGame;
     private Scene sceneOfSettings;
 
-    public GamePane gamePane;
+    GamePane gamePane;
     private OptionsPane optionsPane;
 
     //USTAWIENIA GRY:
     private int firstPlayerProgramType;
     private int secondPlayerProgramType;
-    public int volume;
+    int volume;
     int BoardSize;
-    public int computerPlayerType;
+    int computerPlayerType;
 
     private double buttonWidth;
 
-    public boolean isSound;
+    boolean isSound;
     private boolean debugMode;
 
-    public javafx.scene.paint.Color firstPlayerColor;
-    public javafx.scene.paint.Color secondPlayerColor;
+    javafx.scene.paint.Color firstPlayerColor;
+    javafx.scene.paint.Color secondPlayerColor;
 
     private String playerFirstFullPath = "";
     private String playerSecondFullPath = "";
     private String pathToPlayerOne = "";
     private String pathToPlayerTwo = "";
-    public String playerFirstProgramName = "";
-    public String playerSecondProgramName = "";
+    String playerFirstProgramName = "";
+    String playerSecondProgramName = "";
     private String firstPlayerRunCommand;
     private String secondPlayerRunCommand;
 
-    public int theme;
+    int theme;
 
-    public String classicTheme = MainStage.class.getResource("style.css").toExternalForm();
-    public String minecraftTheme = MainStage.class.getResource("style2.css").toExternalForm();
-    public String selectedTheme;
+    private String classicTheme = MainStage.class.getResource("style.css").toExternalForm();
+    private String minecraftTheme = MainStage.class.getResource("style2.css").toExternalForm();
+    String selectedTheme;
 
-    Button singlePlayerGameButton;
-    Button twoPlayersGameButton;
-    Button robotWarsButton;
-    Button optionsButton;
-    Button exitButton;
+    private Button singlePlayerGameButton;
+    private Button twoPlayersGameButton;
+    private Button robotWarsButton;
+    private Button optionsButton;
+    private Button exitButton;
 
-    Text bricksTitleLabel;
+    private Text bricksTitleLabel;
 
 }
