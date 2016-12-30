@@ -60,7 +60,6 @@ public class MainStage extends Application {
         //bricksTitleLabel.setMaxWidth(Double.MAX_VALUE);
         //bricksTitleLabel.setAlignment(Pos.CENTER);
         bricksTitleLabel.setId("logo");
-        if(theme==1)
         bricksTitleLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,151));
         bricksTitleHBox.getChildren().add(bricksTitleLabel);
 

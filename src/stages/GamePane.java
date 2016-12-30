@@ -711,13 +711,22 @@ public class GamePane extends Pane {
             if(width>height) {
                 double difference = (width-height);
                 if(difference/2.0>20)
-                    marginX = difference/2.0 + marginY;
+                    marginX = difference/2.0;
                 else
-                    marginX = marginY;
+                    marginX = 20;
             }
             else {
-                marginX = marginY;
+                marginX = 20;
             }
+            if(height>width) {
+                double difference = (height-width);
+                if(difference/2.0>20)
+                    marginY = difference/2.0;
+                else
+                    marginY = 20;
+            }
+            else
+                marginY=20;
             canvas.setHeight(height);
             canvas.setWidth(width);
             GraphicsContext gc = canvas.getGraphicsContext2D();
