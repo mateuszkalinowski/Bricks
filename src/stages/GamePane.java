@@ -709,9 +709,9 @@ public class GamePane extends Pane {
             int width = rozmiar[0];
             int height = (int)mainGridPane.getRowConstraints().get(0).getPercentHeight()*rozmiar[1]/100;
             if(width>height) {
-                double difference = (width-height)/2.0;
+                double difference = (width-height);
                 if(difference/2.0>20)
-                    marginX = difference/2.0;
+                    marginX = difference/2.0 + marginY;
                 else
                     marginX = marginY;
             }
