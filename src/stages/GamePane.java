@@ -19,6 +19,7 @@ import javafx.scene.image.Image;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import logic.*;
 import stages.*;
@@ -694,12 +695,23 @@ public class GamePane extends Pane {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 drawFrame();
+
             }
         });
         heightProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
                 drawFrame();
+                if(gamemode==1) {
+                    undoMoveButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/50));
+                }
+                if(gamemode==2) {
+                    speedUpButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                    speedDownButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                    nextMoveButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                    autoPlayButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                    gamesButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                }
             }
         });
     }

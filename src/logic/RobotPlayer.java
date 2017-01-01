@@ -75,7 +75,6 @@ public class RobotPlayer {
             reader.read(buffor);
             String nextMove="";
             for(int i = 0; i < 255; i++) {
-                System.out.print(buffor[i]);
                 nextMove+=buffor[i];
             }
             if(nextMove.contains(System.lineSeparator())) {
