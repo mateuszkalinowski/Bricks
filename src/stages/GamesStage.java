@@ -1,35 +1,24 @@
 package stages;
 
 import core.Bricks;
-import exceptions.InvalidMoveException;
 import javafx.application.Application;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import javafx.stage.WindowEvent;
 import logic.BoardLogic;
 import logic.MovesStorage;
 import logic.RobotPlayer;
-
 import java.io.File;
-import java.io.FileOutputStream;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
-import java.util.concurrent.TimeoutException;
-
 /**
  * Created by Mateusz on 25.12.2016.
  * Project Bricks
@@ -57,86 +46,83 @@ public class GamesStage extends Application {
         boardsSizesListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         importPoints();
 
-        boardsSizesListView.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent e) {
-                int selectedIndex = boardsSizesListView.getSelectionModel().getSelectedIndex();
-                if (boardsSizesListView.getItems().size() > 0 && selectedIndex>=0) {
-                    String currentText = boardsSizesListView.getSelectionModel().getSelectedItem();
-                    if (selectedIndex >= 0) {
-                        if (e.getCode() == KeyCode.DIGIT1) {
-                            if (currentText.length() <= 2)
-                                boardsSizesListView.getItems().set(selectedIndex, currentText + "1");
-                                boardsSizesListView.getSelectionModel().select(selectedIndex);
-                        }
-                        if (e.getCode() == KeyCode.DIGIT2) {
-                            if (currentText.length() <= 2)
-                                boardsSizesListView.getItems().set(selectedIndex, currentText + "2");
+        boardsSizesListView.setOnKeyReleased(e -> {
+            int selectedIndex = boardsSizesListView.getSelectionModel().getSelectedIndex();
+            if (boardsSizesListView.getItems().size() > 0 && selectedIndex>=0) {
+                String currentText = boardsSizesListView.getSelectionModel().getSelectedItem();
+                if (selectedIndex >= 0) {
+                    if (e.getCode() == KeyCode.DIGIT1) {
+                        if (currentText.length() <= 2)
+                            boardsSizesListView.getItems().set(selectedIndex, currentText + "1");
                             boardsSizesListView.getSelectionModel().select(selectedIndex);
+                    }
+                    if (e.getCode() == KeyCode.DIGIT2) {
+                        if (currentText.length() <= 2)
+                            boardsSizesListView.getItems().set(selectedIndex, currentText + "2");
+                        boardsSizesListView.getSelectionModel().select(selectedIndex);
+                    }
+                    if (e.getCode() == KeyCode.DIGIT3) {
+                        if (currentText.length() <= 2)
+                            boardsSizesListView.getItems().set(selectedIndex, currentText + "3");
+                        boardsSizesListView.getSelectionModel().select(selectedIndex);
+                    }
+                    if (e.getCode() == KeyCode.DIGIT4) {
+                        if (currentText.length() <= 2)
+                            boardsSizesListView.getItems().set(selectedIndex, currentText + "4");
+                        boardsSizesListView.getSelectionModel().select(selectedIndex);
+                    }
+                    if (e.getCode() == KeyCode.DIGIT5) {
+                        if (currentText.length() <= 2)
+                            boardsSizesListView.getItems().set(selectedIndex, currentText + "5");
+                        boardsSizesListView.getSelectionModel().select(selectedIndex);
+                    }
+                    if (e.getCode() == KeyCode.DIGIT6) {
+                        if (currentText.length() <= 2)
+                            boardsSizesListView.getItems().set(selectedIndex, currentText + "6");
+                        boardsSizesListView.getSelectionModel().select(selectedIndex);
+                    }
+                    if (e.getCode() == KeyCode.DIGIT7) {
+                        if (currentText.length() <= 2)
+                            boardsSizesListView.getItems().set(selectedIndex, currentText + "7");
+                        boardsSizesListView.getSelectionModel().select(selectedIndex);
+                    }
+                    if (e.getCode() == KeyCode.DIGIT8) {
+                        if (currentText.length() <= 2)
+                            boardsSizesListView.getItems().set(selectedIndex, currentText + "8");
+                        boardsSizesListView.getSelectionModel().select(selectedIndex);
+                    }
+                    if (e.getCode() == KeyCode.DIGIT9) {
+                        if (currentText.length() <= 2)
+                            boardsSizesListView.getItems().set(selectedIndex, currentText + "9");
+                        boardsSizesListView.getSelectionModel().select(selectedIndex);
+                    }
+                    if (e.getCode() == KeyCode.DIGIT0) {
+                        if (currentText.length() <= 2 && currentText.length()>0)
+                            boardsSizesListView.getItems().set(selectedIndex, currentText + "0");
+                        boardsSizesListView.getSelectionModel().select(selectedIndex);
+                    }
+                    if (e.getCode() == KeyCode.BACK_SPACE) {
+                        if (currentText.length() >= 2) {
+                            boardsSizesListView.getItems().set(selectedIndex, currentText.substring(0, currentText.length() - 1));
+                        } else if (currentText.length() == 1 && boardsSizesListView.getItems().size() > 1) {
+                            boardsSizesListView.getItems().remove(selectedIndex);
+                            boardsSizesListView.getSelectionModel().select(selectedIndex - 1);
+                        } else if (currentText.length() == 1 && boardsSizesListView.getItems().size() == 1) {
+                            boardsSizesListView.getItems().set(selectedIndex, "");
+                        } else if (currentText.length() == 0 && selectedIndex > 0) {
+                            boardsSizesListView.getItems().remove(selectedIndex);
+                            boardsSizesListView.getSelectionModel().select(selectedIndex - 1);
                         }
-                        if (e.getCode() == KeyCode.DIGIT3) {
-                            if (currentText.length() <= 2)
-                                boardsSizesListView.getItems().set(selectedIndex, currentText + "3");
-                            boardsSizesListView.getSelectionModel().select(selectedIndex);
+                    }
+                    if (e.getCode() == KeyCode.ENTER) {
+                        if (selectedIndex < boardsSizesListView.getItems().size() - 1 && boardsSizesListView.getItems().get(selectedIndex).length() > 0) {
+                            boardsSizesListView.getSelectionModel().select(selectedIndex + 1);
+                        } else if (boardsSizesListView.getItems().get(selectedIndex).length() > 0) {
+                            boardsSizesListView.getItems().add("");
+                            boardsSizesListView.getSelectionModel().select(selectedIndex + 1);
+                            boardsSizesListView.scrollTo(selectedIndex+1);
                         }
-                        if (e.getCode() == KeyCode.DIGIT4) {
-                            if (currentText.length() <= 2)
-                                boardsSizesListView.getItems().set(selectedIndex, currentText + "4");
-                            boardsSizesListView.getSelectionModel().select(selectedIndex);
-                        }
-                        if (e.getCode() == KeyCode.DIGIT5) {
-                            if (currentText.length() <= 2)
-                                boardsSizesListView.getItems().set(selectedIndex, currentText + "5");
-                            boardsSizesListView.getSelectionModel().select(selectedIndex);
-                        }
-                        if (e.getCode() == KeyCode.DIGIT6) {
-                            if (currentText.length() <= 2)
-                                boardsSizesListView.getItems().set(selectedIndex, currentText + "6");
-                            boardsSizesListView.getSelectionModel().select(selectedIndex);
-                        }
-                        if (e.getCode() == KeyCode.DIGIT7) {
-                            if (currentText.length() <= 2)
-                                boardsSizesListView.getItems().set(selectedIndex, currentText + "7");
-                            boardsSizesListView.getSelectionModel().select(selectedIndex);
-                        }
-                        if (e.getCode() == KeyCode.DIGIT8) {
-                            if (currentText.length() <= 2)
-                                boardsSizesListView.getItems().set(selectedIndex, currentText + "8");
-                            boardsSizesListView.getSelectionModel().select(selectedIndex);
-                        }
-                        if (e.getCode() == KeyCode.DIGIT9) {
-                            if (currentText.length() <= 2)
-                                boardsSizesListView.getItems().set(selectedIndex, currentText + "9");
-                            boardsSizesListView.getSelectionModel().select(selectedIndex);
-                        }
-                        if (e.getCode() == KeyCode.DIGIT0) {
-                            if (currentText.length() <= 2 && currentText.length()>0)
-                                boardsSizesListView.getItems().set(selectedIndex, currentText + "0");
-                            boardsSizesListView.getSelectionModel().select(selectedIndex);
-                        }
-                        if (e.getCode() == KeyCode.BACK_SPACE) {
-                            if (currentText.length() >= 2) {
-                                boardsSizesListView.getItems().set(selectedIndex, currentText.substring(0, currentText.length() - 1));
-                            } else if (currentText.length() == 1 && boardsSizesListView.getItems().size() > 1) {
-                                boardsSizesListView.getItems().remove(selectedIndex);
-                                boardsSizesListView.getSelectionModel().select(selectedIndex - 1);
-                            } else if (currentText.length() == 1 && boardsSizesListView.getItems().size() == 1) {
-                                boardsSizesListView.getItems().set(selectedIndex, "");
-                            } else if (currentText.length() == 0 && selectedIndex > 0) {
-                                boardsSizesListView.getItems().remove(selectedIndex);
-                                boardsSizesListView.getSelectionModel().select(selectedIndex - 1);
-                            }
-                        }
-                        if (e.getCode() == KeyCode.ENTER) {
-                            if (selectedIndex < boardsSizesListView.getItems().size() - 1 && boardsSizesListView.getItems().get(selectedIndex).length() > 0) {
-                                boardsSizesListView.getSelectionModel().select(selectedIndex + 1);
-                            } else if (boardsSizesListView.getItems().get(selectedIndex).length() > 0) {
-                                boardsSizesListView.getItems().add("");
-                                boardsSizesListView.getSelectionModel().select(selectedIndex + 1);
-                                boardsSizesListView.scrollTo(selectedIndex+1);
-                            }
 
-                        }
                     }
                 }
             }
@@ -183,7 +169,7 @@ public class GamesStage extends Application {
         runButton.setOnAction(event -> {
             if (runButton.getText().equals("Uruchom")) {
                 gamesProgressBar.setProgress(0);
-            ArrayList<Integer> boardsSizes = new ArrayList<Integer>();
+            ArrayList<Integer> boardsSizes = new ArrayList<>();
             for (int i = boardsSizesListView.getItems().size() - 1; i >= 0; i--) {
                 try {
                     int toAdd = Integer.parseInt(boardsSizesListView.getItems().get(i));
@@ -217,7 +203,7 @@ public class GamesStage extends Application {
                                     break;
                                 }
                                 int player = 1;
-                                while (true && running) {
+                                while ( running) {
                                     int[] move = new int[4];
                                     if (movesStorage.isEmpty()) {
                                         try {
@@ -295,16 +281,13 @@ public class GamesStage extends Application {
                 Thread autoGameThread = new Thread(gamesTask);
                 gamesProgressBar.progressProperty().bind(gamesTask.progressProperty());
                 autoGameThread.start();
-                gamesTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-                    @Override
-                    public void handle(WorkerStateEvent event) {
-                        runButton.setText("Uruchom");
-                        winsByFirstComputerLabel.setText(firstPlayerWins+"");
-                        winsBySecondComputerLabel.setText(secondPlayerWins+"");
-                        gamesProgressBar.progressProperty().unbind();
-                        if(!Bricks.mainStage.playerFirstProgramName.equals(Bricks.mainStage.playerSecondProgramName)) {
-                            RobotPlayer.exportLogs(firstPlayerWins, secondPlayerWins);
-                        }
+                gamesTask.setOnSucceeded(event1 -> {
+                    runButton.setText("Uruchom");
+                    winsByFirstComputerLabel.setText(firstPlayerWins+"");
+                    winsBySecondComputerLabel.setText(secondPlayerWins+"");
+                    gamesProgressBar.progressProperty().unbind();
+                    if(!Bricks.mainStage.playerFirstProgramName.equals(Bricks.mainStage.playerSecondProgramName)) {
+                        RobotPlayer.exportLogs(firstPlayerWins, secondPlayerWins);
                     }
                 });
 
@@ -317,7 +300,7 @@ public class GamesStage extends Application {
         });
 
         HBox backButtonHBox = new HBox();
-        backButton = new Button("Powrót");
+        Button backButton = new Button("Powrót");
         backButton.setPrefWidth(140);
         backButton.setPrefHeight(350);
         backButtonHBox.setAlignment(Pos.CENTER);
@@ -325,21 +308,16 @@ public class GamesStage extends Application {
         HBox.setMargin(backButton, new Insets(5,0,5,0));
         HBox.setHgrow(backButton, Priority.ALWAYS);
         mainGridPane.add(backButtonHBox,0,11,3,1);
-        backButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                try {
-                    Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
-                    Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);
-                }
-                catch (Exception e){
-
-                }
-                running=false;
-                gamesProgressBar.progressProperty().unbind();
-                exportPoints();
-                gamesStage.close();
+        backButton.setOnAction(event -> {
+            try {
+                Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
+                Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);
             }
+            catch (Exception ignored){}
+            running=false;
+            gamesProgressBar.progressProperty().unbind();
+            exportPoints();
+            gamesStage.close();
         });
 
         gamesProgressBar = new ProgressBar();
@@ -364,18 +342,13 @@ public class GamesStage extends Application {
         gamesScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
 
 
-        gamesStage.setOnCloseRequest(new EventHandler<WindowEvent>() {
-            @Override
-            public void handle(WindowEvent event) {
-                try {
-                    running = false;
-                    Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
-                    Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);
-                } catch (Exception e) {
-
-                }
-                exportPoints();
-            }
+        gamesStage.setOnCloseRequest(event -> {
+            try {
+                running = false;
+                Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
+                Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);
+            } catch (Exception ignored) {}
+            exportPoints();
         });
 
     }
@@ -405,6 +378,7 @@ public class GamesStage extends Application {
         try {
             String path = System.getProperty("user.home") + "/Documents/Bricks";
             if (!new File(path + "/boardsSizes").exists()) {
+                //noinspection ResultOfMethodCallIgnored
                 new File(path + "/boardsSizes").createNewFile();
             }
             String filename = path + "/boardsSizes";
@@ -418,20 +392,19 @@ public class GamesStage extends Application {
         catch (Exception ignored) {}
 
     }
-    ListView<String> boardsSizesListView;
-    Button runButton;
-    Button backButton;
-    ProgressBar gamesProgressBar;
-    Stage gamesStage;
+    private ListView<String> boardsSizesListView;
+    private Button runButton;
+    private ProgressBar gamesProgressBar;
+    private Stage gamesStage;
 
-    boolean running = false;
+    private boolean running = false;
 
-    Task<Void> gamesTask;
+    private Task<Void> gamesTask;
 
-    Label winsByFirstComputerLabel;
+    private  Label winsByFirstComputerLabel;
 
-    Label winsBySecondComputerLabel;
+    private Label winsBySecondComputerLabel;
 
-    int firstPlayerWins = 0;
-    int secondPlayerWins = 0;
+    private int firstPlayerWins = 0;
+    private int secondPlayerWins = 0;
 }

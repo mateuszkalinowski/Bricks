@@ -2,12 +2,7 @@ package stages;
 
 import core.*;
 import exceptions.InvalidMoveException;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
@@ -16,22 +11,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import logic.*;
-import stages.*;
-
-import javax.jws.soap.SOAPBinding;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Optional;
 import java.util.Random;
@@ -41,11 +29,10 @@ import java.util.concurrent.TimeoutException;
  * Created by Mateusz on 18.12.2016.
  * Project InferenceEngine
  */
-public class GamePane extends Pane {
-    public GamePane(BoardLogic board, int gametype){
+class GamePane extends Pane {
+    GamePane(BoardLogic board, int gametype){
         this.board = board;
         this.gamemode = gametype;
-        stop = new Button("Stop");
         canvas = new Canvas();
         mainGridPane = new GridPane();
         ColumnConstraints column = new ColumnConstraints();
@@ -120,7 +107,7 @@ public class GamePane extends Pane {
                 }
             });
 
-            autoGameSpeed = 5;
+            int autoGameSpeed = 5;
             speedTextField = new TextField(autoGameSpeed + "");
             speedTextField.setMaxWidth(32);
             speedTextField.setMinWidth(32);
@@ -366,7 +353,7 @@ public class GamePane extends Pane {
                             result = alert.showAndWait();
                             resetBoard();
                             controlAutoPlayButtons(true);
-                            if (result.get() == buttonExitToMenu)
+                            if (result.isPresent() && result.get() == buttonExitToMenu)
                                 Bricks.mainStage.backToMenu();
                         }
                     });
@@ -398,7 +385,7 @@ public class GamePane extends Pane {
                             result = alert.showAndWait();
                             resetBoard();
                             controlAutoPlayButtons(true);
-                            if (result.get() == buttonExitToMenu)
+                            if (result.isPresent() && result.get() == buttonExitToMenu)
                                 Bricks.mainStage.backToMenu();
                         }
                     });
@@ -425,7 +412,7 @@ public class GamePane extends Pane {
                 alert.getButtonTypes().setAll(buttonNo,buttonYes);
                 if(!movesStorage.isEmpty()) {
                     result = alert.showAndWait();
-                    if (result.get() == buttonYes) {
+                    if (result.isPresent() && result.get() == buttonYes) {
                         resetBoard();
                         Bricks.autoPlayRunning = false;
                         try {
@@ -659,36 +646,30 @@ public class GamePane extends Pane {
         grassBackground = new Image(MainStage.class.getResourceAsStream("resources/dirt_grass.png"));
         sandBackground = new Image(MainStage.class.getResourceAsStream("resources/dirt_sand.png"));
         snowBackground = new Image(MainStage.class.getResourceAsStream("resources/dirt_snow.png"));
-        skyboxside = new Image(MainStage.class.getResourceAsStream("resources/skybox_side.png"));
         skyboxtop = new Image(MainStage.class.getResourceAsStream("resources/skybox_top.png"));
         skyboxsideclouds = new Image(MainStage.class.getResourceAsStream("resources/skybox_sideClouds.png"));
         skyboxsidehills = new Image(MainStage.class.getResourceAsStream("resources/skybox_sideHills.png"));
 
-        widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                drawFrame();
+        widthProperty().addListener((observable, oldValue, newValue) -> {
+            drawFrame();
 
-            }
         });
-        heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                drawFrame();
-                if(gamemode==1) {
-                    undoMoveButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/50));
-                }
-                if(gamemode==2) {
-                    speedUpButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
-                    speedDownButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
-                    nextMoveButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
-                    autoPlayButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
-                    gamesButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
-                }
+        heightProperty().addListener((observable, oldValue, newValue) -> {
+            drawFrame();
+            if(gamemode==1) {
+                undoMoveButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/50));
+            }
+            if(gamemode==2) {
+                speedUpButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                speedDownButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                nextMoveButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                autoPlayButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                gamesButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
             }
         });
     }
-    public void drawFrame(){
+    @SuppressWarnings ("ConstantConditions")
+    void drawFrame(){
         try {
             int[] rozmiar = Bricks.mainStage.getSizeAsArray();
             int width = rozmiar[0];
@@ -874,11 +855,10 @@ public class GamePane extends Pane {
         }//JESZCZE NIE ZOSTALA STWORZONA MAINGAMESCENE w MAINSTAGE, NIE PROBLEM
 
     }
-    Button stop;
-    Canvas canvas = new Canvas();
-    GridPane mainGridPane;
+    private Canvas canvas = new Canvas();
+    private GridPane mainGridPane;
 
-    public void playSound() {
+    private void playSound() {
         try {
             URL putBrickURL = this.getClass().getResource("putbrick.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(putBrickURL);
@@ -895,7 +875,7 @@ public class GamePane extends Pane {
         }
     }
 
-    public boolean checkNoMoves() {
+    private boolean checkNoMoves() {
         if (!board.anyMoves()) {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -939,7 +919,7 @@ public class GamePane extends Pane {
                     }
                 }
                 result = alert.showAndWait();
-                if (result.get()==buttonPlayAgain) {
+                if (result.isPresent() && result.get()==buttonPlayAgain) {
                     resetBoard();
                 } else {
                     resetBoard();
@@ -950,8 +930,7 @@ public class GamePane extends Pane {
         return false;
     }
 
-    public void walkover(int computerPlayer, String reason) {
-        //int selection;
+    private void walkover(int computerPlayer, String reason) {
         Optional<ButtonType> result;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -992,7 +971,7 @@ public class GamePane extends Pane {
         }
         this.computerPlayer = 1;
         result = alert.showAndWait();
-        if (result.get()==buttonPlayAgain) {
+        if (result.isPresent() && result.get()==buttonPlayAgain) {
             resetBoard();
         } else {
             resetBoard();
@@ -1018,7 +997,7 @@ public class GamePane extends Pane {
             alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
             alert.setHeaderText("Komputer wykonał niepoprawny ruch, wygrałałeś, chcesz zagrać jeszcze raz?");
             result = alert.showAndWait();
-            if (result.get()==buttonPlayAgain) {
+            if (result.isPresent() && result.get()==buttonPlayAgain) {
                 resetBoard();
             } else {
                 resetBoard();
@@ -1038,7 +1017,7 @@ public class GamePane extends Pane {
             alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
             alert.setHeaderText("Komputer przekroczył czas na wykonanie ruchu, wygrałałeś, chcesz zagrać jeszcze raz?");
             result = alert.showAndWait();
-            if (result.get()==buttonPlayAgain) {
+            if (result.isPresent() && result.get()==buttonPlayAgain) {
                 resetBoard();
             } else {
                 resetBoard();
@@ -1059,7 +1038,7 @@ public class GamePane extends Pane {
         }
     }
 
-    public void resetBoard() {
+    void resetBoard() {
         board.reset();
         if(gamemode==1)
             undoMoveButton.setDisable(true);
@@ -1085,7 +1064,7 @@ public class GamePane extends Pane {
         actualPlayer = 1;
         drawFrame();
     }
-    public boolean possibleMove(int x1, int y1, int x2, int y2) {
+    private boolean possibleMove(int x1, int y1, int x2, int y2) {
         if (board.board[x1][y1] != 0 || board.board[x2][y2] != 0)
             return false;
         boolean flag = false;
@@ -1127,7 +1106,7 @@ public class GamePane extends Pane {
         }
     }
 
-    Task<Void> autoGame;
+    private Task<Void> autoGame;
 
     private BoardLogic board;
 
@@ -1136,9 +1115,8 @@ public class GamePane extends Pane {
     private double marginY = 20;
     private int selectedX;
     private int selectedY;
-    public int computerPlayer;
+    private  int computerPlayer;
     private int gamemode;
-    private int autoGameSpeed;
     private int cancelReason = 0;
     private int randomBackground[];
     private int boardStyle;
@@ -1162,18 +1140,17 @@ public class GamePane extends Pane {
     private Button gamesButton;
     private Button undoMoveButton;
 
-    TextField speedTextField;
+    private TextField speedTextField;
 
-    Image firstPlayerImage;
-    Image secondPlayerImage;
-    Image normalBackground;
-    Image grassBackground;
-    Image sandBackground;
-    Image snowBackground;
-    Image skyboxside;
-    Image skyboxtop;
-    Image skyboxsideclouds;
-    Image skyboxsidehills;
+    private Image firstPlayerImage;
+    private Image secondPlayerImage;
+    private Image normalBackground;
+    private Image grassBackground;
+    private Image sandBackground;
+    private Image snowBackground;
+    private Image skyboxtop;
+    private Image skyboxsideclouds;
+    private Image skyboxsidehills;
 
 
 }

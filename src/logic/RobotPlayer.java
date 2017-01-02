@@ -76,8 +76,8 @@ public class RobotPlayer {
                 }
             }
 
-            boolean hasNewLine = false;
             char[] buffor = new char[256];
+            //noinspection ResultOfMethodCallIgnored
             reader.read(buffor);
             String nextMove="";
             for(int i = 0; i < 255; i++) {
@@ -112,6 +112,7 @@ public class RobotPlayer {
         try {
             String path = System.getProperty("user.home") + "/Documents/Bricks";
             if (!new File(path + "/logs.txt").exists()) {
+                //noinspection ResultOfMethodCallIgnored
                 new File(path + "/logs.txt").createNewFile();
                 String filename = path + "/logs.txt";
                 PrintWriter writer = new PrintWriter(filename);
@@ -161,18 +162,15 @@ public class RobotPlayer {
 
 
                     }
-                    catch (IndexOutOfBoundsException | NumberFormatException e){
+                    catch (IndexOutOfBoundsException | NumberFormatException ignored){
                     }
                 }
                 PrintWriter writer = new PrintWriter(pathToFile);
-                for(String s : wyniki)
-                    writer.println(s);
+                wyniki.forEach(writer::println);
                 writer.println("###Sumarycznie###");
-                for(Iterator i = winsMap.keySet().iterator();i.hasNext();) {
-                    String key = (String) i.next();
-                    writer.println("Komputer: " + key + " Wygranych: " +winsMap.get(key)+ " Przegranych: " + losesMap.get(key) );
+                for (String key : winsMap.keySet()) {
+                    writer.println("Komputer: " + key + " Wygranych: " + winsMap.get(key) + " Przegranych: " + losesMap.get(key));
                 }
-
                 writer.close();
 
             }
