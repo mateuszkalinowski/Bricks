@@ -1,13 +1,11 @@
 package logic;
 
+import core.Bricks;
 import exceptions.InvalidMoveException;
 import exceptions.RobotPlayerNotWorkingException;
 
-import java.io.BufferedReader;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.PrintWriter;
-import java.util.StringJoiner;
+import java.io.*;
+import java.util.*;
 import java.util.concurrent.TimeoutException;
 
 /**
@@ -56,6 +54,14 @@ public class RobotPlayer {
         this.size = size;
         writer.println(this.size);
     }
+    public void sendEndingMessages(boolean win) {
+        if(win) {
+            writer.println("WYGRALES");
+        }
+        else {
+            writer.println("PRZEGRALES");
+        }
+    }
 
     public int[] makeMove(String message) throws InvalidMoveException, TimeoutException {
         int[] move = new int[4];
@@ -101,6 +107,78 @@ public class RobotPlayer {
         robotProc.destroy();
         reader = null;
         writer = null;
+    }
+    public static void exportLogs(int win1, int win2) {
+        try {
+            String path = System.getProperty("user.home") + "/Documents/Bricks";
+            if (!new File(path + "/logs.txt").exists()) {
+                new File(path + "/logs.txt").createNewFile();
+                String filename = path + "/logs.txt";
+                PrintWriter writer = new PrintWriter(filename);
+                writer.println(Bricks.mainStage.getFirstPlayerProgramName() + "," + Bricks.mainStage.getSecondPlayerProgramName() + "=" + win1 + "," + win2);
+                writer.println("###Sumarycznie###");
+                writer.println(Bricks.mainStage.getFirstPlayerProgramName() + "=" + win1 + "," + win2);
+                writer.println(Bricks.mainStage.getSecondPlayerProgramName() + "=" + win2 + "," + win1);
+                writer.close();
+            }
+            else {
+                String pathToFile = System.getProperty("user.home") + "/Documents/Bricks/logs.txt";
+                Scanner in = new Scanner(new File(pathToFile));
+                ArrayList<String> wyniki = new ArrayList<>();
+                while(in.hasNextLine()) {
+                    String line = in.nextLine();
+                    if(line.charAt(0) != '#') {
+                        wyniki.add(line);
+                    }
+                    else {
+                        break;
+                    }
+                }
+                in.close();
+                wyniki.add(Bricks.mainStage.getFirstPlayerProgramName() + "," + Bricks.mainStage.getSecondPlayerProgramName() + "=" + win1 + "," + win2);
+
+
+                Map<String,Integer> winsMap= new HashMap<>();
+                Map<String,Integer> losesMap= new HashMap<>();
+
+                for(String s : wyniki) {
+                    try {
+                        String[] firstDivision = s.split("=");
+                        String[] secondDivisionNames = firstDivision[0].split(",");
+                        String[] secondDivisionValues = firstDivision[1].split(",");
+                        if(secondDivisionNames.length!=2 || secondDivisionValues.length!=2)
+                            continue;
+                        winsMap.putIfAbsent(secondDivisionNames[0],0);
+                        winsMap.putIfAbsent(secondDivisionNames[1],0);
+                        winsMap.put(secondDivisionNames[0],winsMap.get(secondDivisionNames[0])+Integer.parseInt(secondDivisionValues[0]));
+                        winsMap.put(secondDivisionNames[1],winsMap.get(secondDivisionNames[1])+Integer.parseInt(secondDivisionValues[1]));
+
+                        losesMap.putIfAbsent(secondDivisionNames[0],0);
+                        losesMap.putIfAbsent(secondDivisionNames[1],0);
+                        losesMap.put(secondDivisionNames[0],losesMap.get(secondDivisionNames[0])+Integer.parseInt(secondDivisionValues[1]));
+                        losesMap.put(secondDivisionNames[1],losesMap.get(secondDivisionNames[1])+Integer.parseInt(secondDivisionValues[0]));
+
+
+
+                    }
+                    catch (IndexOutOfBoundsException | NumberFormatException e){
+                    }
+                }
+                PrintWriter writer = new PrintWriter(pathToFile);
+                for(String s : wyniki)
+                    writer.println(s);
+                writer.println("###Sumarycznie###");
+                for(Iterator i = winsMap.keySet().iterator();i.hasNext();) {
+                    String key = (String) i.next();
+                    writer.println("Komputer: " + key + " Wygranych: " +winsMap.get(key)+ " Przegranych: " + losesMap.get(key) );
+                }
+
+                writer.close();
+
+            }
+
+        } catch (IOException ignored){}
+
     }
 
     private String source;
