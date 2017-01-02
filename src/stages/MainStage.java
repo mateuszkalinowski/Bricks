@@ -372,7 +372,7 @@ public class MainStage extends Application {
         Label programInfoLabel = new Label();
         programInfoLabel.setMaxWidth(Double.MAX_VALUE);
         programInfoLabel.setAlignment(Pos.CENTER);
-        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.4.2");
+        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.4.3");
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
@@ -461,9 +461,9 @@ public class MainStage extends Application {
             optionsButton.setMaxWidth(300);
             exitButton.setMaxWidth(300);
         }
-        mainStage.setScene(mainScene);
         mainStage.setWidth(width);
         mainStage.setHeight(height);
+        mainStage.setScene(mainScene);
     }
     public void setSettings(int initialBoardSize, Color firstPlayerColor, Color secondPlayerColor, boolean isSound, int volume, boolean debugModeInitialize, String firstPlayerPath, String secondPlayerPath,
                                   int firstPlayerProgramTypeArgument, int secondPlayerProgramTypeArgument,
@@ -566,6 +566,12 @@ public class MainStage extends Application {
         }
 
         return flag;
+    }
+    public String getFirstPlayerProgramName(){
+        return playerFirstProgramName;
+    }
+    public String getSecondPlayerProgramName(){
+        return playerSecondProgramName;
     }
     Stage mainStage;
     private Scene mainScene;

@@ -2,12 +2,7 @@ package stages;
 
 import core.*;
 import exceptions.InvalidMoveException;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
-import javafx.concurrent.WorkerStateEvent;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.canvas.Canvas;
@@ -16,22 +11,15 @@ import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import logic.*;
-import stages.*;
-
-import javax.jws.soap.SOAPBinding;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.Clip;
 import javax.sound.sampled.FloatControl;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.InputStream;
 import java.net.URL;
 import java.util.Optional;
 import java.util.Random;
@@ -41,11 +29,10 @@ import java.util.concurrent.TimeoutException;
  * Created by Mateusz on 18.12.2016.
  * Project InferenceEngine
  */
-public class GamePane extends Pane {
-    public GamePane(BoardLogic board, int gametype){
+class GamePane extends Pane {
+    GamePane(BoardLogic board, int gametype){
         this.board = board;
         this.gamemode = gametype;
-        stop = new Button("Stop");
         canvas = new Canvas();
         mainGridPane = new GridPane();
         ColumnConstraints column = new ColumnConstraints();
@@ -88,23 +75,20 @@ public class GamePane extends Pane {
 
             undoMoveButton.setDisable(true);
 
-            undoMoveButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    int[] move = movesStorage.returnMoveLikeArray();
+            undoMoveButton.setOnAction(event -> {
+                int[] move = movesStorage.returnMoveLikeArray();
 
-                    board.board[move[0]][move[1]] = 0;
-                    board.board[move[2]][move[3]] = 0;
+                board.board[move[0]][move[1]] = 0;
+                board.board[move[2]][move[3]] = 0;
 
-                    drawFrame();
-                    if(actualPlayer==1)
-                        actualPlayer=2;
-                    else if(actualPlayer==2)
-                        actualPlayer=1;
+                drawFrame();
+                if(actualPlayer==1)
+                    actualPlayer=2;
+                else if(actualPlayer==2)
+                    actualPlayer=1;
 
-                    if(movesStorage.isEmpty())
-                        undoMoveButton.setDisable(true);
-                }
+                if(movesStorage.isEmpty())
+                    undoMoveButton.setDisable(true);
             });
 
 
@@ -115,18 +99,15 @@ public class GamePane extends Pane {
 
             speedDownButton = new Button("-");
             gamemodeRobotsWarsHBox.getChildren().add(speedDownButton);
-            speedDownButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    int i = Integer.parseInt(speedTextField.getText());
-                    if(i>1) {
-                        i--;
-                        speedTextField.setText(i+"");
-                    }
+            speedDownButton.setOnAction(event -> {
+                int i = Integer.parseInt(speedTextField.getText());
+                if(i>1) {
+                    i--;
+                    speedTextField.setText(i+"");
                 }
             });
 
-            autoGameSpeed = 5;
+            int autoGameSpeed = 5;
             speedTextField = new TextField(autoGameSpeed + "");
             speedTextField.setMaxWidth(32);
             speedTextField.setMinWidth(32);
@@ -135,309 +116,303 @@ public class GamePane extends Pane {
 
             speedUpButton = new Button("+");
             gamemodeRobotsWarsHBox.getChildren().add(speedUpButton);
-            speedUpButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    int i = Integer.parseInt(speedTextField.getText());
-                    if(i<20) {
-                        i++;
-                        speedTextField.setText(i+"");
-                    }
+            speedUpButton.setOnAction(event -> {
+                int i = Integer.parseInt(speedTextField.getText());
+                if(i<20) {
+                    i++;
+                    speedTextField.setText(i+"");
                 }
             });
             computerPlayer=1;
             nextMoveButton = new Button("Następny Ruch");
             gamemodeRobotsWarsHBox.getChildren().add(nextMoveButton);
-            nextMoveButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    boolean gameFinished = false;
-                    nextMoveButton.setDisable(true);
-                    try {
-                        int move[] = new int[4];
-                        if (computerPlayer == 1) {
-                            if (movesStorage.isEmpty()) {
-                                try {
-                                    move = Bricks.firstRobotPlayer.makeMove("ZACZYNAJ");
-                                } catch (InvalidMoveException exception) {
-                                    walkover(computerPlayer, "BadMove");
-                                    gameFinished = true;
-                                } catch (TimeoutException exception) {
-                                    walkover(computerPlayer, "Timeout");
-                                    gameFinished = true;
-                                }
-                            } else {
-                                try {
-                                    move = Bricks.firstRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
-                                } catch (InvalidMoveException exception) {
-                                    walkover(computerPlayer, "BadMove");
-                                    gameFinished = true;
-                                } catch (TimeoutException exception) {
-                                    walkover(computerPlayer, "Timeout");
-                                    gameFinished = true;
-                                }
+            nextMoveButton.setOnAction(event -> {
+                boolean gameFinished = false;
+                nextMoveButton.setDisable(true);
+                try {
+                    int move[] = new int[4];
+                    if (computerPlayer == 1) {
+                        if (movesStorage.isEmpty()) {
+                            try {
+                                move = Bricks.firstRobotPlayer.makeMove("ZACZYNAJ");
+                            } catch (InvalidMoveException exception) {
+                                walkover(computerPlayer, "BadMove");
+                                gameFinished = true;
+                            } catch (TimeoutException exception) {
+                                walkover(computerPlayer, "Timeout");
+                                gameFinished = true;
+                            }
+                        } else {
+                            try {
+                                move = Bricks.firstRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
+                            } catch (InvalidMoveException exception) {
+                                walkover(computerPlayer, "BadMove");
+                                gameFinished = true;
+                            } catch (TimeoutException exception) {
+                                walkover(computerPlayer, "Timeout");
+                                gameFinished = true;
                             }
                         }
-                        if (computerPlayer == 2) {
-                            if (movesStorage.isEmpty()) {
-                                try {
-                                    move = Bricks.secondRobotPlayer.makeMove("ZACZYNAJ");
-                                } catch (InvalidMoveException exception) {
-                                    walkover(computerPlayer, "BadMove");
-                                    gameFinished = true;
-                                } catch (TimeoutException exception) {
-                                    walkover(computerPlayer, "Timeout");
-                                    gameFinished = true;
-                                }
-                            } else {
-                                try {
-                                    move = Bricks.secondRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
-                                } catch (InvalidMoveException exception) {
-                                    walkover(computerPlayer, "BadMove");
-                                    gameFinished = true;
-                                } catch (TimeoutException exception) {
-                                    walkover(computerPlayer, "Timeout");
-                                    gameFinished = true;
-                                }
-                            }
-                        }
-
-                        int x1 = move[0];
-                        int y1 = move[1];
-                        int x2 = move[2];
-                        int y2 = move[3];
-
-
-                        if (possibleMove(x1, y1, x2, y2) && !gameFinished) {
-                            board.board[x1][y1] = computerPlayer;
-                            board.board[x2][y2] = computerPlayer;
-                            playSound();
-                            drawFrame();
-                            movesStorage.addMove(x1, y1, x2, y2);
-                            if (computerPlayer == 1) {
-                                computerPlayer = 2;
-
-                            } else if (computerPlayer == 2) {
-                                computerPlayer = 1;
-                            }
-                        } else if (!gameFinished) {
-                            walkover(computerPlayer, "InvalidMove");
-                        }
-                        nextMoveButton.setDisable(false);
-                        checkNoMoves();
-
-                    } catch (Exception ignored) {
-                        nextMoveButton.setDisable(false);
                     }
+                    if (computerPlayer == 2) {
+                        if (movesStorage.isEmpty()) {
+                            try {
+                                move = Bricks.secondRobotPlayer.makeMove("ZACZYNAJ");
+                            } catch (InvalidMoveException exception) {
+                                walkover(computerPlayer, "BadMove");
+                                gameFinished = true;
+                            } catch (TimeoutException exception) {
+                                walkover(computerPlayer, "Timeout");
+                                gameFinished = true;
+                            }
+                        } else {
+                            try {
+                                move = Bricks.secondRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
+                            } catch (InvalidMoveException exception) {
+                                walkover(computerPlayer, "BadMove");
+                                gameFinished = true;
+                            } catch (TimeoutException exception) {
+                                walkover(computerPlayer, "Timeout");
+                                gameFinished = true;
+                            }
+                        }
+                    }
+
+                    int x1 = move[0];
+                    int y1 = move[1];
+                    int x2 = move[2];
+                    int y2 = move[3];
+
+
+                    if (possibleMove(x1, y1, x2, y2) && !gameFinished) {
+                        board.board[x1][y1] = computerPlayer;
+                        board.board[x2][y2] = computerPlayer;
+                        playSound();
+                        drawFrame();
+                        movesStorage.addMove(x1, y1, x2, y2);
+                        if (computerPlayer == 1) {
+                            computerPlayer = 2;
+
+                        } else if (computerPlayer == 2) {
+                            computerPlayer = 1;
+                        }
+                    } else if (!gameFinished) {
+                        walkover(computerPlayer, "InvalidMove");
+                    }
+                    nextMoveButton.setDisable(false);
+                    checkNoMoves();
+
+                } catch (Exception ignored) {
+                    nextMoveButton.setDisable(false);
                 }
             });
 
             autoPlayButton = new Button("Automatyczna Gra");
             autoPlayButton.setMinWidth(150);
             gamemodeRobotsWarsHBox.getChildren().add(autoPlayButton);
-            autoPlayButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    if(autoPlayButton.getText().equals("Automatyczna Gra")){
-                        controlAutoPlayButtons(false);
-                        Bricks.autoPlayRunning=true;
-                        cancelReason=0;
-                        isGameFinished=false;
-                        autoGame = new Task<Void>() {
-                            @Override
-                            protected Void call() {
-                                while (Bricks.autoPlayRunning) {
-                                    int computerPlayer = Bricks.mainStage.gamePane.computerPlayer;
-                                    //Bricks.mainFrame.computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
-                                    int move[] = new int[4];
-                                    if (computerPlayer == 1) {
-                                        if (Bricks.mainStage.gamePane.movesStorage.isEmpty()) {
-                                            try {
-                                                move = Bricks.firstRobotPlayer.makeMove("ZACZYNAJ");
-                                            } catch (InvalidMoveException exception) {
-                                                cancelReason=1;
-                                                cancel();
-                                            } catch (TimeoutException exception) {
-                                                cancelReason=2;
-                                                cancel();
-                                            }
-                                        } else {
-                                            try {
-                                                move = Bricks.firstRobotPlayer.makeMove(Bricks.mainStage.gamePane.movesStorage.getLastMoveAsString());
-                                            } catch (InvalidMoveException exception) {
-                                                cancelReason=1;
-                                                cancel();
-                                            } catch (TimeoutException exception) {
-                                                cancelReason=2;
-                                                cancel();
-                                            }
+            autoPlayButton.setOnAction(event -> {
+                if(autoPlayButton.getText().equals("Automatyczna Gra")){
+                    controlAutoPlayButtons(false);
+                    Bricks.autoPlayRunning=true;
+                    cancelReason=0;
+                    isGameFinished=false;
+                    autoGame = new Task<Void>() {
+                        @Override
+                        protected Void call() {
+                            while (Bricks.autoPlayRunning) {
+                                int computerPlayer1 = Bricks.mainStage.gamePane.computerPlayer;
+                                //Bricks.mainFrame.computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
+                                int move[] = new int[4];
+                                if (computerPlayer1 == 1) {
+                                    if (Bricks.mainStage.gamePane.movesStorage.isEmpty()) {
+                                        try {
+                                            move = Bricks.firstRobotPlayer.makeMove("ZACZYNAJ");
+                                        } catch (InvalidMoveException exception) {
+                                            cancelReason=1;
+                                            cancel();
+                                        } catch (TimeoutException exception) {
+                                            cancelReason=2;
+                                            cancel();
                                         }
-                                    }
-                                    if (computerPlayer == 2) {
-                                        if (Bricks.mainStage.gamePane.movesStorage.isEmpty()) {
-                                            try {
-                                                move = Bricks.secondRobotPlayer.makeMove("ZACZYNAJ");
-                                            } catch (InvalidMoveException exception) {
-                                                cancelReason=1;
-                                                cancel();
-                                            } catch (TimeoutException exception) {
-                                                cancelReason=2;
-                                                cancel();
-                                            }
-                                        } else {
-                                            try {
-                                                move = Bricks.secondRobotPlayer.makeMove(Bricks.mainStage.gamePane.movesStorage.getLastMoveAsString());
-                                            } catch (InvalidMoveException exception) {
-                                                cancelReason=1;
-                                                cancel();
-                                            } catch (TimeoutException exception) {
-                                                cancelReason=2;
-                                                cancel();
-                                            }
-                                        }
-                                    }
-
-                                    int x1 = move[0];
-                                    int y1 = move[1];
-                                    int x2 = move[2];
-                                    int y2 = move[3];
-                                    if (Bricks.mainStage.gamePane.possibleMove(x1, y1, x2, y2)) {
-                                        Bricks.mainStage.gamePane.board.board[x1][y1] = computerPlayer;
-                                        Bricks.mainStage.gamePane.board.board[x2][y2] = computerPlayer;
-                                        Bricks.mainStage.gamePane.playSound();
-                                        Bricks.mainStage.gamePane.drawFrame();
-                                        Bricks.mainStage.gamePane.movesStorage.addMove(x1, y1, x2, y2);
-
-
-                                        if (computerPlayer == 1) {
-                                            computerPlayer = 2;
-
-                                        } else if (computerPlayer == 2) {
-                                            computerPlayer = 1;
-                                        }
-                                        Bricks.mainStage.gamePane.computerPlayer = computerPlayer;
                                     } else {
-                                        cancelReason=1;
-                                        cancel();
-                                    }
-                                    if(!Bricks.mainStage.gamePane.board.anyMoves()) {
-                                        isGameFinished=true;
-                                        break;
-
-                                    }
-                                    try {
-                                        Thread.sleep(1000 / Integer.parseInt(speedTextField.getText()));
-                                    } catch (InterruptedException e) {
-                                        cancel();
+                                        try {
+                                            move = Bricks.firstRobotPlayer.makeMove(Bricks.mainStage.gamePane.movesStorage.getLastMoveAsString());
+                                        } catch (InvalidMoveException exception) {
+                                            cancelReason=1;
+                                            cancel();
+                                        } catch (TimeoutException exception) {
+                                            cancelReason=2;
+                                            cancel();
+                                        }
                                     }
                                 }
-                                return null;
-                            }
+                                if (computerPlayer1 == 2) {
+                                    if (Bricks.mainStage.gamePane.movesStorage.isEmpty()) {
+                                        try {
+                                            move = Bricks.secondRobotPlayer.makeMove("ZACZYNAJ");
+                                        } catch (InvalidMoveException exception) {
+                                            cancelReason=1;
+                                            cancel();
+                                        } catch (TimeoutException exception) {
+                                            cancelReason=2;
+                                            cancel();
+                                        }
+                                    } else {
+                                        try {
+                                            move = Bricks.secondRobotPlayer.makeMove(Bricks.mainStage.gamePane.movesStorage.getLastMoveAsString());
+                                        } catch (InvalidMoveException exception) {
+                                            cancelReason=1;
+                                            cancel();
+                                        } catch (TimeoutException exception) {
+                                            cancelReason=2;
+                                            cancel();
+                                        }
+                                    }
+                                }
 
-                        };
-                        Thread autoGameThread = new Thread(autoGame);
-                        autoGameThread.start();
-                        autoGame.setOnCancelled(new EventHandler<WorkerStateEvent>() {
-                            @Override
-                            public void handle(WorkerStateEvent event) {
-                                Optional<ButtonType> result;
-                                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                                alert.setTitle("Koniec Gry");
-                                alert.setContentText("Co chcesz zrobić?");
-                                ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
-                                ButtonType buttonExitToMenu = new ButtonType("Powrót do Menu");
-                                alert.getButtonTypes().setAll(buttonPlayAgain,buttonExitToMenu);
-                                if(cancelReason==1) {
-                                    if(computerPlayer==1)
-                                        alert.setHeaderText("Komputer pierwszy wykonał błędny ruch, wygrał komputer drugi.");
-                                    if(computerPlayer==2)
-                                        alert.setHeaderText("Komputer drugi wykonał błędny ruch, wygrał komputer pierwszy.");
-                                }
-                                if(cancelReason==2) {
-                                    if(computerPlayer==1)
-                                        alert.setHeaderText("Komputer pierwszy przekroczył czas ruchu, wygrał komputer drugi.");
-                                    if(computerPlayer==2)
-                                        alert.setHeaderText("Komputer drugi przekroczył czas ruchu, wygrał komputer pierwszy.");
-                                }
-                                if(cancelReason==1 || cancelReason==2) {
-                                    result = alert.showAndWait();
-                                    resetBoard();
-                                    controlAutoPlayButtons(true);
-                                    if (result.get() == buttonExitToMenu)
-                                        Bricks.mainStage.backToMenu();
-                                }
-                            }
-                        });
-                        autoGame.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
-                            @Override
-                            public void handle(WorkerStateEvent event) {
-                                if(isGameFinished) {
-                                    Optional<ButtonType> result;
-                                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                                    alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                                    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                                    alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                                    alert.setTitle("Koniec Gry");
-                                    alert.setContentText("Co chcesz zrobić?");
-                                    ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
-                                    ButtonType buttonExitToMenu = new ButtonType("Powrót do Menu");
+                                int x1 = move[0];
+                                int y1 = move[1];
+                                int x2 = move[2];
+                                int y2 = move[3];
+                                if (Bricks.mainStage.gamePane.possibleMove(x1, y1, x2, y2)) {
+                                    Bricks.mainStage.gamePane.board.board[x1][y1] = computerPlayer1;
+                                    Bricks.mainStage.gamePane.board.board[x2][y2] = computerPlayer1;
+                                    Bricks.mainStage.gamePane.playSound();
+                                    Bricks.mainStage.gamePane.drawFrame();
+                                    Bricks.mainStage.gamePane.movesStorage.addMove(x1, y1, x2, y2);
 
-                                    alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
-                                    if (computerPlayer == 1)
-                                        alert.setHeaderText("Koniec możliwych ruchów, wygrał program drugi.");
-                                    else
-                                        alert.setHeaderText("Koniec możliwych ruchów, wygrał program pierwszy.");
-                                    result = alert.showAndWait();
-                                    resetBoard();
-                                    controlAutoPlayButtons(true);
-                                    if (result.get() == buttonExitToMenu)
-                                        Bricks.mainStage.backToMenu();
+
+                                    if (computerPlayer1 == 1) {
+                                        computerPlayer1 = 2;
+
+                                    } else if (computerPlayer1 == 2) {
+                                        computerPlayer1 = 1;
+                                    }
+                                    Bricks.mainStage.gamePane.computerPlayer = computerPlayer1;
+                                } else {
+                                    cancelReason=1;
+                                    cancel();
+                                }
+                                if(!Bricks.mainStage.gamePane.board.anyMoves()) {
+                                    isGameFinished=true;
+                                    break;
+
+                                }
+                                try {
+                                    Thread.sleep(1000 / Integer.parseInt(speedTextField.getText()));
+                                } catch (InterruptedException e) {
+                                    cancel();
                                 }
                             }
-                        });
-                    }
-                    else {
-                        Bricks.autoPlayRunning=false;
-                        controlAutoPlayButtons(true);
-                    }
+                            return null;
+                        }
+
+                    };
+                    Thread autoGameThread = new Thread(autoGame);
+                    autoGameThread.start();
+                    autoGame.setOnCancelled(event1 -> {
+                        Optional<ButtonType> result;
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                        alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                        alert.setTitle("Koniec Gry");
+                        alert.setContentText("Co chcesz zrobić?");
+                        ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
+                        ButtonType buttonExitToMenu = new ButtonType("Powrót do Menu");
+                        alert.getButtonTypes().setAll(buttonPlayAgain,buttonExitToMenu);
+                        if(cancelReason==1) {
+                            if(computerPlayer==1) {
+                                RobotPlayer.exportLogs(0, 1);
+                                Bricks.firstRobotPlayer.sendEndingMessages(false);
+                                Bricks.secondRobotPlayer.sendEndingMessages(true);
+                                alert.setHeaderText("Komputer pierwszy wykonał błędny ruch, wygrał komputer drugi.");
+                            }
+                            if(computerPlayer==2) {
+                                RobotPlayer.exportLogs(1, 0);
+                                Bricks.firstRobotPlayer.sendEndingMessages(true);
+                                Bricks.secondRobotPlayer.sendEndingMessages(false);
+                                alert.setHeaderText("Komputer drugi wykonał błędny ruch, wygrał komputer pierwszy.");
+                            }
+                        }
+                        if(cancelReason==2) {
+                            if(computerPlayer==1) {
+                                RobotPlayer.exportLogs(0, 1);
+                                Bricks.firstRobotPlayer.sendEndingMessages(false);
+                                Bricks.secondRobotPlayer.sendEndingMessages(true);
+                                alert.setHeaderText("Komputer pierwszy przekroczył czas ruchu, wygrał komputer drugi.");
+                            }
+                            if(computerPlayer==2) {
+                                RobotPlayer.exportLogs(1, 0);
+                                Bricks.firstRobotPlayer.sendEndingMessages(true);
+                                Bricks.secondRobotPlayer.sendEndingMessages(false);
+                                alert.setHeaderText("Komputer drugi przekroczył czas ruchu, wygrał komputer pierwszy.");
+                            }
+                        }
+                        if(cancelReason==1 || cancelReason==2) {
+                            result = alert.showAndWait();
+                            resetBoard();
+                            controlAutoPlayButtons(true);
+                            if (result.isPresent() && result.get() == buttonExitToMenu)
+                                Bricks.mainStage.backToMenu();
+                        }
+                    });
+                    autoGame.setOnSucceeded(event12 -> {
+                        if(isGameFinished) {
+                            Optional<ButtonType> result;
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                            alert.setTitle("Koniec Gry");
+                            alert.setContentText("Co chcesz zrobić?");
+                            ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
+                            ButtonType buttonExitToMenu = new ButtonType("Powrót do Menu");
+
+                            alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
+                            if (computerPlayer == 1) {
+                                RobotPlayer.exportLogs(0,1);
+                                Bricks.firstRobotPlayer.sendEndingMessages(false);
+                                Bricks.secondRobotPlayer.sendEndingMessages(true);
+                                alert.setHeaderText("Koniec możliwych ruchów, wygrał program drugi.");
+                            }
+                            else {
+                                RobotPlayer.exportLogs(1,0);
+                                Bricks.firstRobotPlayer.sendEndingMessages(true);
+                                Bricks.secondRobotPlayer.sendEndingMessages(false);
+                                alert.setHeaderText("Koniec możliwych ruchów, wygrał program pierwszy.");
+                            }
+                            result = alert.showAndWait();
+                            resetBoard();
+                            controlAutoPlayButtons(true);
+                            if (result.isPresent() && result.get() == buttonExitToMenu)
+                                Bricks.mainStage.backToMenu();
+                        }
+                    });
+                }
+                else {
+                    Bricks.autoPlayRunning=false;
+                    controlAutoPlayButtons(true);
                 }
             });
 
             gamesButton = new Button("Rozgrywki");
             gamemodeRobotsWarsHBox.getChildren().add(gamesButton);
-            gamesButton.setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    Optional<ButtonType> result;
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                    alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                    alert.setTitle("Przejście do \"rozgrywek\"");
-                    alert.setContentText("Spowoduje to zakończenie obecnej partii.");
-                    alert.setHeaderText("Przejść do \"rozgrywek\"?");
-                    ButtonType buttonYes = new ButtonType("OK");
-                    ButtonType buttonNo = new ButtonType("Anuluj");
-                    alert.getButtonTypes().setAll(buttonNo,buttonYes);
-                    if(!movesStorage.isEmpty()) {
-                        result = alert.showAndWait();
-                        if (result.get() == buttonYes) {
-                            resetBoard();
-                            Bricks.autoPlayRunning = false;
-                            try {
-                                Bricks.firstRobotPlayer.reset();
-                                Bricks.secondRobotPlayer.reset();
-                            } catch (Exception ignored) {
-
-                            }
-                            GamesStage gamesStage = new GamesStage();
-                            gamesStage.start(Bricks.mainStage.mainStage);
-                        }
-                    }
-                    else {
+            gamesButton.setOnAction(event -> {
+                Optional<ButtonType> result;
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                alert.setTitle("Przejście do \"rozgrywek\"");
+                alert.setContentText("Spowoduje to zakończenie obecnej partii.");
+                alert.setHeaderText("Przejść do \"rozgrywek\"?");
+                ButtonType buttonYes = new ButtonType("OK");
+                ButtonType buttonNo = new ButtonType("Anuluj");
+                alert.getButtonTypes().setAll(buttonNo,buttonYes);
+                if(!movesStorage.isEmpty()) {
+                    result = alert.showAndWait();
+                    if (result.isPresent() && result.get() == buttonYes) {
                         resetBoard();
                         Bricks.autoPlayRunning = false;
                         try {
@@ -450,234 +425,219 @@ public class GamePane extends Pane {
                         gamesStage.start(Bricks.mainStage.mainStage);
                     }
                 }
+                else {
+                    resetBoard();
+                    Bricks.autoPlayRunning = false;
+                    try {
+                        Bricks.firstRobotPlayer.reset();
+                        Bricks.secondRobotPlayer.reset();
+                    } catch (Exception ignored) {
+
+                    }
+                    GamesStage gamesStage = new GamesStage();
+                    gamesStage.start(Bricks.mainStage.mainStage);
+                }
             });
 
             gamemodeRobotsWarsHBox.setSpacing(10);
             gamemodeRobotsWarsHBox.setAlignment(Pos.CENTER);
             mainGridPane.add(gamemodeRobotsWarsHBox,0,1);
         }
-        setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent e) {
-                if ((gamemode == 0 || gamemode == 1) && e.getY()<getHeight()*0.95) {
-                    if (!isSelected) {
-                        if ((e.getX() > marginX && e.getX() < getWidth() - marginX) && (e.getY() > marginY && e.getY() < getHeight() - marginY)) {
+        setOnMouseClicked(e -> {
+            if ((gamemode == 0 || gamemode == 1) && e.getY()<getHeight()*0.95) {
+                if (!isSelected) {
+                    if ((e.getX() > marginX && e.getX() < getWidth() - marginX) && (e.getY() > marginY && e.getY() < getHeight() - marginY)) {
 
-                            double intOneFieldWidth = (oneFieldWidth);
-                            double intOneFieldHeight = (oneFieldHeight);
+                        double intOneFieldWidth = (oneFieldWidth);
+                        double intOneFieldHeight = (oneFieldHeight);
 
-                            for (int i = 0; i < board.width - 1; i++) {
-                                if (e.getX() >= (marginX + i * intOneFieldWidth) && e.getX() < marginX + (i + 1) * intOneFieldWidth) {
-                                    selectedX = i;
-                                    break;
-                                }
-                                if (e.getX() >= marginX + (board.width - 1) + intOneFieldWidth) {
-                                    selectedX = board.width - 1;
-                                }
+                        for (int i = 0; i < board.width - 1; i++) {
+                            if (e.getX() >= (marginX + i * intOneFieldWidth) && e.getX() < marginX + (i + 1) * intOneFieldWidth) {
+                                selectedX = i;
+                                break;
                             }
-
-                            for (int i = 0; i < board.height - 1; i++) {
-                                if (e.getY() >= (marginY + i * intOneFieldHeight) && e.getY() < marginY + (i + 1) * intOneFieldHeight) {
-                                    selectedY = i;
-                                    break;
-                                }
-                                if (e.getY() >= marginY + (board.height - 1) + intOneFieldHeight) {
-                                    selectedY = board.height - 1;
-                                }
+                            if (e.getX() >= marginX + (board.width - 1) + intOneFieldWidth) {
+                                selectedX = board.width - 1;
                             }
+                        }
 
-                            try {
-                                if (board.board[selectedX][selectedY] == 0) {
-                                    isSelected = true;
-                                    directions = board.possibleDirections(selectedX, selectedY);
-                                }
-                            } catch (Exception ignored) {
-
+                        for (int i = 0; i < board.height - 1; i++) {
+                            if (e.getY() >= (marginY + i * intOneFieldHeight) && e.getY() < marginY + (i + 1) * intOneFieldHeight) {
+                                selectedY = i;
+                                break;
                             }
+                            if (e.getY() >= marginY + (board.height - 1) + intOneFieldHeight) {
+                                selectedY = board.height - 1;
+                            }
+                        }
+
+                        try {
+                            if (board.board[selectedX][selectedY] == 0) {
+                                isSelected = true;
+                                directions = board.possibleDirections(selectedX, selectedY);
+                            }
+                        } catch (Exception ignored) {
 
                         }
-                    } else {
-                        if ((e.getX() > marginX && e.getX() < getWidth() - marginX) && (e.getY() > marginY && e.getY() < getHeight() - marginY)) {
-                            int tempSelectedX;
-                            int tempSelectedY;
-                            double intOneFieldWidth = (oneFieldWidth);
-                            double intOneFieldHeight = (oneFieldHeight);
-                            tempSelectedX = 0;
-                            tempSelectedY = 0;
 
-                            for (int i = 0; i < board.width - 1; i++) {
-                                if (e.getX() >= (marginX + i * intOneFieldWidth) && e.getX() < marginX + (i + 1) * intOneFieldWidth) {
-                                    tempSelectedX = i;
-                                    break;
-                                }
-                                if (e.getX() >= marginX + (board.width - 1) + intOneFieldWidth) {
-                                    tempSelectedX = board.width - 1;
-                                }
-                            }
-
-                            for (int i = 0; i < board.height - 1; i++) {
-                                if (e.getY() >= (marginY + i * intOneFieldHeight) && e.getY() < marginY + (i + 1) * intOneFieldHeight) {
-                                    tempSelectedY = i;
-                                    break;
-                                }
-                                if (e.getY() >= marginY + (board.height - 1) + intOneFieldHeight) {
-                                    tempSelectedY = board.height - 1;
-                                }
-                            }
-                            if ((tempSelectedX == selectedX + 1) && tempSelectedY == selectedY) {
-                                if (directions[1]) {
-                                    board.board[selectedX][selectedY] = actualPlayer;
-                                    board.board[tempSelectedX][tempSelectedY] = actualPlayer;
-                                    movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
-                                    if(gamemode==1) {
-                                        undoMoveButton.setDisable(false);
-                                    }
-                                    drawFrame();
-                                    //if (Bricks.mainFrame.getComputerPlayerType() == 0)
-                                    //    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
-                                    isSelected = false;
-                                    playSound();
-                                    if (actualPlayer == 1) {
-                                        //Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
-                                        //Bricks.mainFrame.repaint();
-                                        actualPlayer = 2;
-                                        if (!checkNoMoves()) {
-                                            if (gametype == 0 && Bricks.mainStage.computerPlayerType == 0) {
-                                                comp.performMove(board, movesStorage);
-                                                actualPlayer = 1;
-                                                drawFrame();
-                                            }
-                                            if (gametype == 0 && Bricks.mainStage.computerPlayerType != 0) {
-                                                singlePlayerComputerMakeMove();
-                                                actualPlayer = 1;
-                                                drawFrame();
-                                            }
-                                        }
-                                    } else {
-                                        //Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
-                                        //Bricks.mainFrame.repaint();
-                                        actualPlayer = 1;
-                                    }
-                                    checkNoMoves();
-                                }
-                            } else if ((tempSelectedX == selectedX - 1) && tempSelectedY == selectedY) {
-                                if (directions[3]) {
-                                    board.board[selectedX][selectedY] = actualPlayer;
-                                    board.board[tempSelectedX][tempSelectedY] = actualPlayer;
-                                    movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
-                                    if(gamemode==1) {
-                                        undoMoveButton.setDisable(false);
-                                    }
-                                    drawFrame();
-                                    //if (Bricks.mainFrame.getComputerPlayerType() == 0)
-                                    //    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
-                                    isSelected = false;
-                                    playSound();
-                                    if (actualPlayer == 1) {
-                                        //Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
-                                        //Bricks.mainFrame.repaint();
-                                        actualPlayer = 2;
-                                        if (!checkNoMoves()) {
-                                            if (gametype == 0 && Bricks.mainStage.computerPlayerType == 0) {
-                                                comp.performMove(board, movesStorage);
-                                                actualPlayer = 1;
-                                                drawFrame();
-                                            }
-                                            if (gametype == 0 && Bricks.mainStage.computerPlayerType != 0) {
-                                                singlePlayerComputerMakeMove();
-                                                actualPlayer = 1;
-                                                drawFrame();
-                                            }
-                                        }
-                                    } else {
-                                        //Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
-                                        //Bricks.mainFrame.repaint();
-                                        actualPlayer = 1;
-                                    }
-                                    checkNoMoves();
-                                }
-                            } else if ((tempSelectedX == selectedX) && tempSelectedY == selectedY + 1) {
-                                if (directions[2]) {
-                                    board.board[selectedX][selectedY] = actualPlayer;
-                                    board.board[tempSelectedX][tempSelectedY] = actualPlayer;
-                                    movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
-                                    if(gamemode==1) {
-                                        undoMoveButton.setDisable(false);
-                                    }
-                                    drawFrame();
-                                    //if (Bricks.mainFrame.getComputerPlayerType() == 0)
-                                    //    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
-                                    isSelected = false;
-                                    playSound();
-                                    if (actualPlayer == 1) {
-                                        //Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
-                                        //Bricks.mainFrame.repaint();
-                                        actualPlayer = 2;
-                                        if (!checkNoMoves()) {
-                                            if (gametype == 0 && Bricks.mainStage.computerPlayerType == 0) {
-                                                comp.performMove(board, movesStorage);
-                                                actualPlayer = 1;
-                                                drawFrame();
-                                            }
-                                            if (gametype == 0 && Bricks.mainStage.computerPlayerType != 0) {
-                                                singlePlayerComputerMakeMove();
-                                                actualPlayer = 1;
-                                                drawFrame();
-                                            }
-                                        }
-                                    } else {
-                                        //Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
-                                        //Bricks.mainFrame.repaint();
-                                        actualPlayer = 1;
-                                    }
-                                    checkNoMoves();
-                                }
-                            } else if ((tempSelectedX == selectedX) && tempSelectedY == selectedY - 1) {
-                                if (directions[0]) {
-                                    board.board[selectedX][selectedY] = actualPlayer;
-                                    board.board[tempSelectedX][tempSelectedY] = actualPlayer;
-                                    movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
-                                    if(gamemode==1) {
-                                        undoMoveButton.setDisable(false);
-                                    }
-                                    drawFrame();
-                                    //if (Bricks.mainFrame.getComputerPlayerType() == 0)
-                                    //    Bricks.mainFrame.undoLastMoveButton.setEnabled(true);
-                                    isSelected = false;
-                                    playSound();
-                                    if (actualPlayer == 1) {
-                                        //Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerSecondColor);
-                                        //Bricks.mainFrame.repaint();
-                                        actualPlayer = 2;
-                                        if (!checkNoMoves()) {
-                                            if (gametype == 0 && Bricks.mainStage.computerPlayerType == 0) {
-                                                comp.performMove(board, movesStorage);
-                                                actualPlayer = 1;
-                                                drawFrame();
-                                            }
-                                            if (gametype == 0 && Bricks.mainStage.computerPlayerType != 0) {
-                                                singlePlayerComputerMakeMove();
-                                                actualPlayer = 1;
-                                                drawFrame();
-                                            }
-                                        }
-                                    } else {
-                                        //Bricks.mainFrame.actualPlayerColorPreview.setColor(Bricks.mainFrame.playerFirstColor);
-                                        //Bricks.mainFrame.repaint();
-                                        actualPlayer = 1;
-                                    }
-                                    checkNoMoves();
-                                }
-                            } else {
-                                isSelected = false;
-                            }
-
-                        } else
-                            isSelected = false;
                     }
+                } else {
+                    if ((e.getX() > marginX && e.getX() < getWidth() - marginX) && (e.getY() > marginY && e.getY() < getHeight() - marginY)) {
+                        int tempSelectedX;
+                        int tempSelectedY;
+                        double intOneFieldWidth = (oneFieldWidth);
+                        double intOneFieldHeight = (oneFieldHeight);
+                        tempSelectedX = 0;
+                        tempSelectedY = 0;
+
+                        for (int i = 0; i < board.width - 1; i++) {
+                            if (e.getX() >= (marginX + i * intOneFieldWidth) && e.getX() < marginX + (i + 1) * intOneFieldWidth) {
+                                tempSelectedX = i;
+                                break;
+                            }
+                            if (e.getX() >= marginX + (board.width - 1) + intOneFieldWidth) {
+                                tempSelectedX = board.width - 1;
+                            }
+                        }
+
+                        for (int i = 0; i < board.height - 1; i++) {
+                            if (e.getY() >= (marginY + i * intOneFieldHeight) && e.getY() < marginY + (i + 1) * intOneFieldHeight) {
+                                tempSelectedY = i;
+                                break;
+                            }
+                            if (e.getY() >= marginY + (board.height - 1) + intOneFieldHeight) {
+                                tempSelectedY = board.height - 1;
+                            }
+                        }
+                        if ((tempSelectedX == selectedX + 1) && tempSelectedY == selectedY) {
+                            if (directions[1]) {
+                                board.board[selectedX][selectedY] = actualPlayer;
+                                board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
+                                if(gamemode==1) {
+                                    undoMoveButton.setDisable(false);
+                                }
+                                drawFrame();
+                                isSelected = false;
+                                playSound();
+                                if (actualPlayer == 1) {
+                                    actualPlayer = 2;
+                                    if (!checkNoMoves()) {
+                                        if (gametype == 0 && Bricks.mainStage.computerPlayerType == 0) {
+                                            comp.performMove(board, movesStorage);
+                                            actualPlayer = 1;
+                                            drawFrame();
+                                        }
+                                        if (gametype == 0 && Bricks.mainStage.computerPlayerType != 0) {
+                                            singlePlayerComputerMakeMove();
+                                            actualPlayer = 1;
+                                            drawFrame();
+                                        }
+                                    }
+                                } else {
+                                    actualPlayer = 1;
+                                }
+                                checkNoMoves();
+                            }
+                        } else if ((tempSelectedX == selectedX - 1) && tempSelectedY == selectedY) {
+                            if (directions[3]) {
+                                board.board[selectedX][selectedY] = actualPlayer;
+                                board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
+                                if(gamemode==1) {
+                                    undoMoveButton.setDisable(false);
+                                }
+                                drawFrame();
+                                isSelected = false;
+                                playSound();
+                                if (actualPlayer == 1) {
+                                    actualPlayer = 2;
+                                    if (!checkNoMoves()) {
+                                        if (gametype == 0 && Bricks.mainStage.computerPlayerType == 0) {
+                                            comp.performMove(board, movesStorage);
+                                            actualPlayer = 1;
+                                            drawFrame();
+                                        }
+                                        if (gametype == 0 && Bricks.mainStage.computerPlayerType != 0) {
+                                            singlePlayerComputerMakeMove();
+                                            actualPlayer = 1;
+                                            drawFrame();
+                                        }
+                                    }
+                                } else {
+                                    actualPlayer = 1;
+                                }
+                                checkNoMoves();
+                            }
+                        } else if ((tempSelectedX == selectedX) && tempSelectedY == selectedY + 1) {
+                            if (directions[2]) {
+                                board.board[selectedX][selectedY] = actualPlayer;
+                                board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
+                                if(gamemode==1) {
+                                    undoMoveButton.setDisable(false);
+                                }
+                                drawFrame();
+                                isSelected = false;
+                                playSound();
+                                if (actualPlayer == 1) {
+                                    actualPlayer = 2;
+                                    if (!checkNoMoves()) {
+                                        if (gametype == 0 && Bricks.mainStage.computerPlayerType == 0) {
+                                            comp.performMove(board, movesStorage);
+                                            actualPlayer = 1;
+                                            drawFrame();
+                                        }
+                                        if (gametype == 0 && Bricks.mainStage.computerPlayerType != 0) {
+                                            singlePlayerComputerMakeMove();
+                                            actualPlayer = 1;
+                                            drawFrame();
+                                        }
+                                    }
+                                } else {
+                                    actualPlayer = 1;
+                                }
+                                checkNoMoves();
+                            }
+                        } else if ((tempSelectedX == selectedX) && tempSelectedY == selectedY - 1) {
+                            if (directions[0]) {
+                                board.board[selectedX][selectedY] = actualPlayer;
+                                board.board[tempSelectedX][tempSelectedY] = actualPlayer;
+                                movesStorage.addMove(selectedX, selectedY, tempSelectedX, tempSelectedY);
+                                if(gamemode==1) {
+                                    undoMoveButton.setDisable(false);
+                                }
+                                drawFrame();
+                                isSelected = false;
+                                playSound();
+                                if (actualPlayer == 1) {
+                                    actualPlayer = 2;
+                                    if (!checkNoMoves()) {
+                                        if (gametype == 0 && Bricks.mainStage.computerPlayerType == 0) {
+                                            comp.performMove(board, movesStorage);
+                                            actualPlayer = 1;
+                                            drawFrame();
+                                        }
+                                        if (gametype == 0 && Bricks.mainStage.computerPlayerType != 0) {
+                                            singlePlayerComputerMakeMove();
+                                            actualPlayer = 1;
+                                            drawFrame();
+                                        }
+                                    }
+                                } else {
+                                    actualPlayer = 1;
+                                }
+                                checkNoMoves();
+                            }
+                        } else {
+                            isSelected = false;
+                        }
+
+                    } else
+                        isSelected = false;
                 }
-                drawFrame();
             }
+            drawFrame();
         });
 
         firstPlayerImage = new Image(MainStage.class.getResourceAsStream("resources/brick_grey.png"));
@@ -686,36 +646,30 @@ public class GamePane extends Pane {
         grassBackground = new Image(MainStage.class.getResourceAsStream("resources/dirt_grass.png"));
         sandBackground = new Image(MainStage.class.getResourceAsStream("resources/dirt_sand.png"));
         snowBackground = new Image(MainStage.class.getResourceAsStream("resources/dirt_snow.png"));
-        skyboxside = new Image(MainStage.class.getResourceAsStream("resources/skybox_side.png"));
         skyboxtop = new Image(MainStage.class.getResourceAsStream("resources/skybox_top.png"));
         skyboxsideclouds = new Image(MainStage.class.getResourceAsStream("resources/skybox_sideClouds.png"));
         skyboxsidehills = new Image(MainStage.class.getResourceAsStream("resources/skybox_sideHills.png"));
 
-        widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                drawFrame();
+        widthProperty().addListener((observable, oldValue, newValue) -> {
+            drawFrame();
 
-            }
         });
-        heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                drawFrame();
-                if(gamemode==1) {
-                    undoMoveButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/50));
-                }
-                if(gamemode==2) {
-                    speedUpButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
-                    speedDownButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
-                    nextMoveButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
-                    autoPlayButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
-                    gamesButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
-                }
+        heightProperty().addListener((observable, oldValue, newValue) -> {
+            drawFrame();
+            if(gamemode==1) {
+                undoMoveButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/50));
+            }
+            if(gamemode==2) {
+                speedUpButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                speedDownButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                nextMoveButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                autoPlayButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                gamesButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
             }
         });
     }
-    public void drawFrame(){
+    @SuppressWarnings ("ConstantConditions")
+    void drawFrame(){
         try {
             int[] rozmiar = Bricks.mainStage.getSizeAsArray();
             int width = rozmiar[0];
@@ -901,11 +855,10 @@ public class GamePane extends Pane {
         }//JESZCZE NIE ZOSTALA STWORZONA MAINGAMESCENE w MAINSTAGE, NIE PROBLEM
 
     }
-    Button stop;
-    Canvas canvas = new Canvas();
-    GridPane mainGridPane;
+    private Canvas canvas = new Canvas();
+    private GridPane mainGridPane;
 
-    public void playSound() {
+    private void playSound() {
         try {
             URL putBrickURL = this.getClass().getResource("putbrick.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(putBrickURL);
@@ -922,7 +875,7 @@ public class GamePane extends Pane {
         }
     }
 
-    public boolean checkNoMoves() {
+    private boolean checkNoMoves() {
         if (!board.anyMoves()) {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -938,8 +891,14 @@ public class GamePane extends Pane {
             alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
             if (gamemode == 2) {
                     if (computerPlayer == 1) {
+                        RobotPlayer.exportLogs(0, 1);
+                        Bricks.firstRobotPlayer.sendEndingMessages(false);
+                        Bricks.secondRobotPlayer.sendEndingMessages(true);
                         alert.setHeaderText("Koniec możliwych ruchów, wygrał program drugi.");
                     } else {
+                        RobotPlayer.exportLogs(1, 0);
+                        Bricks.firstRobotPlayer.sendEndingMessages(true);
+                        Bricks.secondRobotPlayer.sendEndingMessages(false);
                         alert.setHeaderText("Koniec możliwych ruchów, wygrał program pierwszy.");
                     }
                     computerPlayer = 1;
@@ -960,7 +919,7 @@ public class GamePane extends Pane {
                     }
                 }
                 result = alert.showAndWait();
-                if (result.get()==buttonPlayAgain) {
+                if (result.isPresent() && result.get()==buttonPlayAgain) {
                     resetBoard();
                 } else {
                     resetBoard();
@@ -971,8 +930,7 @@ public class GamePane extends Pane {
         return false;
     }
 
-    public void walkover(int computerPlayer, String reason) {
-        //int selection;
+    private void walkover(int computerPlayer, String reason) {
         Optional<ButtonType> result;
         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
         alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -988,20 +946,32 @@ public class GamePane extends Pane {
         if (reason.equals("Timeout")) {
             System.out.println("Timeout");
             if (computerPlayer == 1) {
+                RobotPlayer.exportLogs(0, 1);
+                Bricks.firstRobotPlayer.sendEndingMessages(false);
+                Bricks.secondRobotPlayer.sendEndingMessages(true);
                 alert.setHeaderText("Komputer numer 1 przekroczył czas na wykonanie ruchu, wygrał program drugi");
             } else {
+                RobotPlayer.exportLogs(1, 0);
+                Bricks.firstRobotPlayer.sendEndingMessages(true);
+                Bricks.secondRobotPlayer.sendEndingMessages(false);
                 alert.setHeaderText("Komputer numer 2 przekroczył czas na wykonanie ruchu, wygrał program pierwszy");
             }
         } else {
             if (computerPlayer == 1) {
+                RobotPlayer.exportLogs(0, 1);
+                Bricks.firstRobotPlayer.sendEndingMessages(false);
+                Bricks.secondRobotPlayer.sendEndingMessages(true);
                 alert.setHeaderText("Komputer numer 1 wykonał błędny ruch, wygrał program drugi");
             } else {
+                RobotPlayer.exportLogs(1, 0);
+                Bricks.firstRobotPlayer.sendEndingMessages(true);
+                Bricks.secondRobotPlayer.sendEndingMessages(false);
                 alert.setHeaderText("Komputer numer 2 wykonał błędny ruch, wygrał program pierwszy");
             }
         }
         this.computerPlayer = 1;
         result = alert.showAndWait();
-        if (result.get()==buttonPlayAgain) {
+        if (result.isPresent() && result.get()==buttonPlayAgain) {
             resetBoard();
         } else {
             resetBoard();
@@ -1027,7 +997,7 @@ public class GamePane extends Pane {
             alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
             alert.setHeaderText("Komputer wykonał niepoprawny ruch, wygrałałeś, chcesz zagrać jeszcze raz?");
             result = alert.showAndWait();
-            if (result.get()==buttonPlayAgain) {
+            if (result.isPresent() && result.get()==buttonPlayAgain) {
                 resetBoard();
             } else {
                 resetBoard();
@@ -1047,7 +1017,7 @@ public class GamePane extends Pane {
             alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
             alert.setHeaderText("Komputer przekroczył czas na wykonanie ruchu, wygrałałeś, chcesz zagrać jeszcze raz?");
             result = alert.showAndWait();
-            if (result.get()==buttonPlayAgain) {
+            if (result.isPresent() && result.get()==buttonPlayAgain) {
                 resetBoard();
             } else {
                 resetBoard();
@@ -1068,7 +1038,7 @@ public class GamePane extends Pane {
         }
     }
 
-    public void resetBoard() {
+    void resetBoard() {
         board.reset();
         if(gamemode==1)
             undoMoveButton.setDisable(true);
@@ -1094,7 +1064,7 @@ public class GamePane extends Pane {
         actualPlayer = 1;
         drawFrame();
     }
-    public boolean possibleMove(int x1, int y1, int x2, int y2) {
+    private boolean possibleMove(int x1, int y1, int x2, int y2) {
         if (board.board[x1][y1] != 0 || board.board[x2][y2] != 0)
             return false;
         boolean flag = false;
@@ -1136,7 +1106,7 @@ public class GamePane extends Pane {
         }
     }
 
-    Task<Void> autoGame;
+    private Task<Void> autoGame;
 
     private BoardLogic board;
 
@@ -1145,9 +1115,8 @@ public class GamePane extends Pane {
     private double marginY = 20;
     private int selectedX;
     private int selectedY;
-    public int computerPlayer;
+    private  int computerPlayer;
     private int gamemode;
-    private int autoGameSpeed;
     private int cancelReason = 0;
     private int randomBackground[];
     private int boardStyle;
@@ -1171,18 +1140,17 @@ public class GamePane extends Pane {
     private Button gamesButton;
     private Button undoMoveButton;
 
-    TextField speedTextField;
+    private TextField speedTextField;
 
-    Image firstPlayerImage;
-    Image secondPlayerImage;
-    Image normalBackground;
-    Image grassBackground;
-    Image sandBackground;
-    Image snowBackground;
-    Image skyboxside;
-    Image skyboxtop;
-    Image skyboxsideclouds;
-    Image skyboxsidehills;
+    private Image firstPlayerImage;
+    private Image secondPlayerImage;
+    private Image normalBackground;
+    private Image grassBackground;
+    private Image sandBackground;
+    private Image snowBackground;
+    private Image skyboxtop;
+    private Image skyboxsideclouds;
+    private Image skyboxsidehills;
 
 
 }

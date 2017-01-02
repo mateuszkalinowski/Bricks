@@ -2,22 +2,16 @@ package stages;
 
 import core.Bricks;
 import core.Settings;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
-
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
@@ -26,8 +20,8 @@ import java.util.Optional;
  * Created by Mateusz on 23.12.2016.
  * Project Bricks
  */
-public class OptionsPane extends Pane {
-    public OptionsPane(double w,double h,Settings settings){
+class OptionsPane extends Pane {
+    OptionsPane(double w,double h,Settings settings){
 
         firstPlayerProgramType = settings.getFirstPlayerProgramType();
         secondPlayerProgramType = settings.getSecondPlayerProgramType();
@@ -98,15 +92,12 @@ public class OptionsPane extends Pane {
                 break;
             }
         }
-        boardSizeComboBox.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                try {
-                    BoardSize = Integer.parseInt(newValue.split("x")[0]);
-                }
-                catch (NumberFormatException ignored){
+        boardSizeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                BoardSize = Integer.parseInt(newValue.split("x")[0]);
+            }
+            catch (NumberFormatException ignored){
 
-                }
             }
         });
         Label firstPlayerColorLabel = new Label("Kolor pierwszego gracza:  ");
@@ -115,12 +106,7 @@ public class OptionsPane extends Pane {
         firstPlayerColorLabel.setAlignment(Pos.BASELINE_RIGHT);
         ColorPicker firstPlayerColorPicker = new ColorPicker();
         firstPlayerColorPicker.setValue(firstPlayerColor);
-        firstPlayerColorPicker.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                setColor(firstPlayerColorPicker.getValue(),1);
-            }
-        });
+        firstPlayerColorPicker.setOnAction(event -> setColor(firstPlayerColorPicker.getValue(),1));
 
         Label secondPlayerColorLabel = new Label("Kolor drugiego gracza:  ");
         secondPlayerColorLabel.setFont(Font.font("Comic Sans MS",16));
@@ -128,12 +114,7 @@ public class OptionsPane extends Pane {
         secondPlayerColorLabel.setAlignment(Pos.BASELINE_RIGHT);
         ColorPicker secondPlayerColorPicker = new ColorPicker();
         secondPlayerColorPicker.setValue(secondPlayerColor);
-        secondPlayerColorPicker.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                setColor(secondPlayerColorPicker.getValue(),2);
-            }
-        });
+        secondPlayerColorPicker.setOnAction(event -> setColor(secondPlayerColorPicker.getValue(),2));
 
         Label soundSettingsLabel = new Label("Motyw Graficzny:  ");
         soundSettingsLabel.setFont(Font.font("Comic Sans MS",16));
@@ -147,11 +128,8 @@ public class OptionsPane extends Pane {
 
         chooseTheme.getSelectionModel().select(theme);
 
-        chooseTheme.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                theme=chooseTheme.getSelectionModel().getSelectedIndex();
-            }
+        chooseTheme.valueProperty().addListener((observable, oldValue, newValue) -> {
+            theme=chooseTheme.getSelectionModel().getSelectedIndex();
         });
 
         Label volumeSettingLabel = new Label("Głośność Dźwięków Gry:  ");
@@ -164,26 +142,17 @@ public class OptionsPane extends Pane {
         volumeSlider.setMin(-80.0);
         volumeSlider.setMax(6.0);
         volumeSlider.setValue(volume);
-        volumeSlider.valueProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                volume = newValue.intValue();
-                if(volume==0)
-                    isSound = false;
-                else
-                    isSound = true;
+        volumeSlider.valueProperty().addListener((observable, oldValue, newValue) -> {
+            volume = newValue.intValue();
+            isSound = volume != 0;
 
-            }
         });
 
         firstProgramRunCommandTextArea = new TextArea();
         firstProgramRunCommandTextArea.setText(firstPlayerRunCommand);
         firstProgramRunCommandTextArea.setMaxWidth(200);
-        firstProgramRunCommandTextArea.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                firstPlayerRunCommand = newValue;
-            }
+        firstProgramRunCommandTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
+            firstPlayerRunCommand = newValue;
         });
         if(firstPlayerProgramType==2) {
             firstProgramRunCommandTextArea.setEditable(true);
@@ -194,11 +163,8 @@ public class OptionsPane extends Pane {
         secondProgramRunCommandTextArea = new TextArea();
         secondProgramRunCommandTextArea.setText(secondPlayerRunCommand);
         secondProgramRunCommandTextArea.setMaxWidth(200);
-        secondProgramRunCommandTextArea.textProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                secondPlayerRunCommand = newValue;
-            }
+        secondProgramRunCommandTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
+            secondPlayerRunCommand = newValue;
         });
         if(secondPlayerProgramType==2) {
             secondProgramRunCommandTextArea.setEditable(true);
@@ -235,27 +201,23 @@ public class OptionsPane extends Pane {
         Button chooseFirstComputerPlayerButton = new Button("Pierwszy Gracz");
         chooseFirstComputerPlayerButton.setFont(Font.font("Comic Sans MS",14));
         chooseFirstComputerPlayerButton.setPrefWidth(150);
-        //chooseFirstComputerPlayerButton.setPadding(new Insets(5,0,5,0));
         chooseFirstComputerPlayerHBox.getChildren().add(chooseFirstComputerPlayerButton);
         chooseFirstComputerPlayerHBox.setAlignment(Pos.CENTER_RIGHT);
 
-        chooseFirstComputerPlayerButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                FileChooser chooseFile = new FileChooser();
-                chooseFile.setTitle("Wybierz komputer pierwszy");
-                File openFile = chooseFile.showOpenDialog(Bricks.mainStage.mainStage);
-                if (openFile != null) {
-                    try {
-                        playerFirstFullPath = openFile.getCanonicalPath();
-                   if (playerFirstFullPath.length() <= 30) {
-                            firstProgramNameLabel.setText(playerFirstFullPath);
-                    } else {
-                            firstProgramNameLabel.setText("..." + playerFirstFullPath.substring(playerFirstFullPath.length() - 30, playerFirstFullPath.length()));
-                    }
-                    } catch (IOException ignored){
+        chooseFirstComputerPlayerButton.setOnAction(event -> {
+            FileChooser chooseFile = new FileChooser();
+            chooseFile.setTitle("Wybierz komputer pierwszy");
+            File openFile = chooseFile.showOpenDialog(Bricks.mainStage.mainStage);
+            if (openFile != null) {
+                try {
+                    playerFirstFullPath = openFile.getCanonicalPath();
+               if (playerFirstFullPath.length() <= 30) {
+                        firstProgramNameLabel.setText(playerFirstFullPath);
+                } else {
+                        firstProgramNameLabel.setText("..." + playerFirstFullPath.substring(playerFirstFullPath.length() - 30, playerFirstFullPath.length()));
+                }
+                } catch (IOException ignored){
 
-                    }
                 }
             }
         });
@@ -275,26 +237,22 @@ public class OptionsPane extends Pane {
         Button chooseSecondComputerPlayerButton = new Button("Drugi Gracz");
         chooseSecondComputerPlayerButton.setFont(Font.font("Comic Sans MS",14));
         chooseSecondComputerPlayerButton.setPrefWidth(150);
-        //chooseSecondComputerPlayerButton.setPadding(new Insets(5,0,5,0));
         chooseSecondComputerPlayerHBox.getChildren().add(chooseSecondComputerPlayerButton);
         chooseSecondComputerPlayerHBox.setAlignment(Pos.CENTER_RIGHT);
-        chooseSecondComputerPlayerButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                FileChooser chooseFile = new FileChooser();
-                chooseFile.setTitle("Wybierz komputer drugi");
-                File openFile = chooseFile.showOpenDialog(Bricks.mainStage.mainStage);
-                if(openFile != null) {
-                    try {
-                        playerSecondFullPath = openFile.getCanonicalPath();
-                        if (playerSecondFullPath.length() <= 30) {
-                            secondProgramNameLabel.setText(playerSecondFullPath);
-                        } else {
-                            secondProgramNameLabel.setText("..." + playerSecondFullPath.substring(playerSecondFullPath.length() - 30, playerSecondFullPath.length()));
-                        }
-                    } catch (IOException ignored) {
-
+        chooseSecondComputerPlayerButton.setOnAction(event -> {
+            FileChooser chooseFile = new FileChooser();
+            chooseFile.setTitle("Wybierz komputer drugi");
+            File openFile = chooseFile.showOpenDialog(Bricks.mainStage.mainStage);
+            if(openFile != null) {
+                try {
+                    playerSecondFullPath = openFile.getCanonicalPath();
+                    if (playerSecondFullPath.length() <= 30) {
+                        secondProgramNameLabel.setText(playerSecondFullPath);
+                    } else {
+                        secondProgramNameLabel.setText("..." + playerSecondFullPath.substring(playerSecondFullPath.length() - 30, playerSecondFullPath.length()));
                     }
+                } catch (IOException ignored) {
+
                 }
             }
         });
@@ -328,18 +286,15 @@ public class OptionsPane extends Pane {
             chooseFirstComputerPlayerButton.setDisable(false);
             firstProgramRunCommandTextArea.setEditable(false);
         }
-        firstProgramTypeComboBox.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                firstPlayerProgramType = firstProgramTypeComboBox.getSelectionModel().getSelectedIndex();
-                if(firstPlayerProgramType==2) {
-                    chooseFirstComputerPlayerButton.setDisable(true);
-                    firstProgramRunCommandTextArea.setEditable(true);
-                }
-                else {
-                    chooseFirstComputerPlayerButton.setDisable(false);
-                    firstProgramRunCommandTextArea.setEditable(false);
-                }
+        firstProgramTypeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            firstPlayerProgramType = firstProgramTypeComboBox.getSelectionModel().getSelectedIndex();
+            if(firstPlayerProgramType==2) {
+                chooseFirstComputerPlayerButton.setDisable(true);
+                firstProgramRunCommandTextArea.setEditable(true);
+            }
+            else {
+                chooseFirstComputerPlayerButton.setDisable(false);
+                firstProgramRunCommandTextArea.setEditable(false);
             }
         });
 
@@ -358,18 +313,15 @@ public class OptionsPane extends Pane {
             chooseSecondComputerPlayerButton.setDisable(false);
             secondProgramRunCommandTextArea.setEditable(false);
         }
-        secondProgramTypeComboBox.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                secondPlayerProgramType = secondProgramTypeComboBox.getSelectionModel().getSelectedIndex();
-                if(secondPlayerProgramType==2) {
-                    chooseSecondComputerPlayerButton.setDisable(true);
-                    secondProgramRunCommandTextArea.setEditable(true);
-                }
-                else {
-                    chooseSecondComputerPlayerButton.setDisable(false);
-                    secondProgramRunCommandTextArea.setEditable(false);
-                }
+        secondProgramTypeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            secondPlayerProgramType = secondProgramTypeComboBox.getSelectionModel().getSelectedIndex();
+            if(secondPlayerProgramType==2) {
+                chooseSecondComputerPlayerButton.setDisable(true);
+                secondProgramRunCommandTextArea.setEditable(true);
+            }
+            else {
+                chooseSecondComputerPlayerButton.setDisable(false);
+                secondProgramRunCommandTextArea.setEditable(false);
             }
         });
 
@@ -381,11 +333,8 @@ public class OptionsPane extends Pane {
 
         chooseCompterTypeComboBox.getSelectionModel().select(computerPlayerType);
 
-        chooseCompterTypeComboBox.valueProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                computerPlayerType = chooseCompterTypeComboBox.getSelectionModel().getSelectedIndex();
-            }
+        chooseCompterTypeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
+            computerPlayerType = chooseCompterTypeComboBox.getSelectionModel().getSelectedIndex();
         });
 
         HBox saveAndExitHBox = new HBox();
@@ -463,84 +412,69 @@ public class OptionsPane extends Pane {
 
         chooseTheme.setMaxHeight(Bricks.mainStage.mainStage.getHeight()/40);
 
-        saveAndExitButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Bricks.mainStage.setSettings(BoardSize,firstPlayerColor,secondPlayerColor,isSound,volume,debugMode,playerFirstFullPath,playerSecondFullPath,firstPlayerProgramType,secondPlayerProgramType,firstPlayerRunCommand,secondPlayerRunCommand,computerPlayerType,theme);
-                Bricks.mainStage.backToMenu();
-            }
+        saveAndExitButton.setOnAction(event -> {
+            Bricks.mainStage.setSettings(BoardSize,firstPlayerColor,secondPlayerColor,isSound,volume,debugMode,playerFirstFullPath,playerSecondFullPath,firstPlayerProgramType,secondPlayerProgramType,firstPlayerRunCommand,secondPlayerRunCommand,computerPlayerType,theme);
+            Bricks.mainStage.backToMenu();
         });
 
-        Bricks.mainStage.mainStage.heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                generalSettingsLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-                robotWarsLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-                saveAndExitButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/55));
+        Bricks.mainStage.mainStage.heightProperty().addListener((observable, oldValue, newValue) -> {
+            generalSettingsLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+            robotWarsLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+            saveAndExitButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/55));
 
-                boardSizeLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
-                firstPlayerColorLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
-                secondPlayerColorLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
-                soundSettingsLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
-                volumeSettingLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
-                runAsFirstPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
-                runAsSecondPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
-                singPlayerComputerPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
-                parametersFirstPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
-                parametersSecondPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
-                firstProgramNameLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/55));
-                secondProgramNameLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/55));
+            boardSizeLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+            firstPlayerColorLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+            secondPlayerColorLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+            soundSettingsLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+            volumeSettingLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+            runAsFirstPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+            runAsSecondPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+            singPlayerComputerPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+            parametersFirstPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+            parametersSecondPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+            firstProgramNameLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/55));
+            secondProgramNameLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/55));
 
-                boardSizeComboBoxHBox.setMaxHeight(newValue.doubleValue()/40);
-                boardSizeComboBox.setMaxHeight(newValue.doubleValue()/40);
+            boardSizeComboBoxHBox.setMaxHeight(newValue.doubleValue()/40);
+            boardSizeComboBox.setMaxHeight(newValue.doubleValue()/40);
 
-                chooseFirstComputerPlayerHBox.setMaxHeight(newValue.doubleValue()/40);
-                firstProgramTypeComboBox.setMaxHeight(newValue.doubleValue()/40);
+            chooseFirstComputerPlayerHBox.setMaxHeight(newValue.doubleValue()/40);
+            firstProgramTypeComboBox.setMaxHeight(newValue.doubleValue()/40);
 
-                chooseSecondComputerPlayerHBox.setMaxHeight(newValue.doubleValue()/40);
-                secondProgramTypeComboBox.setMaxHeight(newValue.doubleValue()/40);
+            chooseSecondComputerPlayerHBox.setMaxHeight(newValue.doubleValue()/40);
+            secondProgramTypeComboBox.setMaxHeight(newValue.doubleValue()/40);
 
-                if(newValue.doubleValue()/40>25) {
-                    firstPlayerColorPicker.setMaxHeight(newValue.doubleValue() / 40);
-                    secondPlayerColorPicker.setMaxHeight(newValue.doubleValue() / 40);
-                }
-                else {
-                    firstPlayerColorPicker.setMaxHeight(25);
-                    secondPlayerColorPicker.setMaxHeight(25);
-                }
-
-                chooseTheme.setMaxHeight(newValue.doubleValue()/40);
+            if(newValue.doubleValue()/40>25) {
+                firstPlayerColorPicker.setMaxHeight(newValue.doubleValue() / 40);
+                secondPlayerColorPicker.setMaxHeight(newValue.doubleValue() / 40);
             }
+            else {
+                firstPlayerColorPicker.setMaxHeight(25);
+                secondPlayerColorPicker.setMaxHeight(25);
+            }
+
+            chooseTheme.setMaxHeight(newValue.doubleValue()/40);
         });
-        setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if(event.getCode()== KeyCode.ESCAPE) {
-                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                    alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                    alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                    alert.setTitle("Potwierdznie Wyjścia");
-                    alert.setHeaderText("Chcesz wyjść z ustawień?");
-                    alert.setContentText("Zmiany nie zostaną zapisane.");
-                    Optional<ButtonType> result=  alert.showAndWait();
-                    if(result.get() == ButtonType.OK){
-                        Bricks.mainStage.backToMenu();
-                    }
+        setOnKeyReleased(event -> {
+            if(event.getCode()== KeyCode.ESCAPE) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                alert.setTitle("Potwierdznie Wyjścia");
+                alert.setHeaderText("Chcesz wyjść z ustawień?");
+                alert.setContentText("Zmiany nie zostaną zapisane.");
+                Optional<ButtonType> result=  alert.showAndWait();
+                if(result.isPresent() && result.get() == ButtonType.OK){
+                    Bricks.mainStage.backToMenu();
                 }
             }
         });
-        widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                mainGridPane.setPrefWidth(newValue.doubleValue());
-            }
+        widthProperty().addListener((observable, oldValue, newValue) -> {
+            mainGridPane.setPrefWidth(newValue.doubleValue());
         });
-        heightProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                mainGridPane.setPrefHeight(newValue.doubleValue());
-            }
+        heightProperty().addListener((observable, oldValue, newValue) -> {
+            mainGridPane.setPrefHeight(newValue.doubleValue());
         });
     }
     private void setColor(Color newColor,int player) {
@@ -555,16 +489,15 @@ public class OptionsPane extends Pane {
 
     private int firstPlayerProgramType;
     private int secondPlayerProgramType;
-    public int volume;
-    public int computerPlayer;
+    private int volume;
     private int BoardSize;
     private int computerPlayerType;
 
-    public boolean isSound;
+    private boolean isSound;
     private boolean debugMode;
 
-    public javafx.scene.paint.Color firstPlayerColor;
-    public javafx.scene.paint.Color secondPlayerColor;
+    private javafx.scene.paint.Color firstPlayerColor;
+    private javafx.scene.paint.Color secondPlayerColor;
 
     private String playerFirstFullPath = "";
     private String playerSecondFullPath = "";
@@ -572,14 +505,14 @@ public class OptionsPane extends Pane {
     private String secondPlayerRunCommand;
 
     //KOMPONENTY
-    Label firstProgramNameLabel;
-    Label secondProgramNameLabel;
+    private Label firstProgramNameLabel;
+    private Label secondProgramNameLabel;
 
-    ComboBox<String> firstProgramTypeComboBox;
-    ComboBox<String> secondProgramTypeComboBox;
+    private ComboBox<String> firstProgramTypeComboBox;
+    private ComboBox<String> secondProgramTypeComboBox;
 
-    TextArea firstProgramRunCommandTextArea;
-    TextArea secondProgramRunCommandTextArea;
+    private TextArea firstProgramRunCommandTextArea;
+    private TextArea secondProgramRunCommandTextArea;
 
     private int theme;
 
