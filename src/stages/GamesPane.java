@@ -339,9 +339,12 @@ class GamesPane extends Pane {
                 alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                 alert.setTitle("Potwierdznie Wyjścia");
                 alert.setHeaderText("Chcesz wyjść z \"Rozgrywek\"");
+                ButtonType buttonYes = new ButtonType("Tak");
+                ButtonType buttonNo = new ButtonType("Anuluj");
+                alert.getButtonTypes().setAll(buttonNo,buttonYes);
                 alert.setContentText("");
                 Optional<ButtonType> result = alert.showAndWait();
-                if(result.isPresent() && result.get() == ButtonType.OK){
+                if(result.isPresent() && result.get() == buttonYes){
                     try {
                         Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
                         Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);
