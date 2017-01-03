@@ -106,18 +106,32 @@ class ResultsPane extends Pane {
         clearLogsButton.setOnAction(new EventHandler<ActionEvent>() {
             @Override
             public void handle(ActionEvent event) {
-                boardsSizesListView.getItems().clear();
-                winsByFirstComputerLabel.setText("0");
-                winsBySecondComputerLabel.setText("0");
-                winsToAllResultLabel.setText("0");
-                try {
-                    String pathToFile = System.getProperty("user.home") + "/Documents/Bricks/logs.txt";
-                    PrintWriter writer = new PrintWriter(pathToFile);
-                    writer.close();
-                }
-                catch (Exception e) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                alert.setTitle("Potwieredznie usuwania wyników");
+                alert.setHeaderText("Chcesz usunąć zapisane wyniki?");
+                alert.setTitle("Potwierdzenie");
+                alert.setContentText("Ten operacji nie można cofnąć.");
+                ButtonType buttonYes = new ButtonType("Tak");
+                ButtonType buttonNo = new ButtonType("Anuluj");
+                alert.getButtonTypes().setAll(buttonNo,buttonYes);
+                Optional<ButtonType> result=  alert.showAndWait();
+                if(result.isPresent() && result.get() == buttonYes){
+                    boardsSizesListView.getItems().clear();
+                    winsByFirstComputerLabel.setText("0");
+                    winsBySecondComputerLabel.setText("0");
+                    winsToAllResultLabel.setText("0");
+                    try {
+                        String pathToFile = System.getProperty("user.home") + "/Documents/Bricks/logs.txt";
+                        PrintWriter writer = new PrintWriter(pathToFile);
+                        writer.close();
+                    }
+                    catch (Exception e) {
 
-                }
+                    }
+            }
             }
         });
 
@@ -146,10 +160,14 @@ class ResultsPane extends Pane {
                 Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
                 alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                 alert.setTitle("Potwierdznie Wyjścia");
-                alert.setHeaderText("Chcesz wyjść z \"Wyników\"");
+                alert.setTitle("Potwierdzenie Wyjścia");
+                alert.setHeaderText("Chcesz wrócić do rozgrywki?");
+                ButtonType buttonYes = new ButtonType("Tak");
+                ButtonType buttonNo = new ButtonType("Anuluj");
+                alert.getButtonTypes().setAll(buttonNo,buttonYes);
                 alert.setContentText("");
                 Optional<ButtonType> result=  alert.showAndWait();
-                if(result.isPresent() && result.get() == ButtonType.OK){
+                if(result.isPresent() && result.get() == buttonYes){
                     try {
                         Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
                         Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);

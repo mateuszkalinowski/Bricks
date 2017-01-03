@@ -348,7 +348,7 @@ public class GamesPane extends Pane {
                 alert.setTitle("Potwierdznie Wyjścia");
                 alert.setHeaderText("Chcesz wyjść z \"Rozgrywek\"");
                 alert.setContentText("");
-                Optional<ButtonType> result=  alert.showAndWait();
+                Optional<ButtonType> result = alert.showAndWait();
                 if(result.isPresent() && result.get() == ButtonType.OK){
                     try {
                         Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
