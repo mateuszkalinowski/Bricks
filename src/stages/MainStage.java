@@ -372,7 +372,7 @@ public class MainStage extends Application {
         Label programInfoLabel = new Label();
         programInfoLabel.setMaxWidth(Double.MAX_VALUE);
         programInfoLabel.setAlignment(Pos.CENTER);
-        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.4.3");
+        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.5.0");
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
@@ -381,7 +381,7 @@ public class MainStage extends Application {
         mainStage.setTitle("Bricks");
         mainStage.setScene(mainScene);
         mainScene.getStylesheets().add(selectedTheme);
-        mainStage.setMinWidth(500);
+        mainStage.setMinWidth(520);
         mainStage.setMinHeight(710);
         mainStage.show();
 
@@ -396,29 +396,29 @@ public class MainStage extends Application {
         mainStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
 
         mainStage.heightProperty().addListener((observable, oldValue, newValue) -> {
-            bricksTitleLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/4.7));
+                bricksTitleLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, newValue.doubleValue() / 4.7));
 
-            singlePlayerGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
-            twoPlayersGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
-            robotWarsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
-            optionsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
-            exitButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD,newValue.doubleValue()/32));
-            FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
-            buttonWidth = fontLoader.computeStringWidth(bricksTitleLabel.getText(),bricksTitleLabel.getFont())*(2.0/3.0);
-            if(buttonWidth>300) {
-                singlePlayerGameButton.setMaxWidth(buttonWidth);
-                twoPlayersGameButton.setMaxWidth(buttonWidth);
-                robotWarsButton.setMaxWidth(buttonWidth);
-                optionsButton.setMaxWidth(buttonWidth);
-                exitButton.setMaxWidth(buttonWidth);
-            }
-            else {
-                singlePlayerGameButton.setMaxWidth(300);
-                twoPlayersGameButton.setMaxWidth(300);
-                robotWarsButton.setMaxWidth(300);
-                optionsButton.setMaxWidth(300);
-                exitButton.setMaxWidth(300);
-            }
+                singlePlayerGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, newValue.doubleValue() / 32));
+                twoPlayersGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, newValue.doubleValue() / 32));
+                robotWarsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, newValue.doubleValue() / 32));
+                optionsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, newValue.doubleValue() / 32));
+                exitButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, newValue.doubleValue() / 32));
+                FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
+                buttonWidth = fontLoader.computeStringWidth(bricksTitleLabel.getText(), bricksTitleLabel.getFont()) * (2.0 / 3.0);
+                if (buttonWidth > 300) {
+                    singlePlayerGameButton.setMaxWidth(buttonWidth);
+                    twoPlayersGameButton.setMaxWidth(buttonWidth);
+                    robotWarsButton.setMaxWidth(buttonWidth);
+                    optionsButton.setMaxWidth(buttonWidth);
+                    exitButton.setMaxWidth(buttonWidth);
+                } else {
+                    singlePlayerGameButton.setMaxWidth(300);
+                    twoPlayersGameButton.setMaxWidth(300);
+                    robotWarsButton.setMaxWidth(300);
+                    optionsButton.setMaxWidth(300);
+                    exitButton.setMaxWidth(300);
+                }
+                mainStage.setMinWidth(newValue.doubleValue()*0.7);
         });
 
     }
@@ -576,7 +576,7 @@ public class MainStage extends Application {
     Stage mainStage;
     private Scene mainScene;
 
-    private Scene sceneOfTheGame;
+    Scene sceneOfTheGame;
     private Scene sceneOfSettings;
 
     GamePane gamePane;

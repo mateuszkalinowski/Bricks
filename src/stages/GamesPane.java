@@ -1,17 +1,14 @@
 package stages;
 
 import core.Bricks;
-import javafx.application.Application;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import logic.BoardLogic;
 import logic.MovesStorage;
@@ -23,14 +20,15 @@ import java.util.*;
  * Created by Mateusz on 25.12.2016.
  * Project Bricks
  */
-public class GamesStage extends Application {
-    public void start(Stage primaryStage){
+class GamesPane extends Pane {
+    GamesPane(double w,double h){
 
         GridPane mainGridPane = new GridPane();
-
+        mainGridPane.setPrefWidth(w);
+        mainGridPane.setPrefHeight(h);
         RowConstraints row = new RowConstraints();
-        row.setPercentHeight(8.3);
-        for(int i = 0; i < 12;i++) {
+        row.setPercentHeight(9.09);
+        for(int i = 0; i < 11;i++) {
             mainGridPane.getRowConstraints().add(row);
         }
         ColumnConstraints column = new ColumnConstraints();
@@ -41,7 +39,12 @@ public class GamesStage extends Application {
         boardsSizesListView = new ListView<>();
         boardsSizesListView.setMaxWidth(Double.MAX_VALUE);
         boardsSizesListView.setMaxHeight(Double.MAX_VALUE);
-        mainGridPane.add(boardsSizesListView,1,0,1,6);
+        mainGridPane.add(boardsSizesListView,1,1,1,5);
+
+        Label boardsListLabel = new Label("Plansze:");
+        boardsListLabel.setAlignment(Pos.CENTER);
+        boardsListLabel.setMaxWidth(Double.MAX_VALUE);
+        mainGridPane.add(boardsListLabel,0,0,3,1);
 
         boardsSizesListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         importPoints();
@@ -122,7 +125,6 @@ public class GamesStage extends Application {
                             boardsSizesListView.getSelectionModel().select(selectedIndex + 1);
                             boardsSizesListView.scrollTo(selectedIndex+1);
                         }
-
                     }
                 }
             }
@@ -158,7 +160,7 @@ public class GamesStage extends Application {
 
         HBox runButtonHBox = new HBox();
         runButton = new Button("Uruchom");
-        runButton.setPrefWidth(200);
+        runButton.setPrefWidth(180);
         runButton.setPrefHeight(350);
         runButtonHBox.setAlignment(Pos.CENTER);
         runButtonHBox.getChildren().add(runButton);
@@ -298,28 +300,6 @@ public class GamesStage extends Application {
                 running=false;
             }
         });
-
-        HBox backButtonHBox = new HBox();
-        Button backButton = new Button("Powrót");
-        backButton.setPrefWidth(140);
-        backButton.setPrefHeight(350);
-        backButtonHBox.setAlignment(Pos.CENTER);
-        backButtonHBox.getChildren().add(backButton);
-        HBox.setMargin(backButton, new Insets(5,0,5,0));
-        HBox.setHgrow(backButton, Priority.ALWAYS);
-        mainGridPane.add(backButtonHBox,0,11,3,1);
-        backButton.setOnAction(event -> {
-            try {
-                Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
-                Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);
-            }
-            catch (Exception ignored){}
-            running=false;
-            gamesProgressBar.progressProperty().unbind();
-            exportPoints();
-            gamesStage.close();
-        });
-
         gamesProgressBar = new ProgressBar();
         gamesProgressBar.setMaxWidth(Double.MAX_VALUE);
 
@@ -327,30 +307,61 @@ public class GamesStage extends Application {
 
         mainGridPane.add(gamesProgressBar,0,10,3,1);
 
-        gamesStage = new Stage();
-        Scene gamesScene = new Scene(mainGridPane,270,350);
-        gamesStage.setScene(gamesScene);
-        gamesStage.setResizable(false);
-        gamesStage.initModality(Modality.APPLICATION_MODAL);
-        gamesStage.show();
-        gamesStage.setResizable(true);
-        gamesStage.setMinHeight(350);
-        gamesStage.setMinWidth(270);
-        gamesStage.setTitle("Rozgrywki");
-        gamesStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+        //Scene gamesScene = new Scene(mainGridPane,270,350);
 
-        gamesScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
+        widthProperty().addListener((observable, oldValue, newValue) -> {
+            mainGridPane.setPrefWidth(newValue.doubleValue());
+        });
+        heightProperty().addListener((observable, oldValue, newValue) -> {
+            mainGridPane.setPrefHeight(newValue.doubleValue());
+            boardsListLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/20));
+            wonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+            winsByFirstComputerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+            winsBySecondComputerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+            firstComputerwonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+            secondComputerwonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
 
-
-        gamesStage.setOnCloseRequest(event -> {
-            try {
-                running = false;
-                Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
-                Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);
-            } catch (Exception ignored) {}
-            exportPoints();
+            runButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/30));
+            if(getWidth()*(2.0/3.0)<=300) {
+                runButton.setMaxWidth(getWidth() * (2.0 / 3.0));
+            }
+            else {
+                runButton.setMaxWidth(300);
+            }
         });
 
+        getChildren().add(mainGridPane);
+        setOnKeyReleased(event -> {
+            if (event.getCode() == KeyCode.ESCAPE) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                alert.setTitle("Potwierdznie Wyjścia");
+                alert.setHeaderText("Chcesz wyjść z \"Rozgrywek\"");
+                ButtonType buttonYes = new ButtonType("Tak");
+                ButtonType buttonNo = new ButtonType("Anuluj");
+                alert.getButtonTypes().setAll(buttonNo,buttonYes);
+                alert.setContentText("");
+                Optional<ButtonType> result = alert.showAndWait();
+                if(result.isPresent() && result.get() == buttonYes){
+                    try {
+                        Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
+                        Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);
+                    }
+                    catch (Exception ignored){}
+                    running=false;
+                    gamesProgressBar.progressProperty().unbind();
+                    exportPoints();
+                    double height = Bricks.mainStage.mainStage.getHeight();
+                    double width = Bricks.mainStage.mainStage.getWidth();
+                    Bricks.mainStage.mainStage.setScene(Bricks.mainStage.sceneOfTheGame);
+                    Bricks.mainStage.mainStage.setWidth(width);
+                    Bricks.mainStage.mainStage.setHeight(height);
+                    Bricks.mainStage.mainStage.show();
+                }
+            }
+        });
     }
     private void importPoints(){
         try {
@@ -395,7 +406,7 @@ public class GamesStage extends Application {
     private ListView<String> boardsSizesListView;
     private Button runButton;
     private ProgressBar gamesProgressBar;
-    private Stage gamesStage;
+    //private Stage gamesStage;
 
     private boolean running = false;
 
