@@ -422,11 +422,7 @@ class GamePane extends Pane {
                         } catch (Exception ignored) {
 
                         }
-                        //GamesStage gamesStage = new GamesStage();
-                        //gamesStage.start(Bricks.mainStage.mainStage);
-
                         GamesPane gamesPane = new GamesPane(Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
-
                         Scene gamesScene = new Scene(gamesPane,Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
                         gamesScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
                         Bricks.mainStage.mainStage.setScene(gamesScene);
@@ -442,10 +438,7 @@ class GamePane extends Pane {
                     } catch (Exception ignored) {
 
                     }
-                    //GamesStage gamesStage = new GamesStage();
-                    //gamesStage.start(Bricks.mainStage.mainStage);
                     GamesPane gamesPane = new GamesPane(Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
-
                     Scene gamesScene = new Scene(gamesPane,Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
                     gamesScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
                     Bricks.mainStage.mainStage.setScene(gamesScene);
@@ -455,6 +448,52 @@ class GamePane extends Pane {
 
             resultsButton = new Button("Wyniki");
             gamemodeRobotsWarsHBox.getChildren().add(resultsButton);
+            resultsButton.setOnAction(event -> {
+                Optional<ButtonType> result;
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                alert.setTitle("Przejście do \"wyników\"");
+                alert.setContentText("Spowoduje to zakończenie obecnej partii.");
+                alert.setHeaderText("Przejść do \"wyników\"?");
+                ButtonType buttonYes = new ButtonType("OK");
+                ButtonType buttonNo = new ButtonType("Anuluj");
+                alert.getButtonTypes().setAll(buttonNo,buttonYes);
+                if(!movesStorage.isEmpty()) {
+                    result = alert.showAndWait();
+                    if (result.isPresent() && result.get() == buttonYes) {
+                        resetBoard();
+                        Bricks.autoPlayRunning = false;
+                        try {
+                            Bricks.firstRobotPlayer.reset();
+                            Bricks.secondRobotPlayer.reset();
+                        } catch (Exception ignored) {
+
+                        }
+                        ResultsPane resultsPane = new ResultsPane(Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
+                        Scene resultsScene = new Scene(resultsPane,Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
+                        resultsScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
+                        Bricks.mainStage.mainStage.setScene(resultsScene);
+                        Bricks.mainStage.mainStage.show();
+                    }
+                }
+                else {
+                    resetBoard();
+                    Bricks.autoPlayRunning = false;
+                    try {
+                        Bricks.firstRobotPlayer.reset();
+                        Bricks.secondRobotPlayer.reset();
+                    } catch (Exception ignored) {
+
+                    }
+                    ResultsPane resultsPane = new ResultsPane(Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
+                    Scene resultsScene = new Scene(resultsPane,Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
+                    resultsScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
+                    Bricks.mainStage.mainStage.setScene(resultsScene);
+                    Bricks.mainStage.mainStage.show();
+                }
+            });
 
             gamemodeRobotsWarsHBox.setSpacing(10);
             gamemodeRobotsWarsHBox.setAlignment(Pos.CENTER);

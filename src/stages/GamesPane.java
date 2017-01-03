@@ -1,5 +1,6 @@
 package stages;
 
+import com.sun.javafx.scene.control.skin.VirtualFlow;
 import core.Bricks;
 import javafx.application.Application;
 import javafx.beans.value.ChangeListener;
@@ -132,7 +133,6 @@ public class GamesPane extends Pane {
                             boardsSizesListView.getSelectionModel().select(selectedIndex + 1);
                             boardsSizesListView.scrollTo(selectedIndex+1);
                         }
-
                     }
                 }
             }
@@ -308,28 +308,6 @@ public class GamesPane extends Pane {
                 running=false;
             }
         });
-
-      /*  HBox backButtonHBox = new HBox();
-        Button backButton = new Button("Powrót");
-        backButton.setPrefWidth(180);
-        backButton.setPrefHeight(350);
-        backButtonHBox.setAlignment(Pos.CENTER);
-        backButtonHBox.getChildren().add(backButton);
-        HBox.setMargin(backButton, new Insets(5,0,5,0));
-        HBox.setHgrow(backButton, Priority.ALWAYS);
-        mainGridPane.add(backButtonHBox,0,11,3,1);
-        backButton.setOnAction(event -> {
-            try {
-                Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
-                Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);
-            }
-            catch (Exception ignored){}
-            running=false;
-            gamesProgressBar.progressProperty().unbind();
-            exportPoints();
-            //gamesStage.close();
-        });*/
-
         gamesProgressBar = new ProgressBar();
         gamesProgressBar.setMaxWidth(Double.MAX_VALUE);
 
