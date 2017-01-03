@@ -381,7 +381,7 @@ public class MainStage extends Application {
         mainStage.setTitle("Bricks");
         mainStage.setScene(mainScene);
         mainScene.getStylesheets().add(selectedTheme);
-        mainStage.setMinWidth(500);
+        mainStage.setMinWidth(520);
         mainStage.setMinHeight(710);
         mainStage.show();
 
@@ -576,7 +576,7 @@ public class MainStage extends Application {
     Stage mainStage;
     private Scene mainScene;
 
-    private Scene sceneOfTheGame;
+    public Scene sceneOfTheGame;
     private Scene sceneOfSettings;
 
     GamePane gamePane;

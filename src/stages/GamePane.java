@@ -5,6 +5,7 @@ import exceptions.InvalidMoveException;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
@@ -421,8 +422,15 @@ class GamePane extends Pane {
                         } catch (Exception ignored) {
 
                         }
-                        GamesStage gamesStage = new GamesStage();
-                        gamesStage.start(Bricks.mainStage.mainStage);
+                        //GamesStage gamesStage = new GamesStage();
+                        //gamesStage.start(Bricks.mainStage.mainStage);
+
+                        GamesPane gamesPane = new GamesPane(Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
+
+                        Scene gamesScene = new Scene(gamesPane,Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
+                        gamesScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
+                        Bricks.mainStage.mainStage.setScene(gamesScene);
+                        Bricks.mainStage.mainStage.show();
                     }
                 }
                 else {
@@ -434,10 +442,19 @@ class GamePane extends Pane {
                     } catch (Exception ignored) {
 
                     }
-                    GamesStage gamesStage = new GamesStage();
-                    gamesStage.start(Bricks.mainStage.mainStage);
+                    //GamesStage gamesStage = new GamesStage();
+                    //gamesStage.start(Bricks.mainStage.mainStage);
+                    GamesPane gamesPane = new GamesPane(Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
+
+                    Scene gamesScene = new Scene(gamesPane,Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
+                    gamesScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
+                    Bricks.mainStage.mainStage.setScene(gamesScene);
+                    Bricks.mainStage.mainStage.show();
                 }
             });
+
+            resultsButton = new Button("Wyniki");
+            gamemodeRobotsWarsHBox.getChildren().add(resultsButton);
 
             gamemodeRobotsWarsHBox.setSpacing(10);
             gamemodeRobotsWarsHBox.setAlignment(Pos.CENTER);
@@ -665,6 +682,7 @@ class GamePane extends Pane {
                 nextMoveButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
                 autoPlayButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
                 gamesButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                resultsButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
             }
         });
     }
@@ -1094,6 +1112,7 @@ class GamePane extends Pane {
                 nextMoveButton.setDisable(false);
                 autoPlayButton.setDisable(false);
                 gamesButton.setDisable(false);
+                resultsButton.setDisable(false);
             }
         } else {
             if (speedUpButton != null) {
@@ -1102,6 +1121,7 @@ class GamePane extends Pane {
                 autoPlayButton.setText("Przerwij");
                 nextMoveButton.setDisable(true);
                 gamesButton.setDisable(true);
+                resultsButton.setDisable(true);
             }
         }
     }
@@ -1139,6 +1159,7 @@ class GamePane extends Pane {
     private Button autoPlayButton;
     private Button gamesButton;
     private Button undoMoveButton;
+    private Button resultsButton;
 
     private TextField speedTextField;
 
