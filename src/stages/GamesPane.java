@@ -1,22 +1,14 @@
 package stages;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import core.Bricks;
-import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
 import logic.BoardLogic;
 import logic.MovesStorage;
@@ -28,8 +20,8 @@ import java.util.*;
  * Created by Mateusz on 25.12.2016.
  * Project Bricks
  */
-public class GamesPane extends Pane {
-    public GamesPane(double w,double h){
+class GamesPane extends Pane {
+    GamesPane(double w,double h){
 
         GridPane mainGridPane = new GridPane();
         mainGridPane.setPrefWidth(w);

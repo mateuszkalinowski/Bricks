@@ -576,7 +576,7 @@ public class MainStage extends Application {
     Stage mainStage;
     private Scene mainScene;
 
-    public Scene sceneOfTheGame;
+    Scene sceneOfTheGame;
     private Scene sceneOfSettings;
 
     GamePane gamePane;

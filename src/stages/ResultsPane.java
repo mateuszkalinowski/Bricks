@@ -1,27 +1,14 @@
 package stages;
 
-import com.sun.javafx.scene.control.skin.VirtualFlow;
 import core.Bricks;
-import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Task;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
-import javafx.stage.Modality;
 import javafx.stage.Stage;
-import logic.BoardLogic;
-import logic.MovesStorage;
-import logic.RobotPlayer;
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -103,36 +90,31 @@ class ResultsPane extends Pane {
         clearLogsButtonHBox.setAlignment(Pos.TOP_RIGHT);
         mainGridPane.add(clearLogsButtonHBox,2,10);
 
-        clearLogsButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                alert.setTitle("Potwieredznie usuwania wyników");
-                alert.setHeaderText("Chcesz usunąć zapisane wyniki?");
-                alert.setTitle("Potwierdzenie");
-                alert.setContentText("Ten operacji nie można cofnąć.");
-                ButtonType buttonYes = new ButtonType("Tak");
-                ButtonType buttonNo = new ButtonType("Anuluj");
-                alert.getButtonTypes().setAll(buttonNo,buttonYes);
-                Optional<ButtonType> result=  alert.showAndWait();
-                if(result.isPresent() && result.get() == buttonYes){
-                    boardsSizesListView.getItems().clear();
-                    winsByFirstComputerLabel.setText("0");
-                    winsBySecondComputerLabel.setText("0");
-                    winsToAllResultLabel.setText("0");
-                    try {
-                        String pathToFile = System.getProperty("user.home") + "/Documents/Bricks/logs.txt";
-                        PrintWriter writer = new PrintWriter(pathToFile);
-                        writer.close();
-                    }
-                    catch (Exception e) {
-
-                    }
-            }
-            }
+        clearLogsButton.setOnAction(event -> {
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+            alert.setTitle("Potwieredznie usuwania wyników");
+            alert.setHeaderText("Chcesz usunąć zapisane wyniki?");
+            alert.setTitle("Potwierdzenie");
+            alert.setContentText("Ten operacji nie można cofnąć.");
+            ButtonType buttonYes = new ButtonType("Tak");
+            ButtonType buttonNo = new ButtonType("Anuluj");
+            alert.getButtonTypes().setAll(buttonNo,buttonYes);
+            Optional<ButtonType> result=  alert.showAndWait();
+            if(result.isPresent() && result.get() == buttonYes){
+                boardsSizesListView.getItems().clear();
+                winsByFirstComputerLabel.setText("0");
+                winsBySecondComputerLabel.setText("0");
+                winsToAllResultLabel.setText("0");
+                try {
+                    String pathToFile = System.getProperty("user.home") + "/Documents/Bricks/logs.txt";
+                    PrintWriter writer = new PrintWriter(pathToFile);
+                    writer.close();
+                }
+                catch (Exception ignored) {}
+        }
         });
 
 
@@ -183,34 +165,28 @@ class ResultsPane extends Pane {
             }
         });
         generateTable();
-        boardsSizesListView.getSelectionModel().selectedItemProperty().addListener(new ChangeListener<String>() {
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue, String newValue) {
-                try {
-                    winsByFirstComputerLabel.setText(winsMap.get(newValue).toString());
-                    winsBySecondComputerLabel.setText(losesMap.get(newValue).toString());
-                    double value = winsMap.get(newValue).doubleValue() / (losesMap.get(newValue) + winsMap.get(newValue));
-                    value *= 100;
-                    value = Math.round(value);
-                    value /= 100;
-                    winsToAllResultLabel.setText(value + "");
-                }
-                catch (NullPointerException e) {
-                    winsByFirstComputerLabel.setText("0");
-                    winsBySecondComputerLabel.setText("0");
-                    winsToAllResultLabel.setText("0");
-                }
+        boardsSizesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+            try {
+                winsByFirstComputerLabel.setText(winsMap.get(newValue).toString());
+                winsBySecondComputerLabel.setText(losesMap.get(newValue).toString());
+                double value = winsMap.get(newValue).doubleValue() / (losesMap.get(newValue) + winsMap.get(newValue));
+                value *= 100;
+                value = Math.round(value);
+                value /= 100;
+                winsToAllResultLabel.setText(value + "");
+            }
+            catch (NullPointerException e) {
+                winsByFirstComputerLabel.setText("0");
+                winsBySecondComputerLabel.setText("0");
+                winsToAllResultLabel.setText("0");
             }
         });
     }
 
-    public void generateTable() {
+    private void generateTable() {
         try {
             String path = System.getProperty("user.home") + "/Documents/Bricks";
-            if (!new File(path + "/logs.txt").exists()) {
-                //TODO KOMUNIKAT O BRAKU DANYCH, MOŻE TUTAJ, MOŻE NIEPOZWOLIC NA OTWARCIE TEGO OKNA
-            }
-            else {
+            if (new File(path + "/logs.txt").exists()) {
                 String pathToFile = System.getProperty("user.home") + "/Documents/Bricks/logs.txt";
                 Scanner in = new Scanner(new File(pathToFile));
                 ArrayList<String> wyniki = new ArrayList<>();
@@ -227,7 +203,7 @@ class ResultsPane extends Pane {
 
                 winsMap= new HashMap<>();
                 losesMap= new HashMap<>();
-                winToAllMap = new TreeMap<>();
+                Map<Double, String> winToAllMap = new TreeMap<>();
 
                 for(String s : wyniki) {
                     try {
@@ -264,9 +240,8 @@ class ResultsPane extends Pane {
         } catch (IOException ignored){}
 
     }
-    Map<String,Integer> winsMap;
-    Map<String,Integer> losesMap;
-    Map<Double,String> winToAllMap;
+    private Map<String,Integer> winsMap;
+    private Map<String,Integer> losesMap;
 
     private ListView<String> boardsSizesListView;
 
