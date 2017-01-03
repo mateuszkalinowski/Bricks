@@ -159,7 +159,6 @@ class ResultsPane extends Pane {
                 alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
                 Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
                 alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                alert.setTitle("Potwierdznie Wyjścia");
                 alert.setTitle("Potwierdzenie Wyjścia");
                 alert.setHeaderText("Chcesz wrócić do rozgrywki?");
                 ButtonType buttonYes = new ButtonType("Tak");
