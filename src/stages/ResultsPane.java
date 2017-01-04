@@ -202,7 +202,7 @@ class ResultsPane extends Pane {
 
                 winsMap= new HashMap<>();
                 losesMap= new HashMap<>();
-                Map<Double, String> winToAllMap = new TreeMap<>();
+                Map<String, Double> winToAllMap = new HashMap<>();
 
                 for(String s : wyniki) {
                     try {
@@ -220,19 +220,16 @@ class ResultsPane extends Pane {
                         losesMap.putIfAbsent(secondDivisionNames[1],0);
                         losesMap.put(secondDivisionNames[0],losesMap.get(secondDivisionNames[0])+Integer.parseInt(secondDivisionValues[1]));
                         losesMap.put(secondDivisionNames[1],losesMap.get(secondDivisionNames[1])+Integer.parseInt(secondDivisionValues[0]));
-
-
-
                     }
                     catch (IndexOutOfBoundsException | NumberFormatException ignored){
                     }
                 }
 
                 for(String key : winsMap.keySet()) {
-                    winToAllMap.put(losesMap.get(key).doubleValue()/(winsMap.get(key).doubleValue()+losesMap.get(key).doubleValue()),key);
+                    winToAllMap.put(key,losesMap.get(key).doubleValue()/(winsMap.get(key).doubleValue()+losesMap.get(key).doubleValue()));
                 }
-                for(Double key : winToAllMap.keySet()) {
-                    boardsSizesListView.getItems().add(winToAllMap.get(key));
+                for(String key : winToAllMap.keySet()) {
+                    boardsSizesListView.getItems().add(key);
                 }
             }
 

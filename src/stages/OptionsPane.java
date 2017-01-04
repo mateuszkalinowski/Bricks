@@ -154,7 +154,7 @@ class OptionsPane extends Pane {
         firstProgramRunCommandTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
             firstPlayerRunCommand = newValue;
         });
-        if(firstPlayerProgramType==2) {
+        if(firstPlayerProgramType==1) {
             firstProgramRunCommandTextArea.setEditable(true);
         }
         else {
@@ -166,7 +166,7 @@ class OptionsPane extends Pane {
         secondProgramRunCommandTextArea.textProperty().addListener((observable, oldValue, newValue) -> {
             secondPlayerRunCommand = newValue;
         });
-        if(secondPlayerProgramType==2) {
+        if(secondPlayerProgramType==1) {
             secondProgramRunCommandTextArea.setEditable(true);
         }
         else {
@@ -273,12 +273,11 @@ class OptionsPane extends Pane {
         singPlayerComputerPlayerLabel.setAlignment(Pos.BASELINE_RIGHT);
 
         firstProgramTypeComboBox = new ComboBox<>();
-        firstProgramTypeComboBox.getItems().add("Plik exe/out");
-        firstProgramTypeComboBox.getItems().add("Plik class(java)");
+        firstProgramTypeComboBox.getItems().add("Plik exe/out/jar/class");
         firstProgramTypeComboBox.getItems().add("Własne");
 
         firstProgramTypeComboBox.getSelectionModel().select(firstPlayerProgramType);
-        if(firstPlayerProgramType==2) {
+        if(firstPlayerProgramType==1) {
             chooseFirstComputerPlayerButton.setDisable(true);
             firstProgramRunCommandTextArea.setEditable(true);
         }
@@ -288,7 +287,7 @@ class OptionsPane extends Pane {
         }
         firstProgramTypeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             firstPlayerProgramType = firstProgramTypeComboBox.getSelectionModel().getSelectedIndex();
-            if(firstPlayerProgramType==2) {
+            if(firstPlayerProgramType==1) {
                 chooseFirstComputerPlayerButton.setDisable(true);
                 firstProgramRunCommandTextArea.setEditable(true);
             }
@@ -300,12 +299,11 @@ class OptionsPane extends Pane {
 
 
         secondProgramTypeComboBox = new ComboBox<>();
-        secondProgramTypeComboBox.getItems().add("Plik exe/out");
-        secondProgramTypeComboBox.getItems().add("Plik class(java)");
+        secondProgramTypeComboBox.getItems().add("Plik exe/out/jar/class");
         secondProgramTypeComboBox.getItems().add("Własne");
 
         secondProgramTypeComboBox.getSelectionModel().select(secondPlayerProgramType);
-        if(secondPlayerProgramType==2) {
+        if(secondPlayerProgramType==1) {
             chooseSecondComputerPlayerButton.setDisable(true);
             secondProgramRunCommandTextArea.setEditable(true);
         }
@@ -315,7 +313,7 @@ class OptionsPane extends Pane {
         }
         secondProgramTypeComboBox.valueProperty().addListener((observable, oldValue, newValue) -> {
             secondPlayerProgramType = secondProgramTypeComboBox.getSelectionModel().getSelectedIndex();
-            if(secondPlayerProgramType==2) {
+            if(secondPlayerProgramType==1) {
                 chooseSecondComputerPlayerButton.setDisable(true);
                 secondProgramRunCommandTextArea.setEditable(true);
             }
@@ -484,7 +482,6 @@ class OptionsPane extends Pane {
             secondPlayerColor = newColor;
     }
 
-    //private Button defaultSettingsButton;
     private Button saveAndExitButton;
 
     private int firstPlayerProgramType;
