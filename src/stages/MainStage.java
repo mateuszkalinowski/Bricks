@@ -68,22 +68,31 @@ public class MainStage extends Application {
         singlePlayerGameButton.setOnAction(event -> {
             boolean computerPlayerFound = false;
             if (computerPlayerType == 1) {
-                if (firstPlayerProgramType == 0) {
-                    try {
-                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
-                        computerPlayerFound = true;
-                    } catch (Exception ignored) {
+                if(firstPlayerProgramType == 0) {
+                    if(playerFirstFullPath.substring(playerFirstFullPath.length()-3).equals("out") || playerFirstFullPath.substring(playerFirstFullPath.length()-3).equals("exe")) {
+                        try {
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
+                            computerPlayerFound = true;
+                        } catch (Exception ignored) {
+                        }
                     }
-                }
-                if (firstPlayerProgramType == 1) {
-                    try {
-                        Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerOne + " " + playerFirstProgramName, BoardSize);
-                        computerPlayerFound = true;
-                    } catch (Exception ignored) {
+                    else if(playerFirstFullPath.substring(playerFirstFullPath.length()-3).equals("jar")) {
+                        try {
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -jar " + playerFirstFullPath, BoardSize);
+                            computerPlayerFound = true;
+                        } catch (Exception ignored) {
+                        }
+                    }
+                    else if(playerFirstFullPath.substring(playerFirstFullPath.length()-5).equals("class")) {
+                        try {
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerOne + " " + playerFirstProgramName, BoardSize);
+                            computerPlayerFound = true;
+                        } catch (Exception ignored) {
+                        }
                     }
 
                 }
-                if (firstPlayerProgramType == 2) {
+                if (firstPlayerProgramType == 1) {
                     try {
                         Bricks.singlePlayerRobotPlayer = new RobotPlayer(firstPlayerRunCommand, BoardSize);
                         computerPlayerFound = true;
@@ -93,22 +102,31 @@ public class MainStage extends Application {
                 }
             }
             if (computerPlayerType == 2) {
-                if (secondPlayerProgramType == 0) {
-                    try {
-                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
-                        computerPlayerFound = true;
-                    } catch (Exception ignored) {
+                if(secondPlayerProgramType == 0) {
+                    if(playerSecondFullPath.substring(playerSecondFullPath.length()-3).equals("out") || playerSecondFullPath.substring(playerSecondFullPath.length()-3).equals("exe")) {
+                        try {
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
+                            computerPlayerFound = true;
+                        } catch (Exception ignored) {
+                        }
                     }
-                }
-                if (secondPlayerProgramType == 1) {
-                    try {
-                        Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerTwo + " " + playerSecondProgramName, BoardSize);
-                        computerPlayerFound = true;
-                    } catch (Exception ignored) {
+                    else if(playerSecondFullPath.substring(playerSecondFullPath.length()-3).equals("jar")) {
+                        try {
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -jar " + playerSecondFullPath, BoardSize);
+                            computerPlayerFound = true;
+                        } catch (Exception ignored) {
+                        }
+                    }
+                    else if(playerSecondFullPath.substring(playerSecondFullPath.length()-5).equals("class")) {
+                        try {
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerTwo + " " + playerSecondProgramName, BoardSize);
+                            computerPlayerFound = true;
+                        } catch (Exception ignored) {
+                        }
                     }
 
                 }
-                if (secondPlayerProgramType == 2) {
+                if (secondPlayerProgramType == 1) {
                     try {
                         Bricks.singlePlayerRobotPlayer = new RobotPlayer(secondPlayerRunCommand, BoardSize);
                         computerPlayerFound = true;
@@ -215,22 +233,31 @@ public class MainStage extends Application {
         robotWarsButton.setOnAction(event -> {
             boolean checkFirstComputerPlayer = false;
             boolean checkSecondComputerPlayer = false;
-            if (firstPlayerProgramType == 0) {
-                try {
-                    Bricks.firstRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
-                    checkFirstComputerPlayer = true;
-                } catch (Exception ignored) {
+            if(firstPlayerProgramType == 0) {
+                if(playerFirstFullPath.substring(playerFirstFullPath.length()-3).equals("out") || playerFirstFullPath.substring(playerFirstFullPath.length()-3).equals("exe")) {
+                    try {
+                        Bricks.firstRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
+                        checkFirstComputerPlayer = true;
+                    } catch (Exception ignored) {
+                    }
                 }
-            }
-            if (firstPlayerProgramType == 1) {
-                try {
-                    Bricks.firstRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainStage.pathToPlayerOne + " " + Bricks.mainStage.playerFirstProgramName, BoardSize);
-                    checkFirstComputerPlayer = true;
-                } catch (Exception ignored) {
+                else if(playerFirstFullPath.substring(playerFirstFullPath.length()-3).equals("jar")) {
+                    try {
+                        Bricks.firstRobotPlayer = new RobotPlayer("java -jar " + playerFirstFullPath, BoardSize);
+                        checkFirstComputerPlayer = true;
+                    } catch (Exception ignored) {
+                    }
+                }
+                else if(playerFirstFullPath.substring(playerFirstFullPath.length()-5).equals("class")) {
+                    try {
+                        Bricks.firstRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainStage.pathToPlayerOne + " " + Bricks.mainStage.playerFirstProgramName, BoardSize);
+                        checkFirstComputerPlayer = true;
+                    } catch (Exception ignored) {
+                    }
                 }
 
             }
-            if (firstPlayerProgramType == 2) {
+            if (firstPlayerProgramType == 1) {
                 try {
                     Bricks.firstRobotPlayer = new RobotPlayer(firstPlayerRunCommand, BoardSize);
                     checkFirstComputerPlayer = true;
@@ -238,23 +265,31 @@ public class MainStage extends Application {
                 }
 
             }
-
-            if (secondPlayerProgramType == 0) {
-                try {
-                    Bricks.secondRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
-                    checkSecondComputerPlayer = true;
-                } catch (Exception ignored) {
+            if(secondPlayerProgramType == 0) {
+                if(playerSecondFullPath.substring(playerSecondFullPath.length()-3).equals("out") || playerSecondFullPath.substring(playerSecondFullPath.length()-3).equals("exe")) {
+                    try {
+                        Bricks.secondRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
+                        checkSecondComputerPlayer = true;
+                    } catch (Exception ignored) {
+                    }
                 }
+                else if(playerSecondFullPath.substring(playerSecondFullPath.length()-3).equals("jar")) {
+                    try {
+                        Bricks.secondRobotPlayer = new RobotPlayer("java -jar " + playerSecondFullPath, BoardSize);
+                        checkSecondComputerPlayer = true;
+                    } catch (Exception ignored) {
+                    }
+                }
+                else if(playerSecondFullPath.substring(playerSecondFullPath.length()-5).equals("class")) {
+                    try {
+                        Bricks.secondRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainStage.pathToPlayerTwo + " " + Bricks.mainStage.playerSecondProgramName, BoardSize);
+                        checkSecondComputerPlayer = true;
+                    } catch (Exception ignored) {
+                    }
+                }
+
             }
             if (secondPlayerProgramType == 1) {
-                try {
-                    Bricks.secondRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainStage.pathToPlayerTwo + " " + Bricks.mainStage.playerSecondProgramName, BoardSize);
-                    checkSecondComputerPlayer = true;
-                } catch (Exception ignored) {
-                }
-
-            }
-            if (secondPlayerProgramType == 2) {
                 try {
                     Bricks.secondRobotPlayer = new RobotPlayer(secondPlayerRunCommand, BoardSize);
                     checkSecondComputerPlayer = true;
@@ -372,7 +407,7 @@ public class MainStage extends Application {
         Label programInfoLabel = new Label();
         programInfoLabel.setMaxWidth(Double.MAX_VALUE);
         programInfoLabel.setAlignment(Pos.CENTER);
-        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.5.0");
+        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.5.1");
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
@@ -484,7 +519,7 @@ public class MainStage extends Application {
         this.computerPlayerType = computerPlayerType;
         this.theme = theme;
 
-        if (playerFirstFullPath.length() > 7) {
+        if (playerFirstFullPath.length() > 7 && firstPlayerProgramType==0) {
             int i = playerFirstFullPath.length() - 1;
             for (; i > 0; i--) {
                 if (playerFirstFullPath.charAt(i) == '/' || playerFirstFullPath.charAt(i) == '\\')
@@ -492,10 +527,17 @@ public class MainStage extends Application {
             }
             pathToPlayerOne = playerFirstFullPath.substring(0, i);
             playerFirstProgramName = playerFirstFullPath.substring(i + 1, playerFirstFullPath.length());
-            playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 6);
-
+            if (playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("out") || playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("exe") || playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("jar")) {
+                playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 4);
+            } else if (playerFirstFullPath.substring(playerFirstFullPath.length() - 5).equals("class")) {
+                playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 6);
+            }
         }
-        if (playerSecondFullPath.length() > 7) {
+        else {
+            //TODO LEPSZE NAZYWANIE PROGRAMU "WLASNEGO" BO OBECNIE WSZYSTKIE BEDA TRAKTOWANE JAKO JEDEN
+            playerFirstProgramName="Wlasny";
+        }
+        if (playerSecondFullPath.length() > 7 && secondPlayerProgramType==0) {
             int i = playerSecondFullPath.length() - 1;
             for (; i > 0; i--) {
                 if (playerSecondFullPath.charAt(i) == '/' || playerSecondFullPath.charAt(i) == '\\')
@@ -503,7 +545,17 @@ public class MainStage extends Application {
             }
             pathToPlayerTwo = playerSecondFullPath.substring(0, i);
             playerSecondProgramName = playerSecondFullPath.substring(i + 1, playerSecondFullPath.length());
-            playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
+
+            if(playerSecondFullPath.substring(playerSecondFullPath.length()-3).equals("out") || playerSecondFullPath.substring(playerSecondFullPath.length()-3).equals("exe") || playerSecondFullPath.substring(playerSecondFullPath.length()-3).equals("jar")) {
+                playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 4);
+            }
+            else if(playerSecondFullPath.substring(playerSecondFullPath.length()-5).equals("class")) {
+                playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
+            }
+        }
+        else {
+            //TODO LEPSZE NAZYWANIE PROGRAMU "WLASNEGO" BO OBECNIE WSZYSTKIE BEDA TRAKTOWANE JAKO JEDEN
+            playerSecondProgramName="Wlasny";
         }
         if(mainScene!=null) {
             mainScene.getStylesheets().removeAll(classicTheme,minecraftTheme);
