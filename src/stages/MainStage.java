@@ -533,9 +533,12 @@ public class MainStage extends Application {
                 playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 6);
             }
         }
-        else {
-            //TODO LEPSZE NAZYWANIE PROGRAMU "WLASNEGO" BO OBECNIE WSZYSTKIE BEDA TRAKTOWANE JAKO JEDEN
-            playerFirstProgramName="Wlasny";
+        else if(firstPlayerProgramType==1){
+            if(firstPlayerRunCommand.length()<=20) {
+                playerFirstProgramName = firstPlayerRunCommand;
+            }
+            else
+                playerFirstProgramName = firstPlayerRunCommand.substring(firstPlayerRunCommand.length()-21);
         }
         if (playerSecondFullPath.length() > 7 && secondPlayerProgramType==0) {
             int i = playerSecondFullPath.length() - 1;
@@ -553,9 +556,12 @@ public class MainStage extends Application {
                 playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
             }
         }
-        else {
-            //TODO LEPSZE NAZYWANIE PROGRAMU "WLASNEGO" BO OBECNIE WSZYSTKIE BEDA TRAKTOWANE JAKO JEDEN
-            playerSecondProgramName="Wlasny";
+        else if(secondPlayerProgramType==1){
+            if(secondPlayerRunCommand.length()<=20) {
+                playerSecondProgramName = secondPlayerRunCommand;
+            }
+            else
+                playerSecondProgramName = secondPlayerRunCommand.substring(secondPlayerRunCommand.length()-21);
         }
         if(mainScene!=null) {
             mainScene.getStylesheets().removeAll(classicTheme,minecraftTheme);
