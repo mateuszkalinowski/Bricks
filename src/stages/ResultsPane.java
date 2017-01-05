@@ -3,12 +3,18 @@ package stages;
 import core.Bricks;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
+import javafx.stage.StageStyle;
+
 import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
@@ -108,6 +114,7 @@ class ResultsPane extends Pane {
                 winsByFirstComputerLabel.setText("0");
                 winsBySecondComputerLabel.setText("0");
                 winsToAllResultLabel.setText("0");
+                dataSeries.getData().clear();
                 try {
                     String pathToFile = System.getProperty("user.home") + "/Documents/Bricks/logs.txt";
                     PrintWriter writer = new PrintWriter(pathToFile);
@@ -120,6 +127,7 @@ class ResultsPane extends Pane {
 
         widthProperty().addListener((observable, oldValue, newValue) -> {
             mainGridPane.setPrefWidth(newValue.doubleValue());
+            mainTabPane.setPrefWidth(newValue.doubleValue());
         });
         heightProperty().addListener((observable, oldValue, newValue) -> {
             mainGridPane.setPrefHeight(newValue.doubleValue());
@@ -132,9 +140,29 @@ class ResultsPane extends Pane {
             winsToAllLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
             winsToAllResultLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
             clearLogsButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/50));
+            mainTabPane.setPrefHeight(newValue.doubleValue());
         });
+        mainTabPane = new TabPane();
+        Tab dataTab = new Tab("Dane");
+        dataTab.setContent(mainGridPane);
+        dataTab.setClosable(false);
+        mainTabPane.getTabs().add(dataTab);
+        BorderPane chartPane = new BorderPane();
+        final CategoryAxis xAxis = new CategoryAxis();
+        final NumberAxis yAxis = new NumberAxis();
+        final BarChart<String,Number> resultsChart = new BarChart<String, Number>(xAxis,yAxis);
+        dataSeries = new XYChart.Series();
+        dataSeries.setName("Wygranych/Rozegranych");
+        generateTable();
+        resultsChart.getData().addAll(dataSeries);
+        chartPane.setCenter(resultsChart);
+        Tab chartTab = new Tab("Wykres - Wygrane/Rozegrane");
+        chartTab.setContent(chartPane);
+        chartTab.setClosable(false);
+        mainTabPane.getTabs().add(chartTab);
 
-        getChildren().add(mainGridPane);
+        getChildren().add(mainTabPane);
+
         setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -143,10 +171,10 @@ class ResultsPane extends Pane {
                 alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                 alert.setTitle("Potwierdzenie Wyjścia");
                 alert.setHeaderText("Chcesz wrócić do rozgrywki?");
+                alert.setContentText("Żadne dane z tego okna nie zostaną utracone, mogą zostać jednak zmienione wraz z kolejnymi grami.");
                 ButtonType buttonYes = new ButtonType("Tak");
                 ButtonType buttonNo = new ButtonType("Anuluj");
                 alert.getButtonTypes().setAll(buttonNo,buttonYes);
-                alert.setContentText("");
                 Optional<ButtonType> result=  alert.showAndWait();
                 if(result.isPresent() && result.get() == buttonYes){
                     try {
@@ -163,7 +191,6 @@ class ResultsPane extends Pane {
                 }
             }
         });
-        generateTable();
         boardsSizesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 winsByFirstComputerLabel.setText(winsMap.get(newValue).toString());
@@ -241,12 +268,15 @@ class ResultsPane extends Pane {
                     }
                     winToAllMap.remove(maxKey);
                     boardsSizesListView.getItems().add(maxKey);
+                        double value = (winsMap.get(maxKey).doubleValue()/(winsMap.get(maxKey).doubleValue()+losesMap.get(maxKey).doubleValue()));
+                        dataSeries.getData().add(new XYChart.Data(maxKey,value));
                 }
             }
 
         } catch (IOException ignored){}
 
     }
+    TabPane mainTabPane;
     private Map<String,Integer> winsMap;
     private Map<String,Integer> losesMap;
 
@@ -257,5 +287,7 @@ class ResultsPane extends Pane {
     private Label winsToAllResultLabel;
 
     private Button clearLogsButton;
+
+    private XYChart.Series dataSeries;
 
 }
