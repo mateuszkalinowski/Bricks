@@ -389,6 +389,7 @@ public class MainStage extends Application {
         HBox.setMargin(exitButton, new Insets(10,0,10,0));
         HBox.setHgrow(exitButton,Priority.ALWAYS);
         exitButton.setOnAction(event -> {
+            //TODO
             if(Bricks.firstRobotPlayer!=null)
                 Bricks.firstRobotPlayer.killRobot();
             if(Bricks.secondRobotPlayer!=null)
@@ -407,7 +408,7 @@ public class MainStage extends Application {
         Label programInfoLabel = new Label();
         programInfoLabel.setMaxWidth(Double.MAX_VALUE);
         programInfoLabel.setAlignment(Pos.CENTER);
-        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.5.1");
+        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.5.2");
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
@@ -422,6 +423,7 @@ public class MainStage extends Application {
 
 
         mainStage.setOnCloseRequest(event -> {
+            //TODO
             if(Bricks.firstRobotPlayer!=null)
                 Bricks.firstRobotPlayer.killRobot();
             if(Bricks.secondRobotPlayer!=null)
@@ -659,8 +661,8 @@ public class MainStage extends Application {
     private String playerSecondFullPath = "";
     private String pathToPlayerOne = "";
     private String pathToPlayerTwo = "";
-    String playerFirstProgramName = "";
-    String playerSecondProgramName = "";
+    public String playerFirstProgramName = "";
+    public String playerSecondProgramName = "";
     private String firstPlayerRunCommand;
     private String secondPlayerRunCommand;
 

@@ -109,6 +109,8 @@ public class RobotPlayer {
         writer = null;
     }
     public static void exportLogs(int win1, int win2) {
+        if(Bricks.mainStage.playerFirstProgramName.equals(Bricks.mainStage.playerSecondProgramName))
+            return;
         try {
             String path = System.getProperty("user.home") + "/Documents/Bricks";
             if (!new File(path + "/logs.txt").exists()) {

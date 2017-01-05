@@ -3,6 +3,8 @@ package stages;
 import core.*;
 import exceptions.InvalidMoveException;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -65,6 +67,16 @@ class GamePane extends Pane {
         if(gamemode==0 && Bricks.mainStage.computerPlayerType==0)
             comp = new ComputerPlayer();
 
+        if(gamemode == 0) {
+            HBox gamemodeOnePlayerHBox = new HBox();
+            backToMenuButton = new Button("Powrót");
+            gamemodeOnePlayerHBox.getChildren().add(backToMenuButton);
+            gamemodeOnePlayerHBox.setAlignment(Pos.CENTER);
+            gamemodeOnePlayerHBox.setPadding(new Insets(0,20,0,0));
+            gamemodeOnePlayerHBox.setAlignment(Pos.TOP_RIGHT);
+            mainGridPane.add(gamemodeOnePlayerHBox,0,1);
+        }
+
         if(gamemode==1) {
             HBox gamemodeTwoPlayerHBox = new HBox();
             undoMoveButton = new Button("Cofnij Ruch");
@@ -72,6 +84,10 @@ class GamePane extends Pane {
             gamemodeTwoPlayerHBox.setAlignment(Pos.CENTER);
             gamemodeTwoPlayerHBox.setPadding(new Insets(0,20,0,0));
             gamemodeTwoPlayerHBox.setAlignment(Pos.TOP_RIGHT);
+            gamemodeTwoPlayerHBox.setSpacing(10);
+            backToMenuButton = new Button("Powrót");
+            gamemodeTwoPlayerHBox.getChildren().add(backToMenuButton);
+
             mainGridPane.add(gamemodeTwoPlayerHBox,0,1);
 
             undoMoveButton.setDisable(true);
@@ -125,7 +141,7 @@ class GamePane extends Pane {
                 }
             });
             computerPlayer=1;
-            nextMoveButton = new Button("Następny Ruch");
+            nextMoveButton = new Button("Ruch");
             gamemodeRobotsWarsHBox.getChildren().add(nextMoveButton);
             nextMoveButton.setOnAction(event -> {
                 boolean gameFinished = false;
@@ -209,7 +225,7 @@ class GamePane extends Pane {
             });
 
             autoPlayButton = new Button("Automatyczna Gra");
-            autoPlayButton.setMinWidth(150);
+            autoPlayButton.setMinWidth(110);
             gamemodeRobotsWarsHBox.getChildren().add(autoPlayButton);
             autoPlayButton.setOnAction(event -> {
                 if(autoPlayButton.getText().equals("Automatyczna Gra")){
@@ -398,6 +414,7 @@ class GamePane extends Pane {
             });
 
             gamesButton = new Button("Rozgrywki");
+            gamesButton.setTooltip( new Tooltip("Przeprowadź rozgrywki pomiędzy podanymi graczami,\nna podanych planszach. Wyniki zostaną zapisane."));
             gamemodeRobotsWarsHBox.getChildren().add(gamesButton);
             gamesButton.setOnAction(event -> {
                 Optional<ButtonType> result;
@@ -447,6 +464,7 @@ class GamePane extends Pane {
             });
 
             resultsButton = new Button("Wyniki");
+            resultsButton.setTooltip( new Tooltip("Zobacz jak wypadł każdy w programów grających."));
             gamemodeRobotsWarsHBox.getChildren().add(resultsButton);
             resultsButton.setOnAction(event -> {
                 Optional<ButtonType> result;
@@ -497,8 +515,35 @@ class GamePane extends Pane {
 
             gamemodeRobotsWarsHBox.setSpacing(10);
             gamemodeRobotsWarsHBox.setAlignment(Pos.CENTER);
+            backToMenuButton = new Button("Powrót");
+            gamemodeRobotsWarsHBox.getChildren().add(backToMenuButton);
+
             mainGridPane.add(gamemodeRobotsWarsHBox,0,1);
         }
+        backToMenuButton.setTooltip( new Tooltip("Możesz też użyć klawisza \"Escape\""));
+        backToMenuButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                alert.setTitle("Potwierdzenie Wyjścia");
+                alert.setHeaderText("Chcesz wrócić do menu głównego?");
+                alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
+                ButtonType buttonYes = new ButtonType("Tak");
+                ButtonType resetBoard = new ButtonType("Zresetuj Grę");
+                ButtonType buttonNo = new ButtonType("Anuluj");
+                alert.getButtonTypes().setAll(buttonNo,resetBoard,buttonYes);
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == buttonYes) {
+                    Bricks.mainStage.backToMenu();
+                }
+                else if(result.isPresent() && result.get() == resetBoard) {
+                    resetBoard();
+                }
+            }
+        });
         setOnMouseClicked(e -> {
             if ((gamemode == 0 || gamemode == 1) && e.getY()<getHeight()*0.95) {
                 if (!isSelected) {
@@ -722,6 +767,11 @@ class GamePane extends Pane {
                 autoPlayButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
                 gamesButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
                 resultsButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+            }
+            if(gamemode==0 || gamemode==1)
+                backToMenuButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/50));
+            if(gamemode==2) {
+                backToMenuButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
             }
         });
     }
@@ -1199,6 +1249,7 @@ class GamePane extends Pane {
     private Button gamesButton;
     private Button undoMoveButton;
     private Button resultsButton;
+    private Button backToMenuButton;
 
     private TextField speedTextField;
 
