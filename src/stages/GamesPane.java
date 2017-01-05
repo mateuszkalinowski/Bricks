@@ -340,7 +340,7 @@ class GamesPane extends Pane {
                 ButtonType buttonYes = new ButtonType("Tak");
                 ButtonType buttonNo = new ButtonType("Anuluj");
                 alert.getButtonTypes().setAll(buttonNo,buttonYes);
-                alert.setContentText("");
+                alert.setContentText("Podane przez Ciebie rozmiary plansz zostaną zachowane, również po wyłączeniu programu.");
                 Optional<ButtonType> result = alert.showAndWait();
                 if(result.isPresent() && result.get() == buttonYes){
                     try {
