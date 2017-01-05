@@ -24,9 +24,9 @@ import javafx.stage.Stage;
 import logic.BoardLogic;
 import logic.RobotPlayer;
 
-import java.io.File;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.Optional;
+import java.util.Scanner;
 
 /**
  * Created by Mateusz on 18.12.2016.
@@ -389,7 +389,21 @@ public class MainStage extends Application {
         HBox.setMargin(exitButton, new Insets(10,0,10,0));
         HBox.setHgrow(exitButton,Priority.ALWAYS);
         exitButton.setOnAction(event -> {
-            //TODO
+            try {
+                String path = System.getProperty("user.home") + "/Documents/Bricks";
+                if (!new File(path + "/runtimesettings").exists()) {
+                    //noinspection ResultOfMethodCallIgnored
+                    new File(path + "/runtimesettings").createNewFile();
+                }
+                String filename = path + "/runtimesettings";
+                PrintWriter writer;
+                writer = new PrintWriter(filename, "UTF-8");
+                    writer.println("width=" + mainStage.getWidth());
+                    writer.println("height="+ mainStage.getHeight());
+                writer.close();
+            }
+            catch (IOException ignored) {
+            }
             if(Bricks.firstRobotPlayer!=null)
                 Bricks.firstRobotPlayer.killRobot();
             if(Bricks.secondRobotPlayer!=null)
@@ -417,13 +431,81 @@ public class MainStage extends Application {
         mainStage.setTitle("Bricks");
         mainStage.setScene(mainScene);
         mainScene.getStylesheets().add(selectedTheme);
+
+        double firstWidth = 520;
+        double firstHeight = 710;
+        try {
+            double tempWidth;
+            double tempHeight;
+            String path = System.getProperty("user.home") + "/Documents/Bricks";
+            Scanner in = new Scanner(new File(path + "/runtimesettings"));
+            String line = in.nextLine();
+            String[] Divided = line.split("=");
+            try {
+                tempWidth = Double.parseDouble(Divided[1]);
+            }
+            catch (NumberFormatException e){
+                tempWidth = 0;
+            }
+            line = in.nextLine();
+            Divided = line.split("=");
+            try {
+                tempHeight = Double.parseDouble(Divided[1]);
+            }
+            catch (NumberFormatException e){
+                tempHeight = 0;
+            }
+            System.out.println(tempWidth + " " + tempHeight);
+            if(tempWidth!=0 && tempHeight!=0 && tempWidth>=tempHeight*0.7) {
+                firstWidth = tempWidth;
+                firstHeight = tempHeight;
+            }
+        }
+        catch(IOException ignored){}
         mainStage.setMinWidth(520);
         mainStage.setMinHeight(710);
+        mainStage.setWidth(firstWidth);
+        mainStage.setHeight(firstHeight);
+
+        bricksTitleLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, firstHeight/ 4.7));
+
+        singlePlayerGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, firstHeight/ 32));
+        twoPlayersGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, firstHeight / 32));
+        robotWarsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, firstHeight / 32));
+        optionsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, firstHeight / 32));
+        exitButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, firstHeight / 32));
+        FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
+        buttonWidth = fontLoader.computeStringWidth(bricksTitleLabel.getText(), bricksTitleLabel.getFont()) * (2.0 / 3.0);
+        if (buttonWidth > 300) {
+            singlePlayerGameButton.setMaxWidth(buttonWidth);
+            twoPlayersGameButton.setMaxWidth(buttonWidth);
+            robotWarsButton.setMaxWidth(buttonWidth);
+            optionsButton.setMaxWidth(buttonWidth);
+            exitButton.setMaxWidth(buttonWidth);
+        } else {
+            singlePlayerGameButton.setMaxWidth(300);
+            twoPlayersGameButton.setMaxWidth(300);
+            robotWarsButton.setMaxWidth(300);
+            optionsButton.setMaxWidth(300);
+            exitButton.setMaxWidth(300);
+        }
         mainStage.show();
-
-
         mainStage.setOnCloseRequest(event -> {
-            //TODO
+            try {
+                String path = System.getProperty("user.home") + "/Documents/Bricks";
+                if (!new File(path + "/runtimesettings").exists()) {
+                    //noinspection ResultOfMethodCallIgnored
+                    new File(path + "/runtimesettings").createNewFile();
+                }
+                String filename = path + "/runtimesettings";
+                PrintWriter writer;
+                writer = new PrintWriter(filename, "UTF-8");
+                writer.println("width=" + mainStage.getWidth());
+                writer.println("height="+ mainStage.getHeight());
+                writer.close();
+            }
+            catch (IOException ignored) {
+            }
             if(Bricks.firstRobotPlayer!=null)
                 Bricks.firstRobotPlayer.killRobot();
             if(Bricks.secondRobotPlayer!=null)
@@ -440,8 +522,8 @@ public class MainStage extends Application {
                 robotWarsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, newValue.doubleValue() / 32));
                 optionsButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, newValue.doubleValue() / 32));
                 exitButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, newValue.doubleValue() / 32));
-                FontLoader fontLoader = Toolkit.getToolkit().getFontLoader();
-                buttonWidth = fontLoader.computeStringWidth(bricksTitleLabel.getText(), bricksTitleLabel.getFont()) * (2.0 / 3.0);
+                final FontLoader fontLoaderFirst = Toolkit.getToolkit().getFontLoader();
+                buttonWidth = fontLoaderFirst.computeStringWidth(bricksTitleLabel.getText(), bricksTitleLabel.getFont()) * (2.0 / 3.0);
                 if (buttonWidth > 300) {
                     singlePlayerGameButton.setMaxWidth(buttonWidth);
                     twoPlayersGameButton.setMaxWidth(buttonWidth);
