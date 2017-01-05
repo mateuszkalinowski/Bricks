@@ -416,8 +416,7 @@ public class MainStage extends Application {
         mainStage.setTitle("Bricks");
         mainStage.setScene(mainScene);
         mainScene.getStylesheets().add(selectedTheme);
-        mainStage.setMinWidth(520);
-        mainStage.setMinHeight(710);
+        mainStage.setMinHeight(660);
         mainStage.show();
 
 
