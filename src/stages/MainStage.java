@@ -455,7 +455,6 @@ public class MainStage extends Application {
             catch (NumberFormatException e){
                 tempHeight = 0;
             }
-            System.out.println(tempWidth + " " + tempHeight);
             if(tempWidth!=0 && tempHeight!=0 && tempWidth>=tempHeight*0.7) {
                 firstWidth = tempWidth;
                 firstHeight = tempHeight;
