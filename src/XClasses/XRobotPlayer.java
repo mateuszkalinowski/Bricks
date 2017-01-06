@@ -1,6 +1,5 @@
 package XClasses;
 
-import core.Bricks;
 import javafx.beans.property.SimpleStringProperty;
 import logic.RobotPlayer;
 
@@ -12,7 +11,8 @@ public class XRobotPlayer {
     private final SimpleStringProperty type;
     private final SimpleStringProperty path;
     private final SimpleStringProperty name;
-    public XRobotPlayer(String isOwn,String path) {
+
+    public XRobotPlayer(String isOwn, String path) {
         this.type = new SimpleStringProperty(isOwn);
         this.path = new SimpleStringProperty(path);
 
@@ -29,51 +29,57 @@ public class XRobotPlayer {
             } else if (this.path.get().substring(this.path.get().length() - 5).equals("class")) {
                 name.set(name.get().substring(0, name.get().length() - 6));
             }
-        }
-        else if(this.type.get().equals("Własny")){
-            if(this.path.get().length()<=20) {
+        } else if (this.type.get().equals("Własny")) {
+            if (this.path.get().length() <= 20) {
                 name = new SimpleStringProperty(this.path.get());
-            }
-            else
-                name = new SimpleStringProperty(this.path.get().substring(this.path.get().length()-21));
-        }
-        else {
+            } else
+                name = new SimpleStringProperty(this.path.get().substring(this.path.get().length() - 21));
+        } else {
             name = new SimpleStringProperty("null");
         }
     }
+    public XRobotPlayer(String isOwn, String path, String customName) {
+        this.type = new SimpleStringProperty("Własny");
+        this.path = new SimpleStringProperty(path);
+        if (customName.equals("")) {
+            if (this.path.get().length() <= 10) {
+                name = new SimpleStringProperty(this.path.get());
+            } else
+                name = new SimpleStringProperty(this.path.get().substring(this.path.get().length() - 11));
+        } else {
+            name = new SimpleStringProperty(customName);
+        }
+    }
+
     private String pathToPlayer;
 
-    public String getType(){
+    public String getType() {
         return type.get();
     }
-    public String getPath(){
+
+    public String getPath() {
         return path.get();
     }
-    public String getName(){
+
+    public String getName() {
         return name.get();
     }
 
-    public String getPathToPlayer(){
-        return pathToPlayer;
-    }
-
-    public RobotPlayer getRobotPlayer(){
-        if(type.get().equals("Wbudowany")) {
-            if(path.get().substring(path.get().length()-3).equals("out") || path.get().substring(path.get().length()-3).equals("exe")) {
+    public RobotPlayer getRobotPlayer() {
+        if (type.get().equals("Wbudowany")) {
+            if (path.get().substring(path.get().length() - 3).equals("out") || path.get().substring(path.get().length() - 3).equals("exe")) {
                 try {
                     return new RobotPlayer(path.get(), 5);
                 } catch (Exception ignored) {
                 }
-            }
-            else if(path.get().substring(path.get().length()-3).equals("jar")) {
+            } else if (path.get().substring(path.get().length() - 3).equals("jar")) {
                 try {
                     return new RobotPlayer("java -jar " + path.get(), 5);
                 } catch (Exception ignored) {
                 }
-            }
-            else if(path.get().substring(path.get().length()-5).equals("class")) {
+            } else if (path.get().substring(path.get().length() - 5).equals("class")) {
                 try {
-                    return new RobotPlayer("java -cp " + pathToPlayer+ " " + name.get(), 5);
+                    return new RobotPlayer("java -cp " + pathToPlayer + " " + name.get(), 5);
                 } catch (Exception ignored) {
                 }
             }
