@@ -30,3 +30,5 @@ Wysyłanie tekstu przez programy grające musi odbywać się "jednym ciągiem", 
 -Naprawa kilkunastu błędów (w tym już niemal całkowita poprawa w kwestiach kompatybilności z protokołem)  
 -Dodanie partii automatycznych (rozgrywek), wraz z zapisywaniem ich wyników  
 -Zmiana wyglądu programu, przepisanie do javyfx, dodanie alternatywnego stylu graficznego plansz
+-Dodanie możliwości wykonywania automatycznych gier wielu programów komputerowych
+-Dodanie możliwości prezentowania wyników w tabelach i na wykresach
