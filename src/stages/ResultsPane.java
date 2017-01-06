@@ -228,8 +228,19 @@ class ResultsPane extends Pane {
                 for(String key : winsMap.keySet()) {
                     winToAllMap.put(key,losesMap.get(key).doubleValue()/(winsMap.get(key).doubleValue()+losesMap.get(key).doubleValue()));
                 }
-                for(String key : winToAllMap.keySet()) {
-                    boardsSizesListView.getItems().add(key);
+
+                while(!winToAllMap.isEmpty()) {
+                    String maxKey="";
+                    for (String key : winToAllMap.keySet()) {
+                        if(maxKey.equals(""))
+                            maxKey = key;
+                        else {
+                            if(winToAllMap.get(key) <winToAllMap.get(maxKey))
+                                maxKey=key;
+                        }
+                    }
+                    winToAllMap.remove(maxKey);
+                    boardsSizesListView.getItems().add(maxKey);
                 }
             }
 

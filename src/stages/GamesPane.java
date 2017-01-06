@@ -288,9 +288,7 @@ class GamesPane extends Pane {
                     winsByFirstComputerLabel.setText(firstPlayerWins+"");
                     winsBySecondComputerLabel.setText(secondPlayerWins+"");
                     gamesProgressBar.progressProperty().unbind();
-                    if(!Bricks.mainStage.playerFirstProgramName.equals(Bricks.mainStage.playerSecondProgramName)) {
-                        RobotPlayer.exportLogs(firstPlayerWins, secondPlayerWins);
-                    }
+                    RobotPlayer.exportLogs(firstPlayerWins, secondPlayerWins);
                 });
 
                 runButton.setText("Przerwij");
