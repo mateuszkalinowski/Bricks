@@ -1,6 +1,10 @@
 package stages;
 
+import XClasses.XResults;
+import XClasses.XRobotPlayer;
 import core.Bricks;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -9,6 +13,7 @@ import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
@@ -35,68 +40,30 @@ class ResultsPane extends Pane {
             mainGridPane.getRowConstraints().add(row);
         }
         ColumnConstraints column = new ColumnConstraints();
-        column.setPercentWidth(33.3);
-        for (int i = 0; i < 3; i++) {
+        column.setPercentWidth(14.28);
+        for (int i = 0; i < 7; i++) {
             mainGridPane.getColumnConstraints().add(column);
         }
-        boardsSizesListView = new ListView<>();
+       /* boardsSizesListView = new ListView<>();
         boardsSizesListView.setMaxWidth(Double.MAX_VALUE);
         boardsSizesListView.setMaxHeight(Double.MAX_VALUE);
-        mainGridPane.add(boardsSizesListView, 1, 1, 1, 5);
+        mainGridPane.add(boardsSizesListView, 1, 1, 1, 5);*/
 
         Label playersListLabel = new Label("Gracze:");
         playersListLabel.setAlignment(Pos.CENTER);
         playersListLabel.setMaxWidth(Double.MAX_VALUE);
-        mainGridPane.add(playersListLabel, 0, 0, 3, 1);
+        mainGridPane.add(playersListLabel, 0, 0, 7, 1);
 
-        boardsSizesListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-
-        Label resultsLabel = new Label("Wyniki:");
-        resultsLabel.setMaxWidth(Double.MAX_VALUE);
-        resultsLabel.setAlignment(Pos.CENTER);
-        resultsLabel.setFont(new Font("Comic Sans MS", 12));
-        mainGridPane.add(resultsLabel, 0, 6, 2, 1);
-        Label wonGames = new Label("Wygranych:");
-        wonGames.setMaxWidth(Double.MAX_VALUE);
-        wonGames.setAlignment(Pos.CENTER);
-        wonGames.setFont(new Font("Comic Sans MS", 12));
-        mainGridPane.add(wonGames, 0, 7, 2, 1);
-        Label lostGames = new Label("Przegranych:");
-        lostGames.setMaxWidth(Double.MAX_VALUE);
-        lostGames.setAlignment(Pos.CENTER);
-        lostGames.setFont(new Font("Comic Sans MS", 12));
-        mainGridPane.add(lostGames, 0, 8, 2, 1);
-        Label winsToAllLabel = new Label("Wygranych/Rozegranych:");
-        winsToAllLabel.setMaxWidth(Double.MAX_VALUE);
-        winsToAllLabel.setAlignment(Pos.CENTER);
-        winsToAllLabel.setFont(new Font("Comic Sans MS", 12));
-        mainGridPane.add(winsToAllLabel, 0, 9, 2, 1);
-
-        winsByFirstComputerLabel = new Label("0");
-        winsByFirstComputerLabel.setMaxWidth(Double.MAX_VALUE);
-        winsByFirstComputerLabel.setAlignment(Pos.CENTER);
-        winsByFirstComputerLabel.setFont(new Font("Comic Sans MS", 12));
-        mainGridPane.add(winsByFirstComputerLabel, 2, 7);
-        winsBySecondComputerLabel = new Label("0");
-        winsBySecondComputerLabel.setMaxWidth(Double.MAX_VALUE);
-        winsBySecondComputerLabel.setAlignment(Pos.CENTER);
-        winsBySecondComputerLabel.setFont(new Font("Comic Sans MS", 12));
-        mainGridPane.add(winsBySecondComputerLabel, 2, 8);
-        winsToAllResultLabel = new Label("0");
-        winsToAllResultLabel.setMaxWidth(Double.MAX_VALUE);
-        winsToAllResultLabel.setAlignment(Pos.CENTER);
-        winsToAllResultLabel.setFont(new Font("Comic Sans MS", 12));
-        mainGridPane.add(winsToAllResultLabel, 2, 9);
+        //boardsSizesListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
         HBox clearLogsButtonHBox = new HBox();
         clearLogsButton = new Button("Wyczyść Wyniki");
         clearLogsButtonHBox.getChildren().add(clearLogsButton);
         clearLogsButtonHBox.setAlignment(Pos.CENTER);
         clearLogsButtonHBox.setPadding(new Insets(0, 20, 0, 0));
-        clearLogsButtonHBox.setAlignment(Pos.TOP_RIGHT);
+        clearLogsButtonHBox.setAlignment(Pos.CENTER_RIGHT);
         clearLogsButtonHBox.setSpacing(10);
-        mainGridPane.add(clearLogsButtonHBox, 1, 10, 2, 1);
+        mainGridPane.add(clearLogsButtonHBox, 4, 9, 3, 2);
         backButton = new Button("Cofnij");
         clearLogsButtonHBox.getChildren().add(backButton);
         backButton.setOnAction(event -> {
@@ -107,7 +74,7 @@ class ResultsPane extends Pane {
             Bricks.mainStage.mainStage.show();
             //     }
         });
-
+        resultsObservableList = FXCollections.observableArrayList();
         clearLogsButton.setOnAction(event -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -122,20 +89,48 @@ class ResultsPane extends Pane {
             alert.getButtonTypes().setAll(buttonNo, buttonYes);
             Optional<ButtonType> result = alert.showAndWait();
             if (result.isPresent() && result.get() == buttonYes) {
-                boardsSizesListView.getItems().clear();
-                winsByFirstComputerLabel.setText("0");
-                winsBySecondComputerLabel.setText("0");
-                winsToAllResultLabel.setText("0");
-                dataToWinToPlayedSeries.getData().clear();
+                resultsObservableList.clear();
                 try {
                     String pathToFile = System.getProperty("user.home") + "/Documents/Bricks/logs.txt";
                     PrintWriter writer = new PrintWriter(pathToFile);
+                    dataToWinSeries.getData().clear();
+                    dataToLostSeries.getData().clear();
+                    dataToWinToPlayedSeries.getData().clear();
+                    writer.print("");
                     writer.close();
                 } catch (Exception ignored) {
                 }
             }
         });
+        playersTableView = new TableView<>();
 
+        TableColumn nameColumn = new TableColumn("Program");
+        //noinspection unchecked
+        nameColumn.setCellValueFactory(new PropertyValueFactory<XResults, String>("name"));
+        nameColumn.prefWidthProperty().bind(playersTableView.widthProperty().divide(4));
+
+        TableColumn winColumn = new TableColumn("Wygrane");
+        //noinspection unchecked
+        winColumn.setCellValueFactory(new PropertyValueFactory<XResults, String>("wins"));
+        winColumn.prefWidthProperty().bind(playersTableView.widthProperty().divide(4));
+
+        TableColumn lostColumn = new TableColumn("Przegrane");
+        //noinspection unchecked
+        lostColumn.setCellValueFactory(new PropertyValueFactory<XResults, String>("lost"));
+        lostColumn.prefWidthProperty().bind(playersTableView.widthProperty().divide(4));
+
+        TableColumn winToAllColumn = new TableColumn("Wygrane/Rozegrane");
+        //noinspection unchecked
+        winToAllColumn.setCellValueFactory(new PropertyValueFactory<XResults, String>("winsToAll"));
+        winToAllColumn.prefWidthProperty().bind(playersTableView.widthProperty().divide(4));
+
+        playersTableView.setItems(resultsObservableList);
+        playersTableView.getColumns().addAll(nameColumn, winColumn, lostColumn,winToAllColumn);
+
+        playersTableView.setColumnResizePolicy((param) -> false);
+        //playersTableView.setSortPolicy((param) -> false);
+
+        mainGridPane.add(playersTableView,1,1,5,8);
 
         widthProperty().addListener((observable, oldValue, newValue) -> {
             mainGridPane.setPrefWidth(newValue.doubleValue());
@@ -144,13 +139,6 @@ class ResultsPane extends Pane {
         heightProperty().addListener((observable, oldValue, newValue) -> {
             mainGridPane.setPrefHeight(newValue.doubleValue());
             playersListLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 20));
-            resultsLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 25));
-            winsByFirstComputerLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 25));
-            winsBySecondComputerLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 25));
-            wonGames.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 25));
-            lostGames.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 25));
-            winsToAllLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 25));
-            winsToAllResultLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 25));
             clearLogsButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 50));
             backButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 50));
             mainTabPane.setPrefHeight(newValue.doubleValue());
@@ -224,7 +212,7 @@ class ResultsPane extends Pane {
                 }
             }
         });
-        boardsSizesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
+       /* boardsSizesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
             try {
                 winsByFirstComputerLabel.setText(winsMap.get(newValue).toString());
                 winsBySecondComputerLabel.setText(losesMap.get(newValue).toString());
@@ -238,7 +226,7 @@ class ResultsPane extends Pane {
                 winsBySecondComputerLabel.setText("0");
                 winsToAllResultLabel.setText("0");
             }
-        });
+        });*/
     }
 
     private void generateTable() {
@@ -297,7 +285,8 @@ class ResultsPane extends Pane {
                         }
                     }
                     winToAllMap.remove(maxKey);
-                    boardsSizesListView.getItems().add(maxKey);
+                    //boardsSizesListView.getItems().add(maxKey);
+                    resultsObservableList.add(new XResults(maxKey,winsMap.get(maxKey),losesMap.get(maxKey)));
                     double value = (winsMap.get(maxKey).doubleValue() / (winsMap.get(maxKey).doubleValue() + losesMap.get(maxKey).doubleValue()));
                     dataToWinToPlayedSeries.getData().add(new XYChart.Data(maxKey, value));
                     dataToWinSeries.getData().add(new XYChart.Data(maxKey, winsMap.get(maxKey)));
@@ -314,7 +303,10 @@ class ResultsPane extends Pane {
     private Map<String, Integer> winsMap;
     private Map<String, Integer> losesMap;
 
-    private ListView<String> boardsSizesListView;
+    //private ListView<String> boardsSizesListView;
+    private TableView<XResults> playersTableView;
+
+    private final ObservableList<XResults> resultsObservableList;
 
     private Label winsByFirstComputerLabel;
     private Label winsBySecondComputerLabel;

@@ -48,7 +48,7 @@ class GamesPane extends Pane {
         boardsSizesListView = new ListView<>();
         boardsSizesListView.setMaxWidth(Double.MAX_VALUE);
         boardsSizesListView.setMaxHeight(Double.MAX_VALUE);
-        mainGridPane.add(boardsSizesListView, 1, 1, 1, 5);
+        mainGridPane.add(boardsSizesListView, 1, 1, 1, 6);
 
         Label boardsListLabel = new Label("Plansze:");
         boardsListLabel.setAlignment(Pos.CENTER);
