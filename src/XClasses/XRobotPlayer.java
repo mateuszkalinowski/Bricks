@@ -1,6 +1,8 @@
 package XClasses;
 
+import core.Bricks;
 import javafx.beans.property.SimpleStringProperty;
+import logic.RobotPlayer;
 
 /**
  * Created by Mateusz on 06.01.2017.
@@ -53,5 +55,37 @@ public class XRobotPlayer {
 
     public String getPathToPlayer(){
         return pathToPlayer;
+    }
+
+    public RobotPlayer getRobotPlayer(){
+        if(type.get().equals("Wbudowany")) {
+            if(path.get().substring(path.get().length()-3).equals("out") || path.get().substring(path.get().length()-3).equals("exe")) {
+                try {
+                    return new RobotPlayer(path.get(), 5);
+                } catch (Exception ignored) {
+                }
+            }
+            else if(path.get().substring(path.get().length()-3).equals("jar")) {
+                try {
+                    return new RobotPlayer("java -jar " + path.get(), 5);
+                } catch (Exception ignored) {
+                }
+            }
+            else if(path.get().substring(path.get().length()-5).equals("class")) {
+                try {
+                    return new RobotPlayer("java -cp " + pathToPlayer+ " " + name.get(), 5);
+                } catch (Exception ignored) {
+                }
+            }
+
+        }
+        if (type.get().equals("Własny")) {
+            try {
+                return new RobotPlayer(path.get(), 5);
+            } catch (Exception ignored) {
+            }
+        }
+        System.out.println("RobotPlayer w XRobotPlayer jest nullem");
+        return null;
     }
 }

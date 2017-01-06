@@ -137,12 +137,12 @@ class GamesPane extends Pane {
         });
 
 
-        Label wonGamesLabel = new Label("Wygranych:");
-        wonGamesLabel.setMaxWidth(Double.MAX_VALUE);
-        wonGamesLabel.setAlignment(Pos.CENTER);
-        wonGamesLabel.setFont(new Font("Comic Sans MS",12));
-        mainGridPane.add(wonGamesLabel,0,6,2,1);
-        Label firstComputerwonGamesLabel = new Label("Komputer Pierwszy:");
+        //Label wonGamesLabel = new Label("Wygranych:");
+        //wonGamesLabel.setMaxWidth(Double.MAX_VALUE);
+        //wonGamesLabel.setAlignment(Pos.CENTER);
+        //wonGamesLabel.setFont(new Font("Comic Sans MS",12));
+        //mainGridPane.add(wonGamesLabel,0,6,2,1);
+        /*Label firstComputerwonGamesLabel = new Label("Komputer Pierwszy:");
         firstComputerwonGamesLabel.setMaxWidth(Double.MAX_VALUE);
         firstComputerwonGamesLabel.setAlignment(Pos.CENTER);
         firstComputerwonGamesLabel.setFont(new Font("Comic Sans MS",12));
@@ -151,9 +151,9 @@ class GamesPane extends Pane {
         secondComputerwonGamesLabel.setMaxWidth(Double.MAX_VALUE);
         secondComputerwonGamesLabel.setAlignment(Pos.CENTER);
         secondComputerwonGamesLabel.setFont(new Font("Comic Sans MS",12));
-        mainGridPane.add(secondComputerwonGamesLabel,0,8,2,1);
+        mainGridPane.add(secondComputerwonGamesLabel,0,8,2,1);*/
 
-        winsByFirstComputerLabel = new Label("0");
+        /*winsByFirstComputerLabel = new Label("0");
         winsByFirstComputerLabel.setMaxWidth(Double.MAX_VALUE);
         winsByFirstComputerLabel.setAlignment(Pos.CENTER);
         winsByFirstComputerLabel.setFont(new Font("Comic Sans MS",12));
@@ -162,7 +162,7 @@ class GamesPane extends Pane {
         winsBySecondComputerLabel.setMaxWidth(Double.MAX_VALUE);
         winsBySecondComputerLabel.setAlignment(Pos.CENTER);
         winsBySecondComputerLabel.setFont(new Font("Comic Sans MS",12));
-        mainGridPane.add(winsBySecondComputerLabel,2,8);
+        mainGridPane.add(winsBySecondComputerLabel,2,8);*/
 
         HBox runButtonHBox = new HBox();
         runButton = new Button("Uruchom");
@@ -196,89 +196,108 @@ class GamesPane extends Pane {
                 gamesTask = new Task<Void>() {
                     @Override
                     protected Void call() {
-                        firstPlayerWins = 0;
-                        secondPlayerWins = 0;
+                        winsMap.clear();
+                        losesMap.clear();
+                        for(XRobotPlayer e : playersObservableList) {
+                            winsMap.put(e.getName(),0);
+                            losesMap.put(e.getName(),0);
+                        }
                         int counter = 0;
-                        for (Integer boardsSize : boardsSizes) {
-                            if (running) {
-                                counter++;
-                                BoardLogic board = new BoardLogic(boardsSize);
-                                MovesStorage movesStorage = new MovesStorage();
-                                try {
-                                    Bricks.firstRobotPlayer.reset(boardsSize);
-                                    Bricks.secondRobotPlayer.reset(boardsSize);
-                                } catch (Exception ignored) {
-                                    break;
+                        int gamesNumber = playersObservableList.size() * (playersObservableList.size()-1);
+
+                        RobotPlayer firstRobotPlayer;
+                        RobotPlayer secondRobotPlayer;
+
+                        for(XRobotPlayer playerFirst : playersObservableList) {
+                            firstRobotPlayer = playerFirst.getRobotPlayer();
+                            for(XRobotPlayer playerSecond : playersObservableList) {
+                                if(playerFirst.getName().equals(playerSecond.getName())) {
+                                    continue;
                                 }
-                                int player = 1;
-                                while ( running) {
-                                    int[] move = new int[4];
-                                    if (movesStorage.isEmpty()) {
+                                secondRobotPlayer = playerSecond.getRobotPlayer();
+                                firstPlayerWins = 0;
+                                secondPlayerWins = 0;
+                                for (Integer boardsSize : boardsSizes) {
+                                    if (running) {
+                                        BoardLogic board = new BoardLogic(boardsSize);
+                                        MovesStorage movesStorage = new MovesStorage();
                                         try {
-                                            move = Bricks.firstRobotPlayer.makeMove("ZACZYNAJ");
-                                        } catch (Exception badMove) {
-                                            Bricks.firstRobotPlayer.sendEndingMessages(false);
-                                            Bricks.secondRobotPlayer.sendEndingMessages(true);
-                                            secondPlayerWins++;
+                                            firstRobotPlayer.reset(boardsSize);
+                                            secondRobotPlayer.reset(boardsSize);
+                                        } catch (Exception ignored) {
                                             break;
                                         }
-                                    } else {
-                                        if (player == 1) {
-                                            try {
-                                                move = Bricks.firstRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
-                                            } catch (Exception badMove) {
-                                                Bricks.firstRobotPlayer.sendEndingMessages(true);
-                                                Bricks.secondRobotPlayer.sendEndingMessages(false);
-                                                secondPlayerWins++;
-                                                break;
+                                        int player = 1;
+                                        while (running) {
+                                            int[] move = new int[4];
+                                            if (movesStorage.isEmpty()) {
+                                                try {
+                                                    move = firstRobotPlayer.makeMove("ZACZYNAJ");
+                                                } catch (Exception badMove) {
+                                                    firstRobotPlayer.sendEndingMessages(false);
+                                                    secondRobotPlayer.sendEndingMessages(true);
+                                                    secondPlayerWins++;
+                                                    break;
+                                                }
+                                            } else {
+                                                if (player == 1) {
+                                                    try {
+                                                        move = firstRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
+                                                    } catch (Exception badMove) {
+                                                        firstRobotPlayer.sendEndingMessages(true);
+                                                        secondRobotPlayer.sendEndingMessages(false);
+                                                        secondPlayerWins++;
+                                                        break;
+                                                    }
+                                                }
+                                                if (player == 2) {
+                                                    try {
+                                                        move = secondRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
+                                                    } catch (Exception badMove) {
+                                                        firstRobotPlayer.sendEndingMessages(false);
+                                                        secondRobotPlayer.sendEndingMessages(true);
+                                                        firstPlayerWins++;
+                                                        break;
+                                                    }
+                                                }
+                                            }
+
+                                            int x1 = move[0];
+                                            int y1 = move[1];
+                                            int x2 = move[2];
+                                            int y2 = move[3];
+
+                                            if (Bricks.mainStage.possibleMove(x1, y1, x2, y2, board.board)) {
+                                                board.board[x1][y1] = player;
+                                                board.board[x2][y2] = player;
+                                            }
+                                            if (!board.anyMoves()) {
+                                                if (player == 1) {
+                                                    firstRobotPlayer.sendEndingMessages(true);
+                                                    secondRobotPlayer.sendEndingMessages(false);
+                                                    firstPlayerWins++;
+                                                    break;
+                                                } else {
+                                                    firstRobotPlayer.sendEndingMessages(false);
+                                                    secondRobotPlayer.sendEndingMessages(true);
+                                                    secondPlayerWins++;
+                                                    break;
+                                                }
+                                            } else {
+                                                if (player == 1) {
+                                                    player = 2;
+                                                } else {
+                                                    player = 1;
+                                                }
                                             }
                                         }
-                                        if (player == 2) {
-                                            try {
-                                                move = Bricks.secondRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
-                                            } catch (Exception badMove) {
-                                                Bricks.firstRobotPlayer.sendEndingMessages(false);
-                                                Bricks.secondRobotPlayer.sendEndingMessages(true);
-                                                firstPlayerWins++;
-                                                break;
-                                            }
-                                        }
-                                    }
-
-                                    int x1 = move[0];
-                                    int y1 = move[1];
-                                    int x2 = move[2];
-                                    int y2 = move[3];
-
-                                    if (Bricks.mainStage.possibleMove(x1, y1, x2, y2, board.board)) {
-                                        board.board[x1][y1] = player;
-                                        board.board[x2][y2] = player;
-                                    }
-                                    if (!board.anyMoves()) {
-                                        if (player == 1) {
-                                            Bricks.firstRobotPlayer.sendEndingMessages(true);
-                                            Bricks.secondRobotPlayer.sendEndingMessages(false);
-                                            firstPlayerWins++;
-                                            break;
-                                        } else {
-                                            Bricks.firstRobotPlayer.sendEndingMessages(false);
-                                            Bricks.secondRobotPlayer.sendEndingMessages(true);
-                                            secondPlayerWins++;
-                                            break;
-                                        }
                                     } else {
-                                        if (player == 1) {
-                                            player = 2;
-                                        } else {
-                                            player = 1;
-                                        }
+                                        break;
                                     }
                                 }
-                                if (running) {
-                                    updateProgress(counter,boardsSizes.size());
-                                }
-                            } else {
-                                break;
+                                counter++;
+                                updateProgress(counter, gamesNumber);
+                                RobotPlayer.exportLogs(firstPlayerWins,secondPlayerWins,playerFirst.getName(),playerSecond.getName());
                             }
                         }
                         return null;
@@ -291,10 +310,10 @@ class GamesPane extends Pane {
                 autoGameThread.start();
                 gamesTask.setOnSucceeded(event1 -> {
                     runButton.setText("Uruchom");
-                    winsByFirstComputerLabel.setText(firstPlayerWins+"");
-                    winsBySecondComputerLabel.setText(secondPlayerWins+"");
+                    //winsByFirstComputerLabel.setText(firstPlayerWins+"");
+                    //winsBySecondComputerLabel.setText(secondPlayerWins+"");
                     gamesProgressBar.progressProperty().unbind();
-                    RobotPlayer.exportLogs(firstPlayerWins, secondPlayerWins);
+                    //RobotPlayer.exportLogs(firstPlayerWins, secondPlayerWins);
                 });
 
                 runButton.setText("Przerwij");
@@ -451,7 +470,7 @@ class GamesPane extends Pane {
                     }
             }
             else {
-                XRobotPlayer toAdd = new XRobotPlayer("Własny",playerPath);
+                XRobotPlayer toAdd = new XRobotPlayer("Wbudowany",playerPath);
                 found = false;
                 for (XRobotPlayer aPlayersObservableList : playersObservableList) {
                     if (toAdd.getName().equals(aPlayersObservableList.getName()))
@@ -559,11 +578,11 @@ class GamesPane extends Pane {
             boardsListLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/20));
             playersListLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/20));
             addPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-            wonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-            winsByFirstComputerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-            winsBySecondComputerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-            firstComputerwonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-            secondComputerwonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+            //wonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+            //winsByFirstComputerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+           // winsBySecondComputerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+           // firstComputerwonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+           // secondComputerwonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
             removePlayerButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/42));
             addPlayerButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/42));
             setPathToPlayerButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/42));
@@ -631,9 +650,9 @@ class GamesPane extends Pane {
 
     private Task<Void> gamesTask;
 
-    private  Label winsByFirstComputerLabel;
+  //  private  Label winsByFirstComputerLabel;
 
-    private Label winsBySecondComputerLabel;
+  //  private Label winsBySecondComputerLabel;
 
     private int firstPlayerWins = 0;
     private int secondPlayerWins = 0;
@@ -642,4 +661,7 @@ class GamesPane extends Pane {
 
     private TableView<XRobotPlayer> playersTableView;
     private final ObservableList<XRobotPlayer> playersObservableList;
+
+    Map<String,Integer> winsMap = new HashMap<>();
+    Map<String,Integer> losesMap = new HashMap<>();
 }
