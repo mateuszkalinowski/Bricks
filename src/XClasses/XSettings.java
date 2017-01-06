@@ -1,11 +1,11 @@
-package core;
+package XClasses;
 
 /**
  * Created by Mateusz on 04.10.2016.
  * Project Bricks
  */
-public class Settings {
-    public Settings(int BoardSize, javafx.scene.paint.Color playerFirstColor, javafx.scene.paint.Color playerSecondColor, boolean isSound, int volume, boolean debugMode, String path1, String path2, int programTypeFirst, int programTypeSecond, String runCommandFirst, String runCommandSecond, int computerPlayerType,int theme) {
+public class XSettings {
+    public XSettings(int BoardSize, javafx.scene.paint.Color playerFirstColor, javafx.scene.paint.Color playerSecondColor, boolean isSound, int volume, boolean debugMode, String path1, String path2, int programTypeFirst, int programTypeSecond, String runCommandFirst, String runCommandSecond, int computerPlayerType,int theme) {
         this.BoardSize = BoardSize;
         this.playerFirstColor = playerFirstColor;
         this.playerSecondColor = playerSecondColor;

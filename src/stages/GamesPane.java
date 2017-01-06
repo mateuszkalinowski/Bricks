@@ -1,19 +1,25 @@
 package stages;
 
+import XClasses.XRobotPlayer;
 import core.Bricks;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import logic.BoardLogic;
 import logic.MovesStorage;
 import logic.RobotPlayer;
 import java.io.File;
+import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
 /**
@@ -305,35 +311,213 @@ class GamesPane extends Pane {
 
         mainGridPane.add(gamesProgressBar,0,10,3,1);
 
-
-        widthProperty().addListener((observable, oldValue, newValue) -> {
-            mainGridPane.setPrefWidth(newValue.doubleValue());
-            mainTabPane.setPrefWidth(newValue.doubleValue());
-        });
-        heightProperty().addListener((observable, oldValue, newValue) -> {
-            mainGridPane.setPrefHeight(newValue.doubleValue());
-            boardsListLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/20));
-            wonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-            winsByFirstComputerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-            winsBySecondComputerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-            firstComputerwonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-            secondComputerwonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-
-            runButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/30));
-            if(getWidth()*(2.0/3.0)<=300) {
-                runButton.setMaxWidth(getWidth() * (2.0 / 3.0));
-            }
-            else {
-                runButton.setMaxWidth(300);
-            }
-            mainTabPane.setPrefHeight(newValue.doubleValue());
-        });
-
         mainTabPane = new TabPane();
         Tab boardsSelectTab = new Tab("Plansze");
         mainTabPane.getTabs().add(boardsSelectTab);
         boardsSelectTab.setContent(mainGridPane);
         boardsSelectTab.setClosable(false);
+
+
+        Tab playersSelectTab = new Tab("Gracze");
+        GridPane playersGridPane = new GridPane();
+        playersGridPane.setPrefWidth(w);
+        playersGridPane.setPrefHeight(h);
+        row = new RowConstraints();
+        row.setPercentHeight(9.09);
+        for(int i = 0; i < 11;i++) {
+            playersGridPane.getRowConstraints().add(row);
+        }
+        column = new ColumnConstraints();
+        column.setPercentWidth(33.3);
+        for(int i =0;i<3;i++) {
+            playersGridPane.getColumnConstraints().add(column);
+        }
+
+        Label playersListLabel = new Label("Zarejestrowani Gracze:");
+        playersListLabel.setAlignment(Pos.CENTER);
+        playersListLabel.setMaxWidth(Double.MAX_VALUE);
+        playersGridPane.add(playersListLabel,0,0,3,1);
+
+        playersTableView = new TableView<XRobotPlayer>();
+        playersObservableList = FXCollections.observableArrayList();
+
+        TableColumn typeColumn = new TableColumn("Typ Programu");
+        typeColumn.setCellValueFactory(new PropertyValueFactory<XRobotPlayer, String>("type"));
+        typeColumn.prefWidthProperty().bind(playersTableView.widthProperty().divide(4));
+
+        TableColumn pathColumn = new TableColumn("Scieżka/Komenda uruchomienia");
+        pathColumn.setCellValueFactory(new PropertyValueFactory<XRobotPlayer, String>("path"));
+        pathColumn.prefWidthProperty().bind(playersTableView.widthProperty().divide(2));
+
+        TableColumn nameColumn = new TableColumn("Nazwa Programu");
+        nameColumn.setCellValueFactory(new PropertyValueFactory<XRobotPlayer, String>("name"));
+        nameColumn.prefWidthProperty().bind(playersTableView.widthProperty().divide(4));
+
+        playersTableView.setItems(playersObservableList);
+        playersTableView.getColumns().addAll(typeColumn,pathColumn,nameColumn);
+
+        playersTableView.setColumnResizePolicy((param) -> false);
+        playersTableView.setSortPolicy((param) -> false);
+
+        Label addPlayerLabel = new Label("Dodaj Gracza:");
+        addPlayerLabel.setAlignment(Pos.CENTER);
+        addPlayerLabel.setMaxWidth(Double.MAX_VALUE);
+
+        Label pathToPlayerLabel = new Label("");
+        pathToPlayerLabel.setAlignment(Pos.CENTER);
+        pathToPlayerLabel.setMaxWidth(Double.MAX_VALUE);
+
+        HBox setPathToPlayerHBox = new HBox();
+        Button setPathToPlayerButton = new Button("Wybierz");
+        setPathToPlayerButton.setFont(Font.font("Comic Sans MS",14));
+        setPathToPlayerHBox.getChildren().add(setPathToPlayerButton);
+        setPathToPlayerHBox.setAlignment(Pos.CENTER);
+        setPathToPlayerButton.setOnAction(event -> {
+            FileChooser chooseFile = new FileChooser();
+            chooseFile.setTitle("Wybierz komputer drugi");
+            File openFile = chooseFile.showOpenDialog(Bricks.mainStage.mainStage);
+            if(openFile != null) {
+                try {
+                    playerPath = openFile.getCanonicalPath();
+                    if (playerPath.length() <= 20) {
+                        pathToPlayerLabel.setText(playerPath);
+                    } else {
+                        pathToPlayerLabel.setText("..." + playerPath.substring(playerPath.length() - 20, playerPath.length()));
+                    }
+                } catch (IOException ignored) {
+
+                }
+            }
+        });
+
+        Label runCommandLabel = new Label("Komenda uruchomienia:");
+        runCommandLabel.setAlignment(Pos.CENTER);
+        runCommandLabel.setMaxWidth(Double.MAX_VALUE);
+
+        TextArea runCommandTextArea = new TextArea();
+        runCommandTextArea.setMaxHeight(30);
+        runCommandTextArea.setTooltip(new Tooltip("Jeśli tutaj coś wpiszesz, wybrana powyżej ścieżka zostanie zignorowana."));
+
+
+        HBox removePlayerHBox = new HBox();
+        Button removePlayerButton = new Button("Usuń Gracza");
+        removePlayerButton.setTooltip(new Tooltip("Usuwa zaznaczonego na liście powyżej gracza."));
+        removePlayerButton.setFont(Font.font("Comic Sans MS",14));
+        removePlayerHBox.getChildren().add(removePlayerButton);
+        removePlayerHBox.setAlignment(Pos.CENTER);
+        removePlayerButton.setOnAction(event -> {
+            XRobotPlayer index = playersTableView.getSelectionModel().getSelectedItem();
+            playersObservableList.remove(index);
+        });
+
+        HBox addPlayerHBox = new HBox();
+        Button addPlayerButton = new Button("Dodaj Gracza");
+        addPlayerButton.setFont(Font.font("Comic Sans MS",14));
+        addPlayerHBox.getChildren().add(addPlayerButton);
+        addPlayerHBox.setAlignment(Pos.CENTER);
+        addPlayerButton.setOnAction(event -> {
+            boolean found = false;
+            if(playerPath.equals("") && runCommandTextArea.getText().equals("")) {
+                Alert alert = new Alert(Alert.AlertType.WARNING);
+                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                alert.setTitle("Błąd dodawania gracza");
+                alert.setHeaderText("Nowy gracz nie został dodany");
+                alert.setContentText("Nie wybrałeś ścieżki, ani nie wprowadziłeś własnej komendy uruchomienia.");
+                ButtonType buttonOk = new ButtonType("Ok");
+                alert.getButtonTypes().setAll(buttonOk);
+                alert.showAndWait();
+            }
+            else if(!runCommandTextArea.getText().equals("")) {
+                    XRobotPlayer toAdd = new XRobotPlayer("Własny",runCommandTextArea.getText());
+                for (XRobotPlayer aPlayersObservableList : playersObservableList) {
+                    if (toAdd.getName().equals(aPlayersObservableList.getName()))
+                        found = true;
+                }
+                    if(!found)
+                        playersObservableList.add(toAdd);
+                    else {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                        alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                        alert.setTitle("Błąd dodawania gracza");
+                        alert.setHeaderText("Nowy gracz nie został dodany");
+                        alert.setContentText("Gracz o tej nazwie jest już dodany.");
+                        ButtonType buttonOk = new ButtonType("Ok");
+                        alert.getButtonTypes().setAll(buttonOk);
+                        alert.showAndWait();
+                    }
+            }
+            else {
+                XRobotPlayer toAdd = new XRobotPlayer("Własny",playerPath);
+                found = false;
+                for (XRobotPlayer aPlayersObservableList : playersObservableList) {
+                    if (toAdd.getName().equals(aPlayersObservableList.getName()))
+                        found = true;
+                }
+                if(!found)
+                    playersObservableList.add(toAdd);
+                else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                    alert.setTitle("Błąd dodawania gracza");
+                    alert.setHeaderText("Nowy gracz nie został dodany");
+                    alert.setContentText("Gracz o tej nazwie jest już dodany.");
+                    ButtonType buttonOk = new ButtonType("Ok");
+                    alert.getButtonTypes().setAll(buttonOk);
+                    alert.showAndWait();
+                }
+            }
+            if(!found) {
+                playerPath = "";
+                runCommandTextArea.setText("");
+                pathToPlayerLabel.setText("");
+            }
+        });
+
+        playersGridPane.add(removePlayerHBox,1,9);
+        playersGridPane.add(addPlayerHBox,0,9);
+        playersGridPane.add(runCommandTextArea,1,8);
+        playersGridPane.add(runCommandLabel,0,8);
+        playersGridPane.add(setPathToPlayerHBox,0,7);
+        playersGridPane.add(pathToPlayerLabel,1,7);
+        playersGridPane.add(addPlayerLabel,0,6,2,1);
+        playersGridPane.add(playersTableView,0,1,3,5);
+
+        //DODAWANIE PIERWSZEGO GRACZA Z POZOSTALEJ CZESCI PROGRAMU:
+
+        if(!Bricks.mainStage.getFirstPlayerProgramName().equals(Bricks.mainStage.getSecondPlayerProgramName())) {
+            String programType = "";
+            String programPath = "";
+            if (Bricks.mainStage.firstPlayerProgramType == 0) {
+                programType = "Wbudowany";
+                programPath = Bricks.mainStage.playerFirstFullPath;
+            } else {
+                programType = "Własny";
+                programPath = Bricks.mainStage.firstPlayerRunCommand;
+            }
+            playersObservableList.add(new XRobotPlayer(programType, programPath));
+
+            programType = "";
+            programPath = "";
+            if (Bricks.mainStage.secondPlayerProgramType == 0) {
+                programType = "Wbudowany";
+                programPath = Bricks.mainStage.playerSecondFullPath;
+            } else {
+                programType = "Własny";
+                programPath = Bricks.mainStage.secondPlayerRunCommand;
+            }
+            playersObservableList.add(new XRobotPlayer(programType, programPath));
+        }
+
+
+        playersSelectTab.setContent(playersGridPane);
+        playersSelectTab.setClosable(false);
+        mainTabPane.getTabs().add(playersSelectTab);
         getChildren().add(mainTabPane);
         setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
@@ -365,6 +549,34 @@ class GamesPane extends Pane {
                     Bricks.mainStage.mainStage.show();
                 }
             }
+        });
+        widthProperty().addListener((observable, oldValue, newValue) -> {
+            mainGridPane.setPrefWidth(newValue.doubleValue());
+            mainTabPane.setPrefWidth(newValue.doubleValue());
+        });
+        heightProperty().addListener((observable, oldValue, newValue) -> {
+            mainGridPane.setPrefHeight(newValue.doubleValue());
+            boardsListLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/20));
+            playersListLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/20));
+            addPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+            wonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+            winsByFirstComputerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+            winsBySecondComputerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+            firstComputerwonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+            secondComputerwonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
+            removePlayerButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/42));
+            addPlayerButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/42));
+            setPathToPlayerButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/42));
+            runCommandLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/50));
+            pathToPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/50));
+            runButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/30));
+            if(getWidth()*(2.0/3.0)<=300) {
+                runButton.setMaxWidth(getWidth() * (2.0 / 3.0));
+            }
+            else {
+                runButton.setMaxWidth(300);
+            }
+            mainTabPane.setPrefHeight(newValue.doubleValue());
         });
     }
     private void importPoints(){
@@ -407,6 +619,9 @@ class GamesPane extends Pane {
         catch (Exception ignored) {}
 
     }
+
+    private String playerPath = "";
+
     private ListView<String> boardsSizesListView;
     private Button runButton;
     private ProgressBar gamesProgressBar;
@@ -424,4 +639,7 @@ class GamesPane extends Pane {
     private int secondPlayerWins = 0;
 
     private TabPane mainTabPane;
+
+    private TableView<XRobotPlayer> playersTableView;
+    private final ObservableList<XRobotPlayer> playersObservableList;
 }

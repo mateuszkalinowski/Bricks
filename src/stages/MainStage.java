@@ -3,7 +3,7 @@ package stages;
 import com.sun.javafx.tk.FontLoader;
 import com.sun.javafx.tk.Toolkit;
 import core.Bricks;
-import core.Settings;
+import XClasses.XSettings;
 import javafx.application.Application;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -369,7 +369,7 @@ public class MainStage extends Application {
         HBox.setMargin(optionsButton, new Insets(10,0,10,0));
         HBox.setHgrow(optionsButton,Priority.ALWAYS);
         optionsButton.setOnAction(event -> {
-            optionsPane = new OptionsPane(mainScene.getWidth(),mainScene.getHeight(),new Settings(BoardSize, firstPlayerColor, secondPlayerColor,
+            optionsPane = new OptionsPane(mainScene.getWidth(),mainScene.getHeight(),new XSettings(BoardSize, firstPlayerColor, secondPlayerColor,
                     isSound, volume, debugMode, playerFirstFullPath, playerSecondFullPath,
                     firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType,theme));
             sceneOfSettings = new Scene(optionsPane,mainScene.getWidth(),mainScene.getHeight());
@@ -724,8 +724,8 @@ public class MainStage extends Application {
     private OptionsPane optionsPane;
 
     //USTAWIENIA GRY:
-    private int firstPlayerProgramType;
-    private int secondPlayerProgramType;
+    public int firstPlayerProgramType;
+    public int secondPlayerProgramType;
     int volume;
     int BoardSize;
     int computerPlayerType;
@@ -738,14 +738,14 @@ public class MainStage extends Application {
     javafx.scene.paint.Color firstPlayerColor;
     javafx.scene.paint.Color secondPlayerColor;
 
-    private String playerFirstFullPath = "";
-    private String playerSecondFullPath = "";
+    public String playerFirstFullPath = "";
+    public String playerSecondFullPath = "";
     private String pathToPlayerOne = "";
     private String pathToPlayerTwo = "";
     public String playerFirstProgramName = "";
     public String playerSecondProgramName = "";
-    private String firstPlayerRunCommand;
-    private String secondPlayerRunCommand;
+    public String firstPlayerRunCommand;
+    public String secondPlayerRunCommand;
 
     int theme;
 

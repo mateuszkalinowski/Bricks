@@ -1,7 +1,7 @@
 package stages;
 
 import core.Bricks;
-import core.Settings;
+import XClasses.XSettings;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
@@ -21,7 +21,7 @@ import java.util.Optional;
  * Project Bricks
  */
 class OptionsPane extends Pane {
-    OptionsPane(double w,double h,Settings settings){
+    OptionsPane(double w,double h,XSettings settings){
 
         firstPlayerProgramType = settings.getFirstPlayerProgramType();
         secondPlayerProgramType = settings.getSecondPlayerProgramType();
