@@ -305,10 +305,10 @@ class GamesPane extends Pane {
 
         mainGridPane.add(gamesProgressBar,0,10,3,1);
 
-        //Scene gamesScene = new Scene(mainGridPane,270,350);
 
         widthProperty().addListener((observable, oldValue, newValue) -> {
             mainGridPane.setPrefWidth(newValue.doubleValue());
+            mainTabPane.setPrefWidth(newValue.doubleValue());
         });
         heightProperty().addListener((observable, oldValue, newValue) -> {
             mainGridPane.setPrefHeight(newValue.doubleValue());
@@ -326,9 +326,15 @@ class GamesPane extends Pane {
             else {
                 runButton.setMaxWidth(300);
             }
+            mainTabPane.setPrefHeight(newValue.doubleValue());
         });
 
-        getChildren().add(mainGridPane);
+        mainTabPane = new TabPane();
+        Tab boardsSelectTab = new Tab("Plansze");
+        mainTabPane.getTabs().add(boardsSelectTab);
+        boardsSelectTab.setContent(mainGridPane);
+        boardsSelectTab.setClosable(false);
+        getChildren().add(mainTabPane);
         setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -416,4 +422,6 @@ class GamesPane extends Pane {
 
     private int firstPlayerWins = 0;
     private int secondPlayerWins = 0;
+
+    private TabPane mainTabPane;
 }

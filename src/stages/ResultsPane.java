@@ -319,15 +319,8 @@ class ResultsPane extends Pane {
                     boardsSizesListView.getItems().add(maxKey);
                         double value = (winsMap.get(maxKey).doubleValue()/(winsMap.get(maxKey).doubleValue()+losesMap.get(maxKey).doubleValue()));
                         dataToWinToPlayedSeries.getData().add(new XYChart.Data(maxKey,value));
-                }
-                ArrayList<String> programList = new ArrayList<>();
-                for(String key : winsMap.keySet()) {
-                    programList.add(key);
-                }
-                Collections.sort(programList);
-                for(String key : programList) {
-                    dataToWinSeries.getData().add(new XYChart.Data(key,winsMap.get(key)));
-                    dataToLostSeries.getData().add(new XYChart.Data(key,losesMap.get(key)));
+                        dataToWinSeries.getData().add(new XYChart.Data(maxKey,winsMap.get(maxKey)));
+                        dataToLostSeries.getData().add(new XYChart.Data(maxKey,losesMap.get(maxKey)));
                 }
             }
 
