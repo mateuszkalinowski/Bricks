@@ -340,13 +340,11 @@ class GamePane extends Pane {
                         alert.getButtonTypes().setAll(buttonPlayAgain,buttonExitToMenu);
                         if(cancelReason==1) {
                             if(computerPlayer==1) {
-                                RobotPlayer.exportLogs(0, 1);
                                 Bricks.firstRobotPlayer.sendEndingMessages(false);
                                 Bricks.secondRobotPlayer.sendEndingMessages(true);
                                 alert.setHeaderText("Komputer pierwszy wykonał błędny ruch, wygrał komputer drugi.");
                             }
                             if(computerPlayer==2) {
-                                RobotPlayer.exportLogs(1, 0);
                                 Bricks.firstRobotPlayer.sendEndingMessages(true);
                                 Bricks.secondRobotPlayer.sendEndingMessages(false);
                                 alert.setHeaderText("Komputer drugi wykonał błędny ruch, wygrał komputer pierwszy.");
@@ -354,13 +352,11 @@ class GamePane extends Pane {
                         }
                         if(cancelReason==2) {
                             if(computerPlayer==1) {
-                                RobotPlayer.exportLogs(0, 1);
                                 Bricks.firstRobotPlayer.sendEndingMessages(false);
                                 Bricks.secondRobotPlayer.sendEndingMessages(true);
                                 alert.setHeaderText("Komputer pierwszy przekroczył czas ruchu, wygrał komputer drugi.");
                             }
                             if(computerPlayer==2) {
-                                RobotPlayer.exportLogs(1, 0);
                                 Bricks.firstRobotPlayer.sendEndingMessages(true);
                                 Bricks.secondRobotPlayer.sendEndingMessages(false);
                                 alert.setHeaderText("Komputer drugi przekroczył czas ruchu, wygrał komputer pierwszy.");
@@ -388,13 +384,11 @@ class GamePane extends Pane {
 
                             alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
                             if (computerPlayer == 1) {
-                                RobotPlayer.exportLogs(0,1);
                                 Bricks.firstRobotPlayer.sendEndingMessages(false);
                                 Bricks.secondRobotPlayer.sendEndingMessages(true);
                                 alert.setHeaderText("Koniec możliwych ruchów, wygrał program drugi.");
                             }
                             else {
-                                RobotPlayer.exportLogs(1,0);
                                 Bricks.firstRobotPlayer.sendEndingMessages(true);
                                 Bricks.secondRobotPlayer.sendEndingMessages(false);
                                 alert.setHeaderText("Koniec możliwych ruchów, wygrał program pierwszy.");
@@ -463,55 +457,6 @@ class GamePane extends Pane {
                 }
             });
 
-            resultsButton = new Button("Wyniki");
-            resultsButton.setTooltip( new Tooltip("Zobacz jak wypadł każdy w programów grających."));
-            gamemodeRobotsWarsHBox.getChildren().add(resultsButton);
-            resultsButton.setOnAction(event -> {
-                Optional<ButtonType> result;
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                alert.setTitle("Przejście do \"wyników\"");
-                alert.setContentText("Spowoduje to zakończenie obecnej partii.");
-                alert.setHeaderText("Przejść do \"wyników\"?");
-                ButtonType buttonYes = new ButtonType("OK");
-                ButtonType buttonNo = new ButtonType("Anuluj");
-                alert.getButtonTypes().setAll(buttonNo,buttonYes);
-                if(!movesStorage.isEmpty()) {
-                    result = alert.showAndWait();
-                    if (result.isPresent() && result.get() == buttonYes) {
-                        resetBoard();
-                        Bricks.autoPlayRunning = false;
-                        try {
-                            Bricks.firstRobotPlayer.reset();
-                            Bricks.secondRobotPlayer.reset();
-                        } catch (Exception ignored) {
-
-                        }
-                        ResultsPane resultsPane = new ResultsPane(Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
-                        Scene resultsScene = new Scene(resultsPane,Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
-                        resultsScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
-                        Bricks.mainStage.mainStage.setScene(resultsScene);
-                        Bricks.mainStage.mainStage.show();
-                    }
-                }
-                else {
-                    resetBoard();
-                    Bricks.autoPlayRunning = false;
-                    try {
-                        Bricks.firstRobotPlayer.reset();
-                        Bricks.secondRobotPlayer.reset();
-                    } catch (Exception ignored) {
-
-                    }
-                    ResultsPane resultsPane = new ResultsPane(Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
-                    Scene resultsScene = new Scene(resultsPane,Bricks.mainStage.sceneOfTheGame.getWidth(),Bricks.mainStage.sceneOfTheGame.getHeight());
-                    resultsScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
-                    Bricks.mainStage.mainStage.setScene(resultsScene);
-                    Bricks.mainStage.mainStage.show();
-                }
-            });
 
             gamemodeRobotsWarsHBox.setSpacing(10);
             gamemodeRobotsWarsHBox.setAlignment(Pos.CENTER);
@@ -761,17 +706,16 @@ class GamePane extends Pane {
                 undoMoveButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/50));
             }
             if(gamemode==2) {
-                speedUpButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
-                speedDownButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
-                nextMoveButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
-                autoPlayButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
-                gamesButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
-                resultsButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                speedUpButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/55));
+                speedDownButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/55));
+                nextMoveButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/55));
+                autoPlayButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/55));
+                gamesButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/55));
             }
             if(gamemode==0 || gamemode==1)
                 backToMenuButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/50));
             if(gamemode==2) {
-                backToMenuButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/60));
+                backToMenuButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/55));
             }
         });
     }
@@ -998,12 +942,10 @@ class GamePane extends Pane {
             alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
             if (gamemode == 2) {
                     if (computerPlayer == 1) {
-                        RobotPlayer.exportLogs(0, 1);
                         Bricks.firstRobotPlayer.sendEndingMessages(false);
                         Bricks.secondRobotPlayer.sendEndingMessages(true);
                         alert.setHeaderText("Koniec możliwych ruchów, wygrał program drugi.");
                     } else {
-                        RobotPlayer.exportLogs(1, 0);
                         Bricks.firstRobotPlayer.sendEndingMessages(true);
                         Bricks.secondRobotPlayer.sendEndingMessages(false);
                         alert.setHeaderText("Koniec możliwych ruchów, wygrał program pierwszy.");
@@ -1053,24 +995,20 @@ class GamePane extends Pane {
         if (reason.equals("Timeout")) {
             System.out.println("Timeout");
             if (computerPlayer == 1) {
-                RobotPlayer.exportLogs(0, 1);
                 Bricks.firstRobotPlayer.sendEndingMessages(false);
                 Bricks.secondRobotPlayer.sendEndingMessages(true);
                 alert.setHeaderText("Komputer numer 1 przekroczył czas na wykonanie ruchu, wygrał program drugi");
             } else {
-                RobotPlayer.exportLogs(1, 0);
                 Bricks.firstRobotPlayer.sendEndingMessages(true);
                 Bricks.secondRobotPlayer.sendEndingMessages(false);
                 alert.setHeaderText("Komputer numer 2 przekroczył czas na wykonanie ruchu, wygrał program pierwszy");
             }
         } else {
             if (computerPlayer == 1) {
-                RobotPlayer.exportLogs(0, 1);
                 Bricks.firstRobotPlayer.sendEndingMessages(false);
                 Bricks.secondRobotPlayer.sendEndingMessages(true);
                 alert.setHeaderText("Komputer numer 1 wykonał błędny ruch, wygrał program drugi");
             } else {
-                RobotPlayer.exportLogs(1, 0);
                 Bricks.firstRobotPlayer.sendEndingMessages(true);
                 Bricks.secondRobotPlayer.sendEndingMessages(false);
                 alert.setHeaderText("Komputer numer 2 wykonał błędny ruch, wygrał program pierwszy");
@@ -1201,7 +1139,6 @@ class GamePane extends Pane {
                 nextMoveButton.setDisable(false);
                 autoPlayButton.setDisable(false);
                 gamesButton.setDisable(false);
-                resultsButton.setDisable(false);
             }
         } else {
             if (speedUpButton != null) {
@@ -1210,7 +1147,6 @@ class GamePane extends Pane {
                 autoPlayButton.setText("Przerwij");
                 nextMoveButton.setDisable(true);
                 gamesButton.setDisable(true);
-                resultsButton.setDisable(true);
             }
         }
     }
@@ -1248,7 +1184,6 @@ class GamePane extends Pane {
     private Button autoPlayButton;
     private Button gamesButton;
     private Button undoMoveButton;
-    private Button resultsButton;
     private Button backToMenuButton;
 
     private TextField speedTextField;

@@ -3,6 +3,7 @@ package stages;
 import core.Bricks;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -98,30 +99,12 @@ class ResultsPane extends Pane {
         backButton = new Button("Cofnij");
         clearLogsButtonHBox.getChildren().add(backButton);
         backButton.setOnAction(event -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-            alert.setTitle("Potwierdzenie Wyjścia");
-            alert.setHeaderText("Chcesz wrócić do rozgrywki?");
-            alert.setContentText("Żadne dane z tego okna nie zostaną utracone, mogą zostać jednak zmienione wraz z kolejnymi grami.");
-            ButtonType buttonYes = new ButtonType("Tak");
-            ButtonType buttonNo = new ButtonType("Anuluj");
-            alert.getButtonTypes().setAll(buttonNo,buttonYes);
-            Optional<ButtonType> result=  alert.showAndWait();
-            if(result.isPresent() && result.get() == buttonYes){
-                try {
-                    Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
-                    Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);
-                }
-                catch (Exception ignored){}
-                double height = Bricks.mainStage.mainStage.getHeight();
-                double width = Bricks.mainStage.mainStage.getWidth();
-                Bricks.mainStage.mainStage.setScene(Bricks.mainStage.sceneOfTheGame);
-                Bricks.mainStage.mainStage.setWidth(width);
-                Bricks.mainStage.mainStage.setHeight(height);
+                GamesPane gamesPane = new GamesPane(getWidth(),getHeight());
+                Scene gamesScene = new Scene(gamesPane,getWidth(),getHeight());
+                gamesScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
+                Bricks.mainStage.mainStage.setScene(gamesScene);
                 Bricks.mainStage.mainStage.show();
-            }
+       //     }
         });
 
         clearLogsButton.setOnAction(event -> {

@@ -5,8 +5,11 @@ import core.Bricks;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -172,11 +175,12 @@ class GamesPane extends Pane {
         runButtonHBox.getChildren().add(runButton);
         HBox.setMargin(runButton, new Insets(5,0,5,0));
         HBox.setHgrow(runButton, Priority.ALWAYS);
-        mainGridPane.add(runButtonHBox,0,9,3,1);
+        mainGridPane.add(runButtonHBox,0,8,3,1);
 
         runButton.setOnAction(event -> {
             if (runButton.getText().equals("Uruchom")) {
                 gamesProgressBar.setProgress(0);
+                resultsButton.setDisable(true);
             ArrayList<Integer> boardsSizes = new ArrayList<>();
             for (int i = boardsSizesListView.getItems().size() - 1; i >= 0; i--) {
                 try {
@@ -310,10 +314,7 @@ class GamesPane extends Pane {
                 autoGameThread.start();
                 gamesTask.setOnSucceeded(event1 -> {
                     runButton.setText("Uruchom");
-                    //winsByFirstComputerLabel.setText(firstPlayerWins+"");
-                    //winsBySecondComputerLabel.setText(secondPlayerWins+"");
                     gamesProgressBar.progressProperty().unbind();
-                    //RobotPlayer.exportLogs(firstPlayerWins, secondPlayerWins);
                 });
 
                 runButton.setText("Przerwij");
@@ -321,6 +322,7 @@ class GamesPane extends Pane {
             }
         } else {
                 running=false;
+                resultsButton.setDisable(false);
             }
         });
         gamesProgressBar = new ProgressBar();
@@ -328,7 +330,68 @@ class GamesPane extends Pane {
 
         gamesProgressBar.setProgress(0);
 
-        mainGridPane.add(gamesProgressBar,0,10,3,1);
+        mainGridPane.add(gamesProgressBar,0,9,3,1);
+
+        HBox resultsButtonHBox = new HBox();
+        resultsButton = new Button("Wyniki");
+        resultsButtonHBox.setAlignment(Pos.CENTER);
+        resultsButtonHBox.getChildren().add(resultsButton);
+        HBox.setMargin(resultsButton, new Insets(5,0,5,0));
+        mainGridPane.add(resultsButtonHBox,0,10);
+
+        resultsButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                ResultsPane resultsPane = new ResultsPane(getWidth(),getHeight());
+                Scene resultsScene = new Scene(resultsPane,getWidth(),getHeight());
+                resultsScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
+                Bricks.mainStage.mainStage.setScene(resultsScene);
+                Bricks.mainStage.mainStage.show();
+            }
+        });
+
+        HBox backButtonHBox = new HBox();
+        backButton = new Button("Cofnij");
+        backButtonHBox.setAlignment(Pos.CENTER);
+        backButtonHBox.getChildren().add(backButton);
+        HBox.setMargin(backButton, new Insets(5,0,5,0));
+        mainGridPane.add(backButtonHBox,2,10);
+
+        backButton.setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                alert.setTitle("Potwierdznie Wyjścia");
+                alert.setHeaderText("Chcesz wyjść z \"Rozgrywek\"");
+                ButtonType buttonYes = new ButtonType("Tak");
+                ButtonType buttonNo = new ButtonType("Anuluj");
+                alert.getButtonTypes().setAll(buttonNo,buttonYes);
+                alert.setContentText("Podane przez Ciebie rozmiary plansz zostaną zachowane, również po wyłączeniu programu.");
+                Optional<ButtonType> result = alert.showAndWait();
+                if(result.isPresent() && result.get() == buttonYes){
+                    try {
+                        Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
+                        Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);
+                    }
+                    catch (Exception ignored){}
+                    running=false;
+                    gamesProgressBar.progressProperty().unbind();
+                    exportPoints();
+                    double height = Bricks.mainStage.mainStage.getHeight();
+                    double width = Bricks.mainStage.mainStage.getWidth();
+                    Bricks.mainStage.mainStage.setScene(Bricks.mainStage.sceneOfTheGame);
+                    Bricks.mainStage.mainStage.setWidth(width);
+                    Bricks.mainStage.mainStage.setHeight(height);
+                    Bricks.mainStage.mainStage.show();
+                }
+            }
+        });
+
+
+
 
         mainTabPane = new TabPane();
         Tab boardsSelectTab = new Tab("Plansze");
@@ -386,28 +449,6 @@ class GamesPane extends Pane {
         pathToPlayerLabel.setAlignment(Pos.CENTER);
         pathToPlayerLabel.setMaxWidth(Double.MAX_VALUE);
 
-        HBox setPathToPlayerHBox = new HBox();
-        Button setPathToPlayerButton = new Button("Wybierz");
-        setPathToPlayerButton.setFont(Font.font("Comic Sans MS",14));
-        setPathToPlayerHBox.getChildren().add(setPathToPlayerButton);
-        setPathToPlayerHBox.setAlignment(Pos.CENTER);
-        setPathToPlayerButton.setOnAction(event -> {
-            FileChooser chooseFile = new FileChooser();
-            chooseFile.setTitle("Wybierz komputer drugi");
-            File openFile = chooseFile.showOpenDialog(Bricks.mainStage.mainStage);
-            if(openFile != null) {
-                try {
-                    playerPath = openFile.getCanonicalPath();
-                    if (playerPath.length() <= 20) {
-                        pathToPlayerLabel.setText(playerPath);
-                    } else {
-                        pathToPlayerLabel.setText("..." + playerPath.substring(playerPath.length() - 20, playerPath.length()));
-                    }
-                } catch (IOException ignored) {
-
-                }
-            }
-        });
 
         Label runCommandLabel = new Label("Komenda uruchomienia:");
         runCommandLabel.setAlignment(Pos.CENTER);
@@ -436,26 +477,28 @@ class GamesPane extends Pane {
         addPlayerHBox.setAlignment(Pos.CENTER);
         addPlayerButton.setOnAction(event -> {
             boolean found = false;
-            if(playerPath.equals("") && runCommandTextArea.getText().equals("")) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                alert.setTitle("Błąd dodawania gracza");
-                alert.setHeaderText("Nowy gracz nie został dodany");
-                alert.setContentText("Nie wybrałeś ścieżki, ani nie wprowadziłeś własnej komendy uruchomienia.");
-                ButtonType buttonOk = new ButtonType("Ok");
-                alert.getButtonTypes().setAll(buttonOk);
-                alert.showAndWait();
-            }
-            else if(!runCommandTextArea.getText().equals("")) {
-                    XRobotPlayer toAdd = new XRobotPlayer("Własny",runCommandTextArea.getText());
+            if(runCommandTextArea.getText().equals("")) {
+                FileChooser chooseFile = new FileChooser();
+                chooseFile.setTitle("Wybierz gracza");
+                File openFile = chooseFile.showOpenDialog(Bricks.mainStage.mainStage);
+                if(openFile != null) {
+                    try {
+                        playerPath = openFile.getCanonicalPath();
+                    } catch (IOException ignored) {
+                        return;
+                    }
+                }
+                XRobotPlayer toAdd = new XRobotPlayer("Wbudowany",playerPath);
+                found = false;
                 for (XRobotPlayer aPlayersObservableList : playersObservableList) {
                     if (toAdd.getName().equals(aPlayersObservableList.getName()))
                         found = true;
                 }
-                    if(!found)
+                if(!found) {
+                    RobotPlayer test = toAdd.getRobotPlayer();
+                    if(test!=null) {
                         playersObservableList.add(toAdd);
+                    }
                     else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -463,21 +506,49 @@ class GamesPane extends Pane {
                         alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                         alert.setTitle("Błąd dodawania gracza");
                         alert.setHeaderText("Nowy gracz nie został dodany");
-                        alert.setContentText("Gracz o tej nazwie jest już dodany.");
+                        alert.setContentText("Podany gracz nie działa");
                         ButtonType buttonOk = new ButtonType("Ok");
                         alert.getButtonTypes().setAll(buttonOk);
                         alert.showAndWait();
                     }
+                }
+                else {
+                    Alert alert = new Alert(Alert.AlertType.WARNING);
+                    alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                    alert.setTitle("Błąd dodawania gracza");
+                    alert.setHeaderText("Nowy gracz nie został dodany");
+                    alert.setContentText("Gracz o tej nazwie jest już dodany.");
+                    ButtonType buttonOk = new ButtonType("Ok");
+                    alert.getButtonTypes().setAll(buttonOk);
+                    alert.showAndWait();
+                }
             }
             else {
-                XRobotPlayer toAdd = new XRobotPlayer("Wbudowany",playerPath);
-                found = false;
+                XRobotPlayer toAdd = new XRobotPlayer("Własny",runCommandTextArea.getText());
                 for (XRobotPlayer aPlayersObservableList : playersObservableList) {
                     if (toAdd.getName().equals(aPlayersObservableList.getName()))
                         found = true;
                 }
-                if(!found)
-                    playersObservableList.add(toAdd);
+                if(!found) {
+                    RobotPlayer test = toAdd.getRobotPlayer();
+                    if(test!=null) {
+                        playersObservableList.add(toAdd);
+                    }
+                    else {
+                        Alert alert = new Alert(Alert.AlertType.WARNING);
+                        alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                        alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                        alert.setTitle("Błąd dodawania gracza");
+                        alert.setHeaderText("Nowy gracz nie został dodany");
+                        alert.setContentText("Podany gracz nie działa");
+                        ButtonType buttonOk = new ButtonType("Ok");
+                        alert.getButtonTypes().setAll(buttonOk);
+                        alert.showAndWait();
+                    }
+                }
                 else {
                     Alert alert = new Alert(Alert.AlertType.WARNING);
                     alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -494,20 +565,15 @@ class GamesPane extends Pane {
             if(!found) {
                 playerPath = "";
                 runCommandTextArea.setText("");
-                pathToPlayerLabel.setText("");
             }
         });
 
-        playersGridPane.add(removePlayerHBox,1,9);
-        playersGridPane.add(addPlayerHBox,0,9);
-        playersGridPane.add(runCommandTextArea,1,8);
-        playersGridPane.add(runCommandLabel,0,8);
-        playersGridPane.add(setPathToPlayerHBox,0,7);
-        playersGridPane.add(pathToPlayerLabel,1,7);
+        playersGridPane.add(removePlayerHBox,1,8);
+        playersGridPane.add(addPlayerHBox,0,8);
+        playersGridPane.add(runCommandTextArea,1,7);
+        playersGridPane.add(runCommandLabel,0,7);
         playersGridPane.add(addPlayerLabel,0,6,2,1);
         playersGridPane.add(playersTableView,0,1,3,5);
-
-        //DODAWANIE PIERWSZEGO GRACZA Z POZOSTALEJ CZESCI PROGRAMU:
 
         if(!Bricks.mainStage.getFirstPlayerProgramName().equals(Bricks.mainStage.getSecondPlayerProgramName())) {
             String programType = "";
@@ -578,17 +644,13 @@ class GamesPane extends Pane {
             boardsListLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/20));
             playersListLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/20));
             addPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-            //wonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-            //winsByFirstComputerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-           // winsBySecondComputerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-           // firstComputerwonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
-           // secondComputerwonGamesLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/25));
             removePlayerButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/42));
             addPlayerButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/42));
-            setPathToPlayerButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/42));
             runCommandLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/50));
             pathToPlayerLabel.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/50));
             runButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/30));
+            resultsButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
+            backButton.setFont(Font.font("Comic Sans MS",newValue.doubleValue()/40));
             if(getWidth()*(2.0/3.0)<=300) {
                 runButton.setMaxWidth(getWidth() * (2.0 / 3.0));
             }
@@ -643,6 +705,8 @@ class GamesPane extends Pane {
 
     private ListView<String> boardsSizesListView;
     private Button runButton;
+    private Button backButton;
+    private Button resultsButton;
     private ProgressBar gamesProgressBar;
     //private Stage gamesStage;
 
