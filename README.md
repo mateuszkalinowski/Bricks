@@ -1,6 +1,6 @@
 # Bricks
 Program napisany w ramach laboratoriów z Algortymów i Struktur Danych, jako program sędziujący grę, będącą tematem przewodnim
-drugiej połowy semestru tegoż przedmiotu.
+drugiej połowy semestru tegoż przedmiotu. Do uruchomienia programu wymagana jest java se 8 runtime environment.
 ##Zasady
 Na planszy n x n pól, gdzie n jest naturalną nieparzystą liczbą z zakresu od 5 do 255 gracze stawiają klocki w rozmiarach 2 x 1
 lub 1x2 pól. Wygrywa gracz który jako ostatni będzie miał możliwość wykonania ruchu. Algortymy grająca mają 1 sekundę czasu na
@@ -29,4 +29,6 @@ Wysyłanie tekstu przez programy grające musi odbywać się "jednym ciągiem", 
 ##Zmiany (od wersji pierwotenej)  
 -Naprawa kilkunastu błędów (w tym już niemal całkowita poprawa w kwestiach kompatybilności z protokołem)  
 -Dodanie partii automatycznych (rozgrywek), wraz z zapisywaniem ich wyników  
--Zmiana wyglądu programu, przepisanie do javyfx, dodanie alternatywnego stylu graficznego plansz
+-Zmiana wyglądu programu, przepisanie do javyfx, dodanie alternatywnego stylu graficznego programu
+-Dodanie możliwości wykonywania automatycznych gier pomiędzy definiowanymi programami
+-Dodanie możliwości prezentowania wyników w tabelach i na wykresach

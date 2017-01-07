@@ -1,6 +1,5 @@
 package logic;
 
-import core.Bricks;
 import exceptions.InvalidMoveException;
 import exceptions.RobotPlayerNotWorkingException;
 
@@ -54,11 +53,11 @@ public class RobotPlayer {
         this.size = size;
         writer.println(this.size);
     }
+
     public void sendEndingMessages(boolean win) {
-        if(win) {
+        if (win) {
             writer.println("WYGRALES");
-        }
-        else {
+        } else {
             writer.println("PRZEGRALES");
         }
     }
@@ -79,18 +78,17 @@ public class RobotPlayer {
             char[] buffor = new char[256];
             //noinspection ResultOfMethodCallIgnored
             reader.read(buffor);
-            String nextMove="";
-            for(int i = 0; i < 255; i++) {
-                nextMove+=buffor[i];
+            String nextMove = "";
+            for (int i = 0; i < 255; i++) {
+                nextMove += buffor[i];
             }
-            if(nextMove.contains(System.lineSeparator())) {
+            if (nextMove.contains(System.lineSeparator())) {
                 String splittedValues[] = nextMove.split("\\s+");
                 move[0] = Integer.parseInt(splittedValues[0]) - 1;
                 move[1] = Integer.parseInt(splittedValues[1]) - 1;
                 move[2] = Integer.parseInt(splittedValues[2]) - 1;
                 move[3] = Integer.parseInt(splittedValues[3]) - 1;
-            }
-            else {
+            } else {
                 System.out.println("Wyjątek 1");
                 throw new InvalidMoveException("Linia nie kończy się znakiem nowej linii");
             }
@@ -108,8 +106,9 @@ public class RobotPlayer {
         reader = null;
         writer = null;
     }
-    public static void exportLogs(int win1, int win2) {
-        if(Bricks.mainStage.playerFirstProgramName.equals(Bricks.mainStage.playerSecondProgramName))
+
+    public static void exportLogs(int win1, int win2, String nameFirst, String nameSecond) {
+        if (nameFirst.equals(nameSecond))
             return;
         try {
             String path = System.getProperty("user.home") + "/Documents/Bricks";
@@ -118,53 +117,49 @@ public class RobotPlayer {
                 new File(path + "/logs.txt").createNewFile();
                 String filename = path + "/logs.txt";
                 PrintWriter writer = new PrintWriter(filename);
-                writer.println(Bricks.mainStage.getFirstPlayerProgramName() + "," + Bricks.mainStage.getSecondPlayerProgramName() + "=" + win1 + "," + win2);
+                writer.println(nameFirst + "," + nameSecond + "=" + win1 + "," + win2);
                 writer.println("###Sumarycznie###");
-                writer.println(Bricks.mainStage.getFirstPlayerProgramName() + "=" + win1 + "," + win2);
-                writer.println(Bricks.mainStage.getSecondPlayerProgramName() + "=" + win2 + "," + win1);
+                writer.println(nameFirst + "=" + win1 + "," + win2);
+                writer.println(nameSecond + "=" + win2 + "," + win1);
                 writer.close();
-            }
-            else {
+            } else {
                 String pathToFile = System.getProperty("user.home") + "/Documents/Bricks/logs.txt";
                 Scanner in = new Scanner(new File(pathToFile));
                 ArrayList<String> wyniki = new ArrayList<>();
-                while(in.hasNextLine()) {
+                while (in.hasNextLine()) {
                     String line = in.nextLine();
-                    if(line.charAt(0) != '#') {
+                    if (line.charAt(0) != '#') {
                         wyniki.add(line);
-                    }
-                    else {
+                    } else {
                         break;
                     }
                 }
                 in.close();
-                wyniki.add(Bricks.mainStage.getFirstPlayerProgramName() + "," + Bricks.mainStage.getSecondPlayerProgramName() + "=" + win1 + "," + win2);
+                wyniki.add(nameFirst + "," + nameSecond + "=" + win1 + "," + win2);
 
 
-                Map<String,Integer> winsMap= new HashMap<>();
-                Map<String,Integer> losesMap= new HashMap<>();
+                Map<String, Integer> winsMap = new HashMap<>();
+                Map<String, Integer> losesMap = new HashMap<>();
 
-                for(String s : wyniki) {
+                for (String s : wyniki) {
                     try {
                         String[] firstDivision = s.split("=");
                         String[] secondDivisionNames = firstDivision[0].split(",");
                         String[] secondDivisionValues = firstDivision[1].split(",");
-                        if(secondDivisionNames.length!=2 || secondDivisionValues.length!=2)
+                        if (secondDivisionNames.length != 2 || secondDivisionValues.length != 2)
                             continue;
-                        winsMap.putIfAbsent(secondDivisionNames[0],0);
-                        winsMap.putIfAbsent(secondDivisionNames[1],0);
-                        winsMap.put(secondDivisionNames[0],winsMap.get(secondDivisionNames[0])+Integer.parseInt(secondDivisionValues[0]));
-                        winsMap.put(secondDivisionNames[1],winsMap.get(secondDivisionNames[1])+Integer.parseInt(secondDivisionValues[1]));
+                        winsMap.putIfAbsent(secondDivisionNames[0], 0);
+                        winsMap.putIfAbsent(secondDivisionNames[1], 0);
+                        winsMap.put(secondDivisionNames[0], winsMap.get(secondDivisionNames[0]) + Integer.parseInt(secondDivisionValues[0]));
+                        winsMap.put(secondDivisionNames[1], winsMap.get(secondDivisionNames[1]) + Integer.parseInt(secondDivisionValues[1]));
 
-                        losesMap.putIfAbsent(secondDivisionNames[0],0);
-                        losesMap.putIfAbsent(secondDivisionNames[1],0);
-                        losesMap.put(secondDivisionNames[0],losesMap.get(secondDivisionNames[0])+Integer.parseInt(secondDivisionValues[1]));
-                        losesMap.put(secondDivisionNames[1],losesMap.get(secondDivisionNames[1])+Integer.parseInt(secondDivisionValues[0]));
+                        losesMap.putIfAbsent(secondDivisionNames[0], 0);
+                        losesMap.putIfAbsent(secondDivisionNames[1], 0);
+                        losesMap.put(secondDivisionNames[0], losesMap.get(secondDivisionNames[0]) + Integer.parseInt(secondDivisionValues[1]));
+                        losesMap.put(secondDivisionNames[1], losesMap.get(secondDivisionNames[1]) + Integer.parseInt(secondDivisionValues[0]));
 
 
-
-                    }
-                    catch (IndexOutOfBoundsException | NumberFormatException ignored){
+                    } catch (IndexOutOfBoundsException | NumberFormatException ignored) {
                     }
                 }
                 PrintWriter writer = new PrintWriter(pathToFile);
@@ -177,7 +172,8 @@ public class RobotPlayer {
 
             }
 
-        } catch (IOException ignored){}
+        } catch (IOException ignored) {
+        }
 
     }
 
