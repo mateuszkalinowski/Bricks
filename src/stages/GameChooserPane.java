@@ -11,12 +11,15 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
+import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import logic.BoardLogic;
 import logic.RobotPlayer;
 
+import java.beans.EventHandler;
 import java.util.Optional;
 
 /**
@@ -54,6 +57,22 @@ class GameChooserPane extends Pane {
         singleGamesButton = new Button("Gra Pojedyńcza");
         singleGameButtonHBox.setAlignment(Pos.CENTER);
         singleGameButtonHBox.getChildren().add(singleGamesButton);
+
+        singleGamesButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new javafx.event.EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                singleGamesBorder = true;
+                drawFrame();
+            }
+        });
+        singleGamesButton.addEventHandler(MouseEvent.MOUSE_EXITED, new javafx.event.EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                singleGamesBorder = false;
+                drawFrame();
+            }
+        });
+
         singleGamesButton.setOnAction(event -> {
             boolean checkFirstComputerPlayer = false;
             boolean checkSecondComputerPlayer = false;
@@ -193,6 +212,21 @@ class GameChooserPane extends Pane {
             Bricks.mainStage.mainStage.show();
         });
 
+        gamesGamesButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new javafx.event.EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                gamesGamesBorder = true;
+                drawFrame();
+            }
+        });
+        gamesGamesButton.addEventHandler(MouseEvent.MOUSE_EXITED, new javafx.event.EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                gamesGamesBorder = false;
+                drawFrame();
+            }
+        });
+
         mainGridPane.add(gamesGameButtonHBox, 1,5);
 
         HBox backButtonHBox = new HBox();
@@ -239,9 +273,20 @@ class GameChooserPane extends Pane {
             gc1.clearRect(0,0,width,height);
             gc1.drawImage(singleGameImage,0, 0, width, height);
 
+            if(singleGamesBorder) {
+                gc1.setStroke(Color.BLUE);
+                gc1.setLineWidth(3);
+                gc1.strokeRect(0,0,width,height);
+            }
+
             GraphicsContext gc2 = gamesGameCanvas.getGraphicsContext2D();
             gc2.clearRect(0,0,width,height);
             gc2.drawImage(gamesGameImage,0,0,width,height);
+            if(gamesGamesBorder) {
+                gc2.setStroke(Color.BLUE);
+                gc2.setLineWidth(3);
+                gc2.strokeRect(0,0,width,height);
+            }
         }
         catch(Exception ignored) {}
     }
@@ -257,5 +302,9 @@ class GameChooserPane extends Pane {
 
     private Image singleGameImage;
     private Image gamesGameImage;
+
+    private boolean singleGamesBorder = false;
+
+    private boolean gamesGamesBorder = false;
 
 }
