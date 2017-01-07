@@ -205,7 +205,7 @@ class GameChooserPane extends Pane {
         gamesGameButtonHBox.getChildren().add(gamesGamesButton);
 
         gamesGamesButton.setOnAction(event -> {
-            GamesPane gamesPane = new GamesPane(Bricks.mainStage.sceneOfChoice.getWidth(), Bricks.mainStage.sceneOfChoice.getHeight());
+            gamesPane = new GamesPane(Bricks.mainStage.sceneOfChoice.getWidth(), Bricks.mainStage.sceneOfChoice.getHeight());
             Scene gamesScene = new Scene(gamesPane, Bricks.mainStage.sceneOfChoice.getWidth(), Bricks.mainStage.sceneOfChoice.getHeight());
             gamesScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
             Bricks.mainStage.mainStage.setScene(gamesScene);
@@ -306,5 +306,7 @@ class GameChooserPane extends Pane {
     private boolean singleGamesBorder = false;
 
     private boolean gamesGamesBorder = false;
+
+    public GamesPane gamesPane;
 
 }

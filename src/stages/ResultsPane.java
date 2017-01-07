@@ -185,41 +185,13 @@ class ResultsPane extends Pane {
 
         setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                alert.setTitle("Potwierdzenie Wyjścia");
-                alert.setHeaderText("Chcesz wrócić do rozgrywki?");
-                alert.setContentText("Żadne dane z tego okna nie zostaną utracone, mogą zostać jednak zmienione wraz z kolejnymi grami.");
-                ButtonType buttonYes = new ButtonType("Tak");
-                ButtonType buttonNo = new ButtonType("Anuluj");
-                alert.getButtonTypes().setAll(buttonNo, buttonYes);
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.isPresent() && result.get() == buttonYes) {
                     GamesPane gamesPane = new GamesPane(getWidth(), getHeight());
                     Scene gamesScene = new Scene(gamesPane, getWidth(), getHeight());
                     gamesScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
                     Bricks.mainStage.mainStage.setScene(gamesScene);
                     Bricks.mainStage.mainStage.show();
-                }
             }
         });
-       /* boardsSizesListView.getSelectionModel().selectedItemProperty().addListener((observable, oldValue, newValue) -> {
-            try {
-                winsByFirstComputerLabel.setText(winsMap.get(newValue).toString());
-                winsBySecondComputerLabel.setText(losesMap.get(newValue).toString());
-                double value = winsMap.get(newValue).doubleValue() / (losesMap.get(newValue) + winsMap.get(newValue));
-                value *= 100;
-                value = Math.round(value);
-                value /= 100;
-                winsToAllResultLabel.setText(value + "");
-            } catch (NullPointerException e) {
-                winsByFirstComputerLabel.setText("0");
-                winsBySecondComputerLabel.setText("0");
-                winsToAllResultLabel.setText("0");
-            }
-        });*/
     }
 
     private void generateTable() {

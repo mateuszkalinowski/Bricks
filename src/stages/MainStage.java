@@ -5,6 +5,7 @@ import com.sun.javafx.tk.Toolkit;
 import core.Bricks;
 import XClasses.XSettings;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -14,6 +15,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -224,12 +226,20 @@ public class MainStage extends Application {
         HBox.setMargin(robotWarsButton, new Insets(10, 0, 10, 0));
         HBox.setHgrow(robotWarsButton, Priority.ALWAYS);
         robotWarsButton.setOnAction(event -> {
-                GameChooserPane gameChooserPane = new GameChooserPane();
+                gameChooserPane = new GameChooserPane();
                 sceneOfChoice = new Scene(gameChooserPane,mainScene.getWidth(),mainScene.getHeight());
                 sceneOfChoice.getStylesheets().add(selectedTheme);
                 gameChooserPane.drawFrame();
                 mainStage.setScene(sceneOfChoice);
                 mainStage.show();
+                sceneOfChoice.setOnKeyReleased(new EventHandler<KeyEvent>() {
+                    @Override
+                    public void handle(KeyEvent event) {
+                        if(event.getCode() == KeyCode.ESCAPE) {
+                            backToMenu();
+                        }
+                    }
+                });
         });
 
         HBox optionsButtonHBox = new HBox();
@@ -361,6 +371,10 @@ public class MainStage extends Application {
         }
         mainStage.show();
         mainStage.setOnCloseRequest(event -> {
+            if(gameChooserPane!=null) {
+                if(gameChooserPane.gamesPane!=null)
+                    gameChooserPane.gamesPane.exportPoints();
+            }
             try {
                 String path = System.getProperty("user.home") + "/Documents/Bricks";
                 if (!new File(path + "/runtimesettings").exists()) {
@@ -600,6 +614,8 @@ public class MainStage extends Application {
     private Scene sceneOfSettings;
 
     Scene sceneOfChoice;
+
+    private GameChooserPane gameChooserPane;
 
     GamePane gamePane;
     private OptionsPane optionsPane;

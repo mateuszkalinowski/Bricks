@@ -5,6 +5,7 @@ import core.Bricks;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,6 +13,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.stage.FileChooser;
@@ -135,10 +137,16 @@ class GamesPane extends Pane {
                             boardsSizesListView.scrollTo(selectedIndex + 1);
                         }
                     }
+                    if(e.getCode() == KeyCode.DELETE) {
+                        if(selectedIndex >=0) {
+                            boardsSizesListView.getItems().remove(selectedIndex);
+                            if(boardsSizesListView.getItems().isEmpty())
+                                boardsSizesListView.getItems().add("");
+                        }
+                    }
                 }
             }
         });
-
         HBox runButtonHBox = new HBox();
         runButton = new Button("Uruchom");
         runButton.setPrefWidth(180);
@@ -285,6 +293,7 @@ class GamesPane extends Pane {
                             runButton.setText("Uruchom");
                             resultsButton.setDisable(false);
                             gamesProgressBar.progressProperty().unbind();
+                            running = false;
                         });
 
                         runButton.setText("Przerwij");
@@ -327,6 +336,7 @@ class GamesPane extends Pane {
             resultsScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
             Bricks.mainStage.mainStage.setScene(resultsScene);
             Bricks.mainStage.mainStage.show();
+            exportPoints();
         });
 
         HBox backButtonHBox = new HBox();
@@ -336,34 +346,10 @@ class GamesPane extends Pane {
         mainGridPane.add(backButtonHBox, 2, 10);
 
         backButton.setOnAction(event -> {
-            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-            alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-            alert.setTitle("Potwierdznie Wyjścia");
-            alert.setHeaderText("Chcesz wyjść z \"Rozgrywek\"");
-            ButtonType buttonYes = new ButtonType("Tak");
-            ButtonType buttonNo = new ButtonType("Anuluj");
-            alert.getButtonTypes().setAll(buttonNo, buttonYes);
-            alert.setContentText("Podane przez Ciebie rozmiary plansz zostaną zachowane, również po wyłączeniu programu.");
-            Optional<ButtonType> result = alert.showAndWait();
-            if (result.isPresent() && result.get() == buttonYes) {
-                /*try {
-                    Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
-                    Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);
-                } catch (Exception ignored) {
-                }*/
                 running = false;
                 gamesProgressBar.progressProperty().unbind();
                 exportPoints();
-                /*double height = Bricks.mainStage.mainStage.getHeight();
-                double width = Bricks.mainStage.mainStage.getWidth();
-                Bricks.mainStage.mainStage.setScene(Bricks.mainStage.sceneOfTheGame);
-                Bricks.mainStage.mainStage.setWidth(width);
-                Bricks.mainStage.mainStage.setHeight(height);
-                Bricks.mainStage.mainStage.show();*/
                 Bricks.mainStage.backToMenu();
-            }
         });
 
 
@@ -415,6 +401,18 @@ class GamesPane extends Pane {
 
         playersTableView.setColumnResizePolicy((param) -> false);
         playersTableView.setSortPolicy((param) -> false);
+
+        playersTableView.setOnKeyReleased(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                if(event.getCode() == KeyCode.DELETE) {
+                    XRobotPlayer toDelete = playersTableView.getSelectionModel().getSelectedItem();
+                    if(toDelete!=null) {
+                        playersObservableList.remove(toDelete);
+                    }
+                }
+            }
+        });
 
         Label addPlayerLabel = new Label("Dodaj Gracza:");
         addPlayerLabel.setAlignment(Pos.CENTER);
@@ -484,17 +482,28 @@ class GamesPane extends Pane {
                         } catch (IOException ignored) {
                             return;
                         }
-                    }
-                    XRobotPlayer toAdd = new XRobotPlayer("Wbudowany", playerPath);
-                    found = false;
-                    for (XRobotPlayer aPlayersObservableList : playersObservableList) {
-                        if (toAdd.getName().equals(aPlayersObservableList.getName()))
-                            found = true;
-                    }
-                    if (!found) {
-                        RobotPlayer test = toAdd.getRobotPlayer();
-                        if (test != null) {
-                            playersObservableList.add(toAdd);
+                        XRobotPlayer toAdd = new XRobotPlayer("Wbudowany", playerPath);
+                        found = false;
+                        for (XRobotPlayer aPlayersObservableList : playersObservableList) {
+                            if (toAdd.getName().equals(aPlayersObservableList.getName()))
+                                found = true;
+                        }
+                        if (!found) {
+                            RobotPlayer test = toAdd.getRobotPlayer();
+                            if (test != null) {
+                                playersObservableList.add(toAdd);
+                            } else {
+                                Alert alert = new Alert(Alert.AlertType.WARNING);
+                                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                                alert.setTitle("Błąd dodawania gracza");
+                                alert.setHeaderText("Nowy gracz nie został dodany");
+                                alert.setContentText("Podany gracz nie działa");
+                                ButtonType buttonOk = new ButtonType("Ok");
+                                alert.getButtonTypes().setAll(buttonOk);
+                                alert.showAndWait();
+                            }
                         } else {
                             Alert alert = new Alert(Alert.AlertType.WARNING);
                             alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -502,22 +511,11 @@ class GamesPane extends Pane {
                             alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                             alert.setTitle("Błąd dodawania gracza");
                             alert.setHeaderText("Nowy gracz nie został dodany");
-                            alert.setContentText("Podany gracz nie działa");
+                            alert.setContentText("Gracz o tej nazwie jest już dodany.");
                             ButtonType buttonOk = new ButtonType("Ok");
                             alert.getButtonTypes().setAll(buttonOk);
                             alert.showAndWait();
                         }
-                    } else {
-                        Alert alert = new Alert(Alert.AlertType.WARNING);
-                        alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                        alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                        alert.setTitle("Błąd dodawania gracza");
-                        alert.setHeaderText("Nowy gracz nie został dodany");
-                        alert.setContentText("Gracz o tej nazwie jest już dodany.");
-                        ButtonType buttonOk = new ButtonType("Ok");
-                        alert.getButtonTypes().setAll(buttonOk);
-                        alert.showAndWait();
                     }
                 } else {
                     XRobotPlayer toAdd = new XRobotPlayer("Własny", runCommandTextArea.getText(), programNameTextArea.getText());
@@ -586,8 +584,9 @@ class GamesPane extends Pane {
         playersGridPane.add(runCommandLabel, 0, 7);
         playersGridPane.add(addPlayerLabel, 0, 6, 2, 1);
         playersGridPane.add(playersTableView, 0, 1, 2, 5);
+        importPrograms();
 
-        if (!Bricks.mainStage.getFirstPlayerProgramName().equals(Bricks.mainStage.getSecondPlayerProgramName())) {
+        if (!Bricks.mainStage.getFirstPlayerProgramName().equals(Bricks.mainStage.getSecondPlayerProgramName()) && playersObservableList.isEmpty()) {
             String programType;
             String programPath;
             if (Bricks.mainStage.firstPlayerProgramType == 0) {
@@ -621,37 +620,12 @@ class GamesPane extends Pane {
         playersSelectTab.setClosable(false);
         mainTabPane.getTabs().add(playersSelectTab);
         getChildren().add(mainTabPane);
-        importPrograms();
         setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                alert.setTitle("Potwierdznie Wyjścia");
-                alert.setHeaderText("Chcesz wyjść z \"Rozgrywek\"");
-                ButtonType buttonYes = new ButtonType("Tak");
-                ButtonType buttonNo = new ButtonType("Anuluj");
-                alert.getButtonTypes().setAll(buttonNo, buttonYes);
-                alert.setContentText("Podane przez Ciebie rozmiary plansz zostaną zachowane, również po wyłączeniu programu.");
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.isPresent() && result.get() == buttonYes) {
-                    /*try {
-                        Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
-                        Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);
-                    } catch (Exception ignored) {
-                    }*/
                     running = false;
                     gamesProgressBar.progressProperty().unbind();
                     exportPoints();
-                    /*double height = Bricks.mainStage.mainStage.getHeight();
-                    double width = Bricks.mainStage.mainStage.getWidth();
-                    Bricks.mainStage.mainStage.setScene(Bricks.mainStage.sceneOfTheGame);
-                    Bricks.mainStage.mainStage.setWidth(width);
-                    Bricks.mainStage.mainStage.setHeight(height);
-                    Bricks.mainStage.mainStage.show();*/
                     Bricks.mainStage.backToMenu();
-                }
             }
         });
         widthProperty().addListener((observable, oldValue, newValue) -> {
@@ -702,7 +676,9 @@ class GamesPane extends Pane {
         }
     }
 
-    private void exportPoints() {
+    public void exportPoints() {
+        if(boardsSizesListView==null)
+            return;
         try {
             String path = System.getProperty("user.home") + "/Documents/Bricks";
             if (!new File(path + "/boardsSizes").exists()) {
