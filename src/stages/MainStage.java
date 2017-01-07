@@ -224,125 +224,12 @@ public class MainStage extends Application {
         HBox.setMargin(robotWarsButton, new Insets(10, 0, 10, 0));
         HBox.setHgrow(robotWarsButton, Priority.ALWAYS);
         robotWarsButton.setOnAction(event -> {
-            boolean checkFirstComputerPlayer = false;
-            boolean checkSecondComputerPlayer = false;
-            if (firstPlayerProgramType == 0) {
-                if (playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("out") || playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("exe")) {
-                    try {
-                        Bricks.firstRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
-                        checkFirstComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
-                } else if (playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("jar")) {
-                    try {
-                        Bricks.firstRobotPlayer = new RobotPlayer("java -jar " + playerFirstFullPath, BoardSize);
-                        checkFirstComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
-                } else if (playerFirstFullPath.substring(playerFirstFullPath.length() - 5).equals("class")) {
-                    try {
-                        Bricks.firstRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainStage.pathToPlayerOne + " " + Bricks.mainStage.playerFirstProgramName, BoardSize);
-                        checkFirstComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
-                }
-
-            }
-            if (firstPlayerProgramType == 1) {
-                try {
-                    Bricks.firstRobotPlayer = new RobotPlayer(firstPlayerRunCommand, BoardSize);
-                    checkFirstComputerPlayer = true;
-                } catch (Exception ignored) {
-                }
-
-            }
-            if (secondPlayerProgramType == 0) {
-                if (playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("out") || playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("exe")) {
-                    try {
-                        Bricks.secondRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
-                        checkSecondComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
-                } else if (playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("jar")) {
-                    try {
-                        Bricks.secondRobotPlayer = new RobotPlayer("java -jar " + playerSecondFullPath, BoardSize);
-                        checkSecondComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
-                } else if (playerSecondFullPath.substring(playerSecondFullPath.length() - 5).equals("class")) {
-                    try {
-                        Bricks.secondRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainStage.pathToPlayerTwo + " " + Bricks.mainStage.playerSecondProgramName, BoardSize);
-                        checkSecondComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
-                }
-
-            }
-            if (secondPlayerProgramType == 1) {
-                try {
-                    Bricks.secondRobotPlayer = new RobotPlayer(secondPlayerRunCommand, BoardSize);
-                    checkSecondComputerPlayer = true;
-                } catch (Exception ignored) {
-                }
-            }
-            if (checkFirstComputerPlayer && checkSecondComputerPlayer) {
-                int gametype = 2;
-                BoardLogic board13 = new BoardLogic(BoardSize);
-                gamePane = new GamePane(board13, gametype);
-                sceneOfTheGame = new Scene(gamePane, mainScene.getWidth(), mainScene.getHeight());
-                sceneOfTheGame.getStylesheets().add(selectedTheme);
-                gamePane.drawFrame();
-                mainStage.setScene(sceneOfTheGame);
+                GameChooserPane gameChooserPane = new GameChooserPane();
+                sceneOfChoice = new Scene(gameChooserPane,mainScene.getWidth(),mainScene.getHeight());
+                sceneOfChoice.getStylesheets().add(selectedTheme);
+                gameChooserPane.drawFrame();
+                mainStage.setScene(sceneOfChoice);
                 mainStage.show();
-                sceneOfTheGame.setOnKeyReleased(event13 -> {
-                    if (event13.getCode() == KeyCode.ESCAPE) {
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.getDialogPane().getStylesheets().add(selectedTheme);
-                        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                        alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                        alert.setTitle("Potwierdzenie Wyjścia");
-                        alert.setHeaderText("Chcesz wrócić do menu głównego?");
-                        alert.setContentText("Obecna rozgrywka nie zostanie zapisana.");
-                        ButtonType buttonYes = new ButtonType("Tak");
-                        ButtonType resetBoard = new ButtonType("Zresetuj Grę");
-                        ButtonType buttonNo = new ButtonType("Anuluj");
-                        alert.getButtonTypes().setAll(buttonNo, resetBoard, buttonYes);
-                        Optional<ButtonType> result = alert.showAndWait();
-                        if (result.isPresent() && result.get() == buttonYes) {
-                            Bricks.mainStage.backToMenu();
-                        } else if (result.isPresent() && result.get() == resetBoard) {
-                            gamePane.resetBoard();
-                        }
-                    }
-                });
-            } else if (!checkFirstComputerPlayer && checkSecondComputerPlayer) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.getDialogPane().getStylesheets().add(selectedTheme);
-                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                alert.setTitle("Błąd uruchamiania gry");
-                alert.setHeaderText("Pierwszy program grający nie działa.");
-                alert.setContentText("Sprawdź podaną w ustawienaich ścieżkę.");
-                alert.showAndWait();
-            } else if (checkFirstComputerPlayer) {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.getDialogPane().getStylesheets().add(selectedTheme);
-                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                alert.setTitle("Błąd uruchamiania gry");
-                alert.setHeaderText("Drugi program grający nie działa.");
-                alert.setContentText("Sprawdź podaną w ustawienaich ścieżkę.");
-                alert.showAndWait();
-            } else {
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.getDialogPane().getStylesheets().add(selectedTheme);
-                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                alert.setTitle("Błąd uruchamiania gry");
-                alert.setHeaderText("Oba programy grające nie działają.");
-                alert.setContentText("Sprawdź podane w ustawienaich ścieżki.");
-                alert.showAndWait();
-            }
         });
 
         HBox optionsButtonHBox = new HBox();
@@ -533,6 +420,15 @@ public class MainStage extends Application {
         size[1] = (int) Bricks.mainStage.sceneOfTheGame.getHeight();
         return size;
     }
+    int[] getGameChooserSizeAsArray() throws NullPointerException {
+        int[] size = new int[2];
+        if (Bricks.mainStage.sceneOfChoice == null) {
+            throw new NullPointerException();
+        }
+        size[0] = (int) Bricks.mainStage.sceneOfChoice.getWidth();
+        size[1] = (int) Bricks.mainStage.sceneOfChoice.getHeight();
+        return size;
+    }
 
     void backToMenu() {
         if (gamePane != null) {
@@ -689,11 +585,11 @@ public class MainStage extends Application {
         return flag;
     }
 
-    public String getFirstPlayerProgramName() {
+    String getFirstPlayerProgramName() {
         return playerFirstProgramName;
     }
 
-    public String getSecondPlayerProgramName() {
+    String getSecondPlayerProgramName() {
         return playerSecondProgramName;
     }
 
@@ -703,12 +599,14 @@ public class MainStage extends Application {
     Scene sceneOfTheGame;
     private Scene sceneOfSettings;
 
+    Scene sceneOfChoice;
+
     GamePane gamePane;
     private OptionsPane optionsPane;
 
     //USTAWIENIA GRY:
-    public int firstPlayerProgramType;
-    public int secondPlayerProgramType;
+    int firstPlayerProgramType;
+    int secondPlayerProgramType;
     int volume;
     int BoardSize;
     int computerPlayerType;
@@ -721,19 +619,19 @@ public class MainStage extends Application {
     javafx.scene.paint.Color firstPlayerColor;
     javafx.scene.paint.Color secondPlayerColor;
 
-    public String playerFirstFullPath = "";
-    public String playerSecondFullPath = "";
-    private String pathToPlayerOne = "";
-    private String pathToPlayerTwo = "";
-    public String playerFirstProgramName = "";
-    public String playerSecondProgramName = "";
-    public String firstPlayerRunCommand;
-    public String secondPlayerRunCommand;
+    String playerFirstFullPath = "";
+    String playerSecondFullPath = "";
+    String pathToPlayerOne = "";
+    String pathToPlayerTwo = "";
+    String playerFirstProgramName = "";
+    String playerSecondProgramName = "";
+    String firstPlayerRunCommand;
+    String secondPlayerRunCommand;
 
     int theme;
 
-    private String classicTheme = MainStage.class.getResource("style.css").toExternalForm();
-    private String minecraftTheme = MainStage.class.getResource("style2.css").toExternalForm();
+    private String classicTheme = MainStage.class.getResource("resources/style.css").toExternalForm();
+    private String minecraftTheme = MainStage.class.getResource("resources/style2.css").toExternalForm();
     String selectedTheme;
 
     private Button singlePlayerGameButton;

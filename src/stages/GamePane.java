@@ -5,7 +5,6 @@ import exceptions.InvalidMoveException;
 import javafx.concurrent.Task;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.*;
@@ -237,7 +236,6 @@ class GamePane extends Pane {
                         protected Void call() {
                             while (Bricks.autoPlayRunning) {
                                 int computerPlayer1 = Bricks.mainStage.gamePane.computerPlayer;
-                                //Bricks.mainFrame.computerPlayerLabel.setText("Gracz Numer " + computerPlayer);
                                 int move[] = new int[4];
                                 if (computerPlayer1 == 1) {
                                     if (Bricks.mainStage.gamePane.movesStorage.isEmpty()) {
@@ -403,57 +401,6 @@ class GamePane extends Pane {
                     controlAutoPlayButtons(true);
                 }
             });
-
-            gamesButton = new Button("Rozgrywki");
-            gamesButton.setTooltip(new Tooltip("Przeprowadź rozgrywki pomiędzy podanymi graczami,\nna podanych planszach. Wyniki zostaną zapisane."));
-            gamemodeRobotsWarsHBox.getChildren().add(gamesButton);
-            gamesButton.setOnAction(event -> {
-                Optional<ButtonType> result;
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                alert.setTitle("Przejście do \"rozgrywek\"");
-                alert.setContentText("Spowoduje to zakończenie obecnej partii.");
-                alert.setHeaderText("Przejść do \"rozgrywek\"?");
-                ButtonType buttonYes = new ButtonType("OK");
-                ButtonType buttonNo = new ButtonType("Anuluj");
-                alert.getButtonTypes().setAll(buttonNo, buttonYes);
-                if (!movesStorage.isEmpty()) {
-                    result = alert.showAndWait();
-                    if (result.isPresent() && result.get() == buttonYes) {
-                        resetBoard();
-                        Bricks.autoPlayRunning = false;
-                        try {
-                            Bricks.firstRobotPlayer.reset();
-                            Bricks.secondRobotPlayer.reset();
-                        } catch (Exception ignored) {
-
-                        }
-                        GamesPane gamesPane = new GamesPane(Bricks.mainStage.sceneOfTheGame.getWidth(), Bricks.mainStage.sceneOfTheGame.getHeight());
-                        Scene gamesScene = new Scene(gamesPane, Bricks.mainStage.sceneOfTheGame.getWidth(), Bricks.mainStage.sceneOfTheGame.getHeight());
-                        gamesScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
-                        Bricks.mainStage.mainStage.setScene(gamesScene);
-                        Bricks.mainStage.mainStage.show();
-                    }
-                } else {
-                    resetBoard();
-                    Bricks.autoPlayRunning = false;
-                    try {
-                        Bricks.firstRobotPlayer.reset();
-                        Bricks.secondRobotPlayer.reset();
-                    } catch (Exception ignored) {
-
-                    }
-                    GamesPane gamesPane = new GamesPane(Bricks.mainStage.sceneOfTheGame.getWidth(), Bricks.mainStage.sceneOfTheGame.getHeight());
-                    Scene gamesScene = new Scene(gamesPane, Bricks.mainStage.sceneOfTheGame.getWidth(), Bricks.mainStage.sceneOfTheGame.getHeight());
-                    gamesScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
-                    Bricks.mainStage.mainStage.setScene(gamesScene);
-                    Bricks.mainStage.mainStage.show();
-                }
-            });
-
-
             gamemodeRobotsWarsHBox.setSpacing(10);
             gamemodeRobotsWarsHBox.setAlignment(Pos.CENTER);
             backToMenuButton = new Button("Powrót");
@@ -699,7 +646,6 @@ class GamePane extends Pane {
                 speedDownButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 55));
                 nextMoveButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 55));
                 autoPlayButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 55));
-                gamesButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 55));
             }
             if (gamemode == 0 || gamemode == 1)
                 backToMenuButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 50));
@@ -788,7 +734,6 @@ class GamePane extends Pane {
                 }
                 if (actualPlayer == 1) {
                     if (isSelected) {
-                        //gc.setFill(firstPlayerColor);
                         int j = selectedX;
                         int i = selectedY;
                         gc.drawImage(firstPlayerImage, j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
@@ -796,7 +741,6 @@ class GamePane extends Pane {
                 }
                 if (actualPlayer == 2) {
                     if (isSelected) {
-                        //gc.setFill(secondPlayerColor);
                         int j = selectedX;
                         int i = selectedY;
                         gc.drawImage(secondPlayerImage, j * (oneFieldWidth) + marginX + inFieldMargin, i * (oneFieldHeight) + marginY + inFieldMargin, (oneFieldWidth) - 2 * inFieldMargin, (oneFieldHeight) - 2 * inFieldMargin);
@@ -899,7 +843,7 @@ class GamePane extends Pane {
 
     private void playSound() {
         try {
-            URL putBrickURL = this.getClass().getResource("putbrick.wav");
+            URL putBrickURL = this.getClass().getResource("resources/putbrick.wav");
             AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(putBrickURL);
             Clip clip = AudioSystem.getClip();
             clip.open(audioInputStream);
@@ -1127,7 +1071,6 @@ class GamePane extends Pane {
                 autoPlayButton.setText("Automatyczna Gra");
                 nextMoveButton.setDisable(false);
                 autoPlayButton.setDisable(false);
-                gamesButton.setDisable(false);
             }
         } else {
             if (speedUpButton != null) {
@@ -1135,7 +1078,6 @@ class GamePane extends Pane {
                 speedDownButton.setDisable(true);
                 autoPlayButton.setText("Przerwij");
                 nextMoveButton.setDisable(true);
-                gamesButton.setDisable(true);
             }
         }
     }
@@ -1171,7 +1113,6 @@ class GamePane extends Pane {
     private Button speedDownButton;
     private Button nextMoveButton;
     private Button autoPlayButton;
-    private Button gamesButton;
     private Button undoMoveButton;
     private Button backToMenuButton;
 
@@ -1186,6 +1127,4 @@ class GamePane extends Pane {
     private Image skyboxtop;
     private Image skyboxsideclouds;
     private Image skyboxsidehills;
-
-
 }
