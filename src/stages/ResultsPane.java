@@ -64,7 +64,7 @@ class ResultsPane extends Pane {
         clearLogsButtonHBox.setAlignment(Pos.CENTER_RIGHT);
         clearLogsButtonHBox.setSpacing(10);
         mainGridPane.add(clearLogsButtonHBox, 4, 9, 3, 2);
-        backButton = new Button("Cofnij");
+        backButton = new Button("Powrót");
         clearLogsButtonHBox.getChildren().add(backButton);
         backButton.setOnAction(event -> {
             GamesPane gamesPane = new GamesPane(getWidth(), getHeight());

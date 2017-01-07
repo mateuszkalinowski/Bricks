@@ -340,7 +340,7 @@ class GamesPane extends Pane {
         });
 
         HBox backButtonHBox = new HBox();
-        backButton = new Button("Cofnij");
+        backButton = new Button("Powrót");
         backButtonHBox.setAlignment(Pos.TOP_CENTER);
         backButtonHBox.getChildren().add(backButton);
         mainGridPane.add(backButtonHBox, 2, 10);
