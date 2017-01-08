@@ -5,6 +5,8 @@ import com.sun.javafx.tk.Toolkit;
 import core.Bricks;
 import XClasses.XSettings;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -305,7 +307,7 @@ public class MainStage extends Application {
         Label programInfoLabel = new Label();
         programInfoLabel.setMaxWidth(Double.MAX_VALUE);
         programInfoLabel.setAlignment(Pos.CENTER);
-        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.6.1");
+        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.6.2");
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
@@ -397,8 +399,16 @@ public class MainStage extends Application {
         });
         mainStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
 
+        mainStage.widthProperty().addListener(new ChangeListener<Number>() {
+            @Override
+            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
+                mainStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+            }
+        });
+
         mainStage.heightProperty().addListener((observable, oldValue, newValue) -> {
             bricksTitleLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, newValue.doubleValue() / 4.7));
+            mainStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
 
             singlePlayerGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, newValue.doubleValue() / 32));
             twoPlayersGameButton.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, newValue.doubleValue() / 32));

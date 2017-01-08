@@ -5,7 +5,6 @@ import core.Bricks;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -13,9 +12,9 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import logic.BoardLogic;
@@ -50,7 +49,7 @@ class GamesPane extends Pane {
         boardsSizesListView = new ListView<>();
         boardsSizesListView.setMaxWidth(Double.MAX_VALUE);
         boardsSizesListView.setMaxHeight(Double.MAX_VALUE);
-        mainGridPane.add(boardsSizesListView, 1, 1, 1, 6);
+        mainGridPane.add(boardsSizesListView, 1, 1, 1, 4);
 
         Label boardsListLabel = new Label("Plansze:");
         boardsListLabel.setAlignment(Pos.CENTER);
@@ -402,15 +401,12 @@ class GamesPane extends Pane {
         playersTableView.setColumnResizePolicy((param) -> false);
         playersTableView.setSortPolicy((param) -> false);
 
-        playersTableView.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if(event.getCode() == KeyCode.DELETE) {
-                    XRobotPlayer toDelete = playersTableView.getSelectionModel().getSelectedItem();
-                    if(toDelete!=null) {
-                        playersObservableList.remove(toDelete);
-                        exportPrograms();
-                    }
+        playersTableView.setOnKeyReleased(event -> {
+            if(event.getCode() == KeyCode.DELETE) {
+                XRobotPlayer toDelete = playersTableView.getSelectionModel().getSelectedItem();
+                if(toDelete!=null) {
+                    playersObservableList.remove(toDelete);
+                    exportPrograms();
                 }
             }
         });
@@ -422,6 +418,22 @@ class GamesPane extends Pane {
         Label pathToPlayerLabel = new Label("");
         pathToPlayerLabel.setAlignment(Pos.CENTER);
         pathToPlayerLabel.setMaxWidth(Double.MAX_VALUE);
+
+        Label descriptionTitle = new Label("Informacje:");
+        descriptionTitle.setMaxWidth(Double.MAX_VALUE);
+        descriptionTitle.setAlignment(Pos.CENTER);
+        descriptionTitle.setFont(Font.font("Comic Sans MS",30));
+
+        Label description = new Label();
+        description.setAlignment(Pos.CENTER);
+        description.setMaxWidth(Double.MAX_VALUE);
+        description.setTextAlignment(TextAlignment.CENTER);
+        description.setWrapText(true);
+        mainGridPane.add(descriptionTitle,0,5,3,1);
+        mainGridPane.add(description, 0, 6, 3, 2);
+        description.setPadding(new Insets(0,10,0,10));
+        description.setText("1.Programy podane na drugiej karcie będa ze soba rozgrywały partie (każdy z każdym) na podanych tutaj planszach. Każdy program będzie w każdej partii raz programem pierwszym, raz drugim\n" +
+                "2.Podane rozmiary plansz i lokalizacje programów grających zapisują się przy wyłączaniu programu i automatycznie wczytują przy jego uruchomieniu");
 
 
         Label runCommandLabel = new Label("Komenda uruchomienia:");
@@ -485,7 +497,8 @@ class GamesPane extends Pane {
                             } catch (IOException ignored) {
                                 return;
                             }
-                            XRobotPlayer toAdd = new XRobotPlayer("Wbudowany", playerPath);
+
+                            XRobotPlayer toAdd = new XRobotPlayer("Plik class/exe/jar/out", playerPath);
                             found = false;
                             for (XRobotPlayer aPlayersObservableList : playersObservableList) {
                                 if (toAdd.getName().equals(aPlayersObservableList.getName())) {
@@ -593,7 +606,7 @@ class GamesPane extends Pane {
             String programType;
             String programPath;
             if (Bricks.mainStage.firstPlayerProgramType == 0) {
-                programType = "Wbudowany";
+                programType = "Plik class/exe/jar/out";
                 programPath = Bricks.mainStage.playerFirstFullPath;
             } else {
                 programType = "Własny";
@@ -605,7 +618,7 @@ class GamesPane extends Pane {
                 playersObservableList.add(xToCheck);
 
             if (Bricks.mainStage.secondPlayerProgramType == 0) {
-                programType = "Wbudowany";
+                programType = "Plik class/exe/jar/out";
                 programPath = Bricks.mainStage.playerSecondFullPath;
             } else {
                 programType = "Własny";
@@ -679,7 +692,7 @@ class GamesPane extends Pane {
         }
     }
 
-    public void exportPoints() {
+    void exportPoints() {
         if(boardsSizesListView==null)
             return;
         try {
@@ -775,10 +788,6 @@ class GamesPane extends Pane {
     private boolean running = false;
 
     private Task<Void> gamesTask;
-
-    //  private  Label winsByFirstComputerLabel;
-
-    //  private Label winsBySecondComputerLabel;
 
     private int firstPlayerWins = 0;
     private int secondPlayerWins = 0;

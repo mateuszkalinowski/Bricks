@@ -16,7 +16,7 @@ public class XRobotPlayer {
         this.type = new SimpleStringProperty(isOwn);
         this.path = new SimpleStringProperty(path);
 
-        if (this.path.get().length() > 7 && this.type.get().equals("Wbudowany")) {
+        if (this.path.get().length() > 7 && this.type.get().equals("Plik class/exe/jar/out")) {
             int i = this.path.get().length() - 1;
             for (; i > 0; i--) {
                 if (this.path.get().charAt(i) == '/' || this.path.get().charAt(i) == '\\')
@@ -66,7 +66,7 @@ public class XRobotPlayer {
     }
 
     public RobotPlayer getRobotPlayer() {
-        if (type.get().equals("Wbudowany")) {
+        if (type.get().equals("Plik class/exe/jar/out")) {
             if (path.get().substring(path.get().length() - 3).equals("out") || path.get().substring(path.get().length() - 3).equals("exe")) {
                 try {
                     return new RobotPlayer(path.get(), 5);
