@@ -5,6 +5,8 @@ import XClasses.XRobotPlayer;
 import core.Bricks;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -18,9 +20,11 @@ import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
+import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
@@ -56,14 +60,18 @@ class ResultsPane extends Pane {
 
         //boardsSizesListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
 
+
+
         HBox clearLogsButtonHBox = new HBox();
+        exportLogsButton = new Button("Eksporuj Wyniki");
         clearLogsButton = new Button("Wyczyść Wyniki");
+        clearLogsButtonHBox.getChildren().add(exportLogsButton);
         clearLogsButtonHBox.getChildren().add(clearLogsButton);
         clearLogsButtonHBox.setAlignment(Pos.CENTER);
         clearLogsButtonHBox.setPadding(new Insets(0, 20, 0, 0));
         clearLogsButtonHBox.setAlignment(Pos.CENTER_RIGHT);
         clearLogsButtonHBox.setSpacing(10);
-        mainGridPane.add(clearLogsButtonHBox, 4, 9, 3, 2);
+        mainGridPane.add(clearLogsButtonHBox, 2, 9, 5, 2);
         backButton = new Button("Powrót");
         clearLogsButtonHBox.getChildren().add(backButton);
         backButton.setOnAction(event -> {
@@ -101,6 +109,31 @@ class ResultsPane extends Pane {
                 }
             }
         });
+
+        exportLogsButton.setOnAction(event -> {
+            FileChooser chooseFile = new FileChooser();
+            chooseFile.setTitle("Wybierz lokalizacje zapisu");
+            chooseFile.setInitialFileName("wyniki.txt");
+            File saveFile = chooseFile.showSaveDialog(Bricks.mainStage.mainStage);
+            if (saveFile != null) {
+                try {
+                    PrintWriter writer = new PrintWriter(saveFile);
+
+                    for(XResults e : resultsObservableList) {
+                        writer.println("Gracz: " + e.getName());
+                        writer.println("wygrane: " + e.getWins());
+                        writer.println("przegrane: " + e.getLost());
+                        writer.println("wygrane/rozegrane: " + e.getWinsToAll());
+                        writer.println("");
+                    }
+
+                    writer.close();
+                } catch (FileNotFoundException ignored) {
+
+                }
+            }
+        });
+
         playersTableView = new TableView<>();
 
         TableColumn nameColumn = new TableColumn("Program");
@@ -140,6 +173,7 @@ class ResultsPane extends Pane {
             playersListLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 20));
             clearLogsButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 50));
             backButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 50));
+            exportLogsButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 50));
             mainTabPane.setPrefHeight(newValue.doubleValue());
         });
         mainTabPane = new TabPane();
@@ -285,4 +319,5 @@ class ResultsPane extends Pane {
     private XYChart.Series dataToLostSeries;
 
     private Button backButton;
+    private Button exportLogsButton;
 }

@@ -409,6 +409,7 @@ class GamesPane extends Pane {
                     XRobotPlayer toDelete = playersTableView.getSelectionModel().getSelectedItem();
                     if(toDelete!=null) {
                         playersObservableList.remove(toDelete);
+                        exportPrograms();
                     }
                 }
             }
@@ -475,48 +476,50 @@ class GamesPane extends Pane {
                 if (runCommandTextArea.getText().equals("")) {
                     FileChooser chooseFile = new FileChooser();
                     chooseFile.setTitle("Wybierz gracza");
-                    File openFile = chooseFile.showOpenDialog(Bricks.mainStage.mainStage);
-                    if (openFile != null) {
-                        try {
-                            playerPath = openFile.getCanonicalPath();
-                        } catch (IOException ignored) {
-                            return;
-                        }
-                        XRobotPlayer toAdd = new XRobotPlayer("Wbudowany", playerPath);
-                        found = false;
-                        for (XRobotPlayer aPlayersObservableList : playersObservableList) {
-                            if (toAdd.getName().equals(aPlayersObservableList.getName()))
-                                found = true;
-                        }
-                        if (!found) {
-                            RobotPlayer test = toAdd.getRobotPlayer();
-                            if (test != null) {
-                                playersObservableList.add(toAdd);
-                            } else {
-                                Alert alert = new Alert(Alert.AlertType.WARNING);
-                                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                                alert.setTitle("Błąd dodawania gracza");
-                                alert.setHeaderText("Nowy gracz nie został dodany");
-                                alert.setContentText("Podany gracz nie działa");
-                                ButtonType buttonOk = new ButtonType("Ok");
-                                alert.getButtonTypes().setAll(buttonOk);
-                                alert.showAndWait();
+                    boolean error = false;
+                    List<File> programsToOpen = chooseFile.showOpenMultipleDialog(Bricks.mainStage.mainStage);
+                    for (File openFile : programsToOpen) {
+                        if (openFile != null) {
+                            try {
+                                playerPath = openFile.getCanonicalPath();
+                            } catch (IOException ignored) {
+                                return;
                             }
-                        } else {
-                            Alert alert = new Alert(Alert.AlertType.WARNING);
-                            alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                            alert.setTitle("Błąd dodawania gracza");
-                            alert.setHeaderText("Nowy gracz nie został dodany");
-                            alert.setContentText("Gracz o tej nazwie jest już dodany.");
-                            ButtonType buttonOk = new ButtonType("Ok");
-                            alert.getButtonTypes().setAll(buttonOk);
-                            alert.showAndWait();
+                            XRobotPlayer toAdd = new XRobotPlayer("Wbudowany", playerPath);
+                            found = false;
+                            for (XRobotPlayer aPlayersObservableList : playersObservableList) {
+                                if (toAdd.getName().equals(aPlayersObservableList.getName())) {
+                                    error = true;
+                                    found = true;
+                                }
+                            }
+                            if (!found) {
+                                RobotPlayer test = toAdd.getRobotPlayer();
+                                if (test != null) {
+                                    playersObservableList.add(toAdd);
+                                } else {
+                                    error = true;
+                                }
+                            }
                         }
                     }
+                    if(error) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                        alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                        alert.setTitle("Komunikat Dodawania Programów");
+                        alert.setHeaderText("Jeden lub więcej programów nie zostało dodanych.");
+                        alert.setContentText("Pominięte zostały programy o nazwie takiej samej jak już zaimportowane, jak również" +
+                                "te niedziałające.");
+                        ButtonType buttonOk = new ButtonType("Ok");
+                        alert.getButtonTypes().setAll(buttonOk);
+                        alert.showAndWait();
+                    }
+
+
+
+
                 } else {
                     XRobotPlayer toAdd = new XRobotPlayer("Własny", runCommandTextArea.getText(), programNameTextArea.getText());
                     for (XRobotPlayer aPlayersObservableList : playersObservableList) {
