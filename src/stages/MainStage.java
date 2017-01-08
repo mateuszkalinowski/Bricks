@@ -75,19 +75,19 @@ public class MainStage extends Application {
                 if (firstPlayerProgramType == 0) {
                     if (playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("out") || playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("exe")) {
                         try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("\""+playerFirstFullPath+"\"", BoardSize);
                             computerPlayerFound = true;
                         } catch (Exception ignored) {
                         }
                     } else if (playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("jar")) {
                         try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -jar " + playerFirstFullPath, BoardSize);
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -jar \"" + playerFirstFullPath+"\"", BoardSize);
                             computerPlayerFound = true;
                         } catch (Exception ignored) {
                         }
                     } else if (playerFirstFullPath.substring(playerFirstFullPath.length() - 5).equals("class")) {
                         try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerOne + " " + playerFirstProgramName, BoardSize);
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp \"" + pathToPlayerOne + "\" " + playerFirstProgramName, BoardSize);
                             computerPlayerFound = true;
                         } catch (Exception ignored) {
                         }
@@ -107,19 +107,19 @@ public class MainStage extends Application {
                 if (secondPlayerProgramType == 0) {
                     if (playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("out") || playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("exe")) {
                         try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("\""+playerSecondFullPath+"\"", BoardSize);
                             computerPlayerFound = true;
                         } catch (Exception ignored) {
                         }
                     } else if (playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("jar")) {
                         try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -jar " + playerSecondFullPath, BoardSize);
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -jar \"" + playerSecondFullPath+"\"", BoardSize);
                             computerPlayerFound = true;
                         } catch (Exception ignored) {
                         }
                     } else if (playerSecondFullPath.substring(playerSecondFullPath.length() - 5).equals("class")) {
                         try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerTwo + " " + playerSecondProgramName, BoardSize);
+                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp \"" + pathToPlayerTwo + "\" " + playerSecondProgramName, BoardSize);
                             computerPlayerFound = true;
                         } catch (Exception ignored) {
                         }
@@ -307,7 +307,7 @@ public class MainStage extends Application {
         Label programInfoLabel = new Label();
         programInfoLabel.setMaxWidth(Double.MAX_VALUE);
         programInfoLabel.setAlignment(Pos.CENTER);
-        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.6.2");
+        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.6.3");
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
@@ -317,7 +317,7 @@ public class MainStage extends Application {
         mainStage.setScene(mainScene);
         mainScene.getStylesheets().add(selectedTheme);
 
-        double firstWidth = 520;
+        double firstWidth = 466;
         double firstHeight = 710;
         try {
             double tempWidth;
