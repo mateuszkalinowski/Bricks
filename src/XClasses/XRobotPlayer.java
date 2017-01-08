@@ -91,7 +91,6 @@ public class XRobotPlayer {
             } catch (Exception ignored) {
             }
         }
-        System.out.println("RobotPlayer w XRobotPlayer jest nullem");
         return null;
     }
 }

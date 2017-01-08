@@ -54,7 +54,7 @@ class GameChooserPane extends Pane {
         mainGridPane.add(gamesGameCanvas,1,1,1,4);
 
         HBox singleGameButtonHBox = new HBox();
-        singleGamesButton = new Button("Gra Pojedyńcza");
+        singleGamesButton = new Button("Gra Pojedyncza");
         singleGameButtonHBox.setAlignment(Pos.CENTER);
         singleGameButtonHBox.getChildren().add(singleGamesButton);
 
