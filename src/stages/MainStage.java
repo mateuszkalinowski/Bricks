@@ -344,8 +344,8 @@ public class MainStage extends Application {
             }
         } catch (IOException ignored) {
         }
-        mainStage.setMinWidth(476);
-        mainStage.setMinHeight(680);
+        mainStage.setMinWidth(466);
+        mainStage.setMinHeight(710);
         mainStage.setWidth(firstWidth);
         mainStage.setHeight(firstHeight);
 

@@ -179,6 +179,7 @@ class GamesPane extends Pane {
                         boardsSizesListView.getItems().add("");
                         gamesProgressBar.setProgress(100.0);
                     } else if (boardsSizes.size() > 0) {
+                        running = true;
                         gamesTask = new Task<Void>() {
                             @Override
                             protected Void call() {
@@ -284,7 +285,6 @@ class GamesPane extends Pane {
                             }
 
                         };
-                        running = true;
                         Thread autoGameThread = new Thread(gamesTask);
                         gamesProgressBar.progressProperty().bind(gamesTask.progressProperty());
                         autoGameThread.start();
@@ -297,6 +297,8 @@ class GamesPane extends Pane {
 
                         runButton.setText("Przerwij");
 
+                    } else {
+                        resultsButton.setDisable(false);
                     }
                 }
                 else {
@@ -320,8 +322,8 @@ class GamesPane extends Pane {
         gamesProgressBar.setMaxWidth(Double.MAX_VALUE);
 
         gamesProgressBar.setProgress(0);
-
         mainGridPane.add(gamesProgressBar, 0, 9, 3, 1);
+        //gamesProgressBar.setEffect();
 
         HBox resultsButtonHBox = new HBox();
         resultsButton = new Button("Wyniki");
@@ -443,7 +445,7 @@ class GamesPane extends Pane {
         TextArea runCommandTextArea = new TextArea();
         runCommandTextArea.setMaxHeight(30);
         runCommandTextArea.setMaxWidth(200);
-        runCommandTextArea.setTooltip(new Tooltip("Jeśli tutaj coś wpiszesz, wybrana powyżej ścieżka zostanie zignorowana."));
+        runCommandTextArea.setTooltip(new Tooltip("Napisz tutaj komendę, jaką wprowadziłbyś w konsoli aby uruchomić swój program."));
 
 
         HBox removePlayerHBox = new HBox();
@@ -475,10 +477,11 @@ class GamesPane extends Pane {
         TextArea programNameTextArea = new TextArea();
         programNameTextArea.setMaxHeight(30);
         programNameTextArea.setMaxWidth(200);
-        programNameTextArea.setTooltip(new Tooltip("Nazwa zostanie zastosowana do programu 'własnego'."));
+        programNameTextArea.setTooltip(new Tooltip("Nazwa zostanie zastosowana tylko do programu 'własnego'."));
 
         HBox addPlayerHBox = new HBox();
-        Button addPlayerButton = new Button("Dodaj Gracza");
+        Button addPlayerButton = new Button("Dodaj Gracza/y");
+        addPlayerButton.setTooltip(new Tooltip("Jeśli nie wpiszesz nic w polu na własną komendę uruchomienia \nspowoduje wyświetlenie okna wyboru plików."));
         addPlayerButton.setFont(Font.font("Comic Sans MS", 14));
         addPlayerHBox.getChildren().add(addPlayerButton);
         addPlayerHBox.setAlignment(Pos.CENTER);
@@ -490,28 +493,30 @@ class GamesPane extends Pane {
                     chooseFile.setTitle("Wybierz gracza");
                     boolean error = false;
                     List<File> programsToOpen = chooseFile.showOpenMultipleDialog(Bricks.mainStage.mainStage);
-                    for (File openFile : programsToOpen) {
-                        if (openFile != null) {
-                            try {
-                                playerPath = openFile.getCanonicalPath();
-                            } catch (IOException ignored) {
-                                return;
-                            }
-
-                            XRobotPlayer toAdd = new XRobotPlayer("Plik class/exe/jar/out", playerPath);
-                            found = false;
-                            for (XRobotPlayer aPlayersObservableList : playersObservableList) {
-                                if (toAdd.getName().equals(aPlayersObservableList.getName())) {
-                                    error = true;
-                                    found = true;
+                    if(programsToOpen!=null) {
+                        for (File openFile : programsToOpen) {
+                            if (openFile != null) {
+                                try {
+                                    playerPath = openFile.getCanonicalPath();
+                                } catch (IOException ignored) {
+                                    return;
                                 }
-                            }
-                            if (!found) {
-                                RobotPlayer test = toAdd.getRobotPlayer();
-                                if (test != null) {
-                                    playersObservableList.add(toAdd);
-                                } else {
-                                    error = true;
+
+                                XRobotPlayer toAdd = new XRobotPlayer("Plik class/exe/jar/out", playerPath);
+                                found = false;
+                                for (XRobotPlayer aPlayersObservableList : playersObservableList) {
+                                    if (toAdd.getName().equals(aPlayersObservableList.getName())) {
+                                        error = true;
+                                        found = true;
+                                    }
+                                }
+                                if (!found) {
+                                    RobotPlayer test = toAdd.getRobotPlayer();
+                                    if (test != null) {
+                                        playersObservableList.add(toAdd);
+                                    } else {
+                                        error = true;
+                                    }
                                 }
                             }
                         }
