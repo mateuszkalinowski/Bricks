@@ -19,7 +19,6 @@ import javafx.stage.Stage;
 import logic.BoardLogic;
 import logic.RobotPlayer;
 
-import java.beans.EventHandler;
 import java.util.Optional;
 
 /**
@@ -58,19 +57,13 @@ class GameChooserPane extends Pane {
         singleGameButtonHBox.setAlignment(Pos.CENTER);
         singleGameButtonHBox.getChildren().add(singleGamesButton);
 
-        singleGamesButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new javafx.event.EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                singleGamesBorder = true;
-                drawFrame();
-            }
+        singleGamesButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+            singleGamesBorder = true;
+            drawFrame();
         });
-        singleGamesButton.addEventHandler(MouseEvent.MOUSE_EXITED, new javafx.event.EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                singleGamesBorder = false;
-                drawFrame();
-            }
+        singleGamesButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+            singleGamesBorder = false;
+            drawFrame();
         });
 
         singleGamesButton.setOnAction(event -> {
@@ -212,19 +205,13 @@ class GameChooserPane extends Pane {
             Bricks.mainStage.mainStage.show();
         });
 
-        gamesGamesButton.addEventHandler(MouseEvent.MOUSE_ENTERED, new javafx.event.EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                gamesGamesBorder = true;
-                drawFrame();
-            }
+        gamesGamesButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
+            gamesGamesBorder = true;
+            drawFrame();
         });
-        gamesGamesButton.addEventHandler(MouseEvent.MOUSE_EXITED, new javafx.event.EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                gamesGamesBorder = false;
-                drawFrame();
-            }
+        gamesGamesButton.addEventHandler(MouseEvent.MOUSE_EXITED, event -> {
+            gamesGamesBorder = false;
+            drawFrame();
         });
 
         mainGridPane.add(gamesGameButtonHBox, 1,5);
@@ -307,6 +294,6 @@ class GameChooserPane extends Pane {
 
     private boolean gamesGamesBorder = false;
 
-    public GamesPane gamesPane;
+    GamesPane gamesPane;
 
 }

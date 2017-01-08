@@ -5,9 +5,6 @@ import com.sun.javafx.tk.Toolkit;
 import core.Bricks;
 import XClasses.XSettings;
 import javafx.application.Application;
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,7 +14,6 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -234,12 +230,9 @@ public class MainStage extends Application {
                 gameChooserPane.drawFrame();
                 mainStage.setScene(sceneOfChoice);
                 mainStage.show();
-                sceneOfChoice.setOnKeyReleased(new EventHandler<KeyEvent>() {
-                    @Override
-                    public void handle(KeyEvent event) {
-                        if(event.getCode() == KeyCode.ESCAPE) {
-                            backToMenu();
-                        }
+                sceneOfChoice.setOnKeyReleased(event13 -> {
+                    if(event13.getCode() == KeyCode.ESCAPE) {
+                        backToMenu();
                     }
                 });
         });
@@ -399,12 +392,7 @@ public class MainStage extends Application {
         });
         mainStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
 
-        mainStage.widthProperty().addListener(new ChangeListener<Number>() {
-            @Override
-            public void changed(ObservableValue<? extends Number> observable, Number oldValue, Number newValue) {
-                mainStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-            }
-        });
+        mainStage.widthProperty().addListener((observable, oldValue, newValue) -> mainStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png"))));
 
         mainStage.heightProperty().addListener((observable, oldValue, newValue) -> {
             bricksTitleLabel.setFont(Font.font("Comic Sans MS", FontWeight.BOLD, newValue.doubleValue() / 4.7));

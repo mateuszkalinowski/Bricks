@@ -1,12 +1,9 @@
 package stages;
 
 import XClasses.XResults;
-import XClasses.XRobotPlayer;
 import core.Bricks;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -134,7 +131,7 @@ class ResultsPane extends Pane {
             }
         });
 
-        playersTableView = new TableView<>();
+        TableView<XResults> playersTableView = new TableView<>();
 
         TableColumn nameColumn = new TableColumn("Program");
         //noinspection unchecked
@@ -184,7 +181,7 @@ class ResultsPane extends Pane {
         BorderPane wintoplayedchartPane = new BorderPane();
         final CategoryAxis xWinToPlayedAxis = new CategoryAxis();
         final NumberAxis yWinToPlayedAxis = new NumberAxis();
-        final BarChart<String, Number> wintoplayedChart = new BarChart<String, Number>(xWinToPlayedAxis, yWinToPlayedAxis);
+        final BarChart<String, Number> wintoplayedChart = new BarChart<>(xWinToPlayedAxis, yWinToPlayedAxis);
         dataToWinToPlayedSeries = new XYChart.Series();
         dataToWinToPlayedSeries.setName("Wygranych/Rozegranych");
         wintoplayedChart.getData().addAll(dataToWinToPlayedSeries);
@@ -198,7 +195,7 @@ class ResultsPane extends Pane {
         final CategoryAxis xWinAndLostAxis = new CategoryAxis();
         final NumberAxis yWinAndLostAxis = new NumberAxis();
 
-        final BarChart<String, Number> winandlostChart = new BarChart<String, Number>(xWinAndLostAxis, yWinAndLostAxis);
+        final BarChart<String, Number> winandlostChart = new BarChart<>(xWinAndLostAxis, yWinAndLostAxis);
         dataToWinSeries = new XYChart.Series();
         dataToWinSeries.setName("Wygrane");
         dataToLostSeries = new XYChart.Series();
@@ -245,8 +242,8 @@ class ResultsPane extends Pane {
                 }
                 in.close();
 
-                winsMap = new HashMap<>();
-                losesMap = new HashMap<>();
+                Map<String, Integer> winsMap = new HashMap<>();
+                Map<String, Integer> losesMap = new HashMap<>();
                 Map<String, Double> winToAllMap = new HashMap<>();
 
                 for (String s : wyniki) {
@@ -285,7 +282,7 @@ class ResultsPane extends Pane {
                     }
                     winToAllMap.remove(maxKey);
                     //boardsSizesListView.getItems().add(maxKey);
-                    resultsObservableList.add(new XResults(maxKey,winsMap.get(maxKey),losesMap.get(maxKey)));
+                    resultsObservableList.add(new XResults(maxKey, winsMap.get(maxKey), losesMap.get(maxKey)));
                     double value = (winsMap.get(maxKey).doubleValue() / (winsMap.get(maxKey).doubleValue() + losesMap.get(maxKey).doubleValue()));
                     dataToWinToPlayedSeries.getData().add(new XYChart.Data(maxKey, value));
                     dataToWinSeries.getData().add(new XYChart.Data(maxKey, winsMap.get(maxKey)));
@@ -298,18 +295,9 @@ class ResultsPane extends Pane {
 
     }
 
-    TabPane mainTabPane;
-    private Map<String, Integer> winsMap;
-    private Map<String, Integer> losesMap;
-
-    //private ListView<String> boardsSizesListView;
-    private TableView<XResults> playersTableView;
+    private TabPane mainTabPane;
 
     private final ObservableList<XResults> resultsObservableList;
-
-    private Label winsByFirstComputerLabel;
-    private Label winsBySecondComputerLabel;
-    private Label winsToAllResultLabel;
 
     private Button clearLogsButton;
 
