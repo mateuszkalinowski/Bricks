@@ -19,8 +19,8 @@ public class ComputerPlayer {
     }
 
     private boolean FullRandomMove() {
-        int x = (int) (Math.random() * (board.staticSize));
-        int y = (int) (Math.random() * (board.staticSize));
+        int x = (int) (Math.random() * (board.width));
+        int y = (int) (Math.random() * (board.height));
         int direction = (int) (Math.random() * 4);
         boolean[] directions = board.possibleDirections(x, y);
 

@@ -17,7 +17,7 @@ public class Bricks extends Application {
     @SuppressWarnings ("ResultOfMethodCallIgnored")
     public void start(Stage primaryStage) throws Exception {
         mainStage = new MainStage();
-        mainStage.setSettings(initialBoardSize, firstPlayerColor, secondPlayerColor, isSound, volume, debugMode,
+        mainStage.setSettings(initialBoardSize, firstPlayerColor, secondPlayerColor, isSound, volume,
                 firstPlayerPath, secondPlayerPath, firstPlayerProgramType, secondPlayerProgramType,
                 firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType, theme);
         mainStage.start(primaryStage);
@@ -25,7 +25,6 @@ public class Bricks extends Application {
 
     @SuppressWarnings ("ResultOfMethodCallIgnored")
     public static void main(String[] args) {
-        //EventQueue.invokeLater(() -> {
         path = System.getProperty("user.home") + "/Documents/Bricks";
         File resources = new File(path);
         try {
@@ -40,7 +39,6 @@ public class Bricks extends Application {
                 createCfg.println("SecondColor=java.awt.Color[r=238,g=44,b=44]");
                 createCfg.println("sound=true");
                 createCfg.println("volume=0");
-                createCfg.println("debugMode=false");
                 createCfg.println("firstPlayer=");
                 createCfg.println("secondPlayer=");
                 createCfg.println("firstPlayerProgramType=1");
@@ -68,10 +66,6 @@ public class Bricks extends Application {
                     line = in.nextLine();
                     splittedLine = line.split("=");
                     volume = Integer.parseInt(splittedLine[1]);
-
-                    line = in.nextLine();
-                    splittedLine = line.split("=");
-                    debugMode = splittedLine[1].equals("true");
                     line = in.nextLine();
                     splittedLine = line.split("=");
                     if (splittedLine.length == 2) {
@@ -130,7 +124,6 @@ public class Bricks extends Application {
     }
 
     private static boolean isSound;
-    private static boolean debugMode;
     public static boolean autoPlayRunning = false;
 
     private static int initialBoardSize;
@@ -165,15 +158,11 @@ public class Bricks extends Application {
         volume = 0;
         firstPlayerProgramType = 1;
         secondPlayerProgramType = 1;
-
         firstPlayerRunCommand = "";
         secondPlayerRunCommand = "";
-
         firstPlayerPath = "";
         secondPlayerPath = "";
-
         computerPlayerType = 0;
-
         theme = 0;
 
     }

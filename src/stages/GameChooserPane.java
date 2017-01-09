@@ -1,5 +1,6 @@
 package stages;
 
+import XClasses.XRobotPlayer;
 import core.Bricks;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -17,8 +18,6 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import logic.BoardLogic;
-import logic.RobotPlayer;
-
 import java.util.Optional;
 
 /**
@@ -70,62 +69,32 @@ class GameChooserPane extends Pane {
             boolean checkFirstComputerPlayer = false;
             boolean checkSecondComputerPlayer = false;
             if (Bricks.mainStage.firstPlayerProgramType == 0) {
-                if (Bricks.mainStage.playerFirstFullPath.substring(Bricks.mainStage.playerFirstFullPath.length() - 3).equals("out") || Bricks.mainStage.playerFirstFullPath.substring(Bricks.mainStage.playerFirstFullPath.length() - 3).equals("exe")) {
-                    try {
-                        Bricks.firstRobotPlayer = new RobotPlayer(Bricks.mainStage.playerFirstFullPath, Bricks.mainStage.BoardSize);
-                        checkFirstComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
-                } else if (Bricks.mainStage.playerFirstFullPath.substring(Bricks.mainStage.playerFirstFullPath.length() - 3).equals("jar")) {
-                    try {
-                        Bricks.firstRobotPlayer = new RobotPlayer("java -jar " + Bricks.mainStage.playerFirstFullPath, Bricks.mainStage.BoardSize);
-                        checkFirstComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
-                } else if (Bricks.mainStage.playerFirstFullPath.substring(Bricks.mainStage.playerFirstFullPath.length() - 5).equals("class")) {
-                    try {
-                        Bricks.firstRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainStage.pathToPlayerOne + " " + Bricks.mainStage.playerFirstProgramName,Bricks.mainStage.BoardSize);
-                        checkFirstComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
+                XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out", Bricks.mainStage.playerFirstFullPath);
+                Bricks.firstRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                if (Bricks.firstRobotPlayer != null) {
+                    checkFirstComputerPlayer = true;
                 }
-
             }
             if (Bricks.mainStage.firstPlayerProgramType == 1) {
-                try {
-                    Bricks.firstRobotPlayer = new RobotPlayer(Bricks.mainStage.firstPlayerRunCommand, Bricks.mainStage.BoardSize);
+                XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Własny",Bricks.mainStage.firstPlayerRunCommand);
+                Bricks.firstRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                if(Bricks.firstRobotPlayer!=null) {
                     checkFirstComputerPlayer = true;
-                } catch (Exception ignored) {
                 }
-
             }
             if (Bricks.mainStage.secondPlayerProgramType == 0) {
-                if (Bricks.mainStage.playerSecondFullPath.substring(Bricks.mainStage.playerSecondFullPath.length() - 3).equals("out") || Bricks.mainStage.playerSecondFullPath.substring(Bricks.mainStage.playerSecondFullPath.length() - 3).equals("exe")) {
-                    try {
-                        Bricks.secondRobotPlayer = new RobotPlayer(Bricks.mainStage.playerSecondFullPath, Bricks.mainStage.BoardSize);
-                        checkSecondComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
-                } else if (Bricks.mainStage.playerSecondFullPath.substring(Bricks.mainStage.playerSecondFullPath.length() - 3).equals("jar")) {
-                    try {
-                        Bricks.secondRobotPlayer = new RobotPlayer("java -jar " + Bricks.mainStage.playerSecondFullPath, Bricks.mainStage.BoardSize);
-                        checkSecondComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
-                } else if (Bricks.mainStage.playerSecondFullPath.substring(Bricks.mainStage.playerSecondFullPath.length() - 5).equals("class")) {
-                    try {
-                        Bricks.secondRobotPlayer = new RobotPlayer("java -cp " + Bricks.mainStage.pathToPlayerTwo + " " + Bricks.mainStage.playerSecondProgramName, Bricks.mainStage.BoardSize);
-                        checkSecondComputerPlayer = true;
-                    } catch (Exception ignored) {
-                    }
+                XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out", Bricks.mainStage.playerSecondFullPath);
+                Bricks.secondRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                if (Bricks.secondRobotPlayer != null) {
+                    checkSecondComputerPlayer = true;
                 }
 
             }
             if (Bricks.mainStage.secondPlayerProgramType == 1) {
-                try {
-                    Bricks.secondRobotPlayer = new RobotPlayer(Bricks.mainStage.secondPlayerRunCommand, Bricks.mainStage.BoardSize);
+                XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Własny", Bricks.mainStage.secondPlayerRunCommand);
+                Bricks.secondRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                if (Bricks.secondRobotPlayer != null) {
                     checkSecondComputerPlayer = true;
-                } catch (Exception ignored) {
                 }
             }
             if(checkFirstComputerPlayer&&checkSecondComputerPlayer) {
@@ -199,7 +168,7 @@ class GameChooserPane extends Pane {
 
         gamesGamesButton.setOnAction(event -> {
             gamesPane = new GamesPane(Bricks.mainStage.sceneOfChoice.getWidth(), Bricks.mainStage.sceneOfChoice.getHeight());
-            Scene gamesScene = new Scene(gamesPane, Bricks.mainStage.sceneOfChoice.getWidth(), Bricks.mainStage.sceneOfChoice.getHeight());
+            gamesScene = new Scene(gamesPane, Bricks.mainStage.sceneOfChoice.getWidth(), Bricks.mainStage.sceneOfChoice.getHeight());
             gamesScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
             Bricks.mainStage.mainStage.setScene(gamesScene);
             Bricks.mainStage.mainStage.show();
@@ -295,5 +264,7 @@ class GameChooserPane extends Pane {
     private boolean gamesGamesBorder = false;
 
     GamesPane gamesPane;
+
+    Scene gamesScene;
 
 }

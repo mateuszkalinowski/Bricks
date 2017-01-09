@@ -573,11 +573,9 @@ class GamesPane extends Pane {
                         alert.showAndWait();
                     }
                 }
-                if (!found) {
-                    exportPrograms();
-                    playerPath = "";
-                    runCommandTextArea.setText("");
-                }
+                exportPrograms();
+                playerPath = "";
+                runCommandTextArea.setText("");
             } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -606,36 +604,6 @@ class GamesPane extends Pane {
         playersGridPane.add(addPlayerLabel, 0, 6, 2, 1);
         playersGridPane.add(playersTableView, 0, 1, 2, 5);
         importPrograms();
-
-        if (!Bricks.mainStage.getFirstPlayerProgramName().equals(Bricks.mainStage.getSecondPlayerProgramName()) && playersObservableList.isEmpty()) {
-            String programType;
-            String programPath;
-            if (Bricks.mainStage.firstPlayerProgramType == 0) {
-                programType = "Plik class/exe/jar/out";
-                programPath = Bricks.mainStage.playerFirstFullPath;
-            } else {
-                programType = "Własny";
-                programPath = Bricks.mainStage.firstPlayerRunCommand;
-            }
-            XRobotPlayer xToCheck = new XRobotPlayer(programType, programPath);
-            RobotPlayer toCheck = xToCheck.getRobotPlayer();
-            if(toCheck!=null)
-                playersObservableList.add(xToCheck);
-
-            if (Bricks.mainStage.secondPlayerProgramType == 0) {
-                programType = "Plik class/exe/jar/out";
-                programPath = Bricks.mainStage.playerSecondFullPath;
-            } else {
-                programType = "Własny";
-                programPath = Bricks.mainStage.secondPlayerRunCommand;
-            }
-            xToCheck = new XRobotPlayer(programType, programPath);
-            toCheck = xToCheck.getRobotPlayer();
-            if(toCheck!=null) {
-                playersObservableList.add(new XRobotPlayer(programType, programPath));
-            }
-        }
-
 
         playersSelectTab.setContent(playersGridPane);
         playersSelectTab.setClosable(false);

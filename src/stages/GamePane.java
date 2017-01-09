@@ -318,7 +318,6 @@ class GamePane extends Pane {
                                 if (!Bricks.mainStage.gamePane.board.anyMoves()) {
                                     isGameFinished = true;
                                     break;
-
                                 }
                                 try {
                                     Thread.sleep(1000 / Integer.parseInt(speedTextField.getText()));

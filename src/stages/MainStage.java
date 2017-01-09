@@ -1,5 +1,6 @@
 package stages;
 
+import XClasses.XRobotPlayer;
 import com.sun.javafx.tk.FontLoader;
 import com.sun.javafx.tk.Toolkit;
 import core.Bricks;
@@ -22,7 +23,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import logic.BoardLogic;
-import logic.RobotPlayer;
 
 import java.io.*;
 import java.util.Optional;
@@ -69,65 +69,33 @@ public class MainStage extends Application {
             boolean computerPlayerFound = false;
             if (computerPlayerType == 1) {
                 if (firstPlayerProgramType == 0) {
-                    if (playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("out") || playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("exe")) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
-                    } else if (playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("jar")) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -jar " + playerFirstFullPath, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
-                    } else if (playerFirstFullPath.substring(playerFirstFullPath.length() - 5).equals("class")) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerOne + " " + playerFirstProgramName, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
+                    XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out",playerFirstFullPath);
+                    Bricks.singlePlayerRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                    if(Bricks.singlePlayerRobotPlayer!=null) {
+                        computerPlayerFound = true;
                     }
 
                 }
                 if (firstPlayerProgramType == 1) {
-                    try {
-                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(firstPlayerRunCommand, BoardSize);
+                    XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Własny",playerFirstFullPath);
+                    Bricks.singlePlayerRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                    if(Bricks.singlePlayerRobotPlayer!=null)
                         computerPlayerFound = true;
-                    } catch (Exception ignored) {
-                    }
-
                 }
             }
             if (computerPlayerType == 2) {
                 if (secondPlayerProgramType == 0) {
-                    if (playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("out") || playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("exe")) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
-                    } else if (playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("jar")) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -jar " + playerSecondFullPath, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
-                    } else if (playerSecondFullPath.substring(playerSecondFullPath.length() - 5).equals("class")) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerTwo + " " + playerSecondProgramName, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
+                    XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out",playerSecondFullPath);
+                    Bricks.singlePlayerRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                    if(Bricks.singlePlayerRobotPlayer!=null) {
+                        computerPlayerFound = true;
                     }
-
                 }
                 if (secondPlayerProgramType == 1) {
-                    try {
-                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(secondPlayerRunCommand, BoardSize);
+                    XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Własny",playerSecondFullPath);
+                    Bricks.singlePlayerRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                    if(Bricks.singlePlayerRobotPlayer!=null)
                         computerPlayerFound = true;
-                    } catch (Exception ignored) {
-                    }
                 }
             }
 
@@ -249,7 +217,7 @@ public class MainStage extends Application {
         HBox.setHgrow(optionsButton, Priority.ALWAYS);
         optionsButton.setOnAction(event -> {
             optionsPane = new OptionsPane(mainScene.getWidth(), mainScene.getHeight(), new XSettings(BoardSize, firstPlayerColor, secondPlayerColor,
-                    isSound, volume, debugMode, playerFirstFullPath, playerSecondFullPath,
+                    isSound, volume, playerFirstFullPath, playerSecondFullPath,
                     firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType, theme));
             sceneOfSettings = new Scene(optionsPane, mainScene.getWidth(), mainScene.getHeight());
             sceneOfSettings.getStylesheets().add(selectedTheme);
@@ -300,7 +268,7 @@ public class MainStage extends Application {
         Label programInfoLabel = new Label();
         programInfoLabel.setMaxWidth(Double.MAX_VALUE);
         programInfoLabel.setAlignment(Pos.CENTER);
-        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.6.2");
+        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.6.4");
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
@@ -475,7 +443,7 @@ public class MainStage extends Application {
         mainStage.setScene(mainScene);
     }
 
-    public void setSettings(int initialBoardSize, Color firstPlayerColor, Color secondPlayerColor, boolean isSound, int volume, boolean debugModeInitialize, String firstPlayerPath, String secondPlayerPath,
+    public void setSettings(int initialBoardSize, Color firstPlayerColor, Color secondPlayerColor, boolean isSound, int volume, String firstPlayerPath, String secondPlayerPath,
                             int firstPlayerProgramTypeArgument, int secondPlayerProgramTypeArgument,
                             String firstPlayerRunCommandArgument, String secondPlayerRunCommandArgument, int computerPlayerType, int theme) {
 
@@ -484,7 +452,6 @@ public class MainStage extends Application {
         this.secondPlayerColor = secondPlayerColor;
         this.isSound = isSound;
         this.volume = volume;
-        this.debugMode = debugModeInitialize;
         this.playerFirstFullPath = firstPlayerPath;
         this.playerSecondFullPath = secondPlayerPath;
         this.firstPlayerProgramType = firstPlayerProgramTypeArgument;
@@ -493,46 +460,6 @@ public class MainStage extends Application {
         this.secondPlayerRunCommand = secondPlayerRunCommandArgument;
         this.computerPlayerType = computerPlayerType;
         this.theme = theme;
-
-        if (playerFirstFullPath.length() > 7 && firstPlayerProgramType == 0) {
-            int i = playerFirstFullPath.length() - 1;
-            for (; i > 0; i--) {
-                if (playerFirstFullPath.charAt(i) == '/' || playerFirstFullPath.charAt(i) == '\\')
-                    break;
-            }
-            pathToPlayerOne = playerFirstFullPath.substring(0, i);
-            playerFirstProgramName = playerFirstFullPath.substring(i + 1, playerFirstFullPath.length());
-            if (playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("out") || playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("exe") || playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("jar")) {
-                playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 4);
-            } else if (playerFirstFullPath.substring(playerFirstFullPath.length() - 5).equals("class")) {
-                playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 6);
-            }
-        } else if (firstPlayerProgramType == 1) {
-            if (firstPlayerRunCommand.length() <= 20) {
-                playerFirstProgramName = firstPlayerRunCommand;
-            } else
-                playerFirstProgramName = firstPlayerRunCommand.substring(firstPlayerRunCommand.length() - 21);
-        }
-        if (playerSecondFullPath.length() > 7 && secondPlayerProgramType == 0) {
-            int i = playerSecondFullPath.length() - 1;
-            for (; i > 0; i--) {
-                if (playerSecondFullPath.charAt(i) == '/' || playerSecondFullPath.charAt(i) == '\\')
-                    break;
-            }
-            pathToPlayerTwo = playerSecondFullPath.substring(0, i);
-            playerSecondProgramName = playerSecondFullPath.substring(i + 1, playerSecondFullPath.length());
-
-            if (playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("out") || playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("exe") || playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("jar")) {
-                playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 4);
-            } else if (playerSecondFullPath.substring(playerSecondFullPath.length() - 5).equals("class")) {
-                playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
-            }
-        } else if (secondPlayerProgramType == 1) {
-            if (secondPlayerRunCommand.length() <= 20) {
-                playerSecondProgramName = secondPlayerRunCommand;
-            } else
-                playerSecondProgramName = secondPlayerRunCommand.substring(secondPlayerRunCommand.length() - 21);
-        }
         if (mainScene != null) {
             mainScene.getStylesheets().removeAll(classicTheme, minecraftTheme);
             if (theme == 0) {
@@ -561,7 +488,6 @@ public class MainStage extends Application {
             createCfg.println("SecondColor=" + secondPlayerColor.toString());
             createCfg.println("sound=" + isSound);
             createCfg.println("volume=" + volume);
-            createCfg.println("debugMode=" + debugMode);
             createCfg.println("firstPlayer=" + playerFirstFullPath);
             createCfg.println("secondPlayer=" + playerSecondFullPath);
             createCfg.println("firstPlayerProgramType=" + firstPlayerProgramType);
@@ -597,14 +523,6 @@ public class MainStage extends Application {
         return flag;
     }
 
-    String getFirstPlayerProgramName() {
-        return playerFirstProgramName;
-    }
-
-    String getSecondPlayerProgramName() {
-        return playerSecondProgramName;
-    }
-
     Stage mainStage;
     private Scene mainScene;
 
@@ -613,7 +531,7 @@ public class MainStage extends Application {
 
     Scene sceneOfChoice;
 
-    private GameChooserPane gameChooserPane;
+    public GameChooserPane gameChooserPane;
 
     GamePane gamePane;
     private OptionsPane optionsPane;
@@ -628,24 +546,19 @@ public class MainStage extends Application {
     private double buttonWidth;
 
     boolean isSound;
-    private boolean debugMode;
 
     javafx.scene.paint.Color firstPlayerColor;
     javafx.scene.paint.Color secondPlayerColor;
 
     String playerFirstFullPath = "";
     String playerSecondFullPath = "";
-    String pathToPlayerOne = "";
-    String pathToPlayerTwo = "";
-    String playerFirstProgramName = "";
-    String playerSecondProgramName = "";
     String firstPlayerRunCommand;
     String secondPlayerRunCommand;
 
     int theme;
 
-    private String classicTheme = MainStage.class.getResource("resources/style.css").toExternalForm();
-    private String minecraftTheme = MainStage.class.getResource("resources/style2.css").toExternalForm();
+    private String classicTheme = MainStage.class.getResource("styles/normalstyle.css").toExternalForm();
+    private String minecraftTheme = MainStage.class.getResource("styles/minecraftstyle.css").toExternalForm();
     String selectedTheme;
 
     private Button singlePlayerGameButton;

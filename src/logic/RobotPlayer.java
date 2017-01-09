@@ -16,6 +16,19 @@ public class RobotPlayer {
     private BufferedReader reader;
     private PrintWriter writer;
 
+    public RobotPlayer(String[] tabSource, int size) throws IOException, RobotPlayerNotWorkingException {
+        this.tabSource = tabSource;
+        this.size = size;
+        robotProc = Runtime.getRuntime().exec(this.tabSource);
+        reader = new BufferedReader(new InputStreamReader(robotProc.getInputStream()));
+        writer = new PrintWriter(robotProc.getOutputStream(), true);
+        writer.println("PONG");
+        if (!reader.readLine().equals("PONG")) {
+            throw new RobotPlayerNotWorkingException("Answer to Ping wasn't Pong");
+        }
+        writer.println(size);
+    }
+
     public RobotPlayer(String source, int size) throws IOException, RobotPlayerNotWorkingException {
         this.source = source;
         this.size = size;
@@ -31,7 +44,10 @@ public class RobotPlayer {
 
     public void reset() throws IOException, RobotPlayerNotWorkingException {
         robotProc.destroy();
-        robotProc = Runtime.getRuntime().exec(source);
+        if(source.equals(""))
+            robotProc = Runtime.getRuntime().exec(tabSource);
+        else
+            robotProc = Runtime.getRuntime().exec(source);
         reader = new BufferedReader(new InputStreamReader(robotProc.getInputStream()));
         writer = new PrintWriter(robotProc.getOutputStream(), true);
         writer.println("PING");
@@ -43,7 +59,11 @@ public class RobotPlayer {
 
     public void reset(int size) throws IOException, RobotPlayerNotWorkingException {
         robotProc.destroy();
-        robotProc = Runtime.getRuntime().exec(source);
+        if(source.equals("")) {
+            robotProc = Runtime.getRuntime().exec(tabSource);
+        }
+        else
+            robotProc = Runtime.getRuntime().exec(source);
         reader = new BufferedReader(new InputStreamReader(robotProc.getInputStream()));
         writer = new PrintWriter(robotProc.getOutputStream(), true);
         writer.println("PING");
@@ -177,7 +197,9 @@ public class RobotPlayer {
 
     }
 
-    private String source;
+    private String source = "";
+
+    private String tabSource[];
 
     private int size;
 }
