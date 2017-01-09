@@ -528,7 +528,7 @@ class GamesPane extends Pane {
                         alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                         alert.setTitle("Komunikat Dodawania Programów");
                         alert.setHeaderText("Jeden lub więcej programów nie zostało dodanych.");
-                        alert.setContentText("Pominięte zostały programy o nazwie takiej samej jak już zaimportowane, jak również" +
+                        alert.setContentText("Pominięte zostały programy o nazwie takiej samej jak już zaimportowane, jak również " +
                                 "te niedziałające.");
                         ButtonType buttonOk = new ButtonType("Ok");
                         alert.getButtonTypes().setAll(buttonOk);
