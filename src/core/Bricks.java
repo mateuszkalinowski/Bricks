@@ -25,7 +25,6 @@ public class Bricks extends Application {
 
     @SuppressWarnings ("ResultOfMethodCallIgnored")
     public static void main(String[] args) {
-        //EventQueue.invokeLater(() -> {
         path = System.getProperty("user.home") + "/Documents/Bricks";
         File resources = new File(path);
         try {
@@ -159,15 +158,11 @@ public class Bricks extends Application {
         volume = 0;
         firstPlayerProgramType = 1;
         secondPlayerProgramType = 1;
-
         firstPlayerRunCommand = "";
         secondPlayerRunCommand = "";
-
         firstPlayerPath = "";
         secondPlayerPath = "";
-
         computerPlayerType = 0;
-
         theme = 0;
 
     }
