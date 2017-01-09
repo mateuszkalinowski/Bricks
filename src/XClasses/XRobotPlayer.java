@@ -102,7 +102,6 @@ public class XRobotPlayer {
             } catch (Exception ignored) {
             }
         }
-        System.out.println("Jest nullem");
         return null;
     }
 }

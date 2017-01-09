@@ -31,7 +31,6 @@ class OptionsPane extends Pane {
         BoardSize = settings.getBoardSize();
 
         isSound = settings.getIsSound();
-        debugMode = settings.getDebugMode();
 
         firstPlayerColor = settings.getPlayerFirstColor();
         secondPlayerColor = settings.getPlayerSecondColor();
@@ -395,69 +394,8 @@ class OptionsPane extends Pane {
         chooseTheme.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 40);
 
         saveAndExitButton.setOnAction(event -> {
-
-
-            String playerFirstProgramName = "";
-            String playerSecondProgramName = "";
-
-            if (playerFirstFullPath.length() > 7 && firstPlayerProgramType == 0) {
-                int i = playerFirstFullPath.length() - 1;
-                for (; i > 0; i--) {
-                    if (playerFirstFullPath.charAt(i) == '/' || playerFirstFullPath.charAt(i) == '\\')
-                        break;
-                }
-                playerFirstProgramName = playerFirstFullPath.substring(i + 1, playerFirstFullPath.length());
-                if (playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("out") || playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("exe") || playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("jar")) {
-                    playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 4);
-                } else if (playerFirstFullPath.substring(playerFirstFullPath.length() - 5).equals("class")) {
-                    playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 6);
-                }
-            } else if (firstPlayerProgramType == 1) {
-                if (firstPlayerRunCommand.length() <= 20) {
-                    playerFirstProgramName = firstPlayerRunCommand;
-                } else
-                    playerFirstProgramName = firstPlayerRunCommand.substring(firstPlayerRunCommand.length() - 21);
-            }
-            if (playerSecondFullPath.length() > 7 && secondPlayerProgramType == 0) {
-                int i = playerSecondFullPath.length() - 1;
-                for (; i > 0; i--) {
-                    if (playerSecondFullPath.charAt(i) == '/' || playerSecondFullPath.charAt(i) == '\\')
-                        break;
-                }
-                playerSecondProgramName = playerSecondFullPath.substring(i + 1, playerSecondFullPath.length());
-
-                if (playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("out") || playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("exe") || playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("jar")) {
-                    playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 4);
-                } else if (playerSecondFullPath.substring(playerSecondFullPath.length() - 5).equals("class")) {
-                    playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
-                }
-            } else if (secondPlayerProgramType == 1) {
-                if (secondPlayerRunCommand.length() <= 20) {
-                    playerSecondProgramName = secondPlayerRunCommand;
-                } else
-                    playerSecondProgramName = secondPlayerRunCommand.substring(secondPlayerRunCommand.length() - 21);
-            }
-
-            if (playerFirstProgramName.equals(playerSecondProgramName)) {
-                Alert alert = new Alert(Alert.AlertType.WARNING);
-                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                alert.setTitle("Ostrzeżenie o braku zapisywania wyników");
-                alert.setHeaderText("Nazwy obu podanych programów są takie same");
-                alert.setContentText("Oznacza to, że wyniki przeprowadzonych partii nie będą zapisywane, kontynuować?");
-                ButtonType buttonYes = new ButtonType("Tak");
-                ButtonType buttonNo = new ButtonType("Anuluj");
-                alert.getButtonTypes().setAll(buttonNo, buttonYes);
-                Optional<ButtonType> result = alert.showAndWait();
-                if (result.isPresent() && result.get() == buttonYes) {
-                    Bricks.mainStage.setSettings(BoardSize, firstPlayerColor, secondPlayerColor, isSound, volume, debugMode, playerFirstFullPath, playerSecondFullPath, firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType, theme);
-                    Bricks.mainStage.backToMenu();
-                }
-            } else {
-                Bricks.mainStage.setSettings(BoardSize, firstPlayerColor, secondPlayerColor, isSound, volume, debugMode, playerFirstFullPath, playerSecondFullPath, firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType, theme);
+                Bricks.mainStage.setSettings(BoardSize, firstPlayerColor, secondPlayerColor, isSound, volume, playerFirstFullPath, playerSecondFullPath, firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType, theme);
                 Bricks.mainStage.backToMenu();
-            }
         });
 
         Bricks.mainStage.mainStage.heightProperty().addListener((observable, oldValue, newValue) -> {
@@ -532,7 +470,6 @@ class OptionsPane extends Pane {
     private int computerPlayerType;
 
     private boolean isSound;
-    private boolean debugMode;
 
     private javafx.scene.paint.Color firstPlayerColor;
     private javafx.scene.paint.Color secondPlayerColor;
@@ -553,5 +490,4 @@ class OptionsPane extends Pane {
     private TextArea secondProgramRunCommandTextArea;
 
     private int theme;
-
 }

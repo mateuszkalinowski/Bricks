@@ -5,13 +5,12 @@ package XClasses;
  * Project Bricks
  */
 public class XSettings {
-    public XSettings(int BoardSize, javafx.scene.paint.Color playerFirstColor, javafx.scene.paint.Color playerSecondColor, boolean isSound, int volume, boolean debugMode, String path1, String path2, int programTypeFirst, int programTypeSecond, String runCommandFirst, String runCommandSecond, int computerPlayerType, int theme) {
+    public XSettings(int BoardSize, javafx.scene.paint.Color playerFirstColor, javafx.scene.paint.Color playerSecondColor, boolean isSound, int volume, String path1, String path2, int programTypeFirst, int programTypeSecond, String runCommandFirst, String runCommandSecond, int computerPlayerType, int theme) {
         this.BoardSize = BoardSize;
         this.playerFirstColor = playerFirstColor;
         this.playerSecondColor = playerSecondColor;
         this.isSound = isSound;
         this.volume = volume;
-        this.debugMode = debugMode;
         firstComputerPlayerPath = path1;
         secondComputerPlayerPath = path2;
         firstPlayerProgramType = programTypeFirst;
@@ -50,10 +49,6 @@ public class XSettings {
         return volume;
     }
 
-    public boolean getDebugMode() {
-        return debugMode;
-    }
-
     public String getSecondPlayerRunCommand() {
         return secondPlayerRunCommand;
     }
@@ -79,7 +74,6 @@ public class XSettings {
     }
 
     private boolean isSound;
-    private boolean debugMode;
 
     private int BoardSize;
     private int volume;

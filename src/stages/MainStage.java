@@ -217,7 +217,7 @@ public class MainStage extends Application {
         HBox.setHgrow(optionsButton, Priority.ALWAYS);
         optionsButton.setOnAction(event -> {
             optionsPane = new OptionsPane(mainScene.getWidth(), mainScene.getHeight(), new XSettings(BoardSize, firstPlayerColor, secondPlayerColor,
-                    isSound, volume, debugMode, playerFirstFullPath, playerSecondFullPath,
+                    isSound, volume, playerFirstFullPath, playerSecondFullPath,
                     firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType, theme));
             sceneOfSettings = new Scene(optionsPane, mainScene.getWidth(), mainScene.getHeight());
             sceneOfSettings.getStylesheets().add(selectedTheme);
@@ -443,7 +443,7 @@ public class MainStage extends Application {
         mainStage.setScene(mainScene);
     }
 
-    public void setSettings(int initialBoardSize, Color firstPlayerColor, Color secondPlayerColor, boolean isSound, int volume, boolean debugModeInitialize, String firstPlayerPath, String secondPlayerPath,
+    public void setSettings(int initialBoardSize, Color firstPlayerColor, Color secondPlayerColor, boolean isSound, int volume, String firstPlayerPath, String secondPlayerPath,
                             int firstPlayerProgramTypeArgument, int secondPlayerProgramTypeArgument,
                             String firstPlayerRunCommandArgument, String secondPlayerRunCommandArgument, int computerPlayerType, int theme) {
 
@@ -452,7 +452,6 @@ public class MainStage extends Application {
         this.secondPlayerColor = secondPlayerColor;
         this.isSound = isSound;
         this.volume = volume;
-        this.debugMode = debugModeInitialize;
         this.playerFirstFullPath = firstPlayerPath;
         this.playerSecondFullPath = secondPlayerPath;
         this.firstPlayerProgramType = firstPlayerProgramTypeArgument;
@@ -489,7 +488,6 @@ public class MainStage extends Application {
             createCfg.println("SecondColor=" + secondPlayerColor.toString());
             createCfg.println("sound=" + isSound);
             createCfg.println("volume=" + volume);
-            createCfg.println("debugMode=" + debugMode);
             createCfg.println("firstPlayer=" + playerFirstFullPath);
             createCfg.println("secondPlayer=" + playerSecondFullPath);
             createCfg.println("firstPlayerProgramType=" + firstPlayerProgramType);
@@ -533,7 +531,7 @@ public class MainStage extends Application {
 
     Scene sceneOfChoice;
 
-    private GameChooserPane gameChooserPane;
+    public GameChooserPane gameChooserPane;
 
     GamePane gamePane;
     private OptionsPane optionsPane;
@@ -548,7 +546,6 @@ public class MainStage extends Application {
     private double buttonWidth;
 
     boolean isSound;
-    private boolean debugMode;
 
     javafx.scene.paint.Color firstPlayerColor;
     javafx.scene.paint.Color secondPlayerColor;

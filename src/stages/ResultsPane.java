@@ -6,7 +6,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.CategoryAxis;
 import javafx.scene.chart.NumberAxis;
@@ -62,10 +61,11 @@ class ResultsPane extends Pane {
         backButton = new Button("Powrót");
         clearLogsButtonHBox.getChildren().add(backButton);
         backButton.setOnAction(event -> {
-            GamesPane gamesPane = new GamesPane(getWidth(), getHeight());
-            Scene gamesScene = new Scene(gamesPane, getWidth(), getHeight());
-            gamesScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
-            Bricks.mainStage.mainStage.setScene(gamesScene);
+            double width = Bricks.mainStage.mainStage.getWidth();
+            double height = Bricks.mainStage.mainStage.getHeight();
+            Bricks.mainStage.mainStage.setScene(Bricks.mainStage.gameChooserPane.gamesScene);
+            Bricks.mainStage.mainStage.setWidth(width);
+            Bricks.mainStage.mainStage.setHeight(height);
             Bricks.mainStage.mainStage.show();
         });
         resultsObservableList = FXCollections.observableArrayList();
@@ -207,11 +207,12 @@ class ResultsPane extends Pane {
 
         setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
-                    GamesPane gamesPane = new GamesPane(getWidth(), getHeight());
-                    Scene gamesScene = new Scene(gamesPane, getWidth(), getHeight());
-                    gamesScene.getStylesheets().add(Bricks.mainStage.selectedTheme);
-                    Bricks.mainStage.mainStage.setScene(gamesScene);
-                    Bricks.mainStage.mainStage.show();
+                double width = Bricks.mainStage.mainStage.getWidth();
+                double height = Bricks.mainStage.mainStage.getHeight();
+                Bricks.mainStage.mainStage.setScene(Bricks.mainStage.gameChooserPane.gamesScene);
+                Bricks.mainStage.mainStage.setWidth(width);
+                Bricks.mainStage.mainStage.setHeight(height);
+                Bricks.mainStage.mainStage.show();
             }
         });
     }
