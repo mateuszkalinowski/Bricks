@@ -72,8 +72,7 @@ public class XRobotPlayer {
                         String cmd[] = new String[1];
                         cmd[0] = path.get();
                         return new RobotPlayer(cmd, 5);
-                    } catch (Exception ignored) {
-                    }
+                    } catch (Exception ignored) {}
                 } else if (path.get().substring(path.get().length() - 3).equals("jar")) {
                     try {
                         String cmd[] = new String[3];
@@ -81,8 +80,7 @@ public class XRobotPlayer {
                         cmd[1] = "-jar";
                         cmd[2] = path.get();
                         return new RobotPlayer(cmd, 5);
-                    } catch (Exception ignored) {
-                    }
+                    } catch (Exception ignored) {}
                 } else if (path.get().substring(path.get().length() - 5).equals("class")) {
                     try {
                         String cmd[] = new String[4];
@@ -91,16 +89,21 @@ public class XRobotPlayer {
                         cmd[2] = pathToPlayer;
                         cmd[3] = name.get();
                         return new RobotPlayer(cmd, 5);
-                    } catch (Exception ignored) {
-                    }
+                    } catch (Exception ignored) {}
+                } else if (path.get().substring(path.get().length() - 2).equals("py")) {
+                    try {
+                        String cmd[] = new String[2];
+                        cmd[0] = "python3";
+                        cmd[1] = path.get();
+                        return new RobotPlayer(cmd, 5);
+                    } catch (Exception ignored) {}
                 }
 
             }
         if (type.get().equals("Własny")) {
             try {
                 return new RobotPlayer(path.get(), 5);
-            } catch (Exception ignored) {
-            }
+            } catch (Exception ignored) {}
         }
         return null;
     }
