@@ -1,5 +1,6 @@
 package stages;
 
+import XClasses.XRobotPlayer;
 import com.sun.javafx.tk.FontLoader;
 import com.sun.javafx.tk.Toolkit;
 import core.Bricks;
@@ -22,7 +23,6 @@ import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
 import logic.BoardLogic;
-import logic.RobotPlayer;
 
 import java.io.*;
 import java.util.Optional;
@@ -69,65 +69,33 @@ public class MainStage extends Application {
             boolean computerPlayerFound = false;
             if (computerPlayerType == 1) {
                 if (firstPlayerProgramType == 0) {
-                    if (playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("out") || playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("exe")) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerFirstFullPath, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
-                    } else if (playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("jar")) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -jar " + playerFirstFullPath, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
-                    } else if (playerFirstFullPath.substring(playerFirstFullPath.length() - 5).equals("class")) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerOne + " " + playerFirstProgramName, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
+                    XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out",playerFirstFullPath);
+                    Bricks.singlePlayerRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                    if(Bricks.singlePlayerRobotPlayer!=null) {
+                        computerPlayerFound = true;
                     }
 
                 }
                 if (firstPlayerProgramType == 1) {
-                    try {
-                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(firstPlayerRunCommand, BoardSize);
+                    XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Własny",playerFirstFullPath);
+                    Bricks.singlePlayerRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                    if(Bricks.singlePlayerRobotPlayer!=null)
                         computerPlayerFound = true;
-                    } catch (Exception ignored) {
-                    }
-
                 }
             }
             if (computerPlayerType == 2) {
                 if (secondPlayerProgramType == 0) {
-                    if (playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("out") || playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("exe")) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer(playerSecondFullPath, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
-                    } else if (playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("jar")) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -jar " + playerSecondFullPath, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
-                    } else if (playerSecondFullPath.substring(playerSecondFullPath.length() - 5).equals("class")) {
-                        try {
-                            Bricks.singlePlayerRobotPlayer = new RobotPlayer("java -cp " + pathToPlayerTwo + " " + playerSecondProgramName, BoardSize);
-                            computerPlayerFound = true;
-                        } catch (Exception ignored) {
-                        }
+                    XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out",playerSecondFullPath);
+                    Bricks.singlePlayerRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                    if(Bricks.singlePlayerRobotPlayer!=null) {
+                        computerPlayerFound = true;
                     }
-
                 }
                 if (secondPlayerProgramType == 1) {
-                    try {
-                        Bricks.singlePlayerRobotPlayer = new RobotPlayer(secondPlayerRunCommand, BoardSize);
+                    XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Własny",playerSecondFullPath);
+                    Bricks.singlePlayerRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                    if(Bricks.singlePlayerRobotPlayer!=null)
                         computerPlayerFound = true;
-                    } catch (Exception ignored) {
-                    }
                 }
             }
 
@@ -595,14 +563,6 @@ public class MainStage extends Application {
         }
 
         return flag;
-    }
-
-    String getFirstPlayerProgramName() {
-        return playerFirstProgramName;
-    }
-
-    String getSecondPlayerProgramName() {
-        return playerSecondProgramName;
     }
 
     Stage mainStage;

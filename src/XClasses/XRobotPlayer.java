@@ -66,7 +66,6 @@ public class XRobotPlayer {
     }
 
     public RobotPlayer getRobotPlayer() {
-      //  if(System.getProperty("os.name").equals("Mac OS X")) {
             if (type.get().equals("Plik class/exe/jar/out")) {
                 if (path.get().substring(path.get().length() - 3).equals("out") || path.get().substring(path.get().length() - 3).equals("exe")) {
                     try {
@@ -97,28 +96,6 @@ public class XRobotPlayer {
                 }
 
             }
-        //}
-        /*else {
-            if (type.get().equals("Plik class/exe/jar/out")) {
-                if (path.get().substring(path.get().length() - 3).equals("out") || path.get().substring(path.get().length() - 3).equals("exe")) {
-                    try {
-                        return new RobotPlayer(path.get(), 5);
-                    } catch (Exception ignored) {
-                    }
-                } else if (path.get().substring(path.get().length() - 3).equals("jar")) {
-                    try {
-                        return new RobotPlayer("java -jar " + path.get(), 5);
-                    } catch (Exception ignored) {
-                    }
-                } else if (path.get().substring(path.get().length() - 5).equals("class")) {
-                    try {
-                        return new RobotPlayer("java -cp " + pathToPlayer + " " + name.get(), 5);
-                    } catch (Exception ignored) {
-                    }
-                }
-
-            }
-        }*/
         if (type.get().equals("Własny")) {
             try {
                 return new RobotPlayer(path.get(), 5);
