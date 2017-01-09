@@ -98,7 +98,7 @@ public class XRobotPlayer {
 
             }
         //}
-        //else {
+        /*else {
             if (type.get().equals("Plik class/exe/jar/out")) {
                 if (path.get().substring(path.get().length() - 3).equals("out") || path.get().substring(path.get().length() - 3).equals("exe")) {
                     try {
@@ -118,7 +118,7 @@ public class XRobotPlayer {
                 }
 
             }
-        //}
+        }*/
         if (type.get().equals("Własny")) {
             try {
                 return new RobotPlayer(path.get(), 5);
