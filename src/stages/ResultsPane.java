@@ -45,20 +45,10 @@ class ResultsPane extends Pane {
         for (int i = 0; i < 7; i++) {
             mainGridPane.getColumnConstraints().add(column);
         }
-       /* boardsSizesListView = new ListView<>();
-        boardsSizesListView.setMaxWidth(Double.MAX_VALUE);
-        boardsSizesListView.setMaxHeight(Double.MAX_VALUE);
-        mainGridPane.add(boardsSizesListView, 1, 1, 1, 5);*/
-
         Label playersListLabel = new Label("Gracze:");
         playersListLabel.setAlignment(Pos.CENTER);
         playersListLabel.setMaxWidth(Double.MAX_VALUE);
         mainGridPane.add(playersListLabel, 0, 0, 7, 1);
-
-        //boardsSizesListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
-
-
-
         HBox clearLogsButtonHBox = new HBox();
         exportLogsButton = new Button("Eksporuj Wyniki");
         clearLogsButton = new Button("Wyczyść Wyniki");
@@ -68,7 +58,7 @@ class ResultsPane extends Pane {
         clearLogsButtonHBox.setPadding(new Insets(0, 20, 0, 0));
         clearLogsButtonHBox.setAlignment(Pos.CENTER_RIGHT);
         clearLogsButtonHBox.setSpacing(10);
-        mainGridPane.add(clearLogsButtonHBox, 2, 9, 5, 2);
+        mainGridPane.add(clearLogsButtonHBox, 1, 9, 6, 2);
         backButton = new Button("Powrót");
         clearLogsButtonHBox.getChildren().add(backButton);
         backButton.setOnAction(event -> {
@@ -132,6 +122,7 @@ class ResultsPane extends Pane {
         });
 
         TableView<XResults> playersTableView = new TableView<>();
+        playersTableView.editableProperty().set(false);
 
         TableColumn nameColumn = new TableColumn("Program");
         //noinspection unchecked
@@ -281,7 +272,6 @@ class ResultsPane extends Pane {
                         }
                     }
                     winToAllMap.remove(maxKey);
-                    //boardsSizesListView.getItems().add(maxKey);
                     resultsObservableList.add(new XResults(maxKey, winsMap.get(maxKey), losesMap.get(maxKey)));
                     double value = (winsMap.get(maxKey).doubleValue() / (winsMap.get(maxKey).doubleValue() + losesMap.get(maxKey).doubleValue()));
                     dataToWinToPlayedSeries.getData().add(new XYChart.Data(maxKey, value));

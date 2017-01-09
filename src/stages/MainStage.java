@@ -461,46 +461,6 @@ public class MainStage extends Application {
         this.secondPlayerRunCommand = secondPlayerRunCommandArgument;
         this.computerPlayerType = computerPlayerType;
         this.theme = theme;
-
-        if (playerFirstFullPath.length() > 7 && firstPlayerProgramType == 0) {
-            int i = playerFirstFullPath.length() - 1;
-            for (; i > 0; i--) {
-                if (playerFirstFullPath.charAt(i) == '/' || playerFirstFullPath.charAt(i) == '\\')
-                    break;
-            }
-            pathToPlayerOne = playerFirstFullPath.substring(0, i);
-            playerFirstProgramName = playerFirstFullPath.substring(i + 1, playerFirstFullPath.length());
-            if (playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("out") || playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("exe") || playerFirstFullPath.substring(playerFirstFullPath.length() - 3).equals("jar")) {
-                playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 4);
-            } else if (playerFirstFullPath.substring(playerFirstFullPath.length() - 5).equals("class")) {
-                playerFirstProgramName = playerFirstProgramName.substring(0, playerFirstProgramName.length() - 6);
-            }
-        } else if (firstPlayerProgramType == 1) {
-            if (firstPlayerRunCommand.length() <= 20) {
-                playerFirstProgramName = firstPlayerRunCommand;
-            } else
-                playerFirstProgramName = firstPlayerRunCommand.substring(firstPlayerRunCommand.length() - 21);
-        }
-        if (playerSecondFullPath.length() > 7 && secondPlayerProgramType == 0) {
-            int i = playerSecondFullPath.length() - 1;
-            for (; i > 0; i--) {
-                if (playerSecondFullPath.charAt(i) == '/' || playerSecondFullPath.charAt(i) == '\\')
-                    break;
-            }
-            pathToPlayerTwo = playerSecondFullPath.substring(0, i);
-            playerSecondProgramName = playerSecondFullPath.substring(i + 1, playerSecondFullPath.length());
-
-            if (playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("out") || playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("exe") || playerSecondFullPath.substring(playerSecondFullPath.length() - 3).equals("jar")) {
-                playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 4);
-            } else if (playerSecondFullPath.substring(playerSecondFullPath.length() - 5).equals("class")) {
-                playerSecondProgramName = playerSecondProgramName.substring(0, playerSecondProgramName.length() - 6);
-            }
-        } else if (secondPlayerProgramType == 1) {
-            if (secondPlayerRunCommand.length() <= 20) {
-                playerSecondProgramName = secondPlayerRunCommand;
-            } else
-                playerSecondProgramName = secondPlayerRunCommand.substring(secondPlayerRunCommand.length() - 21);
-        }
         if (mainScene != null) {
             mainScene.getStylesheets().removeAll(classicTheme, minecraftTheme);
             if (theme == 0) {
@@ -595,17 +555,13 @@ public class MainStage extends Application {
 
     String playerFirstFullPath = "";
     String playerSecondFullPath = "";
-    String pathToPlayerOne = "";
-    String pathToPlayerTwo = "";
-    String playerFirstProgramName = "";
-    String playerSecondProgramName = "";
     String firstPlayerRunCommand;
     String secondPlayerRunCommand;
 
     int theme;
 
-    private String classicTheme = MainStage.class.getResource("resources/style.css").toExternalForm();
-    private String minecraftTheme = MainStage.class.getResource("resources/style2.css").toExternalForm();
+    private String classicTheme = MainStage.class.getResource("styles/normalstyle.css").toExternalForm();
+    private String minecraftTheme = MainStage.class.getResource("styles/minecraftstyle.css").toExternalForm();
     String selectedTheme;
 
     private Button singlePlayerGameButton;
