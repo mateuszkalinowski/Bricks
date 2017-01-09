@@ -237,6 +237,7 @@ class GamePane extends Pane {
                             while (Bricks.autoPlayRunning) {
                                 int computerPlayer1 = Bricks.mainStage.gamePane.computerPlayer;
                                 int move[] = new int[4];
+                                boolean isCanceled = false;
                                 if (computerPlayer1 == 1) {
                                     if (Bricks.mainStage.gamePane.movesStorage.isEmpty()) {
                                         try {
@@ -244,9 +245,11 @@ class GamePane extends Pane {
                                         } catch (InvalidMoveException exception) {
                                             cancelReason = 1;
                                             cancel();
+                                            isCanceled = true;
                                         } catch (TimeoutException exception) {
                                             cancelReason = 2;
                                             cancel();
+                                            isCanceled = true;
                                         }
                                     } else {
                                         try {
@@ -254,9 +257,11 @@ class GamePane extends Pane {
                                         } catch (InvalidMoveException exception) {
                                             cancelReason = 1;
                                             cancel();
+                                            isCanceled = true;
                                         } catch (TimeoutException exception) {
                                             cancelReason = 2;
                                             cancel();
+                                            isCanceled = true;
                                         }
                                     }
                                 }
@@ -267,9 +272,11 @@ class GamePane extends Pane {
                                         } catch (InvalidMoveException exception) {
                                             cancelReason = 1;
                                             cancel();
+                                            isCanceled = true;
                                         } catch (TimeoutException exception) {
                                             cancelReason = 2;
                                             cancel();
+                                            isCanceled = true;
                                         }
                                     } else {
                                         try {
@@ -277,9 +284,11 @@ class GamePane extends Pane {
                                         } catch (InvalidMoveException exception) {
                                             cancelReason = 1;
                                             cancel();
+                                            isCanceled = true;
                                         } catch (TimeoutException exception) {
                                             cancelReason = 2;
                                             cancel();
+                                            isCanceled = true;
                                         }
                                     }
                                 }
@@ -295,7 +304,6 @@ class GamePane extends Pane {
                                     Bricks.mainStage.gamePane.drawFrame();
                                     Bricks.mainStage.gamePane.movesStorage.addMove(x1, y1, x2, y2);
 
-
                                     if (computerPlayer1 == 1) {
                                         computerPlayer1 = 2;
 
@@ -303,7 +311,7 @@ class GamePane extends Pane {
                                         computerPlayer1 = 1;
                                     }
                                     Bricks.mainStage.gamePane.computerPlayer = computerPlayer1;
-                                } else {
+                                } else if(!isCanceled) {
                                     cancelReason = 1;
                                     cancel();
                                 }
@@ -325,6 +333,7 @@ class GamePane extends Pane {
                     Thread autoGameThread = new Thread(autoGame);
                     autoGameThread.start();
                     autoGame.setOnCancelled(event1 -> {
+                        System.out.println(cancelReason);
                         Optional<ButtonType> result;
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
