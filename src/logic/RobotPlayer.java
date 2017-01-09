@@ -59,8 +59,9 @@ public class RobotPlayer {
 
     public void reset(int size) throws IOException, RobotPlayerNotWorkingException {
         robotProc.destroy();
-        if(source.equals(""))
+        if(source.equals("")) {
             robotProc = Runtime.getRuntime().exec(tabSource);
+        }
         else
             robotProc = Runtime.getRuntime().exec(source);
         reader = new BufferedReader(new InputStreamReader(robotProc.getInputStream()));
@@ -196,7 +197,7 @@ public class RobotPlayer {
 
     }
 
-    private String source;
+    private String source = "";
 
     private String tabSource[];
 
