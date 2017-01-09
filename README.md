@@ -6,7 +6,7 @@ Na planszy n x n pól, gdzie n jest naturalną nieparzystą liczbą z zakresu od
 lub 1x2 pól. Wygrywa gracz który jako ostatni będzie miał możliwość wykonania ruchu. Algortymy grająca mają 1 sekundę czasu na
 wykonanie ruchu. Przekroczenie tego czasu, lub wykonanie błędnego ruchu powoduje przegraną danego programu.
 ##Protokół Komunikacji  
-Uwaga: Wszelki wysyłany tekst pisay jest dużymi literami, a numeracja pól planszy mieści się w zakresie od 1 do n, a nie od 0 do n-1.  
+Uwaga: Wszelki wysyłany tekst pisany jest dużymi literami, a numeracja pól planszy mieści się w zakresie od 1 do n, a nie od 0 do n-1.  
 s - sędzia  
 p1 - program pierwszy  
 p2 - program drugi     
