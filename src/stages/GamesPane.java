@@ -1,7 +1,10 @@
 package stages;
 
+import XClasses.XLostReasons;
+import XClasses.XResults;
 import XClasses.XRobotPlayer;
 import core.Bricks;
+import exceptions.InvalidMoveException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -25,6 +28,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Mateusz on 25.12.2016.
@@ -58,6 +62,7 @@ class GamesPane extends Pane {
 
         boardsSizesListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         importPoints();
+
 
         boardsSizesListView.setOnKeyReleased(e -> {
             int selectedIndex = boardsSizesListView.getSelectionModel().getSelectedIndex();
@@ -157,6 +162,7 @@ class GamesPane extends Pane {
         mainGridPane.add(runButtonHBox, 0, 8, 3, 1);
 
         playersObservableList = FXCollections.observableArrayList();
+        reasonsObservableList = FXCollections.observableArrayList();
 
         runButton.setOnAction(event -> {
             if (runButton.getText().equals("Uruchom")) {
@@ -179,11 +185,13 @@ class GamesPane extends Pane {
                         boardsSizesListView.getItems().add("");
                         gamesProgressBar.setProgress(100.0);
                     } else if (boardsSizes.size() > 0) {
+                        reasonsObservableList.clear();
                         running = true;
                         gamesTask = new Task<Void>() {
                             @Override
                             protected Void call() {
                                 int counter = 0;
+                                lostReasons.clear();
                                 int gamesNumber = playersObservableList.size() * (playersObservableList.size() - 1);
 
                                 RobotPlayer firstRobotPlayer;
@@ -214,9 +222,16 @@ class GamesPane extends Pane {
                                                     if (movesStorage.isEmpty()) {
                                                         try {
                                                             move = firstRobotPlayer.makeMove("ZACZYNAJ");
-                                                        } catch (Exception badMove) {
+                                                        } catch (InvalidMoveException badMove) {
                                                             firstRobotPlayer.sendEndingMessages(false);
                                                             secondRobotPlayer.sendEndingMessages(true);
+                                                            reasonsObservableList.add(new XLostReasons(playerFirst.getName(),playerSecond.getName(),boardsSize,2,"Zły Ruch"));
+                                                            secondPlayerWins++;
+                                                            break;
+                                                        } catch (TimeoutException badMove) {
+                                                            firstRobotPlayer.sendEndingMessages(false);
+                                                            secondRobotPlayer.sendEndingMessages(true);
+                                                            reasonsObservableList.add(new XLostReasons(playerFirst.getName(),playerSecond.getName(),boardsSize,2,"Przekroczenie Czasu"));
                                                             secondPlayerWins++;
                                                             break;
                                                         }
@@ -224,9 +239,16 @@ class GamesPane extends Pane {
                                                         if (player == 1) {
                                                             try {
                                                                 move = firstRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
-                                                            } catch (Exception badMove) {
+                                                            } catch (InvalidMoveException badMove) {
                                                                 firstRobotPlayer.sendEndingMessages(true);
                                                                 secondRobotPlayer.sendEndingMessages(false);
+                                                                reasonsObservableList.add(new XLostReasons(playerFirst.getName(),playerSecond.getName(),boardsSize,2,"Zły Ruch"));
+                                                                secondPlayerWins++;
+                                                                break;
+                                                            } catch (TimeoutException timeoutMove) {
+                                                                firstRobotPlayer.sendEndingMessages(true);
+                                                                secondRobotPlayer.sendEndingMessages(false);
+                                                                reasonsObservableList.add(new XLostReasons(playerFirst.getName(),playerSecond.getName(),boardsSize,2,"Przekroczenie Czasu"));
                                                                 secondPlayerWins++;
                                                                 break;
                                                             }
@@ -234,9 +256,16 @@ class GamesPane extends Pane {
                                                         if (player == 2) {
                                                             try {
                                                                 move = secondRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
-                                                            } catch (Exception badMove) {
+                                                            } catch (InvalidMoveException badMove) {
                                                                 firstRobotPlayer.sendEndingMessages(false);
                                                                 secondRobotPlayer.sendEndingMessages(true);
+                                                                firstPlayerWins++;
+                                                                reasonsObservableList.add(new XLostReasons(playerFirst.getName(),playerSecond.getName(),boardsSize,1,"Zły Ruch"));
+                                                                break;
+                                                            } catch (TimeoutException timeoutMove) {
+                                                                firstRobotPlayer.sendEndingMessages(false);
+                                                                secondRobotPlayer.sendEndingMessages(true);
+                                                                reasonsObservableList.add(new XLostReasons(playerFirst.getName(),playerSecond.getName(),boardsSize,1,"Przekroczenie Czasu"));
                                                                 firstPlayerWins++;
                                                                 break;
                                                             }
@@ -247,29 +276,45 @@ class GamesPane extends Pane {
                                                     int y1 = move[1];
                                                     int x2 = move[2];
                                                     int y2 = move[3];
-
                                                     if (Bricks.mainStage.possibleMove(x1, y1, x2, y2, board.board)) {
                                                         board.board[x1][y1] = player;
                                                         board.board[x2][y2] = player;
+                                                        movesStorage.addMove(x1,y1,x2,y2);
+                                                    }
+                                                    else {
+                                                        if(player == 1) {
+                                                            firstRobotPlayer.sendEndingMessages(false);
+                                                            secondRobotPlayer.sendEndingMessages(true);
+                                                            reasonsObservableList.add(new XLostReasons(playerFirst.getName(),playerSecond.getName(),boardsSize,2,"Zły Ruch"));
+                                                            secondPlayerWins++;
+                                                            break;
+                                                        } else {
+                                                            firstRobotPlayer.sendEndingMessages(true);
+                                                            secondRobotPlayer.sendEndingMessages(false);
+                                                            reasonsObservableList.add(new XLostReasons(playerFirst.getName(),playerSecond.getName(),boardsSize,1,"Zły Ruch"));
+                                                            firstPlayerWins++;
+                                                            break;
+                                                        }
                                                     }
                                                     if (!board.anyMoves()) {
                                                         if (player == 1) {
                                                             firstRobotPlayer.sendEndingMessages(true);
                                                             secondRobotPlayer.sendEndingMessages(false);
+                                                            reasonsObservableList.add(new XLostReasons(playerFirst.getName(),playerSecond.getName(),boardsSize,1,"Koniec Ruchów"));
                                                             firstPlayerWins++;
                                                             break;
                                                         } else {
                                                             firstRobotPlayer.sendEndingMessages(false);
                                                             secondRobotPlayer.sendEndingMessages(true);
+                                                            reasonsObservableList.add(new XLostReasons(playerFirst.getName(),playerSecond.getName(),boardsSize,2,"Koniec Ruchów"));
                                                             secondPlayerWins++;
                                                             break;
                                                         }
-                                                    } else {
-                                                        if (player == 1) {
-                                                            player = 2;
-                                                        } else {
-                                                            player = 1;
-                                                        }
+                                                    }
+                                                    if (player == 1) {
+                                                        player = 2;
+                                                    } else  {
+                                                        player = 1;
                                                     }
                                                 }
                                             } else {
@@ -289,6 +334,9 @@ class GamesPane extends Pane {
                         gamesProgressBar.progressProperty().bind(gamesTask.progressProperty());
                         autoGameThread.start();
                         gamesTask.setOnSucceeded(event1 -> {
+                            for(String s : lostReasons) {
+                                System.out.println(s);
+                            }
                             runButton.setText("Uruchom");
                             resultsButton.setDisable(false);
                             gamesProgressBar.progressProperty().unbind();
@@ -611,12 +659,84 @@ class GamesPane extends Pane {
         getChildren().add(mainTabPane);
         setOnKeyReleased(event -> {
             if (event.getCode() == KeyCode.ESCAPE) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                alert.setTitle("Potwierdzenie Wyjścia");
+                alert.setHeaderText("Chcesz wrócić do menu głównego?");
+                alert.setContentText("Jeśli w tle trwa gra, to zostanie ona przerwana.");
+                ButtonType buttonYes = new ButtonType("Tak");
+                ButtonType buttonNo = new ButtonType("Anuluj");
+                alert.getButtonTypes().setAll(buttonNo, buttonYes);
+                Optional<ButtonType> result = alert.showAndWait();
+                if (result.isPresent() && result.get() == buttonYes) {
                     running = false;
                     gamesProgressBar.progressProperty().unbind();
                     exportPoints();
                     Bricks.mainStage.backToMenu();
+                }
             }
         });
+
+        Tab reasonsTab = new Tab("Historia");
+        reasonsTab.setClosable(false);
+
+        GridPane reasonsGridPane = new GridPane();
+        reasonsGridPane.setPrefWidth(w);
+        reasonsGridPane.setPrefHeight(h);
+        row = new RowConstraints();
+        row.setPercentHeight(9.09);
+        for (int i = 0; i < 11; i++) {
+            reasonsGridPane.getRowConstraints().add(row);
+        }
+        column = new ColumnConstraints();
+        column.setPercentWidth(50);
+        for (int i = 0; i < 2; i++) {
+            reasonsGridPane.getColumnConstraints().add(column);
+        }
+        reasonsTab.setContent(reasonsGridPane);
+
+        Label reasonsListLabel = new Label("Historia:");
+        reasonsListLabel.setAlignment(Pos.CENTER);
+        reasonsListLabel.setMaxWidth(Double.MAX_VALUE);
+        reasonsGridPane.add(reasonsListLabel, 0, 0, 3, 1);
+
+        reasonsTableView = new TableView<>();
+        TableColumn firstNameColumn = new TableColumn("Program Pierwszy");
+        //noinspection unchecked
+        firstNameColumn.setCellValueFactory(new PropertyValueFactory<XRobotPlayer, String>("firstProgramName"));
+        firstNameColumn.prefWidthProperty().bind(reasonsTableView.widthProperty().divide(5));
+
+        TableColumn secondNameColumn = new TableColumn("Program Drugi");
+        //noinspection unchecked
+        secondNameColumn.setCellValueFactory(new PropertyValueFactory<XRobotPlayer, String>("secondProgramName"));
+        secondNameColumn.prefWidthProperty().bind(reasonsTableView.widthProperty().divide(5));
+
+        TableColumn boardSizeColumn = new TableColumn("Plansza");
+        //noinspection unchecked
+        boardSizeColumn.setCellValueFactory(new PropertyValueFactory<XRobotPlayer, String>("boardSize"));
+        boardSizeColumn.prefWidthProperty().bind(reasonsTableView.widthProperty().divide(5));
+
+        TableColumn winColumn = new TableColumn("Zwycięzca");
+        //noinspection unchecked
+        winColumn.setCellValueFactory(new PropertyValueFactory<XRobotPlayer, String>("winProgramName"));
+        winColumn.prefWidthProperty().bind(reasonsTableView.widthProperty().divide(5));
+
+        TableColumn reasonsColumn = new TableColumn("Powód");
+        //noinspection unchecked
+        reasonsColumn.setCellValueFactory(new PropertyValueFactory<XRobotPlayer, String>("reason"));
+        reasonsColumn.prefWidthProperty().bind(reasonsTableView.widthProperty().divide(5));
+
+        reasonsTableView.setItems(reasonsObservableList);
+        reasonsTableView.getColumns().addAll(firstNameColumn, secondNameColumn, boardSizeColumn, winColumn, reasonsColumn);
+
+        reasonsTableView.setColumnResizePolicy((param) -> false);
+        reasonsTableView.setSortPolicy((param) -> false);
+
+        reasonsGridPane.add(reasonsTableView,0,1,3,10);
+        mainTabPane.getTabs().add(reasonsTab);
+
         widthProperty().addListener((observable, oldValue, newValue) -> {
             mainGridPane.setPrefWidth(newValue.doubleValue());
             mainTabPane.setPrefWidth(newValue.doubleValue());
@@ -625,6 +745,7 @@ class GamesPane extends Pane {
             mainGridPane.setPrefHeight(newValue.doubleValue());
             boardsListLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 20));
             playersListLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 20));
+            reasonsListLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 20));
             addPlayerLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 25));
             removePlayerButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 42));
             addPlayerButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 42));
@@ -769,4 +890,9 @@ class GamesPane extends Pane {
 
     private TableView<XRobotPlayer> playersTableView;
     private final ObservableList<XRobotPlayer> playersObservableList;
+
+    private TableView<XLostReasons> reasonsTableView;
+    private final ObservableList<XLostReasons> reasonsObservableList;
+
+    private ArrayList<String> lostReasons = new ArrayList<>();
 }

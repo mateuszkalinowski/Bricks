@@ -988,6 +988,7 @@ class GamePane extends Pane {
                 resetBoard();
                 Bricks.mainStage.backToMenu();
             }
+            return;
         } catch (TimeoutException exception) {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -1008,6 +1009,7 @@ class GamePane extends Pane {
                 resetBoard();
                 Bricks.mainStage.backToMenu();
             }
+            return;
         }
 
 
@@ -1020,6 +1022,27 @@ class GamePane extends Pane {
             board.board[x1][y1] = 2;
             board.board[x2][y2] = 2;
             movesStorage.addMove(x1, y1, x2, y2);
+        }
+        else {
+            Optional<ButtonType> result;
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+            alert.setTitle("Koniec Gry");
+            alert.setContentText("Co chcesz zrobić?");
+
+            ButtonType buttonPlayAgain = new ButtonType("Zagraj jeszcze raz");
+            ButtonType buttonExitToMenu = new ButtonType("Wróć do menu");
+            alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
+            alert.setHeaderText("Komputer wykonał niepoprawny ruch, wygrałeś!");
+            result = alert.showAndWait();
+            if (result.isPresent() && result.get() == buttonPlayAgain) {
+                resetBoard();
+            } else {
+                resetBoard();
+                Bricks.mainStage.backToMenu();
+            }
         }
     }
 
@@ -1051,6 +1074,13 @@ class GamePane extends Pane {
     }
 
     private boolean possibleMove(int x1, int y1, int x2, int y2) {
+        if(x1<0 || x1>board.board.length)
+            return false;
+        if(y1<0 || y1>board.board.length)
+            return false;
+        if(x2<0 || x2>board.board.length)
+            return false;
+        if(y2<0 || y2>board.board.length)
         if (board.board[x1][y1] != 0 || board.board[x2][y2] != 0)
             return false;
         boolean flag = false;
