@@ -6,6 +6,7 @@ import com.sun.javafx.tk.Toolkit;
 import core.Bricks;
 import XClasses.XSettings;
 import javafx.application.Application;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -22,6 +23,7 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.Stage;
+import javafx.stage.WindowEvent;
 import logic.BoardLogic;
 
 import java.io.*;
@@ -533,6 +535,7 @@ public class MainStage extends Application {
     }
     public void checkVersion(){
         try {
+            Thread.sleep(5000);
             URL oracle = new URL("http://www.iem.pw.edu.pl/~kalinowm/Bricks/version.html");
             BufferedReader in = new BufferedReader(
                     new InputStreamReader(oracle.openStream()));
