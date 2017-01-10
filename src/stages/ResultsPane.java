@@ -49,7 +49,7 @@ class ResultsPane extends Pane {
         playersListLabel.setMaxWidth(Double.MAX_VALUE);
         mainGridPane.add(playersListLabel, 0, 0, 7, 1);
         HBox clearLogsButtonHBox = new HBox();
-        exportLogsButton = new Button("Eksporuj Wyniki");
+        exportLogsButton = new Button("Eksportuj Wyniki");
         clearLogsButton = new Button("Wyczyść Wyniki");
         clearLogsButtonHBox.getChildren().add(exportLogsButton);
         clearLogsButtonHBox.getChildren().add(clearLogsButton);
