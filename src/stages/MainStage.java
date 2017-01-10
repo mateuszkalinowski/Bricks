@@ -6,6 +6,10 @@ import com.sun.javafx.tk.Toolkit;
 import core.Bricks;
 import XClasses.XSettings;
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
@@ -16,6 +20,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -392,6 +397,47 @@ public class MainStage extends Application {
             mainStage.setMinWidth(newValue.doubleValue() * 0.7);
         });
 
+        mainStage.getScene().setOnMouseEntered(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent event) {
+                if(firstTime){
+                    firstTime=false;
+                    Task<Void> updateTask = new Task<Void>() {
+                        @Override
+                        protected Void call() {
+                            try {
+                                URL updateServer = new URL("http","193.192.62.245",80,"/Bricks/version.html");
+                                BufferedReader in = new BufferedReader(
+                                        new InputStreamReader(updateServer.openStream()));
+
+                                newestVersion = in.readLine();
+                            }
+                            catch (Exception ignored) {}
+                            return null;
+                        }
+
+                    };
+
+                    updateTask.setOnSucceeded(event14 -> {
+                        if(!newestVersion.equals(version) && !newestVersion.equals("")) {
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.getDialogPane().getStylesheets().add(selectedTheme);
+                            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                            alert.setTitle("Kontrola wersji programu");
+                            alert.setHeaderText("Dostępna jest nowsza wersja: " + newestVersion);
+                            alert.setContentText("Możesz ją pobrać z zakładki \"Releases\" na stronie github.com/mateuszkalinowski/Bricks");
+                            ButtonType buttonYes = new ButtonType("Przejdź do gry");
+                            alert.getButtonTypes().setAll(buttonYes);
+                            alert.showAndWait();
+                        }
+                    });
+
+                    Thread updateThread = new Thread(updateTask);
+                    updateThread.start();
+                }
+            }
+        });
     }
 
     int[] getSizeAsArray() throws NullPointerException {
@@ -533,32 +579,7 @@ public class MainStage extends Application {
 
         return flag;
     }
-    public void checkVersion(){
-        try {
-            Thread.sleep(5000);
-            URL oracle = new URL("http://www.iem.pw.edu.pl/~kalinowm/Bricks/version.html");
-            BufferedReader in = new BufferedReader(
-                    new InputStreamReader(oracle.openStream()));
-
-            String inputLine;
-            inputLine = in.readLine();
-            if(!inputLine.equals(version)) {
-                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                alert.getDialogPane().getStylesheets().add(selectedTheme);
-                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                alert.setTitle("Kontrola wersji programu");
-                alert.setHeaderText("Dostępna jest nowsza wersja: " + inputLine);
-                alert.setContentText("Możesz ją pobrać z zakładki \"Releases\" na stronie github.com/mateuszkalinowski/Bricks");
-                ButtonType buttonYes = new ButtonType("Przejdź do gry");
-                alert.getButtonTypes().setAll(buttonYes);
-                alert.showAndWait();
-            }
-
-        } catch (Exception ignored) {}
-    }
-
-    String version = "1.6.5";
+    private String version = "1.6.6";
 
     Stage mainStage;
     private Scene mainScene;
@@ -606,4 +627,7 @@ public class MainStage extends Application {
 
     private Text bricksTitleLabel;
 
+    private String newestVersion = "";
+
+    private boolean firstTime = true;
 }
