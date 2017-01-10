@@ -268,7 +268,7 @@ public class MainStage extends Application {
         Label programInfoLabel = new Label();
         programInfoLabel.setMaxWidth(Double.MAX_VALUE);
         programInfoLabel.setAlignment(Pos.CENTER);
-        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.6.4");
+        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.6.5");
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
@@ -503,6 +503,14 @@ public class MainStage extends Application {
     }
 
     boolean possibleMove(int x1, int y1, int x2, int y2, int[][] board) {
+        if(x1<0 || x1>board.length)
+            return false;
+        if(y1<0 || y1>board.length)
+            return false;
+        if(x2<0 || x2>board.length)
+            return false;
+        if(y2<0 || y2>board.length)
+            return false;
         if (board[x1][y1] != 0 || board[x2][y2] != 0)
             return false;
         boolean flag = false;

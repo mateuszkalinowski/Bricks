@@ -2,6 +2,7 @@ package stages;
 
 import XClasses.XRobotPlayer;
 import core.Bricks;
+import exceptions.InvalidMoveException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
@@ -25,6 +26,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.*;
+import java.util.concurrent.TimeoutException;
 
 /**
  * Created by Mateusz on 25.12.2016.
@@ -215,10 +217,16 @@ class GamesPane extends Pane {
                                                     if (movesStorage.isEmpty()) {
                                                         try {
                                                             move = firstRobotPlayer.makeMove("ZACZYNAJ");
-                                                        } catch (Exception badMove) {
+                                                        } catch (InvalidMoveException badMove) {
                                                             firstRobotPlayer.sendEndingMessages(false);
                                                             secondRobotPlayer.sendEndingMessages(true);
-                                                            lostReasons.add(playerFirst.getName() + " vs. "+playerSecond.getName() + ", Win: " + playerSecond.getName() + " reason: " + "BadMove");
+                                                            lostReasons.add(playerFirst.getName() + " vs. " + playerSecond.getName() + ", Win: " + playerSecond.getName() + " reason: " + "BadMove");
+                                                            secondPlayerWins++;
+                                                            break;
+                                                        } catch (TimeoutException badMove) {
+                                                            firstRobotPlayer.sendEndingMessages(false);
+                                                            secondRobotPlayer.sendEndingMessages(true);
+                                                            lostReasons.add(playerFirst.getName() + " vs. " + playerSecond.getName() + ", Win: " + playerSecond.getName() + " reason: " + "Timeout");
                                                             secondPlayerWins++;
                                                             break;
                                                         }
@@ -226,9 +234,16 @@ class GamesPane extends Pane {
                                                         if (player == 1) {
                                                             try {
                                                                 move = firstRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
-                                                            } catch (Exception badMove) {
+                                                            } catch (InvalidMoveException badMove) {
                                                                 firstRobotPlayer.sendEndingMessages(true);
                                                                 secondRobotPlayer.sendEndingMessages(false);
+                                                                lostReasons.add(playerFirst.getName() + " vs. " + playerSecond.getName() + ", Win: " + playerSecond.getName() + " reason: " + "BadMove");
+                                                                secondPlayerWins++;
+                                                                break;
+                                                            } catch (TimeoutException timeoutMove) {
+                                                                firstRobotPlayer.sendEndingMessages(true);
+                                                                secondRobotPlayer.sendEndingMessages(false);
+                                                                lostReasons.add(playerFirst.getName() + " vs. " + playerSecond.getName() + ", Win: " + playerSecond.getName() + " reason: " + "Timeout");
                                                                 secondPlayerWins++;
                                                                 break;
                                                             }
@@ -236,9 +251,16 @@ class GamesPane extends Pane {
                                                         if (player == 2) {
                                                             try {
                                                                 move = secondRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
-                                                            } catch (Exception badMove) {
+                                                            } catch (InvalidMoveException badMove) {
                                                                 firstRobotPlayer.sendEndingMessages(false);
                                                                 secondRobotPlayer.sendEndingMessages(true);
+                                                                firstPlayerWins++;
+                                                                lostReasons.add(playerFirst.getName() + " vs. " + playerSecond.getName() + ", Win: " + playerFirst.getName() + " reason: " + "BadMove");
+                                                                break;
+                                                            } catch (TimeoutException timeoutMove) {
+                                                                firstRobotPlayer.sendEndingMessages(false);
+                                                                secondRobotPlayer.sendEndingMessages(true);
+                                                                lostReasons.add(playerFirst.getName() + " vs. " + playerSecond.getName() + ", Win: " + playerFirst.getName() + " reason: " + "Timeout");
                                                                 firstPlayerWins++;
                                                                 break;
                                                             }
@@ -249,31 +271,46 @@ class GamesPane extends Pane {
                                                     int y1 = move[1];
                                                     int x2 = move[2];
                                                     int y2 = move[3];
-
+                                                    System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
                                                     if (Bricks.mainStage.possibleMove(x1, y1, x2, y2, board.board)) {
                                                         board.board[x1][y1] = player;
                                                         board.board[x2][y2] = player;
+                                                        movesStorage.addMove(x1,y1,x2,y2);
+                                                    }
+                                                    else {
+                                                        if(player == 1) {
+                                                            firstRobotPlayer.sendEndingMessages(false);
+                                                            secondRobotPlayer.sendEndingMessages(true);
+                                                            lostReasons.add(playerFirst.getName() + " vs. " + playerSecond.getName() + ", Win: " + playerSecond.getName() + " reason: " + "Niepoprawny ruch");
+                                                            secondPlayerWins++;
+                                                            break;
+                                                        } else {
+                                                            firstRobotPlayer.sendEndingMessages(true);
+                                                            secondRobotPlayer.sendEndingMessages(false);
+                                                            lostReasons.add(playerFirst.getName() + " vs. " + playerSecond.getName() + ", Win: " + playerFirst.getName() + " reason: " + "Niepoprawny ruch");
+                                                            firstPlayerWins++;
+                                                            break;
+                                                        }
                                                     }
                                                     if (!board.anyMoves()) {
                                                         if (player == 1) {
                                                             firstRobotPlayer.sendEndingMessages(true);
                                                             secondRobotPlayer.sendEndingMessages(false);
-                                                            lostReasons.add(playerFirst.getName() + " vs. "+playerSecond.getName() + ", Win: " + playerFirst.getName() + " reason: " + "OutOfMoves");
+                                                            lostReasons.add(playerFirst.getName() + " vs. " + playerSecond.getName() + ", Win: " + playerFirst.getName() + " reason: " + "OutOfMoves");
                                                             firstPlayerWins++;
                                                             break;
                                                         } else {
                                                             firstRobotPlayer.sendEndingMessages(false);
                                                             secondRobotPlayer.sendEndingMessages(true);
-                                                            lostReasons.add(playerFirst.getName() + " vs. "+playerSecond.getName() + ", Win: " + playerSecond.getName() + " reason: " + "OutOfMoves");
+                                                            lostReasons.add(playerFirst.getName() + " vs. " + playerSecond.getName() + ", Win: " + playerSecond.getName() + " reason: " + "OutOfMoves");
                                                             secondPlayerWins++;
                                                             break;
                                                         }
-                                                    } else {
-                                                        if (player == 1) {
-                                                            player = 2;
-                                                        } else {
-                                                            player = 1;
-                                                        }
+                                                    }
+                                                    if (player == 1) {
+                                                        player = 2;
+                                                    } else  {
+                                                        player = 1;
                                                     }
                                                 }
                                             } else {
@@ -293,6 +330,9 @@ class GamesPane extends Pane {
                         gamesProgressBar.progressProperty().bind(gamesTask.progressProperty());
                         autoGameThread.start();
                         gamesTask.setOnSucceeded(event1 -> {
+                            for(String s : lostReasons) {
+                                System.out.println(s);
+                            }
                             runButton.setText("Uruchom");
                             resultsButton.setDisable(false);
                             gamesProgressBar.progressProperty().unbind();
