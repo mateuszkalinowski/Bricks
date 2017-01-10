@@ -263,7 +263,7 @@ class OptionsPane extends Pane {
         singPlayerComputerPlayerLabel.setAlignment(Pos.BASELINE_RIGHT);
 
         firstProgramTypeComboBox = new ComboBox<>();
-        firstProgramTypeComboBox.getItems().add("Plik exe/out/jar/class");
+        firstProgramTypeComboBox.getItems().add("Plik class/exe/jar/out/py");
         firstProgramTypeComboBox.getItems().add("Własne");
 
         firstProgramTypeComboBox.getSelectionModel().select(firstPlayerProgramType);
@@ -287,7 +287,7 @@ class OptionsPane extends Pane {
 
 
         secondProgramTypeComboBox = new ComboBox<>();
-        secondProgramTypeComboBox.getItems().add("Plik exe/out/jar/class");
+        secondProgramTypeComboBox.getItems().add("Plik class/exe/jar/out/py");
         secondProgramTypeComboBox.getItems().add("Własne");
 
         secondProgramTypeComboBox.getSelectionModel().select(secondPlayerProgramType);

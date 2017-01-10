@@ -69,7 +69,7 @@ public class MainStage extends Application {
             boolean computerPlayerFound = false;
             if (computerPlayerType == 1) {
                 if (firstPlayerProgramType == 0) {
-                    XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out",playerFirstFullPath);
+                    XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out/py",playerFirstFullPath);
                     Bricks.singlePlayerRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
                     if(Bricks.singlePlayerRobotPlayer!=null) {
                         computerPlayerFound = true;
@@ -85,7 +85,7 @@ public class MainStage extends Application {
             }
             if (computerPlayerType == 2) {
                 if (secondPlayerProgramType == 0) {
-                    XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out",playerSecondFullPath);
+                    XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out/py",playerSecondFullPath);
                     Bricks.singlePlayerRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
                     if(Bricks.singlePlayerRobotPlayer!=null) {
                         computerPlayerFound = true;

@@ -502,7 +502,7 @@ class GamesPane extends Pane {
                                     return;
                                 }
 
-                                XRobotPlayer toAdd = new XRobotPlayer("Plik class/exe/jar/out", playerPath);
+                                XRobotPlayer toAdd = new XRobotPlayer("Plik class/exe/jar/out/py", playerPath);
                                 found = false;
                                 for (XRobotPlayer aPlayersObservableList : playersObservableList) {
                                     if (toAdd.getName().equals(aPlayersObservableList.getName())) {

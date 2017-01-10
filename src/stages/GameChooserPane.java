@@ -69,7 +69,7 @@ class GameChooserPane extends Pane {
             boolean checkFirstComputerPlayer = false;
             boolean checkSecondComputerPlayer = false;
             if (Bricks.mainStage.firstPlayerProgramType == 0) {
-                XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out", Bricks.mainStage.playerFirstFullPath);
+                XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out/py", Bricks.mainStage.playerFirstFullPath);
                 Bricks.firstRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
                 if (Bricks.firstRobotPlayer != null) {
                     checkFirstComputerPlayer = true;
@@ -83,7 +83,7 @@ class GameChooserPane extends Pane {
                 }
             }
             if (Bricks.mainStage.secondPlayerProgramType == 0) {
-                XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out", Bricks.mainStage.playerSecondFullPath);
+                XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out/py", Bricks.mainStage.playerSecondFullPath);
                 Bricks.secondRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
                 if (Bricks.secondRobotPlayer != null) {
                     checkSecondComputerPlayer = true;
