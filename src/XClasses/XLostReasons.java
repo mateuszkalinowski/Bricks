@@ -9,12 +9,14 @@ import javafx.beans.property.SimpleStringProperty;
 public class XLostReasons {
     private final SimpleStringProperty firstProgramName;
     private final SimpleStringProperty secondProgramName;
+    private final SimpleStringProperty boardSize;
     private final SimpleStringProperty winProgramName;
     private final SimpleStringProperty reason;
 
-    public XLostReasons(String firstProgramName,String secondProgramName,int win,String reason) {
+    public XLostReasons(String firstProgramName,String secondProgramName,int boardSize, int win,String reason) {
         this.firstProgramName = new SimpleStringProperty(firstProgramName);
         this.secondProgramName = new SimpleStringProperty(secondProgramName);
+        this.boardSize = new SimpleStringProperty(boardSize + "x"+boardSize);
         if(win==1) {
             winProgramName = new SimpleStringProperty(firstProgramName);
         }
@@ -29,6 +31,7 @@ public class XLostReasons {
     public String getSecondProgramName(){
         return secondProgramName.get();
     }
+    public String getBoardSize() { return boardSize.get();}
     public String getWinProgramName(){
         return winProgramName.get();
     }
