@@ -113,7 +113,7 @@ public class RobotPlayer {
                 System.out.println("Wyjątek 1");
                 throw new InvalidMoveException("Linia nie kończy się znakiem nowej linii");
             }
-        } catch (IOException | ArrayIndexOutOfBoundsException e) {
+        } catch (IOException | ArrayIndexOutOfBoundsException | NumberFormatException e) {
             throw new InvalidMoveException("Ruch wykonany przez komputer nie jest poprawny");
         } catch (InterruptedException e) {
             e.printStackTrace();

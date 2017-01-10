@@ -271,7 +271,6 @@ class GamesPane extends Pane {
                                                     int y1 = move[1];
                                                     int x2 = move[2];
                                                     int y2 = move[3];
-                                                    System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
                                                     if (Bricks.mainStage.possibleMove(x1, y1, x2, y2, board.board)) {
                                                         board.board[x1][y1] = player;
                                                         board.board[x2][y2] = player;

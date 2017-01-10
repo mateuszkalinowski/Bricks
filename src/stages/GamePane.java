@@ -988,6 +988,7 @@ class GamePane extends Pane {
                 resetBoard();
                 Bricks.mainStage.backToMenu();
             }
+            return;
         } catch (TimeoutException exception) {
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -1008,6 +1009,7 @@ class GamePane extends Pane {
                 resetBoard();
                 Bricks.mainStage.backToMenu();
             }
+            return;
         }
 
 
