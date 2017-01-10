@@ -1,5 +1,7 @@
 package stages;
 
+import XClasses.XLostReasons;
+import XClasses.XResults;
 import XClasses.XRobotPlayer;
 import core.Bricks;
 import exceptions.InvalidMoveException;
@@ -812,6 +814,9 @@ class GamesPane extends Pane {
 
     private TableView<XRobotPlayer> playersTableView;
     private final ObservableList<XRobotPlayer> playersObservableList;
+
+    private TableView<XResults> resultsTableView;
+    private final ObservableList<XLostReasons> reasonsObservableList;
 
     private ArrayList<String> lostReasons = new ArrayList<>();
 }
