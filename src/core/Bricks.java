@@ -21,6 +21,7 @@ public class Bricks extends Application {
                 firstPlayerPath, secondPlayerPath, firstPlayerProgramType, secondPlayerProgramType,
                 firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType, theme);
         mainStage.start(primaryStage);
+        mainStage.checkVersion();
     }
 
     @SuppressWarnings ("ResultOfMethodCallIgnored")
