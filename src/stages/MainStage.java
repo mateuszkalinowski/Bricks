@@ -25,6 +25,7 @@ import javafx.stage.Stage;
 import logic.BoardLogic;
 
 import java.io.*;
+import java.net.URL;
 import java.util.Optional;
 import java.util.Scanner;
 
@@ -268,7 +269,7 @@ public class MainStage extends Application {
         Label programInfoLabel = new Label();
         programInfoLabel.setMaxWidth(Double.MAX_VALUE);
         programInfoLabel.setAlignment(Pos.CENTER);
-        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja 1.6.5");
+        programInfoLabel.setText("Autorzy: Mateusz Kalinowski, Michał Romaszko \nWersja " + version);
         programInfoLabel.setTextAlignment(TextAlignment.CENTER);
 
         mainBorderPane.setBottom(programInfoLabel);
@@ -530,6 +531,31 @@ public class MainStage extends Application {
 
         return flag;
     }
+    public void checkVersion(){
+        try {
+            URL oracle = new URL("http://www.iem.pw.edu.pl/~kalinowm/Bricks/version.html");
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(oracle.openStream()));
+
+            String inputLine;
+            inputLine = in.readLine();
+            if(!inputLine.equals(version)) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.getDialogPane().getStylesheets().add(selectedTheme);
+                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                alert.setTitle("Kontrola wersji programu");
+                alert.setHeaderText("Dostępna jest nowsza wersja: " + inputLine);
+                alert.setContentText("Możesz ją pobrać z zakładki \"Releases\" na stronie github.com/mateuszkalinowski/Bricks");
+                ButtonType buttonYes = new ButtonType("Przejdź do gry");
+                alert.getButtonTypes().setAll(buttonYes);
+                alert.showAndWait();
+            }
+
+        } catch (Exception ignored) {}
+    }
+
+    String version = "1.6.5";
 
     Stage mainStage;
     private Scene mainScene;
