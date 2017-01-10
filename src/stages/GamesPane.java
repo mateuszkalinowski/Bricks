@@ -184,6 +184,7 @@ class GamesPane extends Pane {
                             @Override
                             protected Void call() {
                                 int counter = 0;
+                                lostReasons.clear();
                                 int gamesNumber = playersObservableList.size() * (playersObservableList.size() - 1);
 
                                 RobotPlayer firstRobotPlayer;
@@ -217,6 +218,7 @@ class GamesPane extends Pane {
                                                         } catch (Exception badMove) {
                                                             firstRobotPlayer.sendEndingMessages(false);
                                                             secondRobotPlayer.sendEndingMessages(true);
+                                                            lostReasons.add(playerFirst.getName() + " vs. "+playerSecond.getName() + ", Win: " + playerSecond.getName() + " reason: " + "BadMove");
                                                             secondPlayerWins++;
                                                             break;
                                                         }
@@ -256,11 +258,13 @@ class GamesPane extends Pane {
                                                         if (player == 1) {
                                                             firstRobotPlayer.sendEndingMessages(true);
                                                             secondRobotPlayer.sendEndingMessages(false);
+                                                            lostReasons.add(playerFirst.getName() + " vs. "+playerSecond.getName() + ", Win: " + playerFirst.getName() + " reason: " + "OutOfMoves");
                                                             firstPlayerWins++;
                                                             break;
                                                         } else {
                                                             firstRobotPlayer.sendEndingMessages(false);
                                                             secondRobotPlayer.sendEndingMessages(true);
+                                                            lostReasons.add(playerFirst.getName() + " vs. "+playerSecond.getName() + ", Win: " + playerSecond.getName() + " reason: " + "OutOfMoves");
                                                             secondPlayerWins++;
                                                             break;
                                                         }
@@ -769,4 +773,6 @@ class GamesPane extends Pane {
 
     private TableView<XRobotPlayer> playersTableView;
     private final ObservableList<XRobotPlayer> playersObservableList;
+
+    private ArrayList<String> lostReasons = new ArrayList<>();
 }
