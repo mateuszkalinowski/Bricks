@@ -39,6 +39,10 @@ public class XLostReasons {
         return reason.get();
     }
 
+    public void setFirstProgramName(String newName){ firstProgramName.set(newName);}
+    public void setSecondProgramName(String newName){secondProgramName.set(newName);}
+    public void setWinProgramName(String newName) {winProgramName.set(newName);}
+
 
 }
 

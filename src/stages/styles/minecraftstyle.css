@@ -25,3 +25,6 @@
     -fx-border-width: 4;
     -fx-border-radius: 30;
 }
+.table-cell {
+    -fx-alignment: CENTER;
+}

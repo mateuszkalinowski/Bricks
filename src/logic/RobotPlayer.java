@@ -139,9 +139,6 @@ public class RobotPlayer {
                 String filename = path + "/logs.txt";
                 PrintWriter writer = new PrintWriter(filename);
                 writer.println(nameFirst + "," + nameSecond + "=" + win1 + "," + win2);
-                writer.println("###Sumarycznie###");
-                writer.println(nameFirst + "=" + win1 + "," + win2);
-                writer.println(nameSecond + "=" + win2 + "," + win1);
                 writer.close();
             } else {
                 String pathToFile = System.getProperty("user.home") + "/Documents/Bricks/logs.txt";
@@ -185,10 +182,6 @@ public class RobotPlayer {
                 }
                 PrintWriter writer = new PrintWriter(pathToFile);
                 wyniki.forEach(writer::println);
-                writer.println("###Sumarycznie###");
-                for (String key : winsMap.keySet()) {
-                    writer.println("Komputer: " + key + " Wygranych: " + winsMap.get(key) + " Przegranych: " + losesMap.get(key));
-                }
                 writer.close();
 
             }
