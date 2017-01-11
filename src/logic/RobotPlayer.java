@@ -22,11 +22,36 @@ public class RobotPlayer {
         robotProc = Runtime.getRuntime().exec(this.tabSource);
         reader = new BufferedReader(new InputStreamReader(robotProc.getInputStream()));
         writer = new PrintWriter(robotProc.getOutputStream(), true);
-        writer.println("PONG");
-        if (!reader.readLine().equals("PONG")) {
+        writer.println("PING");
+        for (int i = 0; i <= 100; i++) {//pętla sprawdza co 10ms czy nie przyszła odpowiedź
+            if (i == 100) {                   //przekroczony czas na odpowiedź, wyrzuca błąd
+                throw new RobotPlayerNotWorkingException("Answer to Ping wasn't Pong");
+            }
+            try {
+                Thread.sleep(10);
+            } catch (Exception ignored){}
+            if (reader.ready()) {//jak linia gotowa do odczytu - przerywa pętlę
+                break;
+            }
+        }
+
+        char[] buffor = new char[256];
+        //noinspection ResultOfMethodCallIgnored
+        reader.read(buffor);
+        String nextMove = "";
+        for (int i = 0; i < 255; i++) {
+            nextMove += buffor[i];
+        }
+        if (nextMove.contains(System.lineSeparator())) {
+            String splittedValues[] = nextMove.split("\\s+");
+            if (!splittedValues[0].equals("PONG")) {
+                throw new RobotPlayerNotWorkingException("Answer to Ping wasn't Pong");
+            }
+            writer.println(size);
+        }
+        else {
             throw new RobotPlayerNotWorkingException("Answer to Ping wasn't Pong");
         }
-        writer.println(size);
     }
 
     public RobotPlayer(String source, int size) throws IOException, RobotPlayerNotWorkingException {
@@ -35,11 +60,36 @@ public class RobotPlayer {
         robotProc = Runtime.getRuntime().exec(source);
         reader = new BufferedReader(new InputStreamReader(robotProc.getInputStream()));
         writer = new PrintWriter(robotProc.getOutputStream(), true);
-        writer.println("PONG");
-        if (!reader.readLine().equals("PONG")) {
+        writer.println("PING");
+        for (int i = 0; i <= 100; i++) {//pętla sprawdza co 10ms czy nie przyszła odpowiedź
+            if (i == 100) {                   //przekroczony czas na odpowiedź, wyrzuca błąd
+                throw new RobotPlayerNotWorkingException("Answer to Ping wasn't Pong");
+            }
+            try {
+                Thread.sleep(10);
+            } catch (Exception ignored){}
+            if (reader.ready()) {//jak linia gotowa do odczytu - przerywa pętlę
+                break;
+            }
+        }
+
+        char[] buffor = new char[256];
+        //noinspection ResultOfMethodCallIgnored
+        reader.read(buffor);
+        String nextMove = "";
+        for (int i = 0; i < 255; i++) {
+            nextMove += buffor[i];
+        }
+        if (nextMove.contains(System.lineSeparator())) {
+            String splittedValues[] = nextMove.split("\\s+");
+            if (!splittedValues[0].equals("PONG")) {
+                throw new RobotPlayerNotWorkingException("Answer to Ping wasn't Pong");
+            }
+            writer.println(size);
+        }
+        else {
             throw new RobotPlayerNotWorkingException("Answer to Ping wasn't Pong");
         }
-        writer.println(size);
     }
 
     public void reset() throws IOException, RobotPlayerNotWorkingException {

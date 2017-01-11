@@ -3,15 +3,11 @@ package stages;
 import XClasses.XRobotPlayer;
 import core.Bricks;
 import javafx.application.Application;
-import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.ColumnConstraints;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -49,11 +45,60 @@ public class NewProgramNameStage extends Application {
         Button saveButton = new Button("Ok");
         saveButton.setFont(Font.font("Comic Sans MS", 14));
         saveButtonHBox.getChildren().add(saveButton);
-        saveButton.setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
+        saveButton.setOnAction(event -> {
+            if(newNameTextField.getText().equals(toEdit.getName())) {
+               mainStage.close();
+            }
+            else if (newNameTextField.getText().equals("")) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                alert.setTitle("Błąd zmiany nazwy");
+                alert.setHeaderText("Nazwa programu nie może być pusta.");
+                alert.setContentText("Wpisz poprawną nazwę, lub zamknij okno edycji aby anulować.");
+                ButtonType buttonYes = new ButtonType("Ok");
+                alert.getButtonTypes().setAll(buttonYes);
+                alert.showAndWait();
+            }
+            else if (Bricks.mainStage.gameChooserPane.gamesPane.getProgramsNames().contains(newNameTextField.getText())) {
+                Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                alert.setTitle("Błąd zmiany nazwy");
+                alert.setHeaderText("Program o takiej nazwie już instnieje.");
+                alert.setContentText("Wpisz inną nazwę, lub zamknij okno edycji aby anulować.");
+                ButtonType buttonYes = new ButtonType("Ok");
+                alert.getButtonTypes().setAll(buttonYes);
+                alert.showAndWait();
+            } else {
+                boolean found = false;
+                if(newNameTextField.getText().contains("\\") || newNameTextField.getText().contains("/"))
+                    found=true;
+                if(!found) {
+                    Bricks.mainStage.gameChooserPane.gamesPane.changeIndexName(newNameTextField.getText(), indexToEdit);
+                    mainStage.close();
+                }
+                else {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                    alert.setTitle("Błąd zmiany nazwy");
+                    alert.setHeaderText("Nazwa zamiera niedozwolone znaki.");
+                    alert.setContentText("Niedozwolone znaki to: '\\' i '/'");
+                    ButtonType buttonYes = new ButtonType("Ok");
+                    alert.getButtonTypes().setAll(buttonYes);
+                    alert.showAndWait();
+                }
+            }
+        });
+
+        newNameTextField.setOnKeyReleased(event -> {
+            if(event.getCode() == KeyCode.ENTER) {
                 if(newNameTextField.getText().equals(toEdit.getName())) {
-                   mainStage.close();
+                    mainStage.close();
                 }
                 else if (newNameTextField.getText().equals("")) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
@@ -79,45 +124,24 @@ public class NewProgramNameStage extends Application {
                     alert.getButtonTypes().setAll(buttonYes);
                     alert.showAndWait();
                 } else {
-                    Bricks.mainStage.gameChooserPane.gamesPane.changeIndexName(newNameTextField.getText(),indexToEdit);
-                    mainStage.close();
-                }
-            }
-        });
-
-        newNameTextField.setOnKeyReleased(new EventHandler<KeyEvent>() {
-            @Override
-            public void handle(KeyEvent event) {
-                if(event.getCode() == KeyCode.ENTER) {
-                    if(newNameTextField.getText().equals(toEdit.getName())) {
+                    boolean found = false;
+                    if(newNameTextField.getText().contains("\\"))
+                        found=true;
+                    if(!found) {
+                        Bricks.mainStage.gameChooserPane.gamesPane.changeIndexName(newNameTextField.getText(), indexToEdit);
                         mainStage.close();
                     }
-                    else if (newNameTextField.getText().equals("")) {
+                    else {
                         Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                         alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
                         Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
                         alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                         alert.setTitle("Błąd zmiany nazwy");
-                        alert.setHeaderText("Nazwa programu nie może być pusta.");
-                        alert.setContentText("Wpisz poprawną nazwę, lub zamknij okno edycji aby anulować.");
+                        alert.setHeaderText("Nazwa zamiera niedozwolone znaki.");
+                        alert.setContentText("Niedozwolone znaki to: '\\'");
                         ButtonType buttonYes = new ButtonType("Ok");
                         alert.getButtonTypes().setAll(buttonYes);
                         alert.showAndWait();
-                    }
-                    else if (Bricks.mainStage.gameChooserPane.gamesPane.getProgramsNames().contains(newNameTextField.getText())) {
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                        alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                        alert.setTitle("Błąd zmiany nazwy");
-                        alert.setHeaderText("Program o takiej nazwie już instnieje.");
-                        alert.setContentText("Wpisz inną nazwę, lub zamknij okno edycji aby anulować.");
-                        ButtonType buttonYes = new ButtonType("Ok");
-                        alert.getButtonTypes().setAll(buttonYes);
-                        alert.showAndWait();
-                    } else {
-                        Bricks.mainStage.gameChooserPane.gamesPane.changeIndexName(newNameTextField.getText(),indexToEdit);
-                        mainStage.close();
                     }
                 }
             }
@@ -132,7 +156,7 @@ public class NewProgramNameStage extends Application {
 
         mainGridPane.add(saveButtonHBox, 0, 1);
         mainGridPane.add(cancelButtonHBox, 1, 1);
-        mainScene = new Scene(mainGridPane, 300, 100);
+        Scene mainScene = new Scene(mainGridPane, 300, 100);
         mainStage = new Stage();
         mainStage.setScene(mainScene);
         mainStage.initModality(Modality.APPLICATION_MODAL);
@@ -143,12 +167,11 @@ public class NewProgramNameStage extends Application {
         mainStage.show();
     }
 
-    public NewProgramNameStage(XRobotPlayer toEdit, int indexToEdit) {
+    NewProgramNameStage(XRobotPlayer toEdit, int indexToEdit) {
         this.toEdit = toEdit;
         this.indexToEdit = indexToEdit;
     }
 
-    private Scene mainScene;
     private Stage mainStage;
 
     private XRobotPlayer toEdit;

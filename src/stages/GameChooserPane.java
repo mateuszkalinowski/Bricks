@@ -134,7 +134,7 @@ class GameChooserPane extends Pane {
                 alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                 alert.setTitle("Błąd uruchamiania gry");
                 alert.setHeaderText("Pierwszy program grający nie działa.");
-                alert.setContentText("Sprawdź podaną w ustawienaich ścieżkę.");
+                alert.setContentText("Sprawdź podaną w ustawieniach ścieżkę.");
                 alert.showAndWait();
             } else if (checkFirstComputerPlayer) {
                 Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -143,7 +143,7 @@ class GameChooserPane extends Pane {
                 alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                 alert.setTitle("Błąd uruchamiania gry");
                 alert.setHeaderText("Drugi program grający nie działa.");
-                alert.setContentText("Sprawdź podaną w ustawienaich ścieżkę.");
+                alert.setContentText("Sprawdź podaną w ustawieniach ścieżkę.");
                 alert.showAndWait();
             } else {
                 Alert alert = new Alert(Alert.AlertType.ERROR);

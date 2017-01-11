@@ -468,16 +468,40 @@ class GamesPane extends Pane {
             }
         });
 
-        playersTableView.setOnMouseClicked(new EventHandler<MouseEvent>() {
-            @Override
-            public void handle(MouseEvent event) {
-                if(event.getClickCount()==2 && playersTableView.getSelectionModel().getSelectedItem()!=null) {
-                    NewProgramNameStage programNameStage = new NewProgramNameStage(playersTableView.getSelectionModel().getSelectedItem(),playersTableView.getSelectionModel().getSelectedIndex());
-                    try {
-                        programNameStage.start(Bricks.mainStage.mainStage);
+        playersTableView.setOnMouseClicked(event -> {
+            if(event.getClickCount()==2 && playersTableView.getSelectionModel().getSelectedItem()!=null) {
+                if(!running) {
+                    if (!playersTableView.getSelectionModel().getSelectedItem().getType().equals("Własny")) {
+                        NewProgramNameStage programNameStage = new NewProgramNameStage(playersTableView.getSelectionModel().getSelectedItem(), playersTableView.getSelectionModel().getSelectedIndex());
+                        try {
+                            programNameStage.start(Bricks.mainStage.mainStage);
+                        } catch (Exception ignored) {
+                        }
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                        alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                        alert.setTitle("Błąd zmiany nazwy");
+                        alert.setHeaderText("W obecnej wersji programu nie można zmieniać nazwy programów 'Własnych'.");
+                        alert.setContentText("Funkcjonalność ta zostanie dodana w jednej z kolejnych wesji");
+                        ButtonType buttonYes = new ButtonType("Ok");
+                        alert.getButtonTypes().setAll(buttonYes);
+                        alert.showAndWait();
                     }
-                    catch (Exception ignored){}
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                    alert.setTitle("Błąd zmiany nazwy");
+                    alert.setHeaderText("Nie można zmienić nazwy programu podczas trwania rozgrywek");
+                    alert.setContentText("Poczekaj na ich zakończenie, lub je przerwij");
+                    ButtonType buttonYes = new ButtonType("Ok");
+                    alert.getButtonTypes().setAll(buttonYes);
+                    alert.showAndWait();
                 }
+
             }
         });
 
@@ -510,7 +534,7 @@ class GamesPane extends Pane {
         runCommandLabel.setAlignment(Pos.CENTER);
         runCommandLabel.setMaxWidth(Double.MAX_VALUE);
 
-        TextArea runCommandTextArea = new TextArea();
+        TextField runCommandTextArea = new TextField();
         runCommandTextArea.setMaxHeight(30);
         runCommandTextArea.setMaxWidth(200);
         runCommandTextArea.setTooltip(new Tooltip("Napisz tutaj komendę, jaką wprowadziłbyś w konsoli aby uruchomić swój program."));
@@ -542,7 +566,7 @@ class GamesPane extends Pane {
         });
 
 
-        TextArea programNameTextArea = new TextArea();
+        TextField programNameTextArea = new TextField();
         programNameTextArea.setMaxHeight(30);
         programNameTextArea.setMaxWidth(200);
         programNameTextArea.setTooltip(new Tooltip("Nazwa zostanie zastosowana tylko do programu 'własnego'."));
@@ -602,20 +626,57 @@ class GamesPane extends Pane {
                         alert.getButtonTypes().setAll(buttonOk);
                         alert.showAndWait();
                     }
-
-
-
-
                 } else {
-                    XRobotPlayer toAdd = new XRobotPlayer("Własny", runCommandTextArea.getText(), programNameTextArea.getText());
-                    for (XRobotPlayer aPlayersObservableList : playersObservableList) {
-                        if (toAdd.getName().equals(aPlayersObservableList.getName()))
-                            found = true;
-                    }
-                    if (!found) {
-                        RobotPlayer test = toAdd.getRobotPlayer();
-                        if (test != null) {
-                            playersObservableList.add(toAdd);
+                    if (!programNameTextArea.getText().equals("")) {
+
+                        if(getProgramsNames().contains(programNameTextArea.getText())) {
+                            Alert alert = new Alert(Alert.AlertType.WARNING);
+                            alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                            alert.setTitle("Błąd dodawania gracza");
+                            alert.setHeaderText("Nowy gracz nie został dodany");
+                            alert.setContentText("Gracz o tej nazwie już istnieje.");
+                            ButtonType buttonOk = new ButtonType("Ok");
+                            alert.getButtonTypes().setAll(buttonOk);
+                            alert.showAndWait();
+                            return;
+                        }
+                        if(programNameTextArea.getText().contains("\\") || programNameTextArea.getText().contains("/")) {
+                            Alert alert = new Alert(Alert.AlertType.WARNING);
+                            alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                            alert.setTitle("Błąd dodawania gracza");
+                            alert.setHeaderText("Nowy gracz nie został dodany");
+                            alert.setContentText("Nazwa gracza zawiera niedozwolone znaki. Niedozwolone znaki to: '\\' i '/'");
+                            ButtonType buttonOk = new ButtonType("Ok");
+                            alert.getButtonTypes().setAll(buttonOk);
+                            alert.showAndWait();
+                            return;
+                        }
+
+                        XRobotPlayer toAdd = new XRobotPlayer("Własny", runCommandTextArea.getText(), programNameTextArea.getText());
+                        for (XRobotPlayer aPlayersObservableList : playersObservableList) {
+                            if (toAdd.getName().equals(aPlayersObservableList.getName()))
+                                found = true;
+                        }
+                        if (!found) {
+                            RobotPlayer test = toAdd.getRobotPlayer();
+                            if (test != null) {
+                                playersObservableList.add(toAdd);
+                            } else {
+                                Alert alert = new Alert(Alert.AlertType.WARNING);
+                                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                                alert.setTitle("Błąd dodawania gracza");
+                                alert.setHeaderText("Nowy gracz nie został dodany");
+                                alert.setContentText("Podany gracz nie działa");
+                                ButtonType buttonOk = new ButtonType("Ok");
+                                alert.getButtonTypes().setAll(buttonOk);
+                                alert.showAndWait();
+                            }
                         } else {
                             Alert alert = new Alert(Alert.AlertType.WARNING);
                             alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -623,11 +684,14 @@ class GamesPane extends Pane {
                             alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                             alert.setTitle("Błąd dodawania gracza");
                             alert.setHeaderText("Nowy gracz nie został dodany");
-                            alert.setContentText("Podany gracz nie działa");
+                            alert.setContentText("Gracz o tej nazwie jest już dodany.");
                             ButtonType buttonOk = new ButtonType("Ok");
                             alert.getButtonTypes().setAll(buttonOk);
                             alert.showAndWait();
                         }
+                        exportPrograms();
+                        playerPath = "";
+                        runCommandTextArea.setText("");
                     } else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -635,15 +699,12 @@ class GamesPane extends Pane {
                         alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                         alert.setTitle("Błąd dodawania gracza");
                         alert.setHeaderText("Nowy gracz nie został dodany");
-                        alert.setContentText("Gracz o tej nazwie jest już dodany.");
+                        alert.setContentText("Podaj nazwę swojego gracza");
                         ButtonType buttonOk = new ButtonType("Ok");
                         alert.getButtonTypes().setAll(buttonOk);
                         alert.showAndWait();
                     }
                 }
-                exportPrograms();
-                playerPath = "";
-                runCommandTextArea.setText("");
             } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -659,7 +720,7 @@ class GamesPane extends Pane {
 
         });
 
-        Label programNameLabel = new Label("Nazwa (opcjonalne)");
+        Label programNameLabel = new Label("Nazwa");
         programNameLabel.setAlignment(Pos.CENTER);
         programNameLabel.setMaxWidth(Double.MAX_VALUE);
 
