@@ -689,9 +689,6 @@ class GamesPane extends Pane {
                             alert.getButtonTypes().setAll(buttonOk);
                             alert.showAndWait();
                         }
-                        exportPrograms();
-                        playerPath = "";
-                        runCommandTextArea.setText("");
                     } else {
                         Alert alert = new Alert(Alert.AlertType.WARNING);
                         alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -717,6 +714,9 @@ class GamesPane extends Pane {
                 alert.getButtonTypes().setAll(buttonOk);
                 alert.showAndWait();
             }
+            exportPrograms();
+            playerPath = "";
+            runCommandTextArea.setText("");
 
         });
 

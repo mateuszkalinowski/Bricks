@@ -16,6 +16,14 @@ import javafx.scene.text.Font;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
+import java.io.File;
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.Scanner;
+
 /**
  * Created by Mateusz on 11.01.2017.
  * Project InferenceEngine
@@ -61,14 +69,14 @@ public class NewProgramNameStage extends Application {
                 alert.getButtonTypes().setAll(buttonYes);
                 alert.showAndWait();
             }
-            else if (Bricks.mainStage.gameChooserPane.gamesPane.getProgramsNames().contains(newNameTextField.getText())) {
+            else if (Bricks.mainStage.gameChooserPane.gamesPane.getProgramsNames().contains(newNameTextField.getText())|| resultsFileContainProgramName(newNameTextField.getText())) {
                 Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                 alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
                 Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
                 alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                 alert.setTitle("Błąd zmiany nazwy");
                 alert.setHeaderText("Program o takiej nazwie już instnieje.");
-                alert.setContentText("Wpisz inną nazwę, lub zamknij okno edycji aby anulować.");
+                alert.setContentText("Wpisz inną nazwę, lub zamknij okno edycji aby anulować. UWAGA: Gracz ten nie musi być widoczny na liście, może być również zapisany w wynikach.");
                 ButtonType buttonYes = new ButtonType("Ok");
                 alert.getButtonTypes().setAll(buttonYes);
                 alert.showAndWait();
@@ -112,14 +120,14 @@ public class NewProgramNameStage extends Application {
                     alert.getButtonTypes().setAll(buttonYes);
                     alert.showAndWait();
                 }
-                else if (Bricks.mainStage.gameChooserPane.gamesPane.getProgramsNames().contains(newNameTextField.getText())) {
+                else if (Bricks.mainStage.gameChooserPane.gamesPane.getProgramsNames().contains(newNameTextField.getText())|| resultsFileContainProgramName(newNameTextField.getText())) {
                     Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                     alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
                     Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
                     alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                     alert.setTitle("Błąd zmiany nazwy");
                     alert.setHeaderText("Program o takiej nazwie już instnieje.");
-                    alert.setContentText("Wpisz inną nazwę, lub zamknij okno edycji aby anulować.");
+                    alert.setContentText("Wpisz inną nazwę, lub zamknij okno edycji aby anulować. UWAGA: Gracz ten nie musi być widoczny na liście, może być również zapisany w wynikach.");
                     ButtonType buttonYes = new ButtonType("Ok");
                     alert.getButtonTypes().setAll(buttonYes);
                     alert.showAndWait();
@@ -177,4 +185,58 @@ public class NewProgramNameStage extends Application {
     private XRobotPlayer toEdit;
 
     private int indexToEdit;
+
+    private boolean resultsFileContainProgramName(String toCheck) {
+        try {
+            String path = System.getProperty("user.home") + "/Documents/Bricks";
+            if (!new File(path + "/logs.txt").exists()) {
+                return false;
+            } else {
+                String pathToFile = System.getProperty("user.home") + "/Documents/Bricks/logs.txt";
+                Scanner in = new Scanner(new File(pathToFile));
+                ArrayList<String> wyniki = new ArrayList<>();
+                while (in.hasNextLine()) {
+                    String line = in.nextLine();
+                    if (line.charAt(0) != '#') {
+                        wyniki.add(line);
+                    } else {
+                        break;
+                    }
+                }
+                in.close();
+
+                Map<String, Integer> winsMap = new HashMap<>();
+                Map<String, Integer> losesMap = new HashMap<>();
+
+                for (String s : wyniki) {
+                    try {
+                        String[] firstDivision = s.split("=");
+                        String[] secondDivisionNames = firstDivision[0].split(",");
+                        String[] secondDivisionValues = firstDivision[1].split(",");
+                        if (secondDivisionNames.length != 2 || secondDivisionValues.length != 2)
+                            continue;
+                        winsMap.putIfAbsent(secondDivisionNames[0], 0);
+                        winsMap.putIfAbsent(secondDivisionNames[1], 0);
+                        winsMap.put(secondDivisionNames[0], winsMap.get(secondDivisionNames[0]) + Integer.parseInt(secondDivisionValues[0]));
+                        winsMap.put(secondDivisionNames[1], winsMap.get(secondDivisionNames[1]) + Integer.parseInt(secondDivisionValues[1]));
+
+                        losesMap.putIfAbsent(secondDivisionNames[0], 0);
+                        losesMap.putIfAbsent(secondDivisionNames[1], 0);
+                        losesMap.put(secondDivisionNames[0], losesMap.get(secondDivisionNames[0]) + Integer.parseInt(secondDivisionValues[1]));
+                        losesMap.put(secondDivisionNames[1], losesMap.get(secondDivisionNames[1]) + Integer.parseInt(secondDivisionValues[0]));
+
+
+                    } catch (IndexOutOfBoundsException | NumberFormatException ignored) {
+                    }
+                }
+                if(winsMap.containsKey(toCheck)) {
+                    return true;
+                }
+            }
+
+        } catch (IOException ignored) {
+        }
+
+        return false;
+    }
 }
