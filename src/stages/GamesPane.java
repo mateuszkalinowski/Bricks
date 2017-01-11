@@ -8,6 +8,7 @@ import exceptions.InvalidMoveException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -15,11 +16,13 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
 import javafx.stage.FileChooser;
 import javafx.stage.Stage;
+import javafx.util.Callback;
 import logic.BoardLogic;
 import logic.MovesStorage;
 import logic.RobotPlayer;
@@ -403,7 +406,7 @@ class GamesPane extends Pane {
 
 
         mainTabPane = new TabPane();
-        Tab boardsSelectTab = new Tab("Plansze");
+        Tab boardsSelectTab = new Tab("Rozgrywki");
         mainTabPane.getTabs().add(boardsSelectTab);
         boardsSelectTab.setContent(mainGridPane);
         boardsSelectTab.setClosable(false);
@@ -429,7 +432,11 @@ class GamesPane extends Pane {
         playersListLabel.setMaxWidth(Double.MAX_VALUE);
         playersGridPane.add(playersListLabel, 0, 0, 3, 1);
 
+        VBox playersTableViewVBox = new VBox();
         playersTableView = new TableView<>();
+        playersTableViewVBox.getChildren().add(playersTableView);
+        playersTableViewVBox.setVgrow(playersTableView,Priority.ALWAYS);
+        playersTableViewVBox.setPadding(new Insets(0,5,0,5));
         TableColumn typeColumn = new TableColumn("Typ Programu");
         //noinspection unchecked
         typeColumn.setCellValueFactory(new PropertyValueFactory<XRobotPlayer, String>("type"));
@@ -458,6 +465,43 @@ class GamesPane extends Pane {
                     playersObservableList.remove(toDelete);
                     exportPrograms();
                 }
+            }
+        });
+
+        playersTableView.setOnMouseClicked(event -> {
+            if(event.getClickCount()==2 && playersTableView.getSelectionModel().getSelectedItem()!=null) {
+                if(!running) {
+                    if (!playersTableView.getSelectionModel().getSelectedItem().getType().equals("Własny")) {
+                        NewProgramNameStage programNameStage = new NewProgramNameStage(playersTableView.getSelectionModel().getSelectedItem(), playersTableView.getSelectionModel().getSelectedIndex());
+                        try {
+                            programNameStage.start(Bricks.mainStage.mainStage);
+                        } catch (Exception ignored) {
+                        }
+                    } else {
+                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                        alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                        alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                        alert.setTitle("Błąd zmiany nazwy");
+                        alert.setHeaderText("W obecnej wersji programu nie można zmieniać nazwy programów 'Własnych'.");
+                        alert.setContentText("Funkcjonalność ta zostanie dodana w jednej z kolejnych wesji");
+                        ButtonType buttonYes = new ButtonType("Ok");
+                        alert.getButtonTypes().setAll(buttonYes);
+                        alert.showAndWait();
+                    }
+                } else {
+                    Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                    alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                    alert.setTitle("Błąd zmiany nazwy");
+                    alert.setHeaderText("Nie można zmienić nazwy programu podczas trwania rozgrywek");
+                    alert.setContentText("Poczekaj na ich zakończenie, lub je przerwij");
+                    ButtonType buttonYes = new ButtonType("Ok");
+                    alert.getButtonTypes().setAll(buttonYes);
+                    alert.showAndWait();
+                }
+
             }
         });
 
@@ -490,7 +534,7 @@ class GamesPane extends Pane {
         runCommandLabel.setAlignment(Pos.CENTER);
         runCommandLabel.setMaxWidth(Double.MAX_VALUE);
 
-        TextArea runCommandTextArea = new TextArea();
+        TextField runCommandTextArea = new TextField();
         runCommandTextArea.setMaxHeight(30);
         runCommandTextArea.setMaxWidth(200);
         runCommandTextArea.setTooltip(new Tooltip("Napisz tutaj komendę, jaką wprowadziłbyś w konsoli aby uruchomić swój program."));
@@ -522,7 +566,7 @@ class GamesPane extends Pane {
         });
 
 
-        TextArea programNameTextArea = new TextArea();
+        TextField programNameTextArea = new TextField();
         programNameTextArea.setMaxHeight(30);
         programNameTextArea.setMaxWidth(200);
         programNameTextArea.setTooltip(new Tooltip("Nazwa zostanie zastosowana tylko do programu 'własnego'."));
@@ -582,20 +626,57 @@ class GamesPane extends Pane {
                         alert.getButtonTypes().setAll(buttonOk);
                         alert.showAndWait();
                     }
-
-
-
-
                 } else {
-                    XRobotPlayer toAdd = new XRobotPlayer("Własny", runCommandTextArea.getText(), programNameTextArea.getText());
-                    for (XRobotPlayer aPlayersObservableList : playersObservableList) {
-                        if (toAdd.getName().equals(aPlayersObservableList.getName()))
-                            found = true;
-                    }
-                    if (!found) {
-                        RobotPlayer test = toAdd.getRobotPlayer();
-                        if (test != null) {
-                            playersObservableList.add(toAdd);
+                    if (!programNameTextArea.getText().equals("")) {
+
+                        if(getProgramsNames().contains(programNameTextArea.getText())) {
+                            Alert alert = new Alert(Alert.AlertType.WARNING);
+                            alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                            alert.setTitle("Błąd dodawania gracza");
+                            alert.setHeaderText("Nowy gracz nie został dodany");
+                            alert.setContentText("Gracz o tej nazwie już istnieje.");
+                            ButtonType buttonOk = new ButtonType("Ok");
+                            alert.getButtonTypes().setAll(buttonOk);
+                            alert.showAndWait();
+                            return;
+                        }
+                        if(programNameTextArea.getText().contains("\\") || programNameTextArea.getText().contains("/")) {
+                            Alert alert = new Alert(Alert.AlertType.WARNING);
+                            alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                            alert.setTitle("Błąd dodawania gracza");
+                            alert.setHeaderText("Nowy gracz nie został dodany");
+                            alert.setContentText("Nazwa gracza zawiera niedozwolone znaki. Niedozwolone znaki to: '\\' i '/'");
+                            ButtonType buttonOk = new ButtonType("Ok");
+                            alert.getButtonTypes().setAll(buttonOk);
+                            alert.showAndWait();
+                            return;
+                        }
+
+                        XRobotPlayer toAdd = new XRobotPlayer("Własny", runCommandTextArea.getText(), programNameTextArea.getText());
+                        for (XRobotPlayer aPlayersObservableList : playersObservableList) {
+                            if (toAdd.getName().equals(aPlayersObservableList.getName()))
+                                found = true;
+                        }
+                        if (!found) {
+                            RobotPlayer test = toAdd.getRobotPlayer();
+                            if (test != null) {
+                                playersObservableList.add(toAdd);
+                            } else {
+                                Alert alert = new Alert(Alert.AlertType.WARNING);
+                                alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                                Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                                alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                                alert.setTitle("Błąd dodawania gracza");
+                                alert.setHeaderText("Nowy gracz nie został dodany");
+                                alert.setContentText("Podany gracz nie działa");
+                                ButtonType buttonOk = new ButtonType("Ok");
+                                alert.getButtonTypes().setAll(buttonOk);
+                                alert.showAndWait();
+                            }
                         } else {
                             Alert alert = new Alert(Alert.AlertType.WARNING);
                             alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -603,7 +684,7 @@ class GamesPane extends Pane {
                             alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                             alert.setTitle("Błąd dodawania gracza");
                             alert.setHeaderText("Nowy gracz nie został dodany");
-                            alert.setContentText("Podany gracz nie działa");
+                            alert.setContentText("Gracz o tej nazwie jest już dodany.");
                             ButtonType buttonOk = new ButtonType("Ok");
                             alert.getButtonTypes().setAll(buttonOk);
                             alert.showAndWait();
@@ -615,15 +696,12 @@ class GamesPane extends Pane {
                         alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
                         alert.setTitle("Błąd dodawania gracza");
                         alert.setHeaderText("Nowy gracz nie został dodany");
-                        alert.setContentText("Gracz o tej nazwie jest już dodany.");
+                        alert.setContentText("Podaj nazwę swojego gracza");
                         ButtonType buttonOk = new ButtonType("Ok");
                         alert.getButtonTypes().setAll(buttonOk);
                         alert.showAndWait();
                     }
                 }
-                exportPrograms();
-                playerPath = "";
-                runCommandTextArea.setText("");
             } else {
                 Alert alert = new Alert(Alert.AlertType.WARNING);
                 alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -636,10 +714,13 @@ class GamesPane extends Pane {
                 alert.getButtonTypes().setAll(buttonOk);
                 alert.showAndWait();
             }
+            exportPrograms();
+            playerPath = "";
+            runCommandTextArea.setText("");
 
         });
 
-        Label programNameLabel = new Label("Nazwa (opcjonalne)");
+        Label programNameLabel = new Label("Nazwa");
         programNameLabel.setAlignment(Pos.CENTER);
         programNameLabel.setMaxWidth(Double.MAX_VALUE);
 
@@ -650,7 +731,7 @@ class GamesPane extends Pane {
         playersGridPane.add(runCommandTextArea, 1, 7);
         playersGridPane.add(runCommandLabel, 0, 7);
         playersGridPane.add(addPlayerLabel, 0, 6, 2, 1);
-        playersGridPane.add(playersTableView, 0, 1, 2, 5);
+        playersGridPane.add(playersTableViewVBox, 0, 1, 2, 5);
         importPrograms();
 
         playersSelectTab.setContent(playersGridPane);
@@ -702,16 +783,24 @@ class GamesPane extends Pane {
         reasonsListLabel.setMaxWidth(Double.MAX_VALUE);
         reasonsGridPane.add(reasonsListLabel, 0, 0, 3, 1);
 
+        VBox reasonsTableViewVBox = new VBox();
         reasonsTableView = new TableView<>();
-        TableColumn firstNameColumn = new TableColumn("Program Pierwszy");
+        reasonsTableViewVBox.setVgrow(reasonsTableView,Priority.ALWAYS);
+        reasonsTableViewVBox.setPadding(new Insets(0,5,5,5));
+        reasonsTableViewVBox.getChildren().add(reasonsTableView);
+        TableColumn firstNameColumn = new TableColumn("I");
         //noinspection unchecked
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<XRobotPlayer, String>("firstProgramName"));
         firstNameColumn.prefWidthProperty().bind(reasonsTableView.widthProperty().divide(5));
 
-        TableColumn secondNameColumn = new TableColumn("Program Drugi");
+
+        TableColumn secondNameColumn = new TableColumn("II");
         //noinspection unchecked
         secondNameColumn.setCellValueFactory(new PropertyValueFactory<XRobotPlayer, String>("secondProgramName"));
         secondNameColumn.prefWidthProperty().bind(reasonsTableView.widthProperty().divide(5));
+
+        TableColumn programsColumn = new TableColumn("Programy Grające");
+        programsColumn.getColumns().addAll(firstNameColumn,secondNameColumn);
 
         TableColumn boardSizeColumn = new TableColumn("Plansza");
         //noinspection unchecked
@@ -729,12 +818,12 @@ class GamesPane extends Pane {
         reasonsColumn.prefWidthProperty().bind(reasonsTableView.widthProperty().divide(5));
 
         reasonsTableView.setItems(reasonsObservableList);
-        reasonsTableView.getColumns().addAll(firstNameColumn, secondNameColumn, boardSizeColumn, winColumn, reasonsColumn);
+        reasonsTableView.getColumns().addAll(programsColumn, boardSizeColumn, winColumn, reasonsColumn);
 
         reasonsTableView.setColumnResizePolicy((param) -> false);
         reasonsTableView.setSortPolicy((param) -> false);
 
-        reasonsGridPane.add(reasonsTableView,0,1,3,10);
+        reasonsGridPane.add(reasonsTableViewVBox,0,1,3,10);
         mainTabPane.getTabs().add(reasonsTab);
 
         widthProperty().addListener((observable, oldValue, newValue) -> {
@@ -743,6 +832,7 @@ class GamesPane extends Pane {
         });
         heightProperty().addListener((observable, oldValue, newValue) -> {
             mainGridPane.setPrefHeight(newValue.doubleValue());
+            //reasonsTableViewVBox.setMinHeight(newValue.doubleValue());
             boardsListLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 20));
             playersListLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 20));
             reasonsListLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 20));
@@ -830,7 +920,7 @@ class GamesPane extends Pane {
                                 playersObservableList.add(toAdd);
                         }
                     } else {
-                        XRobotPlayer toAdd = new XRobotPlayer(divided[0], divided[1]);
+                        XRobotPlayer toAdd = new XRobotPlayer(divided[0], divided[1], divided[2]);
                         RobotPlayer toCheck = toAdd.getRobotPlayer();
                         if (toCheck != null) {
                             boolean found = false;
@@ -870,6 +960,89 @@ class GamesPane extends Pane {
 
     }
 
+    public void changeIndexName(String newName,int index) {
+        String oldName = playersObservableList.get(index).getName();
+        playersObservableList.get(index).setName(newName);
+        playersTableView.refresh();
+        exportPrograms();
+        if (newName.equals(oldName)) {
+            return;
+        }
+        try {
+            String path = System.getProperty("user.home") + "/Documents/Bricks";
+            if (!new File(path + "/logs.txt").exists()) {
+                return;
+            } else {
+                String pathToFile = System.getProperty("user.home") + "/Documents/Bricks/logs.txt";
+                Scanner in = new Scanner(new File(pathToFile));
+                ArrayList<String> wyniki = new ArrayList<>();
+                while (in.hasNextLine()) {
+                    String line = in.nextLine();
+                    if (line.charAt(0) != '#') {
+                        wyniki.add(line);
+                    } else {
+                        break;
+                    }
+                }
+                in.close();
+
+                Map<String, Integer> winsMap = new HashMap<>();
+                Map<String, Integer> losesMap = new HashMap<>();
+
+                for (String s : wyniki) {
+                    try {
+                        String[] firstDivision = s.split("=");
+                        String[] secondDivisionNames = firstDivision[0].split(",");
+                        String[] secondDivisionValues = firstDivision[1].split(",");
+                        if (secondDivisionNames.length != 2 || secondDivisionValues.length != 2)
+                            continue;
+                        winsMap.putIfAbsent(secondDivisionNames[0], 0);
+                        winsMap.putIfAbsent(secondDivisionNames[1], 0);
+                        winsMap.put(secondDivisionNames[0], winsMap.get(secondDivisionNames[0]) + Integer.parseInt(secondDivisionValues[0]));
+                        winsMap.put(secondDivisionNames[1], winsMap.get(secondDivisionNames[1]) + Integer.parseInt(secondDivisionValues[1]));
+
+                        losesMap.putIfAbsent(secondDivisionNames[0], 0);
+                        losesMap.putIfAbsent(secondDivisionNames[1], 0);
+                        losesMap.put(secondDivisionNames[0], losesMap.get(secondDivisionNames[0]) + Integer.parseInt(secondDivisionValues[1]));
+                        losesMap.put(secondDivisionNames[1], losesMap.get(secondDivisionNames[1]) + Integer.parseInt(secondDivisionValues[0]));
+
+
+                    } catch (IndexOutOfBoundsException | NumberFormatException ignored) {
+                    }
+                }
+                PrintWriter writer = new PrintWriter(pathToFile);
+                //wyniki.forEach(writer::println);
+
+                for (String s : wyniki) {
+                    if(s.contains(oldName)) {
+                        String changed = s.replaceAll(oldName,newName);
+                        writer.println(changed);
+                    }
+                    else {
+                        writer.println(s);
+                    }
+                }
+                writer.close();
+
+            }
+
+        } catch (IOException ignored) {
+        }
+
+        for(XLostReasons e : reasonsObservableList) {
+            if(e.getFirstProgramName().equals(oldName)) {
+                e.setFirstProgramName(newName);
+            }
+            if(e.getSecondProgramName().equals(oldName)) {
+                e.setSecondProgramName(newName);
+            }
+            if(e.getWinProgramName().equals(oldName)) {
+                e.setWinProgramName(newName);
+            }
+        }
+        reasonsTableView.refresh();
+    }
+
     private String playerPath = "";
 
     private ListView<String> boardsSizesListView;
@@ -895,4 +1068,13 @@ class GamesPane extends Pane {
     private final ObservableList<XLostReasons> reasonsObservableList;
 
     private ArrayList<String> lostReasons = new ArrayList<>();
+
+    public ArrayList<String> getProgramsNames(){
+        ArrayList<String> programsNames = new ArrayList<>();
+
+        for(XRobotPlayer name : playersObservableList)
+            programsNames.add(name.getName());
+
+        return programsNames;
+    }
 }

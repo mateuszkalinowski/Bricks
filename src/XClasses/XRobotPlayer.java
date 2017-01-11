@@ -39,15 +39,22 @@ public class XRobotPlayer {
         }
     }
     public XRobotPlayer(String isOwn, String path, String customName) {
-        this.type = new SimpleStringProperty("Własny");
-        this.path = new SimpleStringProperty(path);
-        if (customName.equals("")) {
-            if (this.path.get().length() <= 10) {
-                name = new SimpleStringProperty(this.path.get());
-            } else
-                name = new SimpleStringProperty(this.path.get().substring(this.path.get().length() - 11));
-        } else {
-            name = new SimpleStringProperty(customName);
+        if(isOwn.equals("Własny")) {
+            this.type = new SimpleStringProperty("Własny");
+            this.path = new SimpleStringProperty(path);
+            if (customName.equals("")) {
+                if (this.path.get().length() <= 10) {
+                    name = new SimpleStringProperty(this.path.get());
+                } else
+                    name = new SimpleStringProperty(this.path.get().substring(this.path.get().length() - 11));
+            } else {
+                name = new SimpleStringProperty(customName);
+            }
+        }
+        else {
+            this.type = new SimpleStringProperty("Plik class/exe/jar/out/py");
+            this.path = new SimpleStringProperty(path);
+            this.name = new SimpleStringProperty(customName);
         }
     }
 
@@ -64,6 +71,8 @@ public class XRobotPlayer {
     public String getName() {
         return name.get();
     }
+
+    public void setName(String name) {this.name.set(name);}
 
     public RobotPlayer getRobotPlayer() {
             if (type.get().equals("Plik class/exe/jar/out/py")) {

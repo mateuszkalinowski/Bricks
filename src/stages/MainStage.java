@@ -579,7 +579,7 @@ public class MainStage extends Application {
 
         return flag;
     }
-    private String version = "1.6.6";
+    private String version = "1.6.7";
 
     Stage mainStage;
     private Scene mainScene;
