@@ -173,7 +173,9 @@ public class RobotPlayer {
     }
 
     public void killRobot() {
+        robotProc.destroyForcibly();
         robotProc.destroy();
+        robotProc = null;
         reader = null;
         writer = null;
     }

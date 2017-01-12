@@ -76,6 +76,51 @@ public class XRobotPlayer {
 
     public void setName(String name) {this.name.set(name);}
 
+    public String[] returnRunArray(){
+        if (type.get().equals("Plik class/exe/jar/out/py")) {
+            if (path.get().substring(path.get().length() - 3).equals("out") || path.get().substring(path.get().length() - 3).equals("exe")) {
+                try {
+                    String cmd[] = new String[1];
+                    cmd[0] = path.get();
+                    return cmd;
+                } catch (Exception ignored) {}
+            } else if (path.get().substring(path.get().length() - 3).equals("jar")) {
+                try {
+                    String cmd[] = new String[3];
+                    cmd[0] = "java";
+                    cmd[1] = "-jar";
+                    cmd[2] = path.get();
+                    return cmd;
+                } catch (Exception ignored) {}
+            } else if (path.get().substring(path.get().length() - 5).equals("class")) {
+                try {
+                    String cmd[] = new String[4];
+                    cmd[0] = "java";
+                    cmd[1] = "-cp";
+                    cmd[2] = pathToPlayer;
+                    cmd[3] = name.get();
+                    return cmd;
+                } catch (Exception ignored) {}
+            } else if (path.get().substring(path.get().length() - 2).equals("py")) {
+                try {
+                    String cmd[] = new String[2];
+                    cmd[0] = "python3";
+                    cmd[1] = path.get();
+                    return cmd;
+                } catch (Exception ignored) {}
+            }
+
+        }
+        if (type.get().equals("Własny")) {
+            try {
+                String cmd[] = new String[1];
+                cmd[0] = path.get();
+                return cmd;
+            } catch (Exception ignored) {}
+        }
+        return null;
+    }
+
     public RobotPlayer getRobotPlayer() {
             if (type.get().equals("Plik class/exe/jar/out/py")) {
                 if (path.get().substring(path.get().length() - 3).equals("out") || path.get().substring(path.get().length() - 3).equals("exe")) {

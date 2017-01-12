@@ -327,7 +327,13 @@ class GamesPane extends Pane {
                                         counter++;
                                         updateProgress(counter, gamesNumber);
                                         RobotPlayer.exportLogs(firstPlayerWins, secondPlayerWins, playerFirst.getName(), playerSecond.getName());
+                                        secondRobotPlayer.killRobot();
+                                        if(!running)
+                                            break;
                                     }
+                                    firstRobotPlayer.killRobot();
+                                    if(!running)
+                                        break;
                                 }
                                 return null;
                             }
@@ -343,6 +349,7 @@ class GamesPane extends Pane {
                             runButton.setText("Uruchom");
                             resultsButton.setDisable(false);
                             gamesProgressBar.progressProperty().unbind();
+                            gamesProgressBar.setProgress(100);
                             running = false;
                         });
 
@@ -733,7 +740,44 @@ class GamesPane extends Pane {
         playersGridPane.add(runCommandLabel, 0, 7);
         playersGridPane.add(addPlayerLabel, 0, 6, 2, 1);
         playersGridPane.add(playersTableViewVBox, 0, 1, 2, 5);
-        importPrograms();
+
+        Task<Void> importProgramsTask = new Task<Void>() {
+            @Override
+            protected Void call() {
+                try {
+                    String path = System.getProperty("user.home") + "/Documents/Bricks/programs";
+                    Scanner in = new Scanner(new File(path));
+                    String line;
+                    String[] divided;
+                    while (in.hasNextLine()) {
+                        line = in.nextLine();
+                        divided = line.split("=");
+                        try {
+                            XRobotPlayer toAdd = new XRobotPlayer(divided[0], divided[1], divided[2]);
+                            RobotPlayer toCheck = toAdd.getRobotPlayer();
+                            if (toCheck != null) {
+                                boolean found = false;
+                                for (XRobotPlayer aPlayersObservableList : playersObservableList) {
+                                    if (toAdd.getName().equals(aPlayersObservableList.getName()))
+                                        found = true;
+                                }
+                                if (!found)
+                                    playersObservableList.add(toAdd);
+                                toCheck.killRobot();
+                            }
+
+
+                        } catch (NumberFormatException ignored) {
+                        }
+                    }
+                    in.close();
+                } catch (Exception ignored) {
+                }
+                return null;
+            }
+        };
+        Thread importProgramsThread = new Thread(importProgramsTask);
+        importProgramsThread.start();
 
         playersSelectTab.setContent(playersGridPane);
         playersSelectTab.setClosable(false);
@@ -896,50 +940,6 @@ class GamesPane extends Pane {
         } catch (Exception ignored) {
         }
 
-    }
-
-    private void importPrograms() {
-        try {
-            String path = System.getProperty("user.home") + "/Documents/Bricks/programs";
-            Scanner in = new Scanner(new File(path));
-            String line;
-            String[] divided;
-            while (in.hasNextLine()) {
-                line = in.nextLine();
-                divided = line.split("=");
-                try {
-                    if (divided[0].equals("Własny")) {
-                        XRobotPlayer toAdd = new XRobotPlayer(divided[0], divided[1], divided[2]);
-                        RobotPlayer toCheck = toAdd.getRobotPlayer();
-                        if (toCheck != null) {
-                            boolean found = false;
-                            for (XRobotPlayer aPlayersObservableList : playersObservableList) {
-                                if (toAdd.getName().equals(aPlayersObservableList.getName()))
-                                    found = true;
-                            }
-                            if (!found)
-                                playersObservableList.add(toAdd);
-                        }
-                    } else {
-                        XRobotPlayer toAdd = new XRobotPlayer(divided[0], divided[1], divided[2]);
-                        RobotPlayer toCheck = toAdd.getRobotPlayer();
-                        if (toCheck != null) {
-                            boolean found = false;
-                            for (XRobotPlayer aPlayersObservableList : playersObservableList) {
-                                if (toAdd.getName().equals(aPlayersObservableList.getName()))
-                                    found = true;
-                            }
-                            if (!found)
-                                playersObservableList.add(toAdd);
-                        }
-                    }
-
-                } catch (NumberFormatException ignored) {
-                }
-            }
-            in.close();
-        } catch (Exception ignored) {
-        }
     }
 
     private void exportPrograms() {
