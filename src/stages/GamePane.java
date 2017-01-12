@@ -1074,13 +1074,14 @@ class GamePane extends Pane {
     }
 
     private boolean possibleMove(int x1, int y1, int x2, int y2) {
-        if(x1<0 || x1>board.board.length)
+        if(x1<0 || x1>=board.board.length)
             return false;
-        if(y1<0 || y1>board.board.length)
+        if(y1<0 || y1>=board.board.length)
             return false;
-        if(x2<0 || x2>board.board.length)
+        if(x2<0 || x2>=board.board.length)
             return false;
-        if(y2<0 || y2>board.board.length)
+        if(y2<0 || y2>=board.board.length)
+            return false;
         if (board.board[x1][y1] != 0 || board.board[x2][y2] != 0)
             return false;
         boolean flag = false;

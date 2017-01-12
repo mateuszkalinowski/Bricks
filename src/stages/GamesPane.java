@@ -605,6 +605,7 @@ class GamesPane extends Pane {
                                 if (!found) {
                                     RobotPlayer test = toAdd.getRobotPlayer();
                                     if (test != null) {
+                                        test.killRobot();
                                         playersObservableList.add(toAdd);
                                     } else {
                                         error = true;
