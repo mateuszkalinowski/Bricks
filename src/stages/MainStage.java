@@ -79,6 +79,9 @@ public class MainStage extends Application {
                 if (firstPlayerProgramType == 0) {
                     XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out/py",playerFirstFullPath);
                     Bricks.singlePlayerRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                    try {
+                        Bricks.singlePlayerRobotPlayer.reset(Bricks.mainStage.BoardSize);
+                    } catch (Exception ignored) {}
                     if(Bricks.singlePlayerRobotPlayer!=null) {
                         computerPlayerFound = true;
                     }
@@ -87,6 +90,9 @@ public class MainStage extends Application {
                 if (firstPlayerProgramType == 1) {
                     XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Własny",playerFirstFullPath);
                     Bricks.singlePlayerRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                    try {
+                        Bricks.singlePlayerRobotPlayer.reset(Bricks.mainStage.BoardSize);
+                    } catch (Exception ignored) {}
                     if(Bricks.singlePlayerRobotPlayer!=null)
                         computerPlayerFound = true;
                 }
@@ -95,6 +101,9 @@ public class MainStage extends Application {
                 if (secondPlayerProgramType == 0) {
                     XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out/py",playerSecondFullPath);
                     Bricks.singlePlayerRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                    try {
+                        Bricks.singlePlayerRobotPlayer.reset(Bricks.mainStage.BoardSize);
+                    } catch (Exception ignored) {}
                     if(Bricks.singlePlayerRobotPlayer!=null) {
                         computerPlayerFound = true;
                     }
@@ -102,6 +111,9 @@ public class MainStage extends Application {
                 if (secondPlayerProgramType == 1) {
                     XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Własny",playerSecondFullPath);
                     Bricks.singlePlayerRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                    try {
+                        Bricks.singlePlayerRobotPlayer.reset(Bricks.mainStage.BoardSize);
+                    } catch (Exception ignored) {}
                     if(Bricks.singlePlayerRobotPlayer!=null)
                         computerPlayerFound = true;
                 }
@@ -579,7 +591,7 @@ public class MainStage extends Application {
 
         return flag;
     }
-    private String version = "1.6.7";
+    private String version = "1.6.8";
 
     Stage mainStage;
     private Scene mainScene;

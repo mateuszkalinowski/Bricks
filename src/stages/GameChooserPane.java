@@ -71,6 +71,10 @@ class GameChooserPane extends Pane {
             if (Bricks.mainStage.firstPlayerProgramType == 0) {
                 XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out/py", Bricks.mainStage.playerFirstFullPath);
                 Bricks.firstRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                try {
+                    Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
+                }
+                catch (Exception ignored){}
                 if (Bricks.firstRobotPlayer != null) {
                     checkFirstComputerPlayer = true;
                 }
@@ -78,6 +82,10 @@ class GameChooserPane extends Pane {
             if (Bricks.mainStage.firstPlayerProgramType == 1) {
                 XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Własny",Bricks.mainStage.firstPlayerRunCommand);
                 Bricks.firstRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                try {
+                    Bricks.firstRobotPlayer.reset(Bricks.mainStage.BoardSize);
+                }
+                catch (Exception ignored){}
                 if(Bricks.firstRobotPlayer!=null) {
                     checkFirstComputerPlayer = true;
                 }
@@ -85,6 +93,10 @@ class GameChooserPane extends Pane {
             if (Bricks.mainStage.secondPlayerProgramType == 0) {
                 XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Plik class/exe/jar/out/py", Bricks.mainStage.playerSecondFullPath);
                 Bricks.secondRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                try {
+                    Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);
+                }
+                catch (Exception ignored){}
                 if (Bricks.secondRobotPlayer != null) {
                     checkSecondComputerPlayer = true;
                 }
@@ -93,6 +105,10 @@ class GameChooserPane extends Pane {
             if (Bricks.mainStage.secondPlayerProgramType == 1) {
                 XRobotPlayer newSinglePlayerRobotPlayer = new XRobotPlayer("Własny", Bricks.mainStage.secondPlayerRunCommand);
                 Bricks.secondRobotPlayer = newSinglePlayerRobotPlayer.getRobotPlayer();
+                try {
+                    Bricks.secondRobotPlayer.reset(Bricks.mainStage.BoardSize);
+                }
+                catch (Exception ignored){}
                 if (Bricks.secondRobotPlayer != null) {
                     checkSecondComputerPlayer = true;
                 }

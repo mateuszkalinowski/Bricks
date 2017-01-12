@@ -28,6 +28,8 @@ public class XRobotPlayer {
                 name.set(name.get().substring(0, name.get().length() - 4));
             } else if (this.path.get().substring(this.path.get().length() - 5).equals("class")) {
                 name.set(name.get().substring(0, name.get().length() - 6));
+            } else if (this.path.get().substring(this.path.get().length() - 2).equals("py")) {
+                name.set(name.get().substring(0, name.get().length() - 3));
             }
         } else if (this.type.get().equals("Własny")) {
             if (this.path.get().length() <= 20) {
