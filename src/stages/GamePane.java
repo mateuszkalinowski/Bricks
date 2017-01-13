@@ -151,9 +151,17 @@ class GamePane extends Pane {
                             try {
                                 move = Bricks.firstRobotPlayer.makeMove("ZACZYNAJ");
                             } catch (InvalidMoveException exception) {
+                                Bricks.firstRobotPlayer.sendEndingMessages(false);
+                                Bricks.secondRobotPlayer.sendEndingMessages(true);
+                                Bricks.firstRobotPlayer.killRobot();
+                                Bricks.secondRobotPlayer.killRobot();
                                 walkover(computerPlayer, "BadMove");
                                 gameFinished = true;
                             } catch (TimeoutException exception) {
+                                Bricks.firstRobotPlayer.sendEndingMessages(false);
+                                Bricks.secondRobotPlayer.sendEndingMessages(true);
+                                Bricks.firstRobotPlayer.killRobot();
+                                Bricks.secondRobotPlayer.killRobot();
                                 walkover(computerPlayer, "Timeout");
                                 gameFinished = true;
                             }
@@ -161,9 +169,17 @@ class GamePane extends Pane {
                             try {
                                 move = Bricks.firstRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
                             } catch (InvalidMoveException exception) {
+                                Bricks.firstRobotPlayer.sendEndingMessages(false);
+                                Bricks.secondRobotPlayer.sendEndingMessages(true);
+                                Bricks.firstRobotPlayer.killRobot();
+                                Bricks.secondRobotPlayer.killRobot();
                                 walkover(computerPlayer, "BadMove");
                                 gameFinished = true;
                             } catch (TimeoutException exception) {
+                                Bricks.firstRobotPlayer.sendEndingMessages(false);
+                                Bricks.secondRobotPlayer.sendEndingMessages(true);
+                                Bricks.firstRobotPlayer.killRobot();
+                                Bricks.secondRobotPlayer.killRobot();
                                 walkover(computerPlayer, "Timeout");
                                 gameFinished = true;
                             }
@@ -174,9 +190,17 @@ class GamePane extends Pane {
                             try {
                                 move = Bricks.secondRobotPlayer.makeMove("ZACZYNAJ");
                             } catch (InvalidMoveException exception) {
+                                Bricks.firstRobotPlayer.sendEndingMessages(true);
+                                Bricks.secondRobotPlayer.sendEndingMessages(false);
+                                Bricks.firstRobotPlayer.killRobot();
+                                Bricks.secondRobotPlayer.killRobot();
                                 walkover(computerPlayer, "BadMove");
                                 gameFinished = true;
                             } catch (TimeoutException exception) {
+                                Bricks.firstRobotPlayer.sendEndingMessages(true);
+                                Bricks.secondRobotPlayer.sendEndingMessages(false);
+                                Bricks.firstRobotPlayer.killRobot();
+                                Bricks.secondRobotPlayer.killRobot();
                                 walkover(computerPlayer, "Timeout");
                                 gameFinished = true;
                             }
@@ -184,9 +208,17 @@ class GamePane extends Pane {
                             try {
                                 move = Bricks.secondRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
                             } catch (InvalidMoveException exception) {
+                                Bricks.firstRobotPlayer.sendEndingMessages(true);
+                                Bricks.secondRobotPlayer.sendEndingMessages(false);
+                                Bricks.firstRobotPlayer.killRobot();
+                                Bricks.secondRobotPlayer.killRobot();
                                 walkover(computerPlayer, "BadMove");
                                 gameFinished = true;
                             } catch (TimeoutException exception) {
+                                Bricks.firstRobotPlayer.sendEndingMessages(true);
+                                Bricks.secondRobotPlayer.sendEndingMessages(false);
+                                Bricks.firstRobotPlayer.killRobot();
+                                Bricks.secondRobotPlayer.killRobot();
                                 walkover(computerPlayer, "Timeout");
                                 gameFinished = true;
                             }
@@ -237,31 +269,26 @@ class GamePane extends Pane {
                             while (Bricks.autoPlayRunning) {
                                 int computerPlayer1 = Bricks.mainStage.gamePane.computerPlayer;
                                 int move[] = new int[4];
-                                boolean isCanceled = false;
                                 if (computerPlayer1 == 1) {
                                     if (Bricks.mainStage.gamePane.movesStorage.isEmpty()) {
                                         try {
                                             move = Bricks.firstRobotPlayer.makeMove("ZACZYNAJ");
                                         } catch (InvalidMoveException exception) {
                                             cancelReason = 1;
-                                            cancel();
-                                            isCanceled = true;
+                                            break;
                                         } catch (TimeoutException exception) {
                                             cancelReason = 2;
-                                            cancel();
-                                            isCanceled = true;
+                                            break;
                                         }
                                     } else {
                                         try {
                                             move = Bricks.firstRobotPlayer.makeMove(Bricks.mainStage.gamePane.movesStorage.getLastMoveAsString());
                                         } catch (InvalidMoveException exception) {
                                             cancelReason = 1;
-                                            cancel();
-                                            isCanceled = true;
+                                            break;
                                         } catch (TimeoutException exception) {
                                             cancelReason = 2;
-                                            cancel();
-                                            isCanceled = true;
+                                            break;
                                         }
                                     }
                                 }
@@ -271,24 +298,20 @@ class GamePane extends Pane {
                                             move = Bricks.secondRobotPlayer.makeMove("ZACZYNAJ");
                                         } catch (InvalidMoveException exception) {
                                             cancelReason = 1;
-                                            cancel();
-                                            isCanceled = true;
+                                            break;
                                         } catch (TimeoutException exception) {
                                             cancelReason = 2;
-                                            cancel();
-                                            isCanceled = true;
+                                            break;
                                         }
                                     } else {
                                         try {
                                             move = Bricks.secondRobotPlayer.makeMove(Bricks.mainStage.gamePane.movesStorage.getLastMoveAsString());
                                         } catch (InvalidMoveException exception) {
                                             cancelReason = 1;
-                                            cancel();
-                                            isCanceled = true;
+                                            break;
                                         } catch (TimeoutException exception) {
                                             cancelReason = 2;
-                                            cancel();
-                                            isCanceled = true;
+                                            break;
                                         }
                                     }
                                 }
@@ -311,12 +334,11 @@ class GamePane extends Pane {
                                         computerPlayer1 = 1;
                                     }
                                     Bricks.mainStage.gamePane.computerPlayer = computerPlayer1;
-                                } else if(!isCanceled) {
+                                } else {
                                     cancelReason = 1;
-                                    cancel();
+                                    break;
                                 }
                                 if (!Bricks.mainStage.gamePane.board.anyMoves()) {
-                                    isGameFinished = true;
                                     break;
                                 }
                                 try {
@@ -331,52 +353,9 @@ class GamePane extends Pane {
                     };
                     Thread autoGameThread = new Thread(autoGame);
                     autoGameThread.start();
-                    autoGame.setOnCancelled(event1 -> {
-                        System.out.println(cancelReason);
-                        Optional<ButtonType> result;
-                        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-                        alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
-                        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
-                        alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
-                        alert.setTitle("Koniec Gry");
-                        alert.setContentText("Co chcesz zrobić?");
-                        ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
-                        ButtonType buttonExitToMenu = new ButtonType("Powrót do Menu");
-                        alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
-                        if (cancelReason == 1) {
-                            if (computerPlayer == 1) {
-                                Bricks.firstRobotPlayer.sendEndingMessages(false);
-                                Bricks.secondRobotPlayer.sendEndingMessages(true);
-                                alert.setHeaderText("Komputer pierwszy wykonał błędny ruch, wygrał komputer drugi.");
-                            }
-                            if (computerPlayer == 2) {
-                                Bricks.firstRobotPlayer.sendEndingMessages(true);
-                                Bricks.secondRobotPlayer.sendEndingMessages(false);
-                                alert.setHeaderText("Komputer drugi wykonał błędny ruch, wygrał komputer pierwszy.");
-                            }
-                        }
-                        if (cancelReason == 2) {
-                            if (computerPlayer == 1) {
-                                Bricks.firstRobotPlayer.sendEndingMessages(false);
-                                Bricks.secondRobotPlayer.sendEndingMessages(true);
-                                alert.setHeaderText("Komputer pierwszy przekroczył czas ruchu, wygrał komputer drugi.");
-                            }
-                            if (computerPlayer == 2) {
-                                Bricks.firstRobotPlayer.sendEndingMessages(true);
-                                Bricks.secondRobotPlayer.sendEndingMessages(false);
-                                alert.setHeaderText("Komputer drugi przekroczył czas ruchu, wygrał komputer pierwszy.");
-                            }
-                        }
-                        if (cancelReason == 1 || cancelReason == 2) {
-                            result = alert.showAndWait();
-                            resetBoard();
-                            controlAutoPlayButtons(true);
-                            if (result.isPresent() && result.get() == buttonExitToMenu)
-                                Bricks.mainStage.backToMenu();
-                        }
-                    });
                     autoGame.setOnSucceeded(event12 -> {
-                        if (isGameFinished) {
+
+                        if (cancelReason==0) {
                             Optional<ButtonType> result;
                             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                             alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -397,11 +376,58 @@ class GamePane extends Pane {
                                 Bricks.secondRobotPlayer.sendEndingMessages(false);
                                 alert.setHeaderText("Koniec możliwych ruchów, wygrał program pierwszy.");
                             }
+                            Bricks.firstRobotPlayer.killRobot();
+                            Bricks.secondRobotPlayer.killRobot();
                             result = alert.showAndWait();
                             resetBoard();
                             controlAutoPlayButtons(true);
                             if (result.isPresent() && result.get() == buttonExitToMenu)
                                 Bricks.mainStage.backToMenu();
+                        } else {
+                            Optional<ButtonType> result;
+                            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+                            alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                            Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                            alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                            alert.setTitle("Koniec Gry");
+                            alert.setContentText("Co chcesz zrobić?");
+                            ButtonType buttonPlayAgain = new ButtonType("Kolejna Gra");
+                            ButtonType buttonExitToMenu = new ButtonType("Powrót do Menu");
+                            alert.getButtonTypes().setAll(buttonPlayAgain, buttonExitToMenu);
+                            if (cancelReason == 1) {
+                                if (computerPlayer == 1) {
+                                    Bricks.firstRobotPlayer.sendEndingMessages(false);
+                                    Bricks.secondRobotPlayer.sendEndingMessages(true);
+                                    alert.setHeaderText("Komputer pierwszy wykonał błędny ruch, wygrał komputer drugi.");
+                                }
+                                if (computerPlayer == 2) {
+                                    Bricks.firstRobotPlayer.sendEndingMessages(true);
+                                    Bricks.secondRobotPlayer.sendEndingMessages(false);
+                                    alert.setHeaderText("Komputer drugi wykonał błędny ruch, wygrał komputer pierwszy.");
+                                }
+
+                            }
+                            if (cancelReason == 2) {
+                                if (computerPlayer == 1) {
+                                    Bricks.firstRobotPlayer.sendEndingMessages(false);
+                                    Bricks.secondRobotPlayer.sendEndingMessages(true);
+                                    alert.setHeaderText("Komputer pierwszy przekroczył czas ruchu, wygrał komputer drugi.");
+                                }
+                                if (computerPlayer == 2) {
+                                    Bricks.firstRobotPlayer.sendEndingMessages(true);
+                                    Bricks.secondRobotPlayer.sendEndingMessages(false);
+                                    alert.setHeaderText("Komputer drugi przekroczył czas ruchu, wygrał komputer pierwszy.");
+                                }
+                            }
+                            Bricks.firstRobotPlayer.killRobot();
+                            Bricks.secondRobotPlayer.killRobot();
+                            if (cancelReason == 1 || cancelReason == 2) {
+                                result = alert.showAndWait();
+                                resetBoard();
+                                controlAutoPlayButtons(true);
+                                if (result.isPresent() && result.get() == buttonExitToMenu)
+                                    Bricks.mainStage.backToMenu();
+                            }
                         }
                     });
                 } else {
@@ -884,10 +910,14 @@ class GamePane extends Pane {
                 if (computerPlayer == 1) {
                     Bricks.firstRobotPlayer.sendEndingMessages(false);
                     Bricks.secondRobotPlayer.sendEndingMessages(true);
+                    Bricks.firstRobotPlayer.killRobot();
+                    Bricks.secondRobotPlayer.killRobot();
                     alert.setHeaderText("Koniec możliwych ruchów, wygrał program drugi.");
                 } else {
                     Bricks.firstRobotPlayer.sendEndingMessages(true);
                     Bricks.secondRobotPlayer.sendEndingMessages(false);
+                    Bricks.firstRobotPlayer.killRobot();
+                    Bricks.secondRobotPlayer.killRobot();
                     alert.setHeaderText("Koniec możliwych ruchów, wygrał program pierwszy.");
                 }
                 computerPlayer = 1;
@@ -903,6 +933,10 @@ class GamePane extends Pane {
             if (gamemode == 0) {
                 if (actualPlayer == 1) {
                     alert.setHeaderText("Koniec możliwych ruchów, wygrał komputer.");
+                    if(Bricks.singlePlayerRobotPlayer!=null) {
+                        Bricks.singlePlayerRobotPlayer.sendEndingMessages(true);
+                        Bricks.singlePlayerRobotPlayer.killRobot();
+                    }
                 } else {
                     alert.setHeaderText("Koniec możliwych ruchów, wygrałeś.");
                 }
@@ -935,22 +969,14 @@ class GamePane extends Pane {
         if (reason.equals("Timeout")) {
             System.out.println("Timeout");
             if (computerPlayer == 1) {
-                Bricks.firstRobotPlayer.sendEndingMessages(false);
-                Bricks.secondRobotPlayer.sendEndingMessages(true);
                 alert.setHeaderText("Komputer numer 1 przekroczył czas na wykonanie ruchu, wygrał program drugi");
             } else {
-                Bricks.firstRobotPlayer.sendEndingMessages(true);
-                Bricks.secondRobotPlayer.sendEndingMessages(false);
                 alert.setHeaderText("Komputer numer 2 przekroczył czas na wykonanie ruchu, wygrał program pierwszy");
             }
         } else {
             if (computerPlayer == 1) {
-                Bricks.firstRobotPlayer.sendEndingMessages(false);
-                Bricks.secondRobotPlayer.sendEndingMessages(true);
                 alert.setHeaderText("Komputer numer 1 wykonał błędny ruch, wygrał program drugi");
             } else {
-                Bricks.firstRobotPlayer.sendEndingMessages(true);
-                Bricks.secondRobotPlayer.sendEndingMessages(false);
                 alert.setHeaderText("Komputer numer 2 wykonał błędny ruch, wygrał program pierwszy");
             }
         }
@@ -969,6 +995,8 @@ class GamePane extends Pane {
         try {
             move = Bricks.singlePlayerRobotPlayer.makeMove(movesStorage.getLastMoveAsString());
         } catch (InvalidMoveException exception) {
+            Bricks.singlePlayerRobotPlayer.sendEndingMessages(false);
+            Bricks.singlePlayerRobotPlayer.killRobot();
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -990,6 +1018,8 @@ class GamePane extends Pane {
             }
             return;
         } catch (TimeoutException exception) {
+            Bricks.singlePlayerRobotPlayer.sendEndingMessages(false);
+            Bricks.singlePlayerRobotPlayer.killRobot();
             Optional<ButtonType> result;
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);

@@ -612,6 +612,7 @@ class GamesPane extends Pane {
                                 if (!found) {
                                     RobotPlayer test = toAdd.getRobotPlayer();
                                     if (test != null) {
+                                        test.sendEndingMessages(true);
                                         test.killRobot();
                                         playersObservableList.add(toAdd);
                                     } else {
@@ -763,6 +764,7 @@ class GamesPane extends Pane {
                                 }
                                 if (!found)
                                     playersObservableList.add(toAdd);
+                                toCheck.sendEndingMessages(true);
                                 toCheck.killRobot();
                             }
 
