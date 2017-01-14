@@ -44,7 +44,7 @@ public class RobotPlayer {
         }
         if (nextMove.contains(System.lineSeparator())) {
             String splittedValues[] = nextMove.split("\\s+");
-            if (!splittedValues[0].equals("PONG")) {
+            if (!splittedValues[0].toUpperCase().equals("PONG")) {
                 throw new RobotPlayerNotWorkingException("Answer to Ping wasn't Pong");
             }
             writer.println(size);
@@ -82,7 +82,7 @@ public class RobotPlayer {
         }
         if (nextMove.contains(System.lineSeparator())) {
             String splittedValues[] = nextMove.split("\\s+");
-            if (!splittedValues[0].equals("PONG")) {
+            if (!splittedValues[0].toUpperCase().equals("PONG")) {
                 throw new RobotPlayerNotWorkingException("Answer to Ping wasn't Pong");
             }
             writer.println(size);
@@ -101,7 +101,7 @@ public class RobotPlayer {
         reader = new BufferedReader(new InputStreamReader(robotProc.getInputStream()));
         writer = new PrintWriter(robotProc.getOutputStream(), true);
         writer.println("PING");
-        if (!reader.readLine().equals("PONG")) {
+        if (!reader.readLine().toUpperCase().equals("PONG")) {
             throw new RobotPlayerNotWorkingException("Answer to Ping wasn't Pong");
         }
         writer.println(size);
@@ -117,7 +117,7 @@ public class RobotPlayer {
         reader = new BufferedReader(new InputStreamReader(robotProc.getInputStream()));
         writer = new PrintWriter(robotProc.getOutputStream(), true);
         writer.println("PING");
-        if (!reader.readLine().equals("PONG")) {
+        if (!reader.readLine().toUpperCase().equals("PONG")) {
             throw new RobotPlayerNotWorkingException("Answer to Ping wasn't Pong");
         }
         this.size = size;
