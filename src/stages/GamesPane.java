@@ -412,7 +412,7 @@ class GamesPane extends Pane {
 
 
         mainTabPane = new TabPane();
-        Tab boardsSelectTab = new Tab("Liga");
+        Tab boardsSelectTab = new Tab("Plansze");
         mainTabPane.getTabs().add(boardsSelectTab);
         boardsSelectTab.setContent(mainGridPane);
         boardsSelectTab.setClosable(false);
