@@ -1105,16 +1105,31 @@ class GamePane extends Pane {
     }
 
     private boolean possibleMove(int x1, int y1, int x2, int y2) {
-        if(x1<0 || x1>=board.board.length)
+        if(x1<0 || x1>=board.board.length) {
+            System.out.println("Błędny ruch:");
+            System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
             return false;
-        if(y1<0 || y1>=board.board.length)
+        }
+        if(y1<0 || y1>=board.board.length) {
+            System.out.println("Błędny ruch:");
+            System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
             return false;
-        if(x2<0 || x2>=board.board.length)
+        }
+        if(x2<0 || x2>=board.board.length) {
+            System.out.println("Błędny ruch:");
+            System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
             return false;
-        if(y2<0 || y2>=board.board.length)
+        }
+        if(y2<0 || y2>=board.board.length) {
+            System.out.println("Błędny ruch:");
+            System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
             return false;
-        if (board.board[x1][y1] != 0 || board.board[x2][y2] != 0)
+        }
+        if (board.board[x1][y1] != 0 || board.board[x2][y2] != 0) {
+            System.out.println("Błędny ruch:");
+            System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
             return false;
+        }
         boolean flag = false;
 
         if (y1 == y2) {
@@ -1129,7 +1144,10 @@ class GamePane extends Pane {
             if (y1 - 1 == y2)
                 flag = true;
         }
-
+        if(!flag) {
+            System.out.println("Błędny ruch:");
+            System.out.println(x1 + " " + y1 + " " + x2 + " " + y2);
+        }
         return flag;
     }
 

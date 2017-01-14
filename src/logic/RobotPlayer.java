@@ -135,6 +135,7 @@ public class RobotPlayer {
     public int[] makeMove(String message) throws InvalidMoveException, TimeoutException {
         int[] move = new int[4];
         writer.println(message);
+        char[] buffor = new char[256];
         try {
             for (int i = 0; i <= 100; i++) {//pętla sprawdza co 10ms czy nie przyszła odpowiedź
                 if (i == 100) {                   //przekroczony czas na odpowiedź, wyrzuca błąd
@@ -146,7 +147,6 @@ public class RobotPlayer {
                 }
             }
 
-            char[] buffor = new char[256];
             //noinspection ResultOfMethodCallIgnored
             reader.read(buffor);
             String nextMove = "";
@@ -160,10 +160,11 @@ public class RobotPlayer {
                 move[2] = Integer.parseInt(splittedValues[2]) - 1;
                 move[3] = Integer.parseInt(splittedValues[3]) - 1;
             } else {
-                System.out.println("Wyjątek 1");
                 throw new InvalidMoveException("Linia nie kończy się znakiem nowej linii");
             }
         } catch (IOException | ArrayIndexOutOfBoundsException | NumberFormatException e) {
+            System.out.println("Błędny ruch:");
+            System.out.println(buffor);
             throw new InvalidMoveException("Ruch wykonany przez komputer nie jest poprawny");
         } catch (InterruptedException e) {
             e.printStackTrace();
