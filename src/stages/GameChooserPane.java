@@ -211,7 +211,7 @@ class GameChooserPane extends Pane {
         mainGridPane.add(gamesGameButtonHBox, 1,5);
 
         HBox backButtonHBox = new HBox();
-        backButton = new Button("Powrót");
+        backButton = new Button("Powrót do menu głównego");
         backButtonHBox.setAlignment(Pos.CENTER);
         backButtonHBox.getChildren().add(backButton);
 

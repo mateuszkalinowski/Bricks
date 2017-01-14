@@ -2,11 +2,15 @@ package stages;
 
 import core.Bricks;
 import XClasses.XSettings;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.image.Image;
+import javafx.scene.input.DragEvent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
@@ -166,6 +170,54 @@ class OptionsPane extends Pane {
         firstProgramNameLabel.setAlignment(Pos.CENTER_LEFT);
         firstProgramNameLabel.setPrefWidth(Double.MAX_VALUE);
         firstProgramNameLabel.setPadding(new Insets(0, 0, 0, 20));
+
+        firstProgramNameLabel.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if (db.hasFiles() && firstProgramTypeComboBox.getSelectionModel().getSelectedIndex()==0) {
+                    event.acceptTransferModes(TransferMode.LINK);
+                } else {
+                    event.consume();
+                }
+            }
+        });
+
+        firstProgramNameLabel.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if(db.hasFiles() && db.getFiles().size()==1) {
+                    for (File openFile : db.getFiles()) {
+                        try {
+                            playerFirstFullPath = openFile.getCanonicalPath();
+                            if (playerFirstFullPath.length() <= 30) {
+                                firstProgramNameLabel.setText(playerFirstFullPath);
+                            } else {
+                                firstProgramNameLabel.setText("..." + playerFirstFullPath.substring(playerFirstFullPath.length() - 30, playerFirstFullPath.length()));
+                            }
+                        } catch (IOException ignored) {}
+                    }
+                    event.setDropCompleted(true);
+                    event.consume();
+                }
+                else {
+                    event.setDropCompleted(true);
+                    event.consume();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                    alert.setTitle("Błąd wyboru programu");
+                    alert.setHeaderText("Upuść tutaj tylko jeden program.");
+                    alert.setContentText("Aby przeprowadzać gry wielu programów wybierz 'Wojna Robotow' a następnie 'Liga', i tam dodaj wiele programów grających");
+                    ButtonType buttonOk = new ButtonType("Ok");
+                    alert.getButtonTypes().setAll(buttonOk);
+                    alert.showAndWait();
+                }
+            }
+        });
+
         if (playerFirstFullPath.length() <= 30) {
             firstProgramNameLabel.setText(playerFirstFullPath);
         } else {
@@ -176,6 +228,54 @@ class OptionsPane extends Pane {
         secondProgramNameLabel.setPrefWidth(Double.MAX_VALUE);
         secondProgramNameLabel.setText(playerSecondFullPath);
         secondProgramNameLabel.setPadding(new Insets(0, 0, 0, 20));
+
+        secondProgramNameLabel.setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if (db.hasFiles() && secondProgramTypeComboBox.getSelectionModel().getSelectedIndex()==0) {
+                    event.acceptTransferModes(TransferMode.LINK);
+                } else {
+                    event.consume();
+                }
+            }
+        });
+
+        secondProgramNameLabel.setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if(db.hasFiles() && db.getFiles().size()==1) {
+                    for (File openFile : db.getFiles()) {
+                        try {
+                            playerSecondFullPath = openFile.getCanonicalPath();
+                            if (playerSecondFullPath.length() <= 30) {
+                                secondProgramNameLabel.setText(playerSecondFullPath);
+                            } else {
+                                secondProgramNameLabel.setText("..." + playerSecondFullPath.substring(playerSecondFullPath.length() - 30, playerSecondFullPath.length()));
+                            }
+                        } catch (IOException ignored) {}
+                    }
+                    event.setDropCompleted(true);
+                    event.consume();
+                }
+                else {
+                    event.setDropCompleted(true);
+                    event.consume();
+                    Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                    alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                    Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                    alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                    alert.setTitle("Błąd wyboru programu");
+                    alert.setHeaderText("Upuść tutaj tylko jeden program.");
+                    alert.setContentText("Aby przeprowadzać gry wielu programów wybierz 'Wojna Robotow' a następnie 'Liga', i tam dodaj wiele programów grających");
+                    ButtonType buttonOk = new ButtonType("Ok");
+                    alert.getButtonTypes().setAll(buttonOk);
+                    alert.showAndWait();
+                }
+            }
+        });
+
         if (playerSecondFullPath.length() <= 30) {
             secondProgramNameLabel.setText(playerSecondFullPath);
         } else {
@@ -189,6 +289,7 @@ class OptionsPane extends Pane {
 
         HBox chooseFirstComputerPlayerHBox = new HBox();
         Button chooseFirstComputerPlayerButton = new Button("Pierwszy Gracz");
+        chooseFirstComputerPlayerButton.setTooltip(new Tooltip("Możesz również przeciągnąć swój program na obszar po prawej stronie tego przycisku."));
         chooseFirstComputerPlayerButton.setFont(Font.font("Comic Sans MS", 14));
         chooseFirstComputerPlayerButton.setPrefWidth(150);
         chooseFirstComputerPlayerHBox.getChildren().add(chooseFirstComputerPlayerButton);
@@ -225,6 +326,7 @@ class OptionsPane extends Pane {
 
         HBox chooseSecondComputerPlayerHBox = new HBox();
         Button chooseSecondComputerPlayerButton = new Button("Drugi Gracz");
+        chooseSecondComputerPlayerButton.setTooltip(new Tooltip("Możesz również przeciągnąć swój program na obszar po prawej stronie tego przycisku."));
         chooseSecondComputerPlayerButton.setFont(Font.font("Comic Sans MS", 14));
         chooseSecondComputerPlayerButton.setPrefWidth(150);
         chooseSecondComputerPlayerHBox.getChildren().add(chooseSecondComputerPlayerButton);
