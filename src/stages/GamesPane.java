@@ -919,6 +919,7 @@ class GamesPane extends Pane {
                             }
                         }
                     }
+                    exportPrograms();
                     if(error) {
                         Alert alert = new Alert(Alert.AlertType.INFORMATION);
                         alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
