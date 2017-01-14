@@ -15,8 +15,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.scene.text.Font;
 import javafx.scene.text.TextAlignment;
@@ -873,6 +872,71 @@ class GamesPane extends Pane {
         reasonsGridPane.add(reasonsTableViewVBox,0,1,3,10);
         mainTabPane.getTabs().add(reasonsTab);
 
+        setOnDragOver(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                if (db.hasFiles() && mainTabPane.getSelectionModel().getSelectedIndex()==1) {
+                    event.acceptTransferModes(TransferMode.LINK);
+                } else {
+                    event.consume();
+                }
+            }
+        });
+
+        setOnDragDropped(new EventHandler<DragEvent>() {
+            @Override
+            public void handle(DragEvent event) {
+                Dragboard db = event.getDragboard();
+                boolean found = false;
+                boolean error = false;
+                if(db.hasFiles() && mainTabPane.getSelectionModel().getSelectedIndex()==1) {
+                    for (File openFile : db.getFiles()) {
+                        if (openFile != null) {
+                            try {
+                                playerPath = openFile.getCanonicalPath();
+                            } catch (IOException ignored) {
+                                return;
+                            }
+
+                            XRobotPlayer toAdd = new XRobotPlayer("Plik class/exe/jar/out/py", playerPath);
+                            found = false;
+                            for (XRobotPlayer aPlayersObservableList : playersObservableList) {
+                                if (toAdd.getName().equals(aPlayersObservableList.getName())) {
+                                    error = true;
+                                    found = true;
+                                }
+                            }
+                            if (!found) {
+                                RobotPlayer test = toAdd.getRobotPlayer();
+                                if (test != null) {
+                                    test.sendEndingMessages(true);
+                                    test.killRobot();
+                                    playersObservableList.add(toAdd);
+                                } else {
+                                    error = true;
+                                }
+                            }
+                        }
+                    }
+                    if(error) {
+                        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                        alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
+                        Stage alertStage = (Stage) alert.getDialogPane().getScene().getWindow();
+                        alertStage.getIcons().add(new Image(MainStage.class.getResourceAsStream("resources/brick_red.png")));
+                        alert.setTitle("Komunikat Dodawania Programów");
+                        alert.setHeaderText("Jeden lub więcej programów nie zostało dodanych.");
+                        alert.setContentText("Pominięte zostały programy o nazwie takiej samej jak już zaimportowane, jak również " +
+                                "te niedziałające.");
+                        ButtonType buttonOk = new ButtonType("Ok");
+                        alert.getButtonTypes().setAll(buttonOk);
+                        alert.showAndWait();
+                    }
+                }
+                event.setDropCompleted(true);
+                event.consume();
+            }
+        });
         widthProperty().addListener((observable, oldValue, newValue) -> {
             mainGridPane.setPrefWidth(newValue.doubleValue());
             mainTabPane.setPrefWidth(newValue.doubleValue());

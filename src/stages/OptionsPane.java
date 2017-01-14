@@ -218,7 +218,7 @@ class OptionsPane extends Pane {
         runAsFirstPlayerLabel.setPrefWidth(Double.MAX_VALUE);
         runAsFirstPlayerLabel.setAlignment(Pos.BASELINE_RIGHT);
 
-        Label parametersFirstPlayerLabel = new Label("Parametry uruchomienia:  ");
+        Label parametersFirstPlayerLabel = new Label("Komenda uruchomienia:  ");
         parametersFirstPlayerLabel.setFont(Font.font("Comic Sans MS", 16));
         parametersFirstPlayerLabel.setPrefWidth(Double.MAX_VALUE);
         parametersFirstPlayerLabel.setAlignment(Pos.BASELINE_RIGHT);
@@ -252,7 +252,7 @@ class OptionsPane extends Pane {
         runAsSecondPlayerLabel.setPrefWidth(Double.MAX_VALUE);
         runAsSecondPlayerLabel.setAlignment(Pos.BASELINE_RIGHT);
 
-        Label parametersSecondPlayerLabel = new Label("Parametry uruchomienia:  ");
+        Label parametersSecondPlayerLabel = new Label("Komenda uruchomienia:  ");
         parametersSecondPlayerLabel.setFont(Font.font("Comic Sans MS", 16));
         parametersSecondPlayerLabel.setPrefWidth(Double.MAX_VALUE);
         parametersSecondPlayerLabel.setAlignment(Pos.BASELINE_RIGHT);
