@@ -57,9 +57,11 @@ class GameChooserPane extends Pane {
         mainGridPane.add(gamesGameCanvas,1,1,1,4);
 
         HBox singleGameButtonHBox = new HBox();
-        singleGamesButton = new Button("Gra Pojedyncza");
+        singleGamesButton = new Button("1 vs 1");
         singleGameButtonHBox.setAlignment(Pos.CENTER);
         singleGameButtonHBox.getChildren().add(singleGamesButton);
+        singleGamesButton.setMinWidth(150);
+        singleGameButtonHBox.setMinWidth(150);
 
         singleGamesButton.addEventHandler(MouseEvent.MOUSE_ENTERED, event -> {
             singleGamesBorder = true;
@@ -183,9 +185,11 @@ class GameChooserPane extends Pane {
         mainGridPane.add(singleGameButtonHBox, 0,5);
 
         HBox gamesGameButtonHBox = new HBox();
-        gamesGamesButton = new Button("Rozgrywki");
+        gamesGamesButton = new Button("Liga");
         gamesGameButtonHBox.setAlignment(Pos.CENTER);
         gamesGameButtonHBox.getChildren().add(gamesGamesButton);
+        gamesGamesButton.setMinWidth(150);
+        gamesGameButtonHBox.setMinWidth(150);
 
         gamesGamesButton.setOnAction(event -> {
             gamesPane = new GamesPane(Bricks.mainStage.sceneOfChoice.getWidth(), Bricks.mainStage.sceneOfChoice.getHeight());
