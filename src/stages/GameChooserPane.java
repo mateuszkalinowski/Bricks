@@ -242,7 +242,15 @@ class GameChooserPane extends Pane {
             int[] rozmiar = Bricks.mainStage.getGameChooserSizeAsArray();
             double width = rozmiar[0]*1.0 / 2.0;
             double height = rozmiar[1]*1.0 / 7.0 * 4.0;
-
+            double difference=0;
+            if(width>height) {
+                difference = width-height;
+                if(difference<10)
+                    difference=10;
+            }
+            else {
+                difference=10;
+            }
             singleGameCanvas.setHeight(height);
             singleGameCanvas.setWidth(width);
 
@@ -252,21 +260,21 @@ class GameChooserPane extends Pane {
 
             GraphicsContext gc1 = singleGameCanvas.getGraphicsContext2D();
             gc1.clearRect(0,0,width,height);
-            gc1.drawImage(singleGameImage,0, 0, width, height);
+            gc1.drawImage(singleGameImage,difference/2.0, 0, width-difference, height);
 
             if(singleGamesBorder) {
                 gc1.setStroke(Color.BLUE);
                 gc1.setLineWidth(3);
-                gc1.strokeRect(0,0,width,height);
+                gc1.strokeRect(difference/2.0,0,width-difference,height);
             }
 
             GraphicsContext gc2 = gamesGameCanvas.getGraphicsContext2D();
             gc2.clearRect(0,0,width,height);
-            gc2.drawImage(gamesGameImage,0,0,width,height);
+            gc2.drawImage(gamesGameImage,difference/2.0,0,width-difference,height);
             if(gamesGamesBorder) {
                 gc2.setStroke(Color.BLUE);
                 gc2.setLineWidth(3);
-                gc2.strokeRect(0,0,width,height);
+                gc2.strokeRect(difference/2.0,0,width-difference,height);
             }
         }
         catch(Exception ignored) {}
