@@ -339,6 +339,7 @@ class GamePane extends Pane {
                                     break;
                                 }
                                 if (!Bricks.mainStage.gamePane.board.anyMoves()) {
+                                    isGameFinished = true;
                                     break;
                                 }
                                 try {
@@ -355,7 +356,7 @@ class GamePane extends Pane {
                     autoGameThread.start();
                     autoGame.setOnSucceeded(event12 -> {
 
-                        if (cancelReason==0) {
+                        if (cancelReason==0 && isGameFinished) {
                             Optional<ButtonType> result;
                             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
                             alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
