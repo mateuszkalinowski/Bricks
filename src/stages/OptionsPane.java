@@ -361,37 +361,37 @@ class OptionsPane extends Pane {
         robotWarsLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 25));
         saveAndExitButton.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 55));
 
-        boardSizeLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 40));
-        firstPlayerColorLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 40));
-        secondPlayerColorLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 40));
-        soundSettingsLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 40));
-        volumeSettingLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 40));
-        runAsFirstPlayerLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 40));
-        runAsSecondPlayerLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 40));
-        singPlayerComputerPlayerLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 40));
-        parametersFirstPlayerLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 40));
-        parametersSecondPlayerLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 40));
+        boardSizeLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 45));
+        firstPlayerColorLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 45));
+        secondPlayerColorLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 45));
+        soundSettingsLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 45));
+        volumeSettingLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 45));
+        runAsFirstPlayerLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 45));
+        runAsSecondPlayerLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 45));
+        singPlayerComputerPlayerLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 45));
+        parametersFirstPlayerLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 45));
+        parametersSecondPlayerLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 45));
         firstProgramNameLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 55));
         secondProgramNameLabel.setFont(Font.font("Comic Sans MS", Bricks.mainStage.mainStage.getHeight() / 55));
 
-        boardSizeComboBoxHBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 40);
-        boardSizeComboBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 40);
+        boardSizeComboBoxHBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 45);
+        boardSizeComboBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 45);
 
-        chooseFirstComputerPlayerHBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 40);
-        firstProgramTypeComboBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 40);
+        chooseFirstComputerPlayerHBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 45);
+        firstProgramTypeComboBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 45);
 
-        chooseSecondComputerPlayerHBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 40);
-        secondProgramTypeComboBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 40);
+        chooseSecondComputerPlayerHBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 45);
+        secondProgramTypeComboBox.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 45);
 
-        if (Bricks.mainStage.mainStage.getHeight() / 40 > 25) {
-            firstPlayerColorPicker.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 40);
-            secondPlayerColorPicker.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 40);
+        if (Bricks.mainStage.mainStage.getHeight() / 45 > 25) {
+            firstPlayerColorPicker.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 45);
+            secondPlayerColorPicker.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 45);
         } else {
             firstPlayerColorPicker.setMaxHeight(25);
             secondPlayerColorPicker.setMaxHeight(25);
         }
 
-        chooseTheme.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 40);
+        chooseTheme.setMaxHeight(Bricks.mainStage.mainStage.getHeight() / 45);
 
         saveAndExitButton.setOnAction(event -> {
                 Bricks.mainStage.setSettings(BoardSize, firstPlayerColor, secondPlayerColor, isSound, volume, playerFirstFullPath, playerSecondFullPath, firstPlayerProgramType, secondPlayerProgramType, firstPlayerRunCommand, secondPlayerRunCommand, computerPlayerType, theme);
@@ -403,27 +403,27 @@ class OptionsPane extends Pane {
             robotWarsLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 25));
             saveAndExitButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 55));
 
-            boardSizeLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 40));
-            firstPlayerColorLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 40));
-            secondPlayerColorLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 40));
-            soundSettingsLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 40));
-            volumeSettingLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 40));
-            runAsFirstPlayerLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 40));
-            runAsSecondPlayerLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 40));
-            singPlayerComputerPlayerLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 40));
-            parametersFirstPlayerLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 40));
-            parametersSecondPlayerLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 40));
+            boardSizeLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 45));
+            firstPlayerColorLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 45));
+            secondPlayerColorLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 45));
+            soundSettingsLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 45));
+            volumeSettingLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 45));
+            runAsFirstPlayerLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 45));
+            runAsSecondPlayerLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 45));
+            singPlayerComputerPlayerLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 45));
+            parametersFirstPlayerLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 45));
+            parametersSecondPlayerLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 45));
             firstProgramNameLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 55));
             secondProgramNameLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 55));
 
-            boardSizeComboBoxHBox.setMaxHeight(newValue.doubleValue() / 40);
-            boardSizeComboBox.setMaxHeight(newValue.doubleValue() / 40);
+            boardSizeComboBoxHBox.setMaxHeight(newValue.doubleValue() / 45);
+            boardSizeComboBox.setMaxHeight(newValue.doubleValue() / 45);
 
-            chooseFirstComputerPlayerHBox.setMaxHeight(newValue.doubleValue() / 40);
-            firstProgramTypeComboBox.setMaxHeight(newValue.doubleValue() / 40);
+            chooseFirstComputerPlayerHBox.setMaxHeight(newValue.doubleValue() / 45);
+            firstProgramTypeComboBox.setMaxHeight(newValue.doubleValue() / 45);
 
-            chooseSecondComputerPlayerHBox.setMaxHeight(newValue.doubleValue() / 40);
-            secondProgramTypeComboBox.setMaxHeight(newValue.doubleValue() / 40);
+            chooseSecondComputerPlayerHBox.setMaxHeight(newValue.doubleValue() / 45);
+            secondProgramTypeComboBox.setMaxHeight(newValue.doubleValue() / 45);
 
             if (newValue.doubleValue() / 40 > 25) {
                 firstPlayerColorPicker.setMaxHeight(newValue.doubleValue() / 40);

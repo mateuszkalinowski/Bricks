@@ -264,7 +264,7 @@ class GameChooserPane extends Pane {
 
             if(singleGamesBorder) {
                 gc1.setStroke(Color.BLUE);
-                gc1.setLineWidth(3);
+                gc1.setLineWidth(2);
                 gc1.strokeRect(difference/2.0,0,width-difference,height);
             }
 
@@ -273,7 +273,7 @@ class GameChooserPane extends Pane {
             gc2.drawImage(gamesGameImage,difference/2.0,0,width-difference,height);
             if(gamesGamesBorder) {
                 gc2.setStroke(Color.BLUE);
-                gc2.setLineWidth(3);
+                gc2.setLineWidth(2);
                 gc2.strokeRect(difference/2.0,0,width-difference,height);
             }
         }
