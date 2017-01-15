@@ -406,6 +406,8 @@ class GamePane extends Pane {
                                     Bricks.secondRobotPlayer.sendEndingMessages(false);
                                     alert.setHeaderText("Komputer drugi wykonał błędny ruch, wygrał komputer pierwszy.");
                                 }
+                                Bricks.firstRobotPlayer.killRobot();
+                                Bricks.secondRobotPlayer.killRobot();
 
                             }
                             if (cancelReason == 2) {
@@ -419,9 +421,9 @@ class GamePane extends Pane {
                                     Bricks.secondRobotPlayer.sendEndingMessages(false);
                                     alert.setHeaderText("Komputer drugi przekroczył czas ruchu, wygrał komputer pierwszy.");
                                 }
+                                Bricks.firstRobotPlayer.killRobot();
+                                Bricks.secondRobotPlayer.killRobot();
                             }
-                            Bricks.firstRobotPlayer.killRobot();
-                            Bricks.secondRobotPlayer.killRobot();
                             if (cancelReason == 1 || cancelReason == 2) {
                                 result = alert.showAndWait();
                                 resetBoard();
