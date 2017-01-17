@@ -132,6 +132,7 @@ class GamesPane extends Pane {
                     if (e.getCode() == KeyCode.BACK_SPACE) {
                         if (currentText.length() >= 2) {
                             boardsSizesListView.getItems().set(selectedIndex, currentText.substring(0, currentText.length() - 1));
+                            boardsSizesListView.getSelectionModel().select(selectedIndex);
                         } else if (currentText.length() == 1 && boardsSizesListView.getItems().size() > 1) {
                             boardsSizesListView.getItems().set(selectedIndex,"");
                         } else if (currentText.length() == 1 && boardsSizesListView.getItems().size() == 1) {
@@ -140,6 +141,9 @@ class GamesPane extends Pane {
                         } else if (currentText.length() == 0 && selectedIndex > 0) {
                             boardsSizesListView.getItems().remove(selectedIndex);
                             boardsSizesListView.getSelectionModel().select(selectedIndex - 1);
+                        } else if(currentText.length() == 0 && selectedIndex == 0 && boardsSizesListView.getItems().size()>1) {
+                            boardsSizesListView.getItems().remove(selectedIndex);
+                            boardsSizesListView.getSelectionModel().selectFirst();
                         }
                     }
                     if (e.getCode() == KeyCode.ENTER) {
