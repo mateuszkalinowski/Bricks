@@ -67,14 +67,33 @@ class GamePane extends Pane {
 
         if (gamemode == 0) {
             HBox gamemodeOnePlayerHBox = new HBox();
+            Label computerPlayerTypeLabel = new Label();
+            computerPlayerTypeLabel.setFont(Font.font("Comic Sans MS",14));
+            if(Bricks.mainStage.computerPlayerType == 0) {
+                computerPlayerTypeLabel.setText("Przeciwnik: gracz wbudowany");
+            }
+            else {
+                String przeciwnik="";
+                if(Bricks.mainStage.computerPlayerType==1)
+                    przeciwnik = Bricks.mainStage.playerFirstFullPath;
+                if(Bricks.mainStage.computerPlayerType==2)
+                    przeciwnik = Bricks.mainStage.playerSecondFullPath;
+
+                if(przeciwnik.length()>30)
+                    przeciwnik = "..."+ przeciwnik.substring(przeciwnik.length()-30,przeciwnik.length());
+                computerPlayerTypeLabel.setText("Przeciwnik: " + przeciwnik);
+            }
+            gamemodeOnePlayerHBox.getChildren().add(computerPlayerTypeLabel);
+            gamemodeOnePlayerHBox.setSpacing(20);
             backToMenuButton = new Button("Powrót");
             gamemodeOnePlayerHBox.getChildren().add(backToMenuButton);
             gamemodeOnePlayerHBox.setAlignment(Pos.CENTER);
             gamemodeOnePlayerHBox.setPadding(new Insets(0, 20, 0, 0));
-            gamemodeOnePlayerHBox.setAlignment(Pos.TOP_RIGHT);
+            gamemodeOnePlayerHBox.setAlignment(Pos.BASELINE_RIGHT);
             mainGridPane.add(gamemodeOnePlayerHBox, 0, 1);
-        }
 
+
+        }
         if (gamemode == 1) {
             HBox gamemodeTwoPlayerHBox = new HBox();
             undoMoveButton = new Button("Cofnij Ruch");

@@ -8,10 +8,15 @@ import exceptions.InvalidMoveException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.concurrent.Task;
+import javafx.concurrent.WorkerStateEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.CategoryAxis;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -52,15 +57,18 @@ class GamesPane extends Pane {
         for (int i = 0; i < 3; i++) {
             mainGridPane.getColumnConstraints().add(column);
         }
+        HBox boardsSizesHbox = new HBox();
+        boardsSizesHbox.setPadding(new Insets(0,10,10,10));
         boardsSizesListView = new ListView<>();
         boardsSizesListView.setMaxWidth(Double.MAX_VALUE);
         boardsSizesListView.setMaxHeight(Double.MAX_VALUE);
-        mainGridPane.add(boardsSizesListView, 1, 1, 1, 4);
+        boardsSizesHbox.getChildren().add(boardsSizesListView);
+        mainGridPane.add(boardsSizesHbox, 0, 1, 1, 7);
 
         Label boardsListLabel = new Label("Plansze:");
         boardsListLabel.setAlignment(Pos.CENTER);
         boardsListLabel.setMaxWidth(Double.MAX_VALUE);
-        mainGridPane.add(boardsListLabel, 0, 0, 3, 1);
+        mainGridPane.add(boardsListLabel, 0, 0, 1, 1);
 
         boardsSizesListView.getSelectionModel().setSelectionMode(SelectionMode.SINGLE);
         importPoints();
@@ -157,7 +165,7 @@ class GamesPane extends Pane {
         runButton = new Button("Uruchom");
         runButton.setPrefWidth(180);
         runButton.setPrefHeight(350);
-        runButtonHBox.setAlignment(Pos.CENTER);
+        runButtonHBox.setAlignment(Pos.BOTTOM_CENTER);
         runButtonHBox.getChildren().add(runButton);
         HBox.setMargin(runButton, new Insets(5, 0, 5, 0));
         HBox.setHgrow(runButton, Priority.ALWAYS);
@@ -165,12 +173,14 @@ class GamesPane extends Pane {
 
         playersObservableList = FXCollections.observableArrayList();
         reasonsObservableList = FXCollections.observableArrayList();
+        resultsObservableList = FXCollections.observableArrayList();
 
         runButton.setOnAction(event -> {
             if (runButton.getText().equals("Uruchom")) {
                 if (playersObservableList.size() >= 2) {
                     gamesProgressBar.setProgress(0);
                     resultsButton.setDisable(true);
+                    finish = true;
                     ArrayList<Integer> boardsSizes = new ArrayList<>();
                     for (int i = boardsSizesListView.getItems().size() - 1; i >= 0; i--) {
                         try {
@@ -342,14 +352,64 @@ class GamesPane extends Pane {
                         gamesProgressBar.progressProperty().bind(gamesTask.progressProperty());
                         autoGameThread.start();
                         gamesTask.setOnSucceeded(event1 -> {
-                            for(String s : lostReasons) {
-                                System.out.println(s);
-                            }
                             runButton.setText("Uruchom");
                             resultsButton.setDisable(false);
                             gamesProgressBar.progressProperty().unbind();
                             gamesProgressBar.setProgress(100);
                             running = false;
+                            resultsObservableList.clear();
+                            Map<String, Integer> winsMap = new HashMap<>();
+                            Map<String, Integer> losesMap = new HashMap<>();
+                            Map<String, Double> winToAllMap = new HashMap<>();
+                            if (this.finish ) {
+                                for (XLostReasons reason : reasonsObservableList) {
+                                    {
+                                        String firstProgram = reason.getFirstProgramName();
+                                        String secondProgram = reason.getSecondProgramName();
+                                        if (reason.getWinProgramName().equals(firstProgram)) {
+                                            if (winsMap.containsKey(firstProgram)) {
+                                                winsMap.put(firstProgram, winsMap.get(firstProgram) + 1);
+                                            } else {
+                                                winsMap.put(firstProgram, 1);
+                                            }
+                                            if (losesMap.containsKey(secondProgram)) {
+                                                losesMap.put(secondProgram, losesMap.get(secondProgram) + 1);
+                                            } else {
+                                                losesMap.put(secondProgram, 1);
+                                            }
+                                        } else {
+                                            if (winsMap.containsKey(secondProgram)) {
+                                                winsMap.put(secondProgram, winsMap.get(secondProgram) + 1);
+                                            } else {
+                                                winsMap.put(secondProgram, 1);
+                                            }
+                                            if (losesMap.containsKey(firstProgram)) {
+                                                losesMap.put(firstProgram, losesMap.get(firstProgram) + 1);
+                                            } else {
+                                                losesMap.put(firstProgram, 1);
+                                            }
+                                        }
+                                    }
+                                }
+                            for (String key : winsMap.keySet()) {
+                                winToAllMap.put(key, losesMap.get(key).doubleValue() / (winsMap.get(key).doubleValue() + losesMap.get(key).doubleValue()));
+                            }
+
+                            while (!winToAllMap.isEmpty()) {
+                                String maxKey = "";
+                                for (String key : winToAllMap.keySet()) {
+                                    if (maxKey.equals(""))
+                                        maxKey = key;
+                                    else {
+                                        if (winToAllMap.get(key) < winToAllMap.get(maxKey))
+                                            maxKey = key;
+                                    }
+                                }
+                                winToAllMap.remove(maxKey);
+                                resultsObservableList.add(new XResults(maxKey, winsMap.get(maxKey), losesMap.get(maxKey)));
+                            }
+                        }
+
                         });
 
                         runButton.setText("Przerwij");
@@ -372,6 +432,7 @@ class GamesPane extends Pane {
                 }
             } else {
                 running = false;
+                finish  =false;
                 resultsButton.setDisable(false);
             }
         });
@@ -383,10 +444,11 @@ class GamesPane extends Pane {
         //gamesProgressBar.setEffect();
 
         HBox resultsButtonHBox = new HBox();
-        resultsButton = new Button("Wyniki");
-        resultsButtonHBox.setAlignment(Pos.TOP_CENTER);
+        resultsButton = new Button("Wyniki Sumaryczne");
+        resultsButtonHBox.setAlignment(Pos.TOP_LEFT);
         resultsButtonHBox.getChildren().add(resultsButton);
-        mainGridPane.add(resultsButtonHBox, 0, 10);
+        resultsButtonHBox.setPadding(new Insets(0,0,0,30));
+        mainGridPane.add(resultsButtonHBox, 0, 10,2,1);
 
         resultsButton.setOnAction(event -> {
             ResultsPane resultsPane = new ResultsPane(getWidth(), getHeight());
@@ -399,8 +461,9 @@ class GamesPane extends Pane {
 
         HBox backButtonHBox = new HBox();
         backButton = new Button("Powrót");
-        backButtonHBox.setAlignment(Pos.TOP_CENTER);
+        backButtonHBox.setAlignment(Pos.TOP_RIGHT);
         backButtonHBox.getChildren().add(backButton);
+        backButtonHBox.setPadding(new Insets(0,30,0,0));
         mainGridPane.add(backButtonHBox, 2, 10);
 
         backButton.setOnAction(event -> {
@@ -519,22 +582,47 @@ class GamesPane extends Pane {
         pathToPlayerLabel.setAlignment(Pos.CENTER);
         pathToPlayerLabel.setMaxWidth(Double.MAX_VALUE);
 
-        Label descriptionTitle = new Label("Informacje:");
+        Label descriptionTitle = new Label("Wyniki:");
         descriptionTitle.setMaxWidth(Double.MAX_VALUE);
         descriptionTitle.setAlignment(Pos.CENTER);
         descriptionTitle.setFont(Font.font("Comic Sans MS",30));
 
-        Label description = new Label();
-        description.setAlignment(Pos.CENTER);
-        description.setMaxWidth(Double.MAX_VALUE);
-        description.setTextAlignment(TextAlignment.CENTER);
-        description.setWrapText(true);
-        mainGridPane.add(descriptionTitle,0,5,3,1);
-        mainGridPane.add(description, 0, 6, 3, 2);
-        description.setPadding(new Insets(0,10,0,10));
-        description.setText("1.Programy podane na drugiej karcie będa ze soba rozgrywały partie (każdy z każdym) na podanych tutaj planszach. Każdy program będzie w każdej partii raz programem pierwszym, raz drugim\n" +
-                "2.Podane rozmiary plansz i lokalizacje programów grających zapisują się przy wyłączaniu programu i automatycznie wczytują przy jego uruchomieniu");
+        mainGridPane.add(descriptionTitle,1,0,2,1);
 
+        TableView<XResults> playersResultsTableView = new TableView<>();
+        playersResultsTableView.editableProperty().set(false);
+
+        TableColumn nameProgramColumn = new TableColumn("Program");
+        //noinspection unchecked
+        nameProgramColumn.setCellValueFactory(new PropertyValueFactory<XResults, String>("name"));
+        nameProgramColumn.prefWidthProperty().bind(playersResultsTableView.widthProperty().divide(4));
+
+        TableColumn winsColumn = new TableColumn("Wygrane");
+        //noinspection unchecked
+        winsColumn.setCellValueFactory(new PropertyValueFactory<XResults, String>("wins"));
+        winsColumn.prefWidthProperty().bind(playersResultsTableView.widthProperty().divide(4));
+
+        TableColumn lostColumn = new TableColumn("Przegrane");
+        //noinspection unchecked
+        lostColumn.setCellValueFactory(new PropertyValueFactory<XResults, String>("lost"));
+        lostColumn.prefWidthProperty().bind(playersResultsTableView.widthProperty().divide(4));
+
+        TableColumn winToAllColumn = new TableColumn("Wygrane/Rozegrane");
+        //noinspection unchecked
+        winToAllColumn.setCellValueFactory(new PropertyValueFactory<XResults, String>("winsToAll"));
+        winToAllColumn.prefWidthProperty().bind(playersResultsTableView.widthProperty().divide(4));
+
+        playersResultsTableView.setItems(resultsObservableList);
+        playersResultsTableView.getColumns().addAll(nameProgramColumn, winsColumn, lostColumn,winToAllColumn);
+
+        playersResultsTableView.setColumnResizePolicy((param) -> false);
+        //playersTableView.setSortPolicy((param) -> false);
+
+        HBox palyersResultsTableViewHBox = new HBox();
+        palyersResultsTableViewHBox.getChildren().addAll(playersResultsTableView);
+        palyersResultsTableViewHBox.setHgrow(playersResultsTableView,Priority.ALWAYS);
+        palyersResultsTableViewHBox.setPadding(new Insets(0,10,10,10));
+        mainGridPane.add(palyersResultsTableViewHBox,1, 1, 2, 7);
 
         Label runCommandLabel = new Label("Komenda uruchomienia:");
         runCommandLabel.setAlignment(Pos.CENTER);
@@ -778,6 +866,12 @@ class GamesPane extends Pane {
             }
         };
         Thread importProgramsThread = new Thread(importProgramsTask);
+        importProgramsTask.setOnSucceeded(new EventHandler<WorkerStateEvent>() {
+            @Override
+            public void handle(WorkerStateEvent event) {
+                playersTableView.refresh();
+            }
+        });
         importProgramsThread.start();
 
         playersSelectTab.setContent(playersGridPane);
@@ -939,13 +1033,20 @@ class GamesPane extends Pane {
             }
         });
         widthProperty().addListener((observable, oldValue, newValue) -> {
-            mainGridPane.setPrefWidth(newValue.doubleValue());
             mainTabPane.setPrefWidth(newValue.doubleValue());
+            if(newValue.doubleValue()>Bricks.mainStage.mainStage.getHeight()) {
+                mainGridPane.setPadding(new Insets(0,(newValue.doubleValue()-Bricks.mainStage.mainStage.getHeight())/2.0,0,(newValue.doubleValue()-Bricks.mainStage.mainStage.getHeight())/2.0));
+            }
+            else {
+                mainGridPane.setPadding(new Insets(0,0,0,0));
+            }
+
         });
         heightProperty().addListener((observable, oldValue, newValue) -> {
             mainGridPane.setPrefHeight(newValue.doubleValue());
             //reasonsTableViewVBox.setMinHeight(newValue.doubleValue());
             boardsListLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 20));
+            descriptionTitle.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 20));
             playersListLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 20));
             reasonsListLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 20));
             addPlayerLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 25));
@@ -1112,6 +1213,10 @@ class GamesPane extends Pane {
     }
 
     private String playerPath = "";
+
+    private final ObservableList<XResults> resultsObservableList;
+
+    private boolean finish = true;
 
     private ListView<String> boardsSizesListView;
     private Button runButton;
