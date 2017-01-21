@@ -1,9 +1,13 @@
 package stages;
 
+import XClasses.XDetailedResults;
 import XClasses.XResults;
 import core.Bricks;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
+import javafx.event.Event;
+import javafx.event.EventHandler;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.chart.BarChart;
@@ -69,6 +73,7 @@ class ResultsPane extends Pane {
             Bricks.mainStage.mainStage.show();
         });
         resultsObservableList = FXCollections.observableArrayList();
+       // detailedResultsObservableList = FXCollections.observableArrayList();
         clearLogsButton.setOnAction(event -> {
             Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
             alert.getDialogPane().getStylesheets().add(Bricks.mainStage.selectedTheme);
@@ -159,6 +164,11 @@ class ResultsPane extends Pane {
         heightProperty().addListener((observable, oldValue, newValue) -> {
             mainGridPane.setPrefHeight(newValue.doubleValue());
             playersListLabel.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 20));
+
+            for(Label l : detailsLabelArrayList) {
+                l.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 20));
+            }
+
             clearLogsButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 50));
             backButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 50));
             exportLogsButton.setFont(Font.font("Comic Sans MS", newValue.doubleValue() / 50));
@@ -215,6 +225,170 @@ class ResultsPane extends Pane {
                 Bricks.mainStage.mainStage.show();
             }
         });
+
+        playersTableView.setOnMouseClicked(event -> {
+            if(event.getClickCount()==2 && playersTableView.getSelectionModel().getSelectedItem()!=null) {
+
+                for(int i = 3; i < mainTabPane.getTabs().size();i++) {
+                    if(mainTabPane.getTabs().get(i).getText().equals(playersTableView.getSelectionModel().getSelectedItem().getName() + "-szczegóły")) {
+                        mainTabPane.getSelectionModel().select(i);
+                        return;
+                    }
+                }
+
+                Tab detailedResults = new Tab(playersTableView.getSelectionModel().getSelectedItem().getName() + "-szczegóły");
+
+                GridPane detailedResultsGridPane = new GridPane();
+
+                RowConstraints rowInDetails = new RowConstraints();
+                rowInDetails.setPercentHeight(9.09);
+                for (int i = 0; i < 11; i++) {
+                    detailedResultsGridPane.getRowConstraints().add(rowInDetails);
+                }
+                ColumnConstraints columnInDetails = new ColumnConstraints();
+                columnInDetails.setPercentWidth(14.28);
+                for (int i = 0; i < 7; i++) {
+                    detailedResultsGridPane.getColumnConstraints().add(columnInDetails);
+                }
+                detailedResults.setContent(detailedResultsGridPane);
+
+                Label detailsLabel = new Label("Wyniki szczegółowe:");
+                detailsLabel.setAlignment(Pos.CENTER);
+                detailsLabel.setMaxWidth(Double.MAX_VALUE);
+                detailedResultsGridPane.add(detailsLabel, 0, 0, 7, 1);
+                detailsLabel.setFont(Font.font("Comic Sans MS", getHeight() / 20));
+                detailsLabelArrayList.add(detailsLabel);
+
+                ObservableList<XDetailedResults> detailedResultsObservableList = FXCollections.observableArrayList();
+
+                TableView<XDetailedResults> playersTableViewInDetailed = new TableView<>();
+                playersTableViewInDetailed.editableProperty().set(false);
+
+                TableColumn nameColumnInDetailed = new TableColumn("Z Programem");
+                //noinspection unchecked
+                nameColumnInDetailed.setCellValueFactory(new PropertyValueFactory<XResults, String>("name"));
+                nameColumnInDetailed.prefWidthProperty().bind(playersTableViewInDetailed.widthProperty().divide(3));
+
+                TableColumn winColumnInDetailed = new TableColumn("Wygranych");
+                //noinspection unchecked
+                winColumnInDetailed.setCellValueFactory(new PropertyValueFactory<XResults, String>("wins"));
+                winColumnInDetailed.prefWidthProperty().bind(playersTableViewInDetailed.widthProperty().divide(3));
+
+                TableColumn lostColumnInDetailed = new TableColumn("Przegranych");
+                //noinspection unchecked
+                lostColumnInDetailed.setCellValueFactory(new PropertyValueFactory<XResults, String>("lost"));
+                lostColumnInDetailed.prefWidthProperty().bind(playersTableViewInDetailed.widthProperty().divide(3));
+
+
+                playersTableViewInDetailed.setItems(detailedResultsObservableList);
+                playersTableViewInDetailed.getColumns().addAll(nameColumnInDetailed, winColumnInDetailed, lostColumnInDetailed);
+
+                playersTableViewInDetailed.setColumnResizePolicy((param) -> false);
+                //playersTableView.setSortPolicy((param) -> false);
+
+                detailedResultsGridPane.add(playersTableViewInDetailed,1,1,5,7);
+
+                Label wonAsFirstLabel = new Label();
+                wonAsFirstLabel.setAlignment(Pos.CENTER);
+                wonAsFirstLabel.setMaxWidth(Double.MAX_VALUE);
+                detailedResultsGridPane.add(wonAsFirstLabel, 0, 8, 7, 1);
+                wonAsFirstLabel.setFont(Font.font("Comic Sans MS", getHeight() / 40));
+
+                Label wonAsSecondLabel = new Label();
+                wonAsSecondLabel.setAlignment(Pos.CENTER);
+                wonAsSecondLabel.setMaxWidth(Double.MAX_VALUE);
+                detailedResultsGridPane.add(wonAsSecondLabel, 0, 9, 7, 1);
+                wonAsSecondLabel.setFont(Font.font("Comic Sans MS", getHeight() / 40));
+
+                Button backToMainCardButton = new Button("Powrót do głównej karty");
+                detailedResultsGridPane.add(backToMainCardButton,2,10,3,1);
+                backToMainCardButton.setMaxWidth(Double.MAX_VALUE);
+                backToMainCardButton.setFont(Font.font("Comic Sans MS", getHeight() / 50));
+                backToMainCardButton.setOnAction(new EventHandler<ActionEvent>() {
+                    @Override
+                    public void handle(ActionEvent event) {
+                        mainTabPane.getSelectionModel().selectFirst();
+                    }
+                });
+
+
+                tableViewsArrayList.add(playersTableViewInDetailed);
+                detailedObservableListResults.add(detailedResultsObservableList);
+
+                Map<String, Integer> winsMap = new HashMap<>();
+                Map<String, Integer> losesMap = new HashMap<>();
+
+                String programName = playersTableView.getSelectionModel().getSelectedItem().getName();
+
+                int firstWins = 0;
+                int secondWins = 0;
+
+                String path = System.getProperty("user.home") + "/Documents/Bricks";
+                try {
+                    if (new File(path + "/logs.txt").exists()) {
+                        String pathToFile = System.getProperty("user.home") + "/Documents/Bricks/logs.txt";
+                        Scanner in = new Scanner(new File(pathToFile));
+                        ArrayList<String> wyniki = new ArrayList<>();
+                        while (in.hasNextLine()) {
+                            String line = in.nextLine();
+                            if (line.charAt(0) != '#') {
+                                wyniki.add(line);
+                            } else {
+                                break;
+                            }
+                        }
+                        in.close();
+
+                        for(String s : wyniki) {
+                            String[] firstDivision = s.split("=");
+                            String[] secondDivisionNames = firstDivision[0].split(",");
+                            String[] secondDivisionValues = firstDivision[1].split(",");
+                            if (secondDivisionNames.length != 2 || secondDivisionValues.length != 2)
+                                continue;
+                            if(secondDivisionNames[0].equals(programName)) {
+                                winsMap.putIfAbsent(secondDivisionNames[1],0);
+                                losesMap.putIfAbsent(secondDivisionNames[1],0);
+                                winsMap.put(secondDivisionNames[1],winsMap.get(secondDivisionNames[1]) + Integer.parseInt(secondDivisionValues[0]));
+                                losesMap.put(secondDivisionNames[1],losesMap.get(secondDivisionNames[1]) + Integer.parseInt(secondDivisionValues[1]));
+                                firstWins += Integer.parseInt(secondDivisionValues[0]);
+                            }
+                            if(secondDivisionNames[1].equals(programName)) {
+                                winsMap.putIfAbsent(secondDivisionNames[0],0);
+                                losesMap.putIfAbsent(secondDivisionNames[0],0);
+                                winsMap.put(secondDivisionNames[0],winsMap.get(secondDivisionNames[0]) + Integer.parseInt(secondDivisionValues[1]));
+                                losesMap.put(secondDivisionNames[0],losesMap.get(secondDivisionNames[0]) + Integer.parseInt(secondDivisionValues[0]));
+                                secondWins +=Integer.parseInt(secondDivisionValues[1]);
+                            }
+                        }
+
+                        for(String s : winsMap.keySet()) {
+                            detailedResultsObservableList.add(new XDetailedResults(s,winsMap.get(s),losesMap.get(s)));
+                        }
+                        playersTableViewInDetailed.refresh();
+                        wonAsFirstLabel.setText("Wygranych jako rozpoczynający: " + firstWins);
+                        wonAsSecondLabel.setText("Wygranych jako drugi: " + secondWins);
+
+
+                    }
+                }
+                catch (Exception ignored){}
+
+
+                detailedResults.setOnClosed(new EventHandler<Event>() {
+                    @Override
+                    public void handle(Event event) {
+                        detailsLabelArrayList.remove(detailsLabel);
+                        tableViewsArrayList.remove(playersTableViewInDetailed);
+                        detailedObservableListResults.remove(detailedResultsObservableList);
+                        mainTabPane.getSelectionModel().selectFirst();
+                    }
+                });
+                mainTabPane.getTabs().add(detailedResults);
+                mainTabPane.getSelectionModel().selectLast();
+
+            }
+        });
+
     }
 
     private void generateTable() {
@@ -299,4 +473,8 @@ class ResultsPane extends Pane {
 
     private Button backButton;
     private Button exportLogsButton;
+
+    ArrayList<Label> detailsLabelArrayList = new ArrayList<>();
+    ArrayList<TableView<XDetailedResults>> tableViewsArrayList = new ArrayList<>();
+    ArrayList<ObservableList<XDetailedResults>> detailedObservableListResults = new ArrayList<>();
 }
