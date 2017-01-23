@@ -226,6 +226,8 @@ class ResultsPane extends Pane {
                 ArrayList<String> wyniki = new ArrayList<>();
                 while (in.hasNextLine()) {
                     String line = in.nextLine();
+                    if(line.equals(""))
+                        continue;
                     if (line.charAt(0) != '#') {
                         wyniki.add(line);
                     } else {
